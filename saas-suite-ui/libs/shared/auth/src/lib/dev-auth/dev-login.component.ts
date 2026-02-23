@@ -79,8 +79,8 @@ const DEV_PROFILES: DevProfile[] = [
           <div class="brand-logo">
             <mat-icon>dashboard</mat-icon>
           </div>
-          <h1>Union Solutions</h1>
-          <p>B2B Suite — Plataforma de gestão empresarial</p>
+          <h1>Fluxe B2B Suite</h1>
+          <p>Plataforma B2B multi-tenant — Demo</p>
         </div>
       </div>
       <div class="login-right">

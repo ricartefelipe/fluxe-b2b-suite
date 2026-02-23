@@ -1,0 +1,122 @@
+❯ Building...
+✔ Building...
+Prerendered 0 static routes.
+Application bundle generation failed. [6.605 seconds] - 2026-02-23T19:25:56.691Z
+
+✘ [ERROR] Could not resolve "@union.solutions/shop/feature-products"
+
+    apps/shop/src/app/app.routes.ts:10:35:
+      10 │ ...) => import('@union.solutions/shop/feature-products').then(m =>...
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  You can mark the path "@union.solutions/shop/feature-products" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle. You can also add ".catch()" here to handle this failure at run-time instead of bundle-time.
+
+
+✘ [ERROR] TS2307: Cannot find module '@union.solutions/shop/feature-products' or its corresponding type declarations. [plugin angular-compiler]
+
+    apps/shop/src/app/app.routes.ts:12:13:
+      12 │       import('@union.solutions/shop/feature-products').then(m => m...
+         ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] Could not resolve "@union.solutions/shop/feature-product-detail"
+
+    apps/shop/src/app/app.routes.ts:14:35:
+      14 │ ...=> import('@union.solutions/shop/feature-product-detail').then(...
+         ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  You can mark the path "@union.solutions/shop/feature-product-detail" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle. You can also add ".catch()" here to handle this failure at run-time instead of bundle-time.
+
+
+✘ [ERROR] TS2307: Cannot find module '@union.solutions/shop/feature-product-detail' or its corresponding type declarations. [plugin angular-compiler]
+
+    apps/shop/src/app/app.routes.ts:17:13:
+      17 │       import('@union.solutions/shop/feature-product-detail').then(
+         ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] Could not resolve "@union.solutions/shop/data"
+
+    apps/shop/src/app/checkout/checkout.component.ts:5:28:
+      5 │ import { CartService } from '@union.solutions/shop/data';
+        ╵                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  You can mark the path "@union.solutions/shop/data" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+
+✘ [ERROR] TS2307: Cannot find module '@union.solutions/shop/data' or its corresponding type declarations. [plugin angular-compiler]
+
+    apps/shop/src/app/checkout/checkout.component.ts:5:28:
+      5 │ import { CartService } from '@union.solutions/shop/data';
+        ╵                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    apps/shop/src/app/checkout/checkout.component.ts:25:16:
+      25 │       @if (cart.items().length === 0) {
+         ╵                 ~~~~~
+
+
+✘ [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    apps/shop/src/app/checkout/checkout.component.ts:42:29:
+      42 │           @for (item of cart.items(); track item.product.id) {
+         ╵                              ~~~~~
+
+
+✘ [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    apps/shop/src/app/checkout/checkout.component.ts:50:35:
+      50 │ ...       <strong>Total: {{ cart.totalAmount() | currency }}</strong>
+         ╵                                  ~~~~~~~~~~~
+
+
+✘ [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    apps/shop/src/app/checkout/checkout.component.ts:62:54:
+      62 │ ...ss="btn-secondary" (click)="cart.clear()">Limpar carrinho</button>
+         ╵                                     ~~~~~
+
+
+✘ [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    apps/shop/src/app/checkout/checkout.component.ts:190:15:
+      190 │         items: this.cart.toOrderItems(),
+          ╵                ~~~~~~~~~
+
+
+✘ [ERROR] TS2571: Object is of type 'unknown'. [plugin angular-compiler]
+
+    apps/shop/src/app/checkout/checkout.component.ts:195:8:
+      195 │         this.cart.clear();
+          ╵         ~~~~~~~~~
+
+
+✘ [ERROR] Could not resolve "@union.solutions/shop/feature-products"
+
+    apps/shop/src/app/app.routes.ts:10:35:
+      10 │ ...) => import('@union.solutions/shop/feature-products').then(m =>...
+         ╵                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  You can mark the path "@union.solutions/shop/feature-products" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle. You can also add ".catch()" here to handle this failure at run-time instead of bundle-time.
+
+
+✘ [ERROR] Could not resolve "@union.solutions/shop/feature-product-detail"
+
+    apps/shop/src/app/app.routes.ts:14:35:
+      14 │ ...=> import('@union.solutions/shop/feature-product-detail').then(...
+         ╵              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  You can mark the path "@union.solutions/shop/feature-product-detail" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle. You can also add ".catch()" here to handle this failure at run-time instead of bundle-time.
+
+
+✘ [ERROR] Could not resolve "@union.solutions/shop/data"
+
+    apps/shop/src/app/checkout/checkout.component.ts:5:28:
+      5 │ import { CartService } from '@union.solutions/shop/data';
+        ╵                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  You can mark the path "@union.solutions/shop/data" as external to exclude it from the bundle, which will remove this error and leave the unresolved path in the bundle.
+
+

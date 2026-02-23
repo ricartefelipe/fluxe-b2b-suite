@@ -5,6 +5,8 @@ import { firstValueFrom } from 'rxjs';
 import { AuthStore } from './auth.store';
 import { sessionFromJwt } from './models/auth-session.model';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
+import { TenantContextService } from '@saas-suite/shared/http';
+import { OidcAuthService } from './oidc-auth.service';
 import { SKIP_AUTH, SKIP_TENANT_HEADER } from '@saas-suite/shared/util';
 
 interface DevTokenRequest {
@@ -53,6 +55,8 @@ export class AuthService {
   private readonly router = inject(Router);
   private readonly store = inject(AuthStore);
   private readonly config = inject(RuntimeConfigService);
+  private readonly tenantCtx = inject(TenantContextService, { optional: true });
+  private readonly oidcAuth = inject(OidcAuthService, { optional: true });
 
   async loginWithDevToken(params: DevTokenRequest): Promise<void> {
     let token: string;
@@ -72,6 +76,9 @@ export class AuthService {
 
     const session = sessionFromJwt(token);
     this.store.setSession(session);
+    if (session.tenantId && this.tenantCtx) {
+      this.tenantCtx.setActiveTenantId(session.tenantId);
+    }
     sessionStorage.setItem('dev_token', token);
     await this.router.navigate(['/']);
   }
@@ -82,6 +89,9 @@ export class AuthService {
       const session = sessionFromJwt(token);
       if (Date.now() < session.expiresAt) {
         this.store.setSession(session);
+        if (session.tenantId && this.tenantCtx) {
+          this.tenantCtx.setActiveTenantId(session.tenantId);
+        }
       } else {
         sessionStorage.removeItem('dev_token');
       }
@@ -89,7 +99,14 @@ export class AuthService {
   }
 
   async logout(): Promise<void> {
+    if (this.config.get('authMode') === 'oidc' && this.oidcAuth) {
+      this.oidcAuth.logout();
+      return;
+    }
     this.store.clearSession();
+    if (this.tenantCtx) {
+      this.tenantCtx.setActiveTenantId(null);
+    }
     sessionStorage.removeItem('dev_token');
     await this.router.navigate(['/login']);
   }

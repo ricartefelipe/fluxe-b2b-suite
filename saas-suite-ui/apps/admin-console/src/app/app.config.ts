@@ -1,6 +1,7 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { OAuthModule } from 'angular-oauth2-oidc';
 import { appRoutes } from './app.routes';
 import { provideRuntimeConfig } from '@saas-suite/shared/config';
 import { provideAuth } from '@saas-suite/shared/auth';
@@ -14,6 +15,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideAnimationsAsync(),
+    importProvidersFrom(OAuthModule.forRoot()),
     provideRouter(appRoutes, withComponentInputBinding()),
     provideRuntimeConfig(),
     provideHttpLayer(),

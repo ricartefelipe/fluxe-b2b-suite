@@ -1,135 +1,183 @@
-# Union Solutions — B2B Suite
+# Fluxe B2B Suite
 
-Plataforma B2B para gestão empresarial desenvolvida com Angular e Nx monorepo.
+Plataforma B2B multi-tenant para e-commerce, operações e gestão administrativa. Suíte completa desenvolvida com Angular, Nx monorepo e integração com backends Spring/Node/Python.
 
-**Autor:** Felipe Ricarte — felipericartem@gmail.com
+**Repositório:** [github.com/ricartefelipe/fluxe-b2b-suite](https://github.com/ricartefelipe/fluxe-b2b-suite)
 
-## Visão Geral
+---
 
-Monorepo com arquitetura modular contendo múltiplas aplicações e bibliotecas compartilhadas:
+## O que é a Suite
 
-### Aplicações
+- **Shop** — E-commerce Angular com SSR, catálogo de produtos e checkout com pedidos
+- **Ops Portal** — Pedidos, inventário, pagamentos e ledger para operações
+- **Admin Console** — Tenants, políticas ABAC, feature flags e audit log
+- **API** — Backend Express (produtos) e proxy para desenvolvimento local
 
-| App | Descrição |
-|-----|-----------|
-| `shop` | Aplicação Angular de e-commerce com SSR (Server-Side Rendering) |
-| `api` | API backend com Express e suporte a Docker |
-| `ops-portal` | Portal de operações |
-| `admin-console` | Console administrativo |
+Integra com:
 
-### Bibliotecas
+- **spring-saas-core** (8080) — Tenants, policies, flags, audit
+- **node-b2b-orders** (3000) — Pedidos e inventário
+- **py-payments-ledger** (8000) — Pagamentos e ledger
 
-| Biblioteca | Escopo | Descrição |
-|------------|--------|-----------|
-| `shared/config` | Shared | Configuração da aplicação e runtime config |
-| `shared/auth` | Shared | Autenticação OAuth2/OIDC, guards e session management |
-| `shared/http` | Shared | HTTP providers, interceptors (auth, tenant, correlation, idempotency, error) |
-| `shared/ui` | Shared | Componentes UI reutilizáveis (shell, sidebar, header, dialogs, status chips) |
-| `shared/util` | Shared | Utilitários (paginação, datas, UUID, HTTP context tokens) |
-| `shared/telemetry` | Shared | Web Vitals, logging e telemetria |
-| `shared/i18n` | Shared | Internacionalização (pt-BR) |
-| `data-access/core` | Core | API client para tenants, policies, feature flags e audit |
-| `data-access/orders` | Orders | Facades para pedidos e inventário |
-| `data-access/payments` | Payments | Facades para pagamentos e ledger |
-| `domains/tenancy` | Domain | Domínio de multi-tenancy |
-| `domains/admin` | Domain | Domínio administrativo |
-| `domains/ops` | Domain | Domínio de operações |
-| `shop/feature-products` | Shop | Feature de listagem de produtos |
-| `shop/feature-product-detail` | Shop | Feature de detalhe de produto |
-| `shop/data` | Shop | Data access layer do shop |
-| `shop/shared-ui` | Shop | UI compartilhada do shop |
-| `api/products` | API | Serviço de produtos da API |
+---
+
+## Arquitetura
+
+```
+                    ┌─────────────────────────────────────────┐
+                    │           Fluxe B2B Suite (Nx)            │
+                    └─────────────────────────────────────────┘
+                                         │
+         ┌───────────────────────────────┼───────────────────────────────┐
+         │                               │                               │
+         ▼                               ▼                               ▼
+   ┌───────────┐                 ┌───────────────┐                 ┌─────────────┐
+   │   Shop    │                 │  Ops Portal   │                 │Admin Console│
+   │ (Angular) │                 │  (Angular)   │                 │ (Angular)   │
+   └─────┬─────┘                 └──────┬──────┘                 └──────┬──────┘
+         │                               │                               │
+         │         ┌─────────────────────┼─────────────────────┐         │
+         │         │                     │                     │         │
+         ▼         ▼                     ▼                     ▼         ▼
+   ┌─────────┐  ┌─────────────┐  ┌──────────────┐  ┌─────────────────────────┐
+   │ API     │  │ spring-saas  │  │node-b2b-orders│  │   py-payments-ledger    │
+   │(Express)│  │   (8080)     │  │    (3000)     │  │       (8000)            │
+   └─────────┘  └─────────────┘  └──────────────┘  └─────────────────────────┘
+```
+
+---
 
 ## Quick Start
 
 ```bash
+# Clone o repositório
+git clone https://github.com/ricartefelipe/fluxe-b2b-suite.git
+cd fluxe-b2b-suite/saas-suite-ui
+
+# Instale dependências
 pnpm install
 
-pnpm nx serve shop
-
+# Rode a API de produtos (necessária para o shop)
 pnpm nx serve api
 
-pnpm nx run-many -t build
+# Em outro terminal: rode o shop (com SSR e proxy para API)
+pnpm nx serve shop
 
-pnpm nx run-many -t test
-
-pnpm nx run-many -t lint
-
-pnpm nx e2e shop-e2e
+# Ou rode o ops-portal ou admin-console (com Dev Auth para demo)
+pnpm nx serve ops-portal
+# ou
+pnpm nx serve admin-console
 ```
 
-## Estrutura do Projeto
+**URLs após subir:**
+
+- Shop: http://localhost:4200
+- Ops Portal: http://localhost:4200 (serve ops-portal)
+- Admin Console: http://localhost:4200 (serve admin-console)
+- API produtos: http://localhost:3333
+
+---
+
+## Demo em 3 Minutos
+
+1. **Ops Portal**
+   - Rode `pnpm nx serve ops-portal`
+   - Acesse http://localhost:4200 → tela de login (Dev Auth)
+   - Selecione perfil "Super Admin" ou "Ops User" → Login
+   - Navegue: Pedidos, Inventário (Ajustes), Pagamentos, Ledger
+   - Mostre lista de pedidos e status (CREATED, RESERVED, CONFIRMED etc.)
+
+2. **Admin Console**
+   - Rode `pnpm nx serve admin-console`
+   - Faça login com Dev Auth
+   - Navegue: Tenants, Policies, Feature Flags, Audit Log
+   - Mostre CRUD de tenants e toggle de flags
+
+3. **Shop**
+   - Rode `pnpm nx serve api` + `pnpm nx serve shop`
+   - Acesse catálogo de produtos
+   - Mostre produto e checkout (cria pedido com Idempotency-Key)
+   - Página "Meus Pedidos"
+
+---
+
+## Configuração e URLs dos Backends
+
+Edite `apps/<app>/public/assets/config.json` (ops-portal e admin-console):
+
+```json
+{
+  "coreApiBaseUrl": "http://localhost:8080",
+  "ordersApiBaseUrl": "http://localhost:3000",
+  "paymentsApiBaseUrl": "http://localhost:8000",
+  "authMode": "dev",
+  "oidc": {
+    "issuer": "https://auth.exemplo.com",
+    "clientId": "fluxe-b2b",
+    "scope": "openid profile email"
+  }
+}
+```
+
+- **authMode:** `dev` = tela de login local com perfis; `oidc` = OAuth2/OIDC real
+- Para desenvolvimento local sem backends, use `authMode: "dev"` — as chamadas HTTP falharão mas a UI demonstra os fluxos
+
+---
+
+## Segurança e Ambientes
+
+- **Dev Auth:** Disponível apenas quando `authMode === 'dev'`. Gera JWT local para demos.
+- **Produção:** Use `authMode: 'oidc'` e configure issuer/clientId/scope. Dev Auth não deve estar acessível em produção.
+
+---
+
+## Comandos
+
+| Comando | Descrição |
+|--------|-----------|
+| `pnpm install` | Instala dependências (em saas-suite-ui) |
+| `pnpm nx serve shop` | Sobe o shop (depende da API) |
+| `pnpm nx serve api` | Sobe API Express (produtos) |
+| `pnpm nx serve ops-portal` | Sobe portal de operações |
+| `pnpm nx serve admin-console` | Sobe console admin |
+| `pnpm nx run-many -t lint,test,build` | Lint, testes e build |
+| `pnpm nx e2e shop-e2e` | Testes E2E do shop |
+| `pnpm format` | Formata código com Prettier |
+| `pnpm lint` | ESLint em todo workspace |
+
+---
+
+## OpenAPI / Documentação dos Serviços
+
+- **spring-saas-core:** `/v1/tenants`, `/v1/policies`, `/v1/tenants/{id}/flags`, `/v1/audit`
+- **node-b2b-orders:** `/v1/orders`, `/v1/inventory/adjustments`
+- **py-payments-ledger:** `/v1/payment-intents`, `/v1/ledger/entries`, `/v1/ledger/balances`
+
+(Consulte a documentação de cada serviço para specs OpenAPI completas.)
+
+---
+
+## Estrutura (saas-suite-ui)
 
 ```
+saas-suite-ui/
 ├── apps/
-│   ├── shop/                  Aplicação e-commerce Angular + SSR
-│   ├── shop-e2e/              Testes E2E (Playwright) do shop
-│   ├── api/                   API backend Express + Docker
-│   ├── ops-portal/            Portal de operações
-│   ├── ops-portal-e2e/        Testes E2E do ops-portal
-│   ├── admin-console/         Console administrativo
-│   └── admin-console-e2e/     Testes E2E do admin-console
+│   ├── shop/           # E-commerce Angular + SSR
+│   ├── api/            # API Express (produtos)
+│   ├── ops-portal/     # Portal de operações
+│   ├── admin-console/  # Console administrativo
+│   └── *-e2e/          # Testes E2E (Playwright)
 ├── libs/
-│   ├── shared/                Bibliotecas compartilhadas
-│   │   ├── config/            Configuração runtime
-│   │   ├── auth/              Autenticação e guards
-│   │   ├── http/              HTTP client e interceptors
-│   │   ├── ui/                Componentes UI
-│   │   ├── util/              Utilitários
-│   │   ├── telemetry/         Web Vitals e logging
-│   │   ├── i18n/              Internacionalização
-│   │   └── models/            Modelos compartilhados
-│   ├── data-access/           Camada de acesso a dados
-│   │   ├── core/              Tenants, policies, flags, audit
-│   │   ├── orders/            Pedidos e inventário
-│   │   └── payments/          Pagamentos e ledger
-│   ├── domains/               Domínios de negócio
-│   │   ├── tenancy/           Multi-tenancy
-│   │   ├── admin/             Administração
-│   │   └── ops/               Operações
-│   ├── shop/                  Libs específicas do shop
-│   │   ├── feature-products/
-│   │   ├── feature-product-detail/
-│   │   ├── data/
-│   │   └── shared-ui/
-│   └── api/
-│       └── products/          Serviço de produtos
-├── nx.json                    Configuração Nx
-├── tsconfig.base.json         TypeScript base config
-└── eslint.config.mjs          ESLint config
+│   ├── shared/         # config, auth, http, ui, telemetry, i18n
+│   ├── data-access/    # core, orders, payments
+│   └── domains/        # tenancy, admin, ops
+├── nx.json
+├── tsconfig.base.json
+└── eslint.config.mjs
 ```
 
-## Module Boundaries
-
-O projeto usa tags para definir fronteiras arquiteturais:
-
-| Tag | Pode importar de |
-|-----|-------------------|
-| `scope:shop` | `scope:shop`, `scope:shared` |
-| `scope:api` | `scope:api`, `scope:shared` |
-| `scope:shared` | `scope:shared` |
-
-## Stack Tecnológica
-
-- **Frontend:** Angular 21, Angular Material, Angular CDK
-- **Backend:** Express, Node.js
-- **Auth:** angular-oauth2-oidc (OAuth2/OIDC)
-- **Build:** Nx 22, Vite 7, esbuild
-- **Testes:** Vitest (unit), Playwright (E2E)
-- **Lint:** ESLint, Prettier
-- **Infra:** Docker, SSR com Angular SSR
-
-## Comandos Úteis
-
-```bash
-pnpm nx graph                          # Grafo de dependências
-pnpm nx show project shop --web        # Detalhes de um projeto
-pnpm nx affected -t build              # Build dos projetos afetados
-pnpm nx affected -t test               # Testes dos projetos afetados
-pnpm nx docker:build api               # Build da imagem Docker
-pnpm nx docker:run api                 # Executar container Docker
-```
+---
 
 ## Licença
 
-MIT — Felipe Ricarte
+MIT

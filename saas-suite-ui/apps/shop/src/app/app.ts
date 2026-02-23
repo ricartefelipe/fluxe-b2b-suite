@@ -9,5 +9,5 @@ import { RouterModule } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class App {
-  protected title = 'Union Solutions B2B Suite';
+  protected title = 'Fluxe B2B Suite';
 }

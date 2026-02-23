@@ -19,6 +19,16 @@ export const appRoutes: Route[] = [
       ),
   },
   {
+    path: 'checkout',
+    loadComponent: () =>
+      import('./checkout/checkout.component').then((m) => m.CheckoutComponent),
+  },
+  {
+    path: 'orders',
+    loadComponent: () =>
+      import('./orders/orders.component').then((m) => m.OrdersComponent),
+  },
+  {
     path: '**',
     redirectTo: 'products',
   },

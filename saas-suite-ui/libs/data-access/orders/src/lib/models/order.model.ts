@@ -1,0 +1,34 @@
+export type OrderStatus = 'DRAFT' | 'RESERVED' | 'CONFIRMED' | 'CANCELLED' | 'PAID';
+
+export interface OrderItem {
+  sku: string;
+  quantity: number;
+  unitPrice: number;
+  description?: string;
+}
+
+export interface Order {
+  id: string;
+  tenantId: string;
+  customerId: string;
+  status: OrderStatus;
+  items: OrderItem[];
+  totalAmount: number;
+  currency: string;
+  correlationId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateOrderRequest {
+  customerId: string;
+  items: OrderItem[];
+  currency?: string;
+}
+
+export interface OrderListParams {
+  status?: OrderStatus;
+  customerId?: string;
+  page?: number;
+  pageSize?: number;
+}

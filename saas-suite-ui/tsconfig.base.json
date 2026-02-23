@@ -1,0 +1,37 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "bundler",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ES2022",
+    "lib": ["ES2022", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "paths": {
+      "@saas-suite/shared/config": ["libs/shared/config/src/index.ts"],
+      "@saas-suite/shared/util": ["libs/shared/util/src/index.ts"],
+      "@saas-suite/shared/auth": ["libs/shared/auth/src/index.ts"],
+      "@saas-suite/shared/http": ["libs/shared/http/src/index.ts"],
+      "@saas-suite/shared/ui": ["libs/shared/ui/src/index.ts"],
+      "@saas-suite/shared/telemetry": ["libs/shared/telemetry/src/index.ts"],
+      "@saas-suite/shared/i18n": ["libs/shared/i18n/src/index.ts"],
+      "@saas-suite/data-access/core": ["libs/data-access/core/src/index.ts"],
+      "@saas-suite/data-access/orders": ["libs/data-access/orders/src/index.ts"],
+      "@saas-suite/data-access/payments": ["libs/data-access/payments/src/index.ts"],
+      "@saas-suite/domains/tenancy": ["libs/domains/tenancy/src/index.ts"],
+      "@saas-suite/domains/admin": ["libs/domains/admin/src/index.ts"],
+      "@saas-suite/domains/ops": ["libs/domains/ops/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

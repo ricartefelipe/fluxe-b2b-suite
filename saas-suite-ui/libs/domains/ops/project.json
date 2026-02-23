@@ -1,0 +1,13 @@
+{
+  "name": "domain-ops",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/domains/ops/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:ops", "type:domain"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

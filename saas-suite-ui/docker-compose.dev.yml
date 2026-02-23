@@ -1,0 +1,22 @@
+services:
+  admin-console:
+    build:
+      context: .
+      dockerfile: apps/admin-console/Dockerfile
+    ports:
+      - "4200:80"
+    environment:
+      - CORE_API_BASE_URL=http://host.docker.internal:8080
+      - ORDERS_API_BASE_URL=http://host.docker.internal:3000
+      - PAYMENTS_API_BASE_URL=http://host.docker.internal:8000
+
+  ops-portal:
+    build:
+      context: .
+      dockerfile: apps/ops-portal/Dockerfile
+    ports:
+      - "4300:80"
+    environment:
+      - CORE_API_BASE_URL=http://host.docker.internal:8080
+      - ORDERS_API_BASE_URL=http://host.docker.internal:3000
+      - PAYMENTS_API_BASE_URL=http://host.docker.internal:8000

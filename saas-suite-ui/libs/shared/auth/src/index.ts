@@ -5,3 +5,5 @@ export * from './lib/auth.providers';
 export * from './lib/guards/auth.guard';
 export * from './lib/guards/permission.guard';
 export * from './lib/dev-auth/dev-login.component';
+export * from './lib/login-page.component';
+export * from './lib/oidc-auth.service';

@@ -6,7 +6,18 @@
     "name": "Felipe Ricarte",
     "email": "felipericartem@gmail.com"
   },
-  "scripts": {},
+  "scripts": {
+    "format": "nx format:write",
+    "format:check": "nx format:check",
+    "lint": "nx run-many -t lint",
+    "test": "nx run-many -t test,vite:test",
+    "build": "nx run-many -t build",
+    "e2e": "nx run-many -t e2e",
+    "serve:shop": "nx serve shop",
+    "serve:api": "nx serve api",
+    "serve:ops-portal": "nx serve ops-portal",
+    "serve:admin-console": "nx serve admin-console"
+  },
   "private": true,
   "dependencies": {
     "@angular-devkit/build-angular": "21.1.1",

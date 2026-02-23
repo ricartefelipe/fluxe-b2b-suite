@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.angular/
+.nx/cache/
+
+# Coverage
+coverage/
+
+# IDE
+.idea/
+*.swp
+*.swo
+.vscode/
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary
+tmp/
+temp/
+*.tmp
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/

@@ -1,0 +1,16 @@
+
+Linting "shop"...
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/shop/src/app/checkout/checkout.component.ts
+  15:13  error  The selector should start with one of these prefixes: "app" (https://angular.dev/style-guide#choosing-component-selectors)  @angular-eslint/component-selector
+  32:11  error  A label component must be associated with a form element                                                                    @angular-eslint/template/label-has-associated-control
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/shop/src/app/orders/orders.component.ts
+   1:37  warning  'signal' is defined but never used                                                                                          @typescript-eslint/no-unused-vars
+  16:13  error    The selector should start with one of these prefixes: "app" (https://angular.dev/style-guide#choosing-component-selectors)  @angular-eslint/component-selector
+  27:9   error    A label component must be associated with a form element                                                                    @angular-eslint/template/label-has-associated-control
+
+✖ 5 problems (4 errors, 1 warning)
+
+✖ 5 problems (4 errors, 1 warning)
+

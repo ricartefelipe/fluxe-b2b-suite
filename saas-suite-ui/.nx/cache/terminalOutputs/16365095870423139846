@@ -1,0 +1,61 @@
+
+Linting "admin-console"...
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/admin-console/src/app/admin-shell.component.ts
+  2:1  error  Static imports of lazy-loaded libraries are forbidden.
+
+Library "ui" is lazy-loaded in these files:
+- apps/admin-console/src/app/app.routes.ts  @nx/enforce-module-boundaries
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/admin-console/src/app/app.config.ts
+  7:1  error  Static imports of lazy-loaded libraries are forbidden.
+
+Library "shared-auth" is lazy-loaded in these files:
+- apps/admin-console/src/app/app.routes.ts  @nx/enforce-module-boundaries
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/admin-console/src/app/app.routes.ts
+  2:1  error  Static imports of lazy-loaded libraries are forbidden.
+
+Library "shared-auth" is lazy-loaded in these files:
+- apps/admin-console/src/app/app.routes.ts  @nx/enforce-module-boundaries
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/admin-console/src/app/pages/audit-list.page.ts
+  10:1  error  Static imports of lazy-loaded libraries are forbidden.
+
+Library "ui" is lazy-loaded in these files:
+- apps/admin-console/src/app/app.routes.ts  @nx/enforce-module-boundaries
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/admin-console/src/app/pages/flags-list.page.ts
+  11:1  error  Static imports of lazy-loaded libraries are forbidden.
+
+Library "ui" is lazy-loaded in these files:
+- apps/admin-console/src/app/app.routes.ts  @nx/enforce-module-boundaries
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/admin-console/src/app/pages/policies-list.page.ts
+  13:1   error    Static imports of lazy-loaded libraries are forbidden.
+
+Library "ui" is lazy-loaded in these files:
+- apps/admin-console/src/app/app.routes.ts  @nx/enforce-module-boundaries
+  14:55  warning  'PolicyEffect' is defined but never used                                                                                                        @typescript-eslint/no-unused-vars
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/admin-console/src/app/pages/tenant-detail.page.ts
+   13:1   error    Static imports of lazy-loaded libraries are forbidden.
+
+Library "ui" is lazy-loaded in these files:
+- apps/admin-console/src/app/app.routes.ts  @nx/enforce-module-boundaries
+  140:16  warning  Forbidden non-null assertion                                                                                                                    @typescript-eslint/no-non-null-assertion
+  171:46  warning  Forbidden non-null assertion                                                                                                                    @typescript-eslint/no-non-null-assertion
+  180:46  warning  Forbidden non-null assertion                                                                                                                    @typescript-eslint/no-non-null-assertion
+  185:46  warning  Forbidden non-null assertion                                                                                                                    @typescript-eslint/no-non-null-assertion
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/admin-console/src/app/pages/tenants-list.page.ts
+  13:1   error    Static imports of lazy-loaded libraries are forbidden.
+
+Library "ui" is lazy-loaded in these files:
+- apps/admin-console/src/app/app.routes.ts  @nx/enforce-module-boundaries
+  13:52  warning  'ConfirmDialogComponent' is defined but never used                                                                                              @typescript-eslint/no-unused-vars
+
+✖ 14 problems (8 errors, 6 warnings)
+
+✖ 14 problems (8 errors, 6 warnings)
+

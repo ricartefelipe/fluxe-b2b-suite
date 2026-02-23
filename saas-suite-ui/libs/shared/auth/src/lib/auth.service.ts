@@ -23,6 +23,30 @@ interface TokenResponse {
   expires_in: number;
 }
 
+function base64url(obj: object): string {
+  return btoa(JSON.stringify(obj))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+}
+
+function createLocalDevJwt(params: DevTokenRequest): string {
+  const header = { alg: 'none', typ: 'JWT' };
+  const now = Math.floor(Date.now() / 1000);
+  const payload = {
+    sub: params.sub,
+    email: params.email ?? params.sub,
+    tid: params.tid ?? null,
+    roles: params.roles ?? [],
+    perms: params.perms ?? [],
+    plan: params.plan ?? 'starter',
+    region: params.region ?? 'us-east-1',
+    iat: now,
+    exp: now + 86400,
+  };
+  return `${base64url(header)}.${base64url(payload)}.dev`;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly http = inject(HttpClient);
@@ -31,16 +55,24 @@ export class AuthService {
   private readonly config = inject(RuntimeConfigService);
 
   async loginWithDevToken(params: DevTokenRequest): Promise<void> {
-    const baseUrl = this.config.get('coreApiBaseUrl');
-    const ctx = new HttpContext()
-      .set(SKIP_AUTH, true)
-      .set(SKIP_TENANT_HEADER, true);
-    const resp = await firstValueFrom(
-      this.http.post<TokenResponse>(`${baseUrl}/v1/dev/token`, params, { context: ctx })
-    );
-    const session = sessionFromJwt(resp.access_token);
+    let token: string;
+
+    if (this.config.get('authMode') === 'dev') {
+      token = createLocalDevJwt(params);
+    } else {
+      const baseUrl = this.config.get('coreApiBaseUrl');
+      const ctx = new HttpContext()
+        .set(SKIP_AUTH, true)
+        .set(SKIP_TENANT_HEADER, true);
+      const resp = await firstValueFrom(
+        this.http.post<TokenResponse>(`${baseUrl}/v1/dev/token`, params, { context: ctx })
+      );
+      token = resp.access_token;
+    }
+
+    const session = sessionFromJwt(token);
     this.store.setSession(session);
-    sessionStorage.setItem('dev_token', resp.access_token);
+    sessionStorage.setItem('dev_token', token);
     await this.router.navigate(['/']);
   }
 

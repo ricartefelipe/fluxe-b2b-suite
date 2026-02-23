@@ -1,12 +1,188 @@
 @use '@angular/material' as mat;
 
-html, body { height: 100%; margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$green-palette,
+      tertiary: mat.$cyan-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
 
-@include mat.theme((
-  color: (
-    primary: mat.$green-palette,
-    tertiary: mat.$cyan-palette,
-  ),
-  typography: Roboto,
-  density: 0,
-));
+:root {
+  --app-primary: #2e7d32;
+  --app-primary-light: #43a047;
+  --app-primary-dark: #1b5e20;
+  --app-accent: #66bb6a;
+  --app-bg: #f4f6f9;
+  --app-surface: #fff;
+  --app-text: #263238;
+  --app-text-secondary: #546e7a;
+  --app-border: #e0e0e0;
+  --app-sidebar-bg: #0d2818;
+  --app-sidebar-text: #b0bec5;
+  --app-sidebar-active: #2e7d32;
+  --app-header-bg: #ffffff;
+  --app-header-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  color: var(--app-text);
+  background: var(--app-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  color: var(--app-text);
+  font-weight: 600;
+}
+
+h1 { font-size: 22px; }
+h2 { font-size: 18px; }
+h3 { font-size: 15px; }
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.page-card {
+  background: var(--app-surface);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.filters {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--app-surface);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.filters mat-form-field {
+  min-width: 180px;
+}
+
+table.mat-mdc-table {
+  width: 100%;
+  background: var(--app-surface);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.mat-mdc-header-row {
+  background: #f8fafc !important;
+}
+
+.mat-mdc-header-cell {
+  font-weight: 600 !important;
+  color: var(--app-text-secondary) !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mat-mdc-row:hover {
+  background: #f0fff0 !important;
+}
+
+code {
+  background: #eef2f7;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--app-primary);
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.chip-allow {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.chip-deny {
+  background: #ffebee;
+  color: #c62828;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.create-form {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: var(--app-surface);
+  border-radius: 12px;
+  border: 1px dashed var(--app-border);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.full-span {
+  grid-column: 1 / -1;
+}
+
+mat-card {
+  border-radius: 12px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+}
+
+.mat-mdc-progress-bar {
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}

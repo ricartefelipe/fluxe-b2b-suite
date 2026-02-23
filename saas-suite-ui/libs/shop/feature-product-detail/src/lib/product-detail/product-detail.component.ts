@@ -1,7 +1,7 @@
 import { Component, inject, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { ProductsService } from '@union.solutions/shop/data';
+import { ProductsService, CartService } from '@union.solutions/shop/data';
 import { Product } from '@union.solutions/models';
 import { LoadingSpinnerComponent, ErrorMessageComponent } from '@union.solutions/shop/shared-ui';
 
@@ -326,6 +326,7 @@ export class ProductDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly productsService = inject(ProductsService);
+  private readonly cartService = inject(CartService);
 
   readonly product = signal<Product | null>(null);
   readonly loading = signal(false);
@@ -379,8 +380,11 @@ export class ProductDetailComponent implements OnInit {
   }
 
   addToCart() {
-    console.log('Adding to cart:', this.product()?.id);
-    alert('Product added to cart!');
+    const p = this.product();
+    if (p) {
+      this.cartService.addItem(p, 1);
+      this.router.navigate(['/checkout']);
+    }
   }
 
   addToWishlist() {

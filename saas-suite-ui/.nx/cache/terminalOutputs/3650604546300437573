@@ -1,0 +1,36 @@
+❯ Building...
+✔ Building...
+Initial chunk files | Names                 |  Raw size | Estimated transfer size
+chunk-LTOJ6UDG.js   | -                     | 499.11 kB |               102.06 kB
+chunk-42LARUZ5.js   | -                     | 168.35 kB |                49.18 kB
+styles-OFPO3NG4.css | styles                |   9.38 kB |                 1.83 kB
+main-R5ZS6Z34.js    | main                  |   5.54 kB |                 1.98 kB
+chunk-N7OZ5ND4.js   | -                     |   5.35 kB |                 1.13 kB
+chunk-ZXGF6NDM.js   | -                     | 793 bytes |               793 bytes
+chunk-7CGTOI24.js   | -                     | 618 bytes |               618 bytes
+
+                    | Initial total         | 689.15 kB |               157.59 kB
+
+Lazy chunk files    | Names                 |  Raw size | Estimated transfer size
+chunk-56K3ETQJ.js   | -                     |  84.68 kB |                19.20 kB
+chunk-5KKCSDI2.js   | browser               |  67.78 kB |                17.81 kB
+chunk-Q23Q3XJY.js   | -                     |  39.70 kB |                 8.52 kB
+chunk-7JNOOALN.js   | -                     |  24.90 kB |                 4.34 kB
+chunk-UC7KVQW3.js   | -                     |  11.03 kB |                 2.45 kB
+chunk-CHHCO33Y.js   | tenants-list-page     |   6.67 kB |                 2.19 kB
+chunk-O7B43L7A.js   | policies-list-page    |   6.49 kB |                 2.15 kB
+chunk-U3L5WPZ4.js   | flags-list-page       |   6.44 kB |                 2.10 kB
+chunk-LXB4EFRX.js   | web-vitals            |   5.69 kB |                 2.13 kB
+chunk-XWBUMCZP.js   | audit-list-page       |   5.53 kB |                 1.84 kB
+chunk-WWE5YMQK.js   | tenant-detail-page    |   4.74 kB |                 1.76 kB
+chunk-HYK3ZDAL.js   | admin-shell-component | 954 bytes |               954 bytes
+chunk-UXLL7C7Y.js   | index                 | 391 bytes |               391 bytes
+chunk-ZXBGPPFW.js   | index                 | 341 bytes |               341 bytes
+
+Application bundle generation complete. [21.336 seconds] - 2026-02-23T19:21:58.189Z
+
+▲ [WARNING] bundle initial exceeded maximum budget. Budget 500.00 kB was not met by 189.15 kB with a total of 689.15 kB.
+
+
+Output location: /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/dist/apps/admin-console
+

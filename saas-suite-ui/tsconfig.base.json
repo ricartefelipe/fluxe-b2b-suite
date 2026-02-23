@@ -30,7 +30,13 @@
       "@saas-suite/data-access/payments": ["libs/data-access/payments/src/index.ts"],
       "@saas-suite/domains/tenancy": ["libs/domains/tenancy/src/index.ts"],
       "@saas-suite/domains/admin": ["libs/domains/admin/src/index.ts"],
-      "@saas-suite/domains/ops": ["libs/domains/ops/src/index.ts"]
+      "@saas-suite/domains/ops": ["libs/domains/ops/src/index.ts"],
+      "@union.solutions/models": ["libs/shared/models/src/index.ts"],
+      "@union.solutions/shop/data": ["libs/shop/data/src/index.ts"],
+      "@union.solutions/shop/feature-products": ["libs/shop/feature-products/src/index.ts"],
+      "@union.solutions/shop/feature-product-detail": ["libs/shop/feature-product-detail/src/index.ts"],
+      "@union.solutions/shop/shared-ui": ["libs/shop/shared-ui/src/index.ts"],
+      "@union.solutions/api/products": ["libs/api/products/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

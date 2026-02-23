@@ -1,9 +1,11 @@
 import nx from '@nx/eslint-plugin';
+import eslintConfigPrettier from 'eslint-config-prettier';
 
 export default [
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
+  eslintConfigPrettier,
   {
     ignores: [
       '**/dist',
@@ -19,6 +21,10 @@ export default [
         {
           enforceBuildableLibDependency: true,
           allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
+          checkDynamicDependenciesExceptions: [
+            '@saas-suite/shared/auth',
+            '@saas-suite/shared/ui',
+          ],
           depConstraints: [
             { sourceTag: 'scope:admin', onlyDependOnLibsWithTags: ['scope:admin', 'scope:shared'] },
             { sourceTag: 'scope:ops', onlyDependOnLibsWithTags: ['scope:ops', 'scope:shared'] },

@@ -4,7 +4,7 @@ import { authGuard } from '@saas-suite/shared/auth';
 export const appRoutes: Route[] = [
   {
     path: 'login',
-    loadComponent: () => import('@saas-suite/shared/auth').then(m => m.DevLoginComponent),
+    loadComponent: () => import('@saas-suite/shared/auth').then(m => m.LoginPageComponent),
   },
   {
     path: '',

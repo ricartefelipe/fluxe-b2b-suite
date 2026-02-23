@@ -1,0 +1,17 @@
+{
+  "name": "fluxe-b2b-suite",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Fluxe B2B Suite — plataforma B2B multi-tenant (shop, ops-portal, admin-console)",
+  "scripts": {
+    "dev": "cd saas-suite-ui && pnpm nx serve ops-portal",
+    "dev:shop": "cd saas-suite-ui && pnpm nx serve shop",
+    "dev:admin": "cd saas-suite-ui && pnpm nx serve admin-console",
+    "install:ui": "cd saas-suite-ui && pnpm install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ricartefelipe/fluxe-b2b-suite.git"
+  },
+  "license": "MIT"
+}

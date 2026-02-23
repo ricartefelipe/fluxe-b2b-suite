@@ -11,16 +11,31 @@ interface TenantOption { id: string; name: string; }
   standalone: true,
   imports: [MatSelectModule, MatFormFieldModule, FormsModule],
   template: `
-    <mat-form-field appearance="outline" class="tenant-select" subscriptSizing="dynamic">
-      <mat-label>Tenant</mat-label>
-      <mat-select [(ngModel)]="selectedId" (ngModelChange)="onChange($event)">
-        @for (t of tenants; track t.id) {
-          <mat-option [value]="t.id">{{ t.name }}</mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
+    @if (tenants.length > 0) {
+      <div class="switcher">
+        <mat-form-field appearance="outline" subscriptSizing="dynamic" class="compact-field">
+          <mat-label>Tenant</mat-label>
+          <mat-select [(ngModel)]="selectedId" (ngModelChange)="onChange($event)">
+            @for (t of tenants; track t.id) {
+              <mat-option [value]="t.id">{{ t.name }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+    }
   `,
-  styles: [`.tenant-select { min-width: 180px; margin-right: 8px; }`],
+  styles: [`
+    .switcher { margin-right: 4px; }
+    .compact-field {
+      font-size: 12px;
+    }
+    :host ::ng-deep .compact-field .mat-mdc-form-field-infix { min-height: 36px; padding: 6px 0 !important; }
+    :host ::ng-deep .compact-field .mdc-notched-outline__leading,
+    :host ::ng-deep .compact-field .mdc-notched-outline__notch,
+    :host ::ng-deep .compact-field .mdc-notched-outline__trailing {
+      border-color: #e0e0e0 !important;
+    }
+  `],
 })
 export class TenantSwitcherComponent {
   private tenantCtx = inject(TenantContextService);

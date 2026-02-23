@@ -7,16 +7,34 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [MatIconModule],
   template: `
     <div class="empty">
-      <mat-icon class="empty-icon">{{ icon }}</mat-icon>
+      <div class="empty-icon-wrapper">
+        <mat-icon class="empty-icon">{{ icon }}</mat-icon>
+      </div>
       <p class="empty-title">{{ title }}</p>
       @if (subtitle) { <p class="empty-sub">{{ subtitle }}</p> }
     </div>
   `,
   styles: [`
-    .empty { display: flex; flex-direction: column; align-items: center; padding: 48px; color: #999; }
-    .empty-icon { font-size: 64px; width: 64px; height: 64px; }
-    .empty-title { font-size: 18px; font-weight: 500; margin-top: 16px; }
-    .empty-sub { font-size: 14px; }
+    .empty {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 60px 24px;
+      color: #90a4ae;
+    }
+    .empty-icon-wrapper {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #eceff1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .empty-icon { font-size: 36px; width: 36px; height: 36px; color: #b0bec5; }
+    .empty-title { font-size: 16px; font-weight: 500; margin: 0 0 4px; color: #78909c; }
+    .empty-sub { font-size: 13px; margin: 0; color: #b0bec5; }
   `],
 })
 export class EmptyStateComponent {

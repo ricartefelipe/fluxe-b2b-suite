@@ -26,7 +26,41 @@ import { firstValueFrom } from 'rxjs';
   template: `
     @if (loading()) { <mat-progress-bar mode="indeterminate" /> }
 
-    @if (tenant()) {
+    @if (isCreateMode()) {
+      <div class="page-header">
+        <h1>Novo Tenant</h1>
+        <button mat-stroked-button (click)="goBack()"><mat-icon>arrow_back</mat-icon> Voltar</button>
+      </div>
+      <mat-card>
+        <mat-card-content>
+          <div class="form-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Nome</mat-label>
+              <input matInput [(ngModel)]="createName" placeholder="Ex: Acme Corp">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Slug</mat-label>
+              <input matInput [(ngModel)]="createSlug" placeholder="Ex: acme-corp">
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Plano</mat-label>
+              <mat-select [(ngModel)]="createPlan">
+                <mat-option value="starter">Starter</mat-option>
+                <mat-option value="professional">Professional</mat-option>
+                <mat-option value="enterprise">Enterprise</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Região</mat-label>
+              <input matInput [(ngModel)]="createRegion" placeholder="us-east-1">
+            </mat-form-field>
+          </div>
+          <button mat-raised-button color="primary" (click)="create()" [disabled]="saving()">
+            Criar Tenant
+          </button>
+        </mat-card-content>
+      </mat-card>
+    } @else if (tenant()) {
       <div class="page-header">
         <div>
           <h1>{{ tenant()!.name }}</h1>
@@ -93,9 +127,21 @@ export class TenantDetailPage implements OnInit {
   saving = signal(false);
   editName = '';
   editPlan: TenantPlan = 'starter';
+  createName = '';
+  createSlug = '';
+  createPlan: TenantPlan = 'starter';
+  createRegion = 'us-east-1';
+
+  isCreateMode(): boolean {
+    return this.route.snapshot.paramMap.get('id') === 'new';
+  }
 
   async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id')!;
+    if (id === 'new') {
+      this.loading.set(false);
+      return;
+    }
     try {
       const t = await firstValueFrom(this.api.getTenant(id));
       this.tenant.set(t);
@@ -103,6 +149,21 @@ export class TenantDetailPage implements OnInit {
       this.editPlan = t.plan;
     } catch { this.snackBar.open('Tenant não encontrado', 'OK', { duration: 3000 }); }
     finally { this.loading.set(false); }
+  }
+
+  async create(): Promise<void> {
+    this.saving.set(true);
+    const created = await this.facade.createTenant({
+      name: this.createName,
+      slug: this.createSlug,
+      plan: this.createPlan,
+      region: this.createRegion,
+    });
+    if (created) {
+      this.snackBar.open('Tenant criado', 'OK', { duration: 2000 });
+      this.router.navigate(['/tenants', created.id]);
+    }
+    this.saving.set(false);
   }
 
   async save(): Promise<void> {

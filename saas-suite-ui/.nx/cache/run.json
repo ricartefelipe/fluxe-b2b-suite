@@ -1,0 +1,21 @@
+{
+  "run": {
+    "command": "nx run admin-console:lint",
+    "startTime": "2026-02-23T19:31:58.543Z",
+    "endTime": "2026-02-23T19:32:00.045Z",
+    "inner": false
+  },
+  "tasks": [
+    {
+      "taskId": "admin-console:lint",
+      "target": "lint",
+      "projectName": "admin-console",
+      "hash": "13392205124864962125",
+      "startTime": "2026-02-23T19:31:58.565Z",
+      "endTime": "2026-02-23T19:32:00.042Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    }
+  ]
+}

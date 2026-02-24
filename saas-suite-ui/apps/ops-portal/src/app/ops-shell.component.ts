@@ -3,6 +3,7 @@ import { ShellComponent, NavItem } from '@saas-suite/shared/ui';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
 
 const OPS_NAV: NavItem[] = [
+  { label: 'Dashboard', route: '/dashboard', icon: 'dashboard', permission: 'orders:read' },
   { label: 'Pedidos', route: '/orders', icon: 'receipt_long', permission: 'orders:read' },
   { label: 'Novo Pedido', route: '/orders/new', icon: 'add_shopping_cart', permission: 'orders:write' },
   { label: 'Inventário', route: '/inventory/adjustments', icon: 'inventory_2', permission: 'inventory:read' },

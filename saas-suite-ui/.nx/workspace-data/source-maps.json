@@ -24,6 +24,18 @@
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
+    "metadata.targetGroups.E2E (CI).3": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "metadata.targetGroups.E2E (CI).4": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "metadata.targetGroups.E2E (CI).5": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
     "targets": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
@@ -92,71 +104,275 @@
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts": [
+    "targets.e2e-ci--src/login-flow.spec.ts": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.options": [
+    "targets.e2e-ci--src/login-flow.spec.ts.options": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata": [
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.dependsOn": [
+    "targets.e2e-ci--src/login-flow.spec.ts.dependsOn": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.cache": [
+    "targets.e2e-ci--src/login-flow.spec.ts.cache": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.inputs": [
+    "targets.e2e-ci--src/login-flow.spec.ts.inputs": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.outputs": [
+    "targets.e2e-ci--src/login-flow.spec.ts.outputs": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.executor": [
+    "targets.e2e-ci--src/login-flow.spec.ts.executor": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.options.cwd": [
+    "targets.e2e-ci--src/login-flow.spec.ts.options.cwd": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.options.env": [
+    "targets.e2e-ci--src/login-flow.spec.ts.options.env": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.options.command": [
+    "targets.e2e-ci--src/login-flow.spec.ts.options.command": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata.technologies": [
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata.technologies": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata.technologies.0": [
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata.technologies.0": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata.description": [
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata.description": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata.help": [
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata.help": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata.help.command": [
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata.help.command": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata.help.example": [
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata.help.example": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.options": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.dependsOn": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.cache": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.inputs": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.outputs": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.executor": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.options.cwd": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.options.env": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.options.command": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata.technologies": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata.technologies.0": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata.description": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata.help": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata.help.command": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata.help.example": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.options": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.metadata": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.dependsOn": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.cache": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.inputs": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.outputs": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.executor": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.options.cwd": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.options.env": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.options.command": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.metadata.technologies": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.metadata.technologies.0": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.metadata.description": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.metadata.help": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.metadata.help.command": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/onboarding-wizard.spec.ts.metadata.help.example": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.options": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.metadata": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.dependsOn": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.cache": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.inputs": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.outputs": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.executor": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.options.cwd": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.options.env": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.options.command": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.metadata.technologies": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.metadata.technologies.0": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.metadata.description": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.metadata.help": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.metadata.help.command": [
+      "apps/admin-console-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/tenants-management.spec.ts.metadata.help.example": [
       "apps/admin-console-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
@@ -378,6 +594,18 @@
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
+    "metadata.targetGroups.E2E (CI).3": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "metadata.targetGroups.E2E (CI).4": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "metadata.targetGroups.E2E (CI).5": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
     "targets": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
@@ -446,71 +674,275 @@
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts": [
+    "targets.e2e-ci--src/dashboard.spec.ts": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.options": [
+    "targets.e2e-ci--src/dashboard.spec.ts.options": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata": [
+    "targets.e2e-ci--src/dashboard.spec.ts.metadata": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.dependsOn": [
+    "targets.e2e-ci--src/dashboard.spec.ts.dependsOn": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.cache": [
+    "targets.e2e-ci--src/dashboard.spec.ts.cache": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.inputs": [
+    "targets.e2e-ci--src/dashboard.spec.ts.inputs": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.outputs": [
+    "targets.e2e-ci--src/dashboard.spec.ts.outputs": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.executor": [
+    "targets.e2e-ci--src/dashboard.spec.ts.executor": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.options.cwd": [
+    "targets.e2e-ci--src/dashboard.spec.ts.options.cwd": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.options.env": [
+    "targets.e2e-ci--src/dashboard.spec.ts.options.env": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.options.command": [
+    "targets.e2e-ci--src/dashboard.spec.ts.options.command": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata.technologies": [
+    "targets.e2e-ci--src/dashboard.spec.ts.metadata.technologies": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata.technologies.0": [
+    "targets.e2e-ci--src/dashboard.spec.ts.metadata.technologies.0": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata.description": [
+    "targets.e2e-ci--src/dashboard.spec.ts.metadata.description": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata.help": [
+    "targets.e2e-ci--src/dashboard.spec.ts.metadata.help": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata.help.command": [
+    "targets.e2e-ci--src/dashboard.spec.ts.metadata.help.command": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
-    "targets.e2e-ci--src/example.spec.ts.metadata.help.example": [
+    "targets.e2e-ci--src/dashboard.spec.ts.metadata.help.example": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.options": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.dependsOn": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.cache": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.inputs": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.outputs": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.executor": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.options.cwd": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.options.env": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.options.command": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata.technologies": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata.technologies.0": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata.description": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata.help": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata.help.command": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/login-flow.spec.ts.metadata.help.example": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.options": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.dependsOn": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.cache": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.inputs": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.outputs": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.executor": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.options.cwd": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.options.env": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.options.command": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata.technologies": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata.technologies.0": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata.description": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata.help": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata.help.command": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/navigation.spec.ts.metadata.help.example": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.options": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.metadata": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.dependsOn": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.cache": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.inputs": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.outputs": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.executor": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.options.cwd": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.options.env": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.options.command": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.metadata.technologies": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.metadata.technologies.0": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.metadata.description": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.metadata.help": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.metadata.help.command": [
+      "apps/ops-portal-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-management.spec.ts.metadata.help.example": [
       "apps/ops-portal-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
@@ -744,6 +1176,14 @@
       "apps/shop-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
+    "metadata.targetGroups.E2E (CI).6": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "metadata.targetGroups.E2E (CI).7": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
     "targets": [
       "apps/shop-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
@@ -812,6 +1252,74 @@
       "apps/shop-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.options": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.metadata": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.dependsOn": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.cache": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.inputs": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.outputs": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.executor": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.options.cwd": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.options.env": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.options.command": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.metadata.technologies": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.metadata.technologies.0": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.metadata.description": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.metadata.help": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.metadata.help.command": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/checkout-flow.spec.ts.metadata.help.example": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
     "targets.e2e-ci--src/navigation-flow.spec.ts": [
       "apps/shop-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
@@ -877,6 +1385,74 @@
       "@nx/playwright/plugin"
     ],
     "targets.e2e-ci--src/navigation-flow.spec.ts.metadata.help.example": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.options": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.metadata": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.dependsOn": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.cache": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.inputs": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.outputs": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.executor": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.options.cwd": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.options.env": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.options.command": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.metadata.technologies": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.metadata.technologies.0": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.metadata.description": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.metadata.help": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.metadata.help.command": [
+      "apps/shop-e2e/playwright.config.ts",
+      "@nx/playwright/plugin"
+    ],
+    "targets.e2e-ci--src/orders-history.spec.ts.metadata.help.example": [
       "apps/shop-e2e/playwright.config.ts",
       "@nx/playwright/plugin"
     ],
@@ -1727,6 +2303,10 @@
       "nx/core/project-json"
     ],
     "targets.build.configurations.production.outputHashing": [
+      "apps/admin-console/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.configurations.production.optimization": [
       "apps/admin-console/project.json",
       "nx/core/project-json"
     ],
@@ -2906,6 +3486,10 @@
       "apps/ops-portal/project.json",
       "nx/core/project-json"
     ],
+    "targets.build.configurations.production.optimization": [
+      "apps/ops-portal/project.json",
+      "nx/core/project-json"
+    ],
     "targets.build.configurations.development": [
       "apps/ops-portal/project.json",
       "nx/core/project-json"
@@ -3264,6 +3848,10 @@
       "apps/shop/project.json",
       "nx/core/project-json"
     ],
+    "targets.build.options.serviceWorker": [
+      "apps/shop/project.json",
+      "nx/core/project-json"
+    ],
     "targets.build.options.server": [
       "apps/shop/project.json",
       "nx/core/project-json"
@@ -3285,6 +3873,10 @@
       "nx/core/project-json"
     ],
     "targets.build.configurations.production.outputHashing": [
+      "apps/shop/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.build.configurations.production.optimization": [
       "apps/shop/project.json",
       "nx/core/project-json"
     ],
@@ -3465,6 +4057,130 @@
       "nx/target-defaults"
     ],
     "targets.build.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ]
+  },
+  "libs/shared/notifications": {
+    "root": [
+      "libs/shared/notifications/project.json",
+      "nx/core/project-json"
+    ],
+    "targets": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "name": [
+      "libs/shared/notifications/project.json",
+      "nx/core/project-json"
+    ],
+    "$schema": [
+      "libs/shared/notifications/project.json",
+      "nx/core/project-json"
+    ],
+    "sourceRoot": [
+      "libs/shared/notifications/project.json",
+      "nx/core/project-json"
+    ],
+    "prefix": [
+      "libs/shared/notifications/project.json",
+      "nx/core/project-json"
+    ],
+    "projectType": [
+      "libs/shared/notifications/project.json",
+      "nx/core/project-json"
+    ],
+    "tags": [
+      "libs/shared/notifications/project.json",
+      "nx/core/project-json"
+    ],
+    "tags.scope:shared": [
+      "libs/shared/notifications/project.json",
+      "nx/core/project-json"
+    ],
+    "tags.type:feature": [
+      "libs/shared/notifications/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.lint": [
+      "libs/shared/notifications/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.lint.executor": [
+      "libs/shared/notifications/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.lint.cache": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.lint.inputs": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.lint.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ]
+  },
+  "libs/shared/search": {
+    "root": [
+      "libs/shared/search/project.json",
+      "nx/core/project-json"
+    ],
+    "targets": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "name": [
+      "libs/shared/search/project.json",
+      "nx/core/project-json"
+    ],
+    "$schema": [
+      "libs/shared/search/project.json",
+      "nx/core/project-json"
+    ],
+    "sourceRoot": [
+      "libs/shared/search/project.json",
+      "nx/core/project-json"
+    ],
+    "prefix": [
+      "libs/shared/search/project.json",
+      "nx/core/project-json"
+    ],
+    "projectType": [
+      "libs/shared/search/project.json",
+      "nx/core/project-json"
+    ],
+    "tags": [
+      "libs/shared/search/project.json",
+      "nx/core/project-json"
+    ],
+    "tags.scope:shared": [
+      "libs/shared/search/project.json",
+      "nx/core/project-json"
+    ],
+    "tags.type:feature": [
+      "libs/shared/search/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.lint": [
+      "libs/shared/search/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.lint.executor": [
+      "libs/shared/search/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.lint.cache": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.lint.inputs": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.lint.parallelism": [
       "nx.json",
       "nx/target-defaults"
     ]
@@ -3949,6 +4665,162 @@
       "nx/target-defaults"
     ],
     "targets.test.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ]
+  },
+  "libs/shop/performance": {
+    "root": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "targets": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "name": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "$schema": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "sourceRoot": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "prefix": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "projectType": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "tags": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "tags.scope:shop": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "tags.type:util": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.executor": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.outputs": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options.reportsDirectory": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.lint": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.lint.executor": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.lint.cache": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.lint.inputs": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.lint.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.cache": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.inputs": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ]
+  },
+  "libs/shop/pwa": {
+    "root": [
+      "libs/shop/pwa/project.json",
+      "nx/core/project-json"
+    ],
+    "targets": [
+      "eslint.config.mjs",
+      "@nx/eslint/plugin"
+    ],
+    "name": [
+      "libs/shop/pwa/project.json",
+      "nx/core/project-json"
+    ],
+    "$schema": [
+      "libs/shop/pwa/project.json",
+      "nx/core/project-json"
+    ],
+    "sourceRoot": [
+      "libs/shop/pwa/project.json",
+      "nx/core/project-json"
+    ],
+    "prefix": [
+      "libs/shop/pwa/project.json",
+      "nx/core/project-json"
+    ],
+    "projectType": [
+      "libs/shop/pwa/project.json",
+      "nx/core/project-json"
+    ],
+    "tags": [
+      "libs/shop/pwa/project.json",
+      "nx/core/project-json"
+    ],
+    "tags.scope:shop": [
+      "libs/shop/pwa/project.json",
+      "nx/core/project-json"
+    ],
+    "tags.type:feature": [
+      "libs/shop/pwa/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.lint": [
+      "libs/shop/pwa/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.lint.executor": [
+      "libs/shop/pwa/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.lint.cache": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.lint.inputs": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.lint.parallelism": [
       "nx.json",
       "nx/target-defaults"
     ]

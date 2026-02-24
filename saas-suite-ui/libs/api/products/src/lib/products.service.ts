@@ -39,16 +39,14 @@ export class ProductsService {
         );
       }
 
-      if (filter.minPrice !== undefined) {
-        filteredProducts = filteredProducts.filter(
-          p => p.price >= filter.minPrice
-        );
+      const minPrice = filter.minPrice;
+      if (minPrice !== undefined) {
+        filteredProducts = filteredProducts.filter(p => p.price >= minPrice);
       }
 
-      if (filter.maxPrice !== undefined) {
-        filteredProducts = filteredProducts.filter(
-          p => p.price <= filter.maxPrice
-        );
+      const maxPrice = filter.maxPrice;
+      if (maxPrice !== undefined) {
+        filteredProducts = filteredProducts.filter(p => p.price <= maxPrice);
       }
 
       if (filter.inStock !== undefined) {

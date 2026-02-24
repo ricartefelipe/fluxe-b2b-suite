@@ -1,21 +1,40 @@
-<header class="app-header">
+<shop-offline-indicator />
+
+<header class="app-header" role="banner">
   <div class="container">
-    <h1>{{ title }}</h1>
-    <nav>
+    <a routerLink="/" class="brand" aria-label="Home">
+      <h1>{{ title }}</h1>
+    </a>
+    <nav role="navigation" aria-label="Main navigation">
       <a routerLink="/products" routerLinkActive="active">Products</a>
-      <a routerLink="/checkout" routerLinkActive="active">Checkout</a>
-      <a routerLink="/orders" routerLinkActive="active">Meus Pedidos</a>
+      <a routerLink="/orders" routerLinkActive="active">My Orders</a>
+      <a routerLink="/checkout" routerLinkActive="active" class="cart-link" aria-label="Shopping cart">
+        <mat-icon
+          [matBadge]="cart.totalItems() || null"
+          matBadgeColor="warn"
+          matBadgeSize="small"
+          [matBadgeHidden]="cart.totalItems() === 0"
+          aria-hidden="true"
+        >shopping_cart</mat-icon>
+        Cart
+      </a>
     </nav>
+    <div class="header-actions">
+      <ui-theme-toggle />
+      <saas-language-switcher />
+    </div>
   </div>
 </header>
 
-<main class="app-main">
+<main id="main-content" class="app-main" role="main">
   <router-outlet></router-outlet>
 </main>
 
-<footer class="app-footer">
+<footer class="app-footer" role="contentinfo">
   <div class="container">
-    <p>© 2026 Fluxe B2B Suite</p>
-    <p>Plataforma B2B multi-tenant</p>
+    <p>&copy; 2026 Fluxe B2B Suite</p>
+    <p>Multi-tenant B2B Platform</p>
   </div>
 </footer>
+
+<shop-install-prompt />

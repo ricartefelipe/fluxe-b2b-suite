@@ -1,344 +1,4 @@
 {
-  "14410160547584852256apps/admin-console/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/admin-console"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/admin-console"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.app.json",
-        "options": {
-          "cwd": "apps/admin-console"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.app.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects admin-console --includeDependentProjects -- pnpm exec nx build-deps admin-console"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "10066868416251668505apps/ops-portal/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/ops-portal"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/ops-portal"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.app.json",
-        "options": {
-          "cwd": "apps/ops-portal"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.app.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects ops-portal --includeDependentProjects -- pnpm exec nx build-deps ops-portal"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "2705988416583898564libs/shop/shared-ui/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shop/shared-ui"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shop/shared-ui"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.lib.json",
-        "options": {
-          "cwd": "libs/shop/shared-ui"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects shared-ui --includeDependentProjects -- pnpm exec nx build-deps shared-ui"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "15484364466236433615libs/shared/http/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shared/http"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/http"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.lib.json",
-        "options": {
-          "cwd": "libs/shared/http"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects shared-http --includeDependentProjects -- pnpm exec nx build-deps shared-http"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
   "12098243632551333945apps/shop/vite.config.mts": {
     "targets": {
       "test": {
@@ -419,346 +79,6 @@
           "build-deps"
         ],
         "command": "pnpm exec nx watch --projects shop --includeDependentProjects -- pnpm exec nx build-deps shop"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "13799634810357721165libs/data-access/payments/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/data-access/payments"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/data-access/payments"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.lib.json",
-        "options": {
-          "cwd": "libs/data-access/payments"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects data-access-payments --includeDependentProjects -- pnpm exec nx build-deps data-access-payments"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "9751213063472630692libs/domains/admin/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/domains/admin"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/domains/admin"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.lib.json",
-        "options": {
-          "cwd": "libs/domains/admin"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects domain-admin --includeDependentProjects -- pnpm exec nx build-deps domain-admin"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "16864572852640881069libs/domains/ops/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/domains/ops"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/domains/ops"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.lib.json",
-        "options": {
-          "cwd": "libs/domains/ops"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects domain-ops --includeDependentProjects -- pnpm exec nx build-deps domain-ops"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "13066610096996663296libs/data-access/orders/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/data-access/orders"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/data-access/orders"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.lib.json",
-        "options": {
-          "cwd": "libs/data-access/orders"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects data-access-orders --includeDependentProjects -- pnpm exec nx build-deps data-access-orders"
       }
     },
     "metadata": {},
@@ -849,12 +169,12 @@
     "metadata": {},
     "projectType": "application"
   },
-  "6915894686455427622libs/shared/config/vite.config.mts": {
+  "9751213063472630692libs/domains/admin/vite.config.mts": {
     "targets": {
       "test": {
         "command": "vitest",
         "options": {
-          "cwd": "libs/shared/config"
+          "cwd": "libs/domains/admin"
         },
         "cache": true,
         "inputs": [
@@ -870,7 +190,7 @@
           }
         ],
         "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/config"
+          "{workspaceRoot}/coverage/libs/domains/admin"
         ],
         "metadata": {
           "technologies": [
@@ -901,7 +221,7 @@
         ],
         "command": "tsc --noEmit -p tsconfig.lib.json",
         "options": {
-          "cwd": "libs/shared/config"
+          "cwd": "libs/domains/admin"
         },
         "metadata": {
           "description": "Runs type-checking for the project.",
@@ -928,18 +248,18 @@
         "dependsOn": [
           "build-deps"
         ],
-        "command": "pnpm exec nx watch --projects shared-config --includeDependentProjects -- pnpm exec nx build-deps shared-config"
+        "command": "pnpm exec nx watch --projects domain-admin --includeDependentProjects -- pnpm exec nx build-deps domain-admin"
       }
     },
     "metadata": {},
     "projectType": "application"
   },
-  "14596003173774648612libs/domains/tenancy/vite.config.mts": {
+  "15484364466236433615libs/shared/http/vite.config.mts": {
     "targets": {
       "test": {
         "command": "vitest",
         "options": {
-          "cwd": "libs/domains/tenancy"
+          "cwd": "libs/shared/http"
         },
         "cache": true,
         "inputs": [
@@ -955,7 +275,7 @@
           }
         ],
         "outputs": [
-          "{workspaceRoot}/coverage/libs/domains/tenancy"
+          "{workspaceRoot}/coverage/libs/shared/http"
         ],
         "metadata": {
           "technologies": [
@@ -986,7 +306,7 @@
         ],
         "command": "tsc --noEmit -p tsconfig.lib.json",
         "options": {
-          "cwd": "libs/domains/tenancy"
+          "cwd": "libs/shared/http"
         },
         "metadata": {
           "description": "Runs type-checking for the project.",
@@ -1013,262 +333,7 @@
         "dependsOn": [
           "build-deps"
         ],
-        "command": "pnpm exec nx watch --projects domain-tenancy --includeDependentProjects -- pnpm exec nx build-deps domain-tenancy"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "6971024217034461247libs/shop/feature-product-detail/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shop/feature-product-detail"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shop/feature-product-detail"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.lib.json",
-        "options": {
-          "cwd": "libs/shop/feature-product-detail"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects feature-product-detail --includeDependentProjects -- pnpm exec nx build-deps feature-product-detail"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "10663078547026215101libs/shared/auth/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shared/auth"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/auth"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.app.json",
-        "options": {
-          "cwd": "libs/shared/auth"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.app.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects shared-auth --includeDependentProjects -- pnpm exec nx build-deps shared-auth"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "15301848890182736849libs/shared/util/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shared/util"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/util"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.lib.json",
-        "options": {
-          "cwd": "libs/shared/util"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects shared-util --includeDependentProjects -- pnpm exec nx build-deps shared-util"
+        "command": "pnpm exec nx watch --projects shared-http --includeDependentProjects -- pnpm exec nx build-deps shared-http"
       }
     },
     "metadata": {},
@@ -1359,12 +424,12 @@
     "metadata": {},
     "projectType": "application"
   },
-  "16248534763954097731libs/shop/feature-products/vite.config.mts": {
+  "643605713149539083libs/shared/config/vite.config.mts": {
     "targets": {
       "test": {
         "command": "vitest",
         "options": {
-          "cwd": "libs/shop/feature-products"
+          "cwd": "libs/shared/config"
         },
         "cache": true,
         "inputs": [
@@ -1380,7 +445,7 @@
           }
         ],
         "outputs": [
-          "{workspaceRoot}/coverage/libs/shop/feature-products"
+          "{workspaceRoot}/coverage/libs/shared/config"
         ],
         "metadata": {
           "technologies": [
@@ -1411,7 +476,7 @@
         ],
         "command": "tsc --noEmit -p tsconfig.lib.json",
         "options": {
-          "cwd": "libs/shop/feature-products"
+          "cwd": "libs/shared/config"
         },
         "metadata": {
           "description": "Runs type-checking for the project.",
@@ -1438,18 +503,18 @@
         "dependsOn": [
           "build-deps"
         ],
-        "command": "pnpm exec nx watch --projects feature-products --includeDependentProjects -- pnpm exec nx build-deps feature-products"
+        "command": "pnpm exec nx watch --projects shared-config --includeDependentProjects -- pnpm exec nx build-deps shared-config"
       }
     },
     "metadata": {},
     "projectType": "application"
   },
-  "12532586589130254599libs/shared/telemetry/vite.config.mts": {
+  "10066868416251668505apps/ops-portal/vite.config.mts": {
     "targets": {
       "test": {
         "command": "vitest",
         "options": {
-          "cwd": "libs/shared/telemetry"
+          "cwd": "apps/ops-portal"
         },
         "cache": true,
         "inputs": [
@@ -1465,7 +530,92 @@
           }
         ],
         "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/telemetry"
+          "{workspaceRoot}/coverage/apps/ops-portal"
+        ],
+        "metadata": {
+          "technologies": [
+            "vite"
+          ],
+          "description": "Run Vite tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "typecheck": {
+        "cache": true,
+        "inputs": [
+          "production",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
+        "command": "tsc --noEmit -p tsconfig.app.json",
+        "options": {
+          "cwd": "apps/ops-portal"
+        },
+        "metadata": {
+          "description": "Runs type-checking for the project.",
+          "technologies": [
+            "typescript"
+          ],
+          "help": {
+            "command": "pnpm exec tsc -p tsconfig.app.json --help",
+            "example": {
+              "options": {
+                "noEmit": true
+              }
+            }
+          }
+        }
+      },
+      "build-deps": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "watch-deps": {
+        "continuous": true,
+        "dependsOn": [
+          "build-deps"
+        ],
+        "command": "pnpm exec nx watch --projects ops-portal --includeDependentProjects -- pnpm exec nx build-deps ops-portal"
+      }
+    },
+    "metadata": {},
+    "projectType": "application"
+  },
+  "13066610096996663296libs/data-access/orders/vite.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/data-access/orders"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/data-access/orders"
         ],
         "metadata": {
           "technologies": [
@@ -1496,7 +646,7 @@
         ],
         "command": "tsc --noEmit -p tsconfig.lib.json",
         "options": {
-          "cwd": "libs/shared/telemetry"
+          "cwd": "libs/data-access/orders"
         },
         "metadata": {
           "description": "Runs type-checking for the project.",
@@ -1523,7 +673,92 @@
         "dependsOn": [
           "build-deps"
         ],
-        "command": "pnpm exec nx watch --projects shared-telemetry --includeDependentProjects -- pnpm exec nx build-deps shared-telemetry"
+        "command": "pnpm exec nx watch --projects data-access-orders --includeDependentProjects -- pnpm exec nx build-deps data-access-orders"
+      }
+    },
+    "metadata": {},
+    "projectType": "application"
+  },
+  "14410160547584852256apps/admin-console/vite.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "apps/admin-console"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/apps/admin-console"
+        ],
+        "metadata": {
+          "technologies": [
+            "vite"
+          ],
+          "description": "Run Vite tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "typecheck": {
+        "cache": true,
+        "inputs": [
+          "production",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
+        "command": "tsc --noEmit -p tsconfig.app.json",
+        "options": {
+          "cwd": "apps/admin-console"
+        },
+        "metadata": {
+          "description": "Runs type-checking for the project.",
+          "technologies": [
+            "typescript"
+          ],
+          "help": {
+            "command": "pnpm exec tsc -p tsconfig.app.json --help",
+            "example": {
+              "options": {
+                "noEmit": true
+              }
+            }
+          }
+        }
+      },
+      "build-deps": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "watch-deps": {
+        "continuous": true,
+        "dependsOn": [
+          "build-deps"
+        ],
+        "command": "pnpm exec nx watch --projects admin-console --includeDependentProjects -- pnpm exec nx build-deps admin-console"
       }
     },
     "metadata": {},
@@ -1614,6 +849,176 @@
     "metadata": {},
     "projectType": "application"
   },
+  "14596003173774648612libs/domains/tenancy/vite.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/domains/tenancy"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/domains/tenancy"
+        ],
+        "metadata": {
+          "technologies": [
+            "vite"
+          ],
+          "description": "Run Vite tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "typecheck": {
+        "cache": true,
+        "inputs": [
+          "production",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
+        "command": "tsc --noEmit -p tsconfig.lib.json",
+        "options": {
+          "cwd": "libs/domains/tenancy"
+        },
+        "metadata": {
+          "description": "Runs type-checking for the project.",
+          "technologies": [
+            "typescript"
+          ],
+          "help": {
+            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
+            "example": {
+              "options": {
+                "noEmit": true
+              }
+            }
+          }
+        }
+      },
+      "build-deps": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "watch-deps": {
+        "continuous": true,
+        "dependsOn": [
+          "build-deps"
+        ],
+        "command": "pnpm exec nx watch --projects domain-tenancy --includeDependentProjects -- pnpm exec nx build-deps domain-tenancy"
+      }
+    },
+    "metadata": {},
+    "projectType": "application"
+  },
+  "10663078547026215101libs/shared/auth/vite.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared/auth"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared/auth"
+        ],
+        "metadata": {
+          "technologies": [
+            "vite"
+          ],
+          "description": "Run Vite tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "typecheck": {
+        "cache": true,
+        "inputs": [
+          "production",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
+        "command": "tsc --noEmit -p tsconfig.app.json",
+        "options": {
+          "cwd": "libs/shared/auth"
+        },
+        "metadata": {
+          "description": "Runs type-checking for the project.",
+          "technologies": [
+            "typescript"
+          ],
+          "help": {
+            "command": "pnpm exec tsc -p tsconfig.app.json --help",
+            "example": {
+              "options": {
+                "noEmit": true
+              }
+            }
+          }
+        }
+      },
+      "build-deps": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "watch-deps": {
+        "continuous": true,
+        "dependsOn": [
+          "build-deps"
+        ],
+        "command": "pnpm exec nx watch --projects shared-auth --includeDependentProjects -- pnpm exec nx build-deps shared-auth"
+      }
+    },
+    "metadata": {},
+    "projectType": "application"
+  },
   "1106487879789297432libs/shop/data/vite.config.mts": {
     "targets": {
       "test": {
@@ -1694,6 +1099,601 @@
           "build-deps"
         ],
         "command": "pnpm exec nx watch --projects data --includeDependentProjects -- pnpm exec nx build-deps data"
+      }
+    },
+    "metadata": {},
+    "projectType": "application"
+  },
+  "15301848890182736849libs/shared/util/vite.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared/util"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared/util"
+        ],
+        "metadata": {
+          "technologies": [
+            "vite"
+          ],
+          "description": "Run Vite tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "typecheck": {
+        "cache": true,
+        "inputs": [
+          "production",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
+        "command": "tsc --noEmit -p tsconfig.lib.json",
+        "options": {
+          "cwd": "libs/shared/util"
+        },
+        "metadata": {
+          "description": "Runs type-checking for the project.",
+          "technologies": [
+            "typescript"
+          ],
+          "help": {
+            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
+            "example": {
+              "options": {
+                "noEmit": true
+              }
+            }
+          }
+        }
+      },
+      "build-deps": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "watch-deps": {
+        "continuous": true,
+        "dependsOn": [
+          "build-deps"
+        ],
+        "command": "pnpm exec nx watch --projects shared-util --includeDependentProjects -- pnpm exec nx build-deps shared-util"
+      }
+    },
+    "metadata": {},
+    "projectType": "application"
+  },
+  "12532586589130254599libs/shared/telemetry/vite.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared/telemetry"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared/telemetry"
+        ],
+        "metadata": {
+          "technologies": [
+            "vite"
+          ],
+          "description": "Run Vite tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "typecheck": {
+        "cache": true,
+        "inputs": [
+          "production",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
+        "command": "tsc --noEmit -p tsconfig.lib.json",
+        "options": {
+          "cwd": "libs/shared/telemetry"
+        },
+        "metadata": {
+          "description": "Runs type-checking for the project.",
+          "technologies": [
+            "typescript"
+          ],
+          "help": {
+            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
+            "example": {
+              "options": {
+                "noEmit": true
+              }
+            }
+          }
+        }
+      },
+      "build-deps": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "watch-deps": {
+        "continuous": true,
+        "dependsOn": [
+          "build-deps"
+        ],
+        "command": "pnpm exec nx watch --projects shared-telemetry --includeDependentProjects -- pnpm exec nx build-deps shared-telemetry"
+      }
+    },
+    "metadata": {},
+    "projectType": "application"
+  },
+  "16864572852640881069libs/domains/ops/vite.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/domains/ops"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/domains/ops"
+        ],
+        "metadata": {
+          "technologies": [
+            "vite"
+          ],
+          "description": "Run Vite tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "typecheck": {
+        "cache": true,
+        "inputs": [
+          "production",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
+        "command": "tsc --noEmit -p tsconfig.lib.json",
+        "options": {
+          "cwd": "libs/domains/ops"
+        },
+        "metadata": {
+          "description": "Runs type-checking for the project.",
+          "technologies": [
+            "typescript"
+          ],
+          "help": {
+            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
+            "example": {
+              "options": {
+                "noEmit": true
+              }
+            }
+          }
+        }
+      },
+      "build-deps": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "watch-deps": {
+        "continuous": true,
+        "dependsOn": [
+          "build-deps"
+        ],
+        "command": "pnpm exec nx watch --projects domain-ops --includeDependentProjects -- pnpm exec nx build-deps domain-ops"
+      }
+    },
+    "metadata": {},
+    "projectType": "application"
+  },
+  "16248534763954097731libs/shop/feature-products/vite.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shop/feature-products"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shop/feature-products"
+        ],
+        "metadata": {
+          "technologies": [
+            "vite"
+          ],
+          "description": "Run Vite tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "typecheck": {
+        "cache": true,
+        "inputs": [
+          "production",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
+        "command": "tsc --noEmit -p tsconfig.lib.json",
+        "options": {
+          "cwd": "libs/shop/feature-products"
+        },
+        "metadata": {
+          "description": "Runs type-checking for the project.",
+          "technologies": [
+            "typescript"
+          ],
+          "help": {
+            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
+            "example": {
+              "options": {
+                "noEmit": true
+              }
+            }
+          }
+        }
+      },
+      "build-deps": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "watch-deps": {
+        "continuous": true,
+        "dependsOn": [
+          "build-deps"
+        ],
+        "command": "pnpm exec nx watch --projects feature-products --includeDependentProjects -- pnpm exec nx build-deps feature-products"
+      }
+    },
+    "metadata": {},
+    "projectType": "application"
+  },
+  "2705988416583898564libs/shop/shared-ui/vite.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shop/shared-ui"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shop/shared-ui"
+        ],
+        "metadata": {
+          "technologies": [
+            "vite"
+          ],
+          "description": "Run Vite tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "typecheck": {
+        "cache": true,
+        "inputs": [
+          "production",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
+        "command": "tsc --noEmit -p tsconfig.lib.json",
+        "options": {
+          "cwd": "libs/shop/shared-ui"
+        },
+        "metadata": {
+          "description": "Runs type-checking for the project.",
+          "technologies": [
+            "typescript"
+          ],
+          "help": {
+            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
+            "example": {
+              "options": {
+                "noEmit": true
+              }
+            }
+          }
+        }
+      },
+      "build-deps": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "watch-deps": {
+        "continuous": true,
+        "dependsOn": [
+          "build-deps"
+        ],
+        "command": "pnpm exec nx watch --projects shared-ui --includeDependentProjects -- pnpm exec nx build-deps shared-ui"
+      }
+    },
+    "metadata": {},
+    "projectType": "application"
+  },
+  "13799634810357721165libs/data-access/payments/vite.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/data-access/payments"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/data-access/payments"
+        ],
+        "metadata": {
+          "technologies": [
+            "vite"
+          ],
+          "description": "Run Vite tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "typecheck": {
+        "cache": true,
+        "inputs": [
+          "production",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
+        "command": "tsc --noEmit -p tsconfig.lib.json",
+        "options": {
+          "cwd": "libs/data-access/payments"
+        },
+        "metadata": {
+          "description": "Runs type-checking for the project.",
+          "technologies": [
+            "typescript"
+          ],
+          "help": {
+            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
+            "example": {
+              "options": {
+                "noEmit": true
+              }
+            }
+          }
+        }
+      },
+      "build-deps": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "watch-deps": {
+        "continuous": true,
+        "dependsOn": [
+          "build-deps"
+        ],
+        "command": "pnpm exec nx watch --projects data-access-payments --includeDependentProjects -- pnpm exec nx build-deps data-access-payments"
+      }
+    },
+    "metadata": {},
+    "projectType": "application"
+  },
+  "6971024217034461247libs/shop/feature-product-detail/vite.config.mts": {
+    "targets": {
+      "test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shop/feature-product-detail"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shop/feature-product-detail"
+        ],
+        "metadata": {
+          "technologies": [
+            "vite"
+          ],
+          "description": "Run Vite tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      },
+      "typecheck": {
+        "cache": true,
+        "inputs": [
+          "production",
+          "^production",
+          {
+            "externalDependencies": [
+              "typescript"
+            ]
+          }
+        ],
+        "command": "tsc --noEmit -p tsconfig.lib.json",
+        "options": {
+          "cwd": "libs/shop/feature-product-detail"
+        },
+        "metadata": {
+          "description": "Runs type-checking for the project.",
+          "technologies": [
+            "typescript"
+          ],
+          "help": {
+            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
+            "example": {
+              "options": {
+                "noEmit": true
+              }
+            }
+          }
+        }
+      },
+      "build-deps": {
+        "dependsOn": [
+          "^build"
+        ]
+      },
+      "watch-deps": {
+        "continuous": true,
+        "dependsOn": [
+          "build-deps"
+        ],
+        "command": "pnpm exec nx watch --projects feature-product-detail --includeDependentProjects -- pnpm exec nx build-deps feature-product-detail"
       }
     },
     "metadata": {},
@@ -1949,516 +1949,6 @@
           "build-deps"
         ],
         "command": "pnpm exec nx watch --projects models --includeDependentProjects -- pnpm exec nx build-deps models"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "643605713149539083libs/shared/config/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shared/config"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/config"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.lib.json",
-        "options": {
-          "cwd": "libs/shared/config"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects shared-config --includeDependentProjects -- pnpm exec nx build-deps shared-config"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "2802725885727395932apps/ops-portal/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/ops-portal"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/ops-portal"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.app.json",
-        "options": {
-          "cwd": "apps/ops-portal"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.app.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects ops-portal --includeDependentProjects -- pnpm exec nx build-deps ops-portal"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "4661805322654507460apps/ops-portal/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/ops-portal"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/ops-portal"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.app.json",
-        "options": {
-          "cwd": "apps/ops-portal"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.app.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects ops-portal --includeDependentProjects -- pnpm exec nx build-deps ops-portal"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "12926024725386713898libs/shared/ui/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shared/ui"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/ui"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.lib.json",
-        "options": {
-          "cwd": "libs/shared/ui"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.lib.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects ui --includeDependentProjects -- pnpm exec nx build-deps ui"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "4722069947787488740apps/admin-console/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/admin-console"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/admin-console"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.app.json",
-        "options": {
-          "cwd": "apps/admin-console"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.app.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects admin-console --includeDependentProjects -- pnpm exec nx build-deps admin-console"
-      }
-    },
-    "metadata": {},
-    "projectType": "application"
-  },
-  "10522335720863263180apps/ops-portal/vite.config.mts": {
-    "targets": {
-      "test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/ops-portal"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/ops-portal"
-        ],
-        "metadata": {
-          "technologies": [
-            "vite"
-          ],
-          "description": "Run Vite tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      },
-      "typecheck": {
-        "cache": true,
-        "inputs": [
-          "production",
-          "^production",
-          {
-            "externalDependencies": [
-              "typescript"
-            ]
-          }
-        ],
-        "command": "tsc --noEmit -p tsconfig.app.json",
-        "options": {
-          "cwd": "apps/ops-portal"
-        },
-        "metadata": {
-          "description": "Runs type-checking for the project.",
-          "technologies": [
-            "typescript"
-          ],
-          "help": {
-            "command": "pnpm exec tsc -p tsconfig.app.json --help",
-            "example": {
-              "options": {
-                "noEmit": true
-              }
-            }
-          }
-        }
-      },
-      "build-deps": {
-        "dependsOn": [
-          "^build"
-        ]
-      },
-      "watch-deps": {
-        "continuous": true,
-        "dependsOn": [
-          "build-deps"
-        ],
-        "command": "pnpm exec nx watch --projects ops-portal --includeDependentProjects -- pnpm exec nx build-deps ops-portal"
       }
     },
     "metadata": {},

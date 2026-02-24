@@ -14,21 +14,25 @@ class NotificationOrchestrator {
   private lastCount = 0;
 
   start(): void {
-    this.sse.connect();
-    this.lastCount = this.store.notifications().length;
+    try {
+      this.sse.connect();
+      this.lastCount = this.store.notifications().length;
 
-    effect(() => {
-      const notifications = this.store.notifications();
-      if (notifications.length > this.lastCount) {
-        const newest = notifications[0];
-        if (newest && !newest.read) {
-          this.toast.show(newest);
+      effect(() => {
+        const notifications = this.store.notifications();
+        if (notifications.length > this.lastCount) {
+          const newest = notifications[0];
+          if (newest && !newest.read) {
+            this.toast.show(newest);
+          }
         }
-      }
-      this.lastCount = notifications.length;
-    }, { injector: this.injector });
+        this.lastCount = notifications.length;
+      }, { injector: this.injector });
 
-    this.destroyRef.onDestroy(() => this.sse.disconnect());
+      this.destroyRef.onDestroy(() => this.sse.disconnect());
+    } catch {
+      // evita quebrar bootstrap
+    }
   }
 }
 
@@ -36,7 +40,9 @@ export function provideNotifications(): EnvironmentProviders {
   return makeEnvironmentProviders([
     {
       provide: APP_INITIALIZER,
-      useFactory: (orchestrator: NotificationOrchestrator) => () => orchestrator.start(),
+      useFactory: (orchestrator: NotificationOrchestrator) => () => {
+        setTimeout(() => orchestrator.start(), 0);
+      },
       deps: [NotificationOrchestrator],
       multi: true,
     },

@@ -1,5 +1,48 @@
 {
-  "10705445494440382943apps/shop/vite.config.mts": {
+  "930918499700190037libs/data-access/core/vite.config.mts": {
+    "targets": {
+      "vite:test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/data-access/core"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/data-access/core"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {},
+    "projectType": "library"
+  },
+  "17199117198203131188apps/shop/vite.config.mts": {
     "targets": {
       "vite:test": {
         "command": "vitest",
@@ -21,522 +64,6 @@
         ],
         "outputs": [
           "{workspaceRoot}/coverage/apps/shop"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "15566643711938720910libs/shared/auth/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shared/auth"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/auth"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "9674305771172708616libs/shop/feature-product-detail/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shop/feature-product-detail"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shop/feature-product-detail"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "10803104187441154790libs/shop/data/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shop/data"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shop/data"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "7539572183593537299libs/shared/util/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shared/util"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/util"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "7442698380889127550apps/ops-portal/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/ops-portal"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/ops-portal"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "3496714198940931035libs/shop/feature-products/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shop/feature-products"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shop/feature-products"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "563149262855828263libs/api/products/vite.config.ts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/api/products"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/api/products"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "6274863769449400902libs/data-access/payments/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/data-access/payments"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/data-access/payments"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "16265062550776012000libs/shop/shared-ui/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shop/shared-ui"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shop/shared-ui"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "4186907535103240832libs/shared/telemetry/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shared/telemetry"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/telemetry"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "6481348583219687769libs/shared/http/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shared/http"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/http"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "1820055700120141984libs/shared/ui/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shared/ui"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/ui"
         ],
         "metadata": {
           "technologies": [
@@ -601,6 +128,178 @@
     "metadata": {},
     "projectType": "library"
   },
+  "5796316625333445427libs/shared/i18n/vite.config.mts": {
+    "targets": {
+      "vite:test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared/i18n"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared/i18n"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {},
+    "projectType": "library"
+  },
+  "16356761485448085569apps/admin-console/vite.config.mts": {
+    "targets": {
+      "vite:test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "apps/admin-console"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/apps/admin-console"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {},
+    "projectType": "library"
+  },
+  "4186907535103240832libs/shared/telemetry/vite.config.mts": {
+    "targets": {
+      "vite:test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared/telemetry"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared/telemetry"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {},
+    "projectType": "library"
+  },
+  "3496714198940931035libs/shop/feature-products/vite.config.mts": {
+    "targets": {
+      "vite:test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shop/feature-products"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shop/feature-products"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {},
+    "projectType": "library"
+  },
   "6013996862571198550libs/data-access/orders/vite.config.mts": {
     "targets": {
       "vite:test": {
@@ -623,49 +322,6 @@
         ],
         "outputs": [
           "{workspaceRoot}/coverage/libs/data-access/orders"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "1913661905393947196libs/shared/i18n/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shared/i18n"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/i18n"
         ],
         "metadata": {
           "technologies": [
@@ -730,7 +386,222 @@
     "metadata": {},
     "projectType": "library"
   },
-  "11715780894641023663libs/domains/admin/vite.config.mts": {
+  "9042639024799969444libs/shop/shared-ui/vite.config.mts": {
+    "targets": {
+      "vite:test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shop/shared-ui"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shop/shared-ui"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {},
+    "projectType": "library"
+  },
+  "15701216514984694392libs/shop/feature-product-detail/vite.config.mts": {
+    "targets": {
+      "vite:test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shop/feature-product-detail"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shop/feature-product-detail"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {},
+    "projectType": "library"
+  },
+  "17267031473365171754libs/shared/http/vite.config.mts": {
+    "targets": {
+      "vite:test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared/http"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared/http"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {},
+    "projectType": "library"
+  },
+  "7539572183593537299libs/shared/util/vite.config.mts": {
+    "targets": {
+      "vite:test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared/util"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared/util"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {},
+    "projectType": "library"
+  },
+  "11502545539979586272libs/shared/auth/vite.config.mts": {
+    "targets": {
+      "vite:test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared/auth"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared/auth"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {},
+    "projectType": "library"
+  },
+  "3127952362203492728libs/domains/admin/vite.config.mts": {
     "targets": {
       "vite:test": {
         "command": "vitest",
@@ -773,12 +644,12 @@
     "metadata": {},
     "projectType": "library"
   },
-  "930918499700190037libs/data-access/core/vite.config.mts": {
+  "1445576799650189886apps/ops-portal/vite.config.mts": {
     "targets": {
       "vite:test": {
         "command": "vitest",
         "options": {
-          "cwd": "libs/data-access/core"
+          "cwd": "apps/ops-portal"
         },
         "cache": true,
         "inputs": [
@@ -794,7 +665,7 @@
           }
         ],
         "outputs": [
-          "{workspaceRoot}/coverage/libs/data-access/core"
+          "{workspaceRoot}/coverage/apps/ops-portal"
         ],
         "metadata": {
           "technologies": [
@@ -816,12 +687,12 @@
     "metadata": {},
     "projectType": "library"
   },
-  "16965325412384723589apps/admin-console/vite.config.mts": {
+  "8926967543763938511libs/data-access/payments/vite.config.mts": {
     "targets": {
       "vite:test": {
         "command": "vitest",
         "options": {
-          "cwd": "apps/admin-console"
+          "cwd": "libs/data-access/payments"
         },
         "cache": true,
         "inputs": [
@@ -837,7 +708,7 @@
           }
         ],
         "outputs": [
-          "{workspaceRoot}/coverage/apps/admin-console"
+          "{workspaceRoot}/coverage/libs/data-access/payments"
         ],
         "metadata": {
           "technologies": [
@@ -859,12 +730,12 @@
     "metadata": {},
     "projectType": "library"
   },
-  "17880985716940778470libs/domains/ops/vite.config.mts": {
+  "17165923667752851714libs/shop/data/vite.config.mts": {
     "targets": {
       "vite:test": {
         "command": "vitest",
         "options": {
-          "cwd": "libs/domains/ops"
+          "cwd": "libs/shop/data"
         },
         "cache": true,
         "inputs": [
@@ -880,7 +751,50 @@
           }
         ],
         "outputs": [
-          "{workspaceRoot}/coverage/libs/domains/ops"
+          "{workspaceRoot}/coverage/libs/shop/data"
+        ],
+        "metadata": {
+          "technologies": [
+            "vitest"
+          ],
+          "description": "Run Vitest tests",
+          "help": {
+            "command": "pnpm exec vitest --help",
+            "example": {
+              "options": {
+                "bail": 1,
+                "coverage": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "metadata": {},
+    "projectType": "library"
+  },
+  "6915694968094292288libs/shared/ui/vite.config.mts": {
+    "targets": {
+      "vite:test": {
+        "command": "vitest",
+        "options": {
+          "cwd": "libs/shared/ui"
+        },
+        "cache": true,
+        "inputs": [
+          "default",
+          "^production",
+          {
+            "externalDependencies": [
+              "vitest"
+            ]
+          },
+          {
+            "env": "CI"
+          }
+        ],
+        "outputs": [
+          "{workspaceRoot}/coverage/libs/shared/ui"
         ],
         "metadata": {
           "technologies": [
@@ -988,12 +902,12 @@
     "metadata": {},
     "projectType": "library"
   },
-  "17267031473365171754libs/shared/http/vite.config.mts": {
+  "3598679721932602817libs/api/products/vite.config.ts": {
     "targets": {
       "vite:test": {
         "command": "vitest",
         "options": {
-          "cwd": "libs/shared/http"
+          "cwd": "libs/api/products"
         },
         "cache": true,
         "inputs": [
@@ -1009,437 +923,7 @@
           }
         ],
         "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/http"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "1206462615918711563apps/shop/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/shop"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/shop"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "17165923667752851714libs/shop/data/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shop/data"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shop/data"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "15701216514984694392libs/shop/feature-product-detail/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shop/feature-product-detail"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shop/feature-product-detail"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "8825387298596071480apps/admin-console/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/admin-console"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/admin-console"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "2215166797396202796apps/shop/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/shop"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/shop"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "12797176177521481008apps/shop/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/shop"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/shop"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "8926967543763938511libs/data-access/payments/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/data-access/payments"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/data-access/payments"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "2887417418372307838apps/admin-console/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/admin-console"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/admin-console"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "6400105725281188269apps/ops-portal/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/ops-portal"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/ops-portal"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "3127952362203492728libs/domains/admin/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/domains/admin"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/domains/admin"
+          "{workspaceRoot}/coverage/libs/api/products"
         ],
         "metadata": {
           "technologies": [
@@ -1483,221 +967,6 @@
         ],
         "outputs": [
           "{workspaceRoot}/coverage/libs/domains/ops"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "5457721188728873679apps/shop/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/shop"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/shop"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "2326556345195982734libs/shared/ui/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shared/ui"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/ui"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "5796316625333445427libs/shared/i18n/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "libs/shared/i18n"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/libs/shared/i18n"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "15697822445566346371apps/shop/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/shop"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/shop"
-        ],
-        "metadata": {
-          "technologies": [
-            "vitest"
-          ],
-          "description": "Run Vitest tests",
-          "help": {
-            "command": "pnpm exec vitest --help",
-            "example": {
-              "options": {
-                "bail": 1,
-                "coverage": true
-              }
-            }
-          }
-        }
-      }
-    },
-    "metadata": {},
-    "projectType": "library"
-  },
-  "9565018770581702210apps/shop/vite.config.mts": {
-    "targets": {
-      "vite:test": {
-        "command": "vitest",
-        "options": {
-          "cwd": "apps/shop"
-        },
-        "cache": true,
-        "inputs": [
-          "default",
-          "^production",
-          {
-            "externalDependencies": [
-              "vitest"
-            ]
-          },
-          {
-            "env": "CI"
-          }
-        ],
-        "outputs": [
-          "{workspaceRoot}/coverage/apps/shop"
         ],
         "metadata": {
           "technologies": [

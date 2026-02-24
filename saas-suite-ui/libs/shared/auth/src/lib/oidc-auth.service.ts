@@ -5,6 +5,7 @@ import { filter } from 'rxjs/operators';
 import { AuthStore } from './auth.store';
 import { sessionFromJwt } from './models/auth-session.model';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
+// eslint-disable-next-line @nx/enforce-module-boundaries -- circular with shared-http (see auth.service)
 import { TenantContextService } from '@saas-suite/shared/http';
 
 @Injectable({ providedIn: 'root' })
@@ -33,7 +34,6 @@ export class OidcAuthService implements OnDestroy {
       useSilentRefresh: true,
       silentRefreshRedirectUri: window.location.origin + '/silent-refresh.html',
       showDebugInformation: this.config.get('logLevel') === 'debug',
-      requireCodeFlow: true,
       sessionChecksEnabled: true,
       timeoutFactor: 0.75,
     });

@@ -137,8 +137,8 @@ export class TenantDetailPage implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    const id = this.route.snapshot.paramMap.get('id')!;
-    if (id === 'new') {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (!id || id === 'new') {
       this.loading.set(false);
       return;
     }
@@ -167,22 +167,28 @@ export class TenantDetailPage implements OnInit {
   }
 
   async save(): Promise<void> {
+    const current = this.tenant();
+    if (!current) return;
     this.saving.set(true);
-    const t = await this.facade.updateTenant(this.tenant()!.id, { name: this.editName, plan: this.editPlan });
+    const t = await this.facade.updateTenant(current.id, { name: this.editName, plan: this.editPlan });
     if (t) { this.tenant.set(t); this.snackBar.open('Tenant atualizado', 'OK', { duration: 2000 }); }
     this.saving.set(false);
   }
 
   async suspend(): Promise<void> {
+    const current = this.tenant();
+    if (!current) return;
     const ref = this.dialog.open(ConfirmDialogComponent, { data: { title: 'Suspender tenant?', message: 'Esta ação suspenderá o acesso do tenant.', danger: true } });
     const confirmed = await firstValueFrom(ref.afterClosed());
     if (!confirmed) return;
-    const t = await this.facade.updateTenant(this.tenant()!.id, { status: 'SUSPENDED' });
+    const t = await this.facade.updateTenant(current.id, { status: 'SUSPENDED' });
     if (t) this.tenant.set(t);
   }
 
   async activate(): Promise<void> {
-    const t = await this.facade.updateTenant(this.tenant()!.id, { status: 'ACTIVE' });
+    const current = this.tenant();
+    if (!current) return;
+    const t = await this.facade.updateTenant(current.id, { status: 'ACTIVE' });
     if (t) this.tenant.set(t);
   }
 

@@ -49,4 +49,5 @@ export const appRoutes: Route[] = [
       },
     ],
   },
+  { path: '**', redirectTo: 'login', pathMatch: 'full' },
 ];

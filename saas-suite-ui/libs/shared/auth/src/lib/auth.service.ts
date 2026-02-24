@@ -5,6 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import { AuthStore } from './auth.store';
 import { sessionFromJwt } from './models/auth-session.model';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
+// eslint-disable-next-line @nx/enforce-module-boundaries -- shared-http uses AuthStore; auth needs TenantContextService
 import { TenantContextService } from '@saas-suite/shared/http';
 import { OidcAuthService } from './oidc-auth.service';
 import { SKIP_AUTH, SKIP_TENANT_HEADER } from '@saas-suite/shared/util';
@@ -62,7 +63,30 @@ export class AuthService {
     let token: string;
 
     if (this.config.get('authMode') === 'dev') {
-      token = createLocalDevJwt(params);
+      const coreUrl = this.config.get('coreApiBaseUrl');
+      if (coreUrl) {
+        try {
+          const ctx = new HttpContext()
+            .set(SKIP_AUTH, true)
+            .set(SKIP_TENANT_HEADER, true);
+          const body = {
+            sub: params.sub,
+            tid: params.tid ?? '*',
+            roles: params.roles ?? [],
+            perms: params.perms ?? [],
+            plan: params.plan ?? 'starter',
+            region: params.region ?? 'us-east-1',
+          };
+          const resp = await firstValueFrom(
+            this.http.post<TokenResponse>(`${coreUrl}/v1/dev/token`, body, { context: ctx })
+          );
+          token = resp.access_token;
+        } catch {
+          token = createLocalDevJwt(params);
+        }
+      } else {
+        token = createLocalDevJwt(params);
+      }
     } else {
       const baseUrl = this.config.get('coreApiBaseUrl');
       const ctx = new HttpContext()

@@ -106,23 +106,27 @@ export class OrderDetailPage implements OnInit {
   itemCols = ['sku', 'description', 'quantity', 'unitPrice', 'subtotal'];
 
   async ngOnInit(): Promise<void> {
-    const id = this.route.snapshot.paramMap.get('id')!;
-    await this.facade.loadOrder(id);
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) await this.facade.loadOrder(id);
   }
 
   async confirm(): Promise<void> {
+    const order = this.facade.selectedOrder();
+    if (!order) return;
     const ref = this.dialog.open(ConfirmDialogComponent, { data: { title: 'Confirmar pedido?', message: 'Esta ação confirmará o pedido e reservará o estoque.' } });
     const ok = await firstValueFrom(ref.afterClosed());
     if (!ok) return;
-    const o = await this.facade.confirmOrder(this.facade.selectedOrder()!.id);
+    const o = await this.facade.confirmOrder(order.id);
     if (o) this.snackBar.open('Pedido confirmado', 'OK', { duration: 2000 });
   }
 
   async cancel(): Promise<void> {
+    const order = this.facade.selectedOrder();
+    if (!order) return;
     const ref = this.dialog.open(ConfirmDialogComponent, { data: { title: 'Cancelar pedido?', message: 'Esta ação cancelará o pedido.', danger: true } });
     const ok = await firstValueFrom(ref.afterClosed());
     if (!ok) return;
-    const o = await this.facade.cancelOrder(this.facade.selectedOrder()!.id);
+    const o = await this.facade.cancelOrder(order.id);
     if (o) this.snackBar.open('Pedido cancelado', 'OK', { duration: 2000 });
   }
 

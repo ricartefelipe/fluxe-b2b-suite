@@ -5,12 +5,12 @@ import { DevLoginComponent } from './dev-auth/dev-login.component';
 import { OidcAuthService } from './oidc-auth.service';
 
 @Component({
-  selector: 'saas-login-page',
+  selector: 'lib-login-page',
   standalone: true,
   imports: [DevLoginComponent, MatProgressSpinnerModule],
   template: `
     @if (authMode === 'dev') {
-      <saas-dev-login />
+      <lib-dev-login />
     } @else {
       <div class="oidc-loading">
         <mat-spinner diameter="36" />

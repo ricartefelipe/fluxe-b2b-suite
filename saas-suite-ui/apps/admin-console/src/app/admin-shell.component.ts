@@ -4,6 +4,7 @@ import { TenantContextStore } from '@saas-suite/domains/tenancy';
 
 const ADMIN_NAV: NavItem[] = [
   { label: 'Tenants', route: '/tenants', icon: 'business', permission: 'tenants:read' },
+  { label: 'New Tenant', route: '/onboarding', icon: 'add_business', permission: 'tenants:write' },
   { label: 'Policies', route: '/policies', icon: 'policy', permission: 'policies:read' },
   { label: 'Feature Flags', route: '/flags', icon: 'flag', permission: 'flags:read' },
   { label: 'Audit Log', route: '/audit', icon: 'history', permission: 'audit:read' },

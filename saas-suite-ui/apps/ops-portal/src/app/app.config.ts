@@ -10,6 +10,9 @@ import { provideTelemetry } from '@saas-suite/shared/telemetry';
 import { provideTenancyContext } from '@saas-suite/domains/tenancy';
 import { MESSAGES } from '@saas-suite/shared/i18n';
 import { PT_BR_MESSAGES } from '@saas-suite/shared/i18n';
+import { provideNotifications } from '@saas-suite/shared/notifications';
+import { provideSearch } from '@saas-suite/shared/search';
+import { provideAccessibility } from '@saas-suite/shared/ui';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -23,5 +26,8 @@ export const appConfig: ApplicationConfig = {
     provideTelemetry(),
     provideTenancyContext(),
     { provide: MESSAGES, useValue: PT_BR_MESSAGES },
+    provideNotifications(),
+    provideSearch({ enabledEntities: ['order', 'payment', 'inventory'], maxResultsPerEntity: 5, debounceMs: 300 }),
+    provideAccessibility(),
   ],
 };

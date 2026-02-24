@@ -10,11 +10,13 @@ Como subir os 4 repositórios integrados (frontend + spring-saas-core + node-b2b
 - Node.js 20+, Java 21, Python 3.12+ (conforme cada repo)
 - Clones no mesmo nível: `fluxe-b2b-suite`, `spring-saas-core`, `node-b2b-orders`, `py-payments-ledger` (ex.: `wks/fluxe-b2b-suite`, `wks/node-b2b-orders`, …)
 
-**Um comando (recomendado):** Do repositório fluxe-b2b-suite, rode `./scripts/up-all.sh`. Ele verifica o Docker, sobe os 3 backends (migrate/seed), depois inicia o frontend. Acesse http://localhost:4200 e faça login com **Ops User**.
+**Um comando (recomendado):** Do repositório fluxe-b2b-suite, rode `./scripts/up-all.sh`. Ele cria a rede `fluxe_shared`, sobe o Spring (com RabbitMQ compartilhado), depois Node e Python com `RABBITMQ_URL` apontando para o mesmo broker (fluxo pedido → PAID funciona). Migrate/seed são executados; em seguida inicia o frontend. Acesse http://localhost:4200 e faça login com **Ops User**.
 
 **Só frontend (backends já no ar):** `./scripts/serve-frontend.sh`.
 
-**Script de validação (smokes):** `./scripts/e2e-integrated.sh` — sobe cada backend e roda os smokes (requer Docker).
+**Smoke com suite já no ar:** `./scripts/smoke-suite.sh` — verifica health dos 3 backends.
+
+**Smokes por repo (cada um com seu próprio stack):** `./scripts/e2e-integrated.sh`.
 
 ---
 
@@ -31,7 +33,7 @@ Para um único login no frontend ser aceito pelos 3 backends, use **o mesmo secr
 | py-payments-ledger   | —                      | `JWT_SECRET`       | (mesmo que acima) |
 | py-payments-ledger   | —                      | `JWT_ISSUER`       | `spring-saas-core` |
 
-**RabbitMQ:** Node e Python devem apontar para o **mesmo** broker (mesma URL). Ex.: `RABBITMQ_URL=amqp://guest:guest@localhost:5672` em ambos.
+**RabbitMQ:** Node e Python devem apontar para o **mesmo** broker. No `./scripts/up-all.sh` isso é feito automaticamente: rede Docker `fluxe_shared`, RabbitMQ do Spring com nome `fluxe-rabbitmq`, e `RABBITMQ_URL=amqp://guest:guest@fluxe-rabbitmq:5672` para Node e Python.
 
 **Tenant:** O Spring emite o token com o `tid` enviado no body (ex.: `tenant_demo`); não precisa existir na tabela de tenants do Core. O tenant `tenant_demo` existe nos seeds de node-b2b-orders e py-payments-ledger.
 
@@ -81,7 +83,7 @@ Para um único login no frontend ser aceito pelos 3 backends, use **o mesmo secr
 ## Troubleshooting
 
 - **"Docker inacessível" / permission denied:** Rode `docker info`. Se der erro de permissão: `sudo usermod -aG docker $USER`, depois faça logout/login (ou `newgrp docker` na mesma sessão). Em seguida rode `./scripts/up-all.sh` de novo.
-- **Porta em uso (Address already in use):** Cada backend usa portas diferentes (Spring: 5432, 6379, 5672, 8080; Node: 5433, 6380, 5673, 3000; Python: 5434, 6381, 5674, 8000). Se alguma estiver ocupada, pare o processo que a usa ou edite o `docker-compose.yml` do repo correspondente.
+- **Porta em uso (Address already in use):** Cada backend usa portas diferentes (Spring: 5432, 6379, 5672, 8080, Grafana 3030; Node: 5433, 6380, 5673, 3000; Python: 5434, 6381, 5674, 8000). A API Node usa 3000; o Grafana do Spring usa 3030. Se alguma porta estiver ocupada, pare o processo ou edite o `docker-compose.yml` do repo correspondente.
 - **401 ao chamar Orders ou Payments:** Token não está sendo aceito. Confirme `JWT_SECRET` e `JWT_ISSUER` iguais nos 3 backends; o `up-all.sh` ajusta isso nos `.env` de Node e Python. Use perfil **Ops User** (tid `tenant_demo`) no login.  
 - **403 tenant mismatch:** Header `X-Tenant-Id` deve ser `tenant_demo`; o frontend envia o `tid` da sessão.  
 - **Pedido não vai para PAID:** Verifique se o RabbitMQ é o mesmo para Node e Python, se `ORDERS_INTEGRATION_ENABLED=true` no Python e se as filas/exchanges estão criadas (ex.: RabbitMQ Management UI em 15672).

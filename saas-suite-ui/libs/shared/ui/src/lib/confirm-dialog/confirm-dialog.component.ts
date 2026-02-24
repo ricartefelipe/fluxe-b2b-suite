@@ -15,15 +15,24 @@ export interface ConfirmDialogData {
   standalone: true,
   imports: [MatDialogModule, MatButtonModule],
   template: `
-    <h2 mat-dialog-title>{{ data.title }}</h2>
-    <mat-dialog-content>{{ data.message }}</mat-dialog-content>
+    <h2 mat-dialog-title id="confirm-dialog-title">{{ data.title }}</h2>
+    <mat-dialog-content id="confirm-dialog-description">{{ data.message }}</mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-button mat-dialog-close>{{ data.cancelLabel ?? 'Cancelar' }}</button>
-      <button mat-raised-button [color]="data.danger ? 'warn' : 'primary'" [mat-dialog-close]="true">
+      <button
+        mat-raised-button
+        [color]="data.danger ? 'warn' : 'primary'"
+        [mat-dialog-close]="true"
+        cdkFocusInitial>
         {{ data.confirmLabel ?? 'Confirmar' }}
       </button>
     </mat-dialog-actions>
   `,
+  host: {
+    'role': 'alertdialog',
+    'aria-labelledby': 'confirm-dialog-title',
+    'aria-describedby': 'confirm-dialog-description',
+  },
 })
 export class ConfirmDialogComponent {
   constructor(

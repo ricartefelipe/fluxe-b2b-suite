@@ -9,6 +9,10 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthStore } from '@saas-suite/shared/auth';
 import { AuthService } from '@saas-suite/shared/auth';
 import { TenantSwitcherComponent } from '../tenant-switcher/tenant-switcher.component';
+import { ThemeToggleComponent } from '../theme/theme-toggle.component';
+import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
+import { NotificationBellComponent } from '@saas-suite/shared/notifications';
+import { SearchTriggerComponent } from '@saas-suite/shared/search';
 
 @Component({
   selector: 'saas-header',
@@ -16,30 +20,44 @@ import { TenantSwitcherComponent } from '../tenant-switcher/tenant-switcher.comp
   imports: [
     UpperCasePipe, MatToolbarModule, MatButtonModule, MatIconModule,
     MatMenuModule, MatDividerModule, MatTooltipModule, TenantSwitcherComponent,
+    ThemeToggleComponent, LanguageSwitcherComponent, NotificationBellComponent,
+    SearchTriggerComponent,
   ],
   template: `
-    <header class="app-header">
+    <header class="app-header" role="banner">
       <div class="header-left">
-        <button class="menu-btn" (click)="menuToggle.emit()" matTooltip="Menu">
-          <mat-icon>menu</mat-icon>
+        <button
+          class="menu-btn"
+          (click)="menuToggle.emit()"
+          aria-label="Toggle sidebar navigation"
+          matTooltip="Menu">
+          <mat-icon aria-hidden="true">menu</mat-icon>
         </button>
-        <span class="app-title">{{ appTitle }}</span>
+        <span class="app-title" aria-hidden="true">{{ appTitle }}</span>
+        <saas-search-trigger />
       </div>
       <div class="header-right">
         <saas-tenant-switcher />
-        <button class="avatar-btn" [matMenuTriggerFor]="userMenu">
-          <div class="avatar">
+        <saas-notification-bell />
+        <ui-theme-toggle />
+        <saas-language-switcher />
+        <button
+          class="avatar-btn"
+          [matMenuTriggerFor]="userMenu"
+          aria-label="User menu"
+          aria-haspopup="true">
+          <div class="avatar" aria-hidden="true">
             {{ (auth.session()?.email ?? 'U')[0] | uppercase }}
           </div>
         </button>
         <mat-menu #userMenu="matMenu">
-          <div class="user-menu-header">
+          <div class="user-menu-header" role="group" aria-label="User info">
             <strong>{{ auth.session()?.email }}</strong>
             <span class="user-role">{{ auth.session()?.roles?.[0] ?? 'user' }}</span>
           </div>
           <mat-divider />
           <button mat-menu-item (click)="logout()">
-            <mat-icon>logout</mat-icon> Sair
+            <mat-icon aria-hidden="true">logout</mat-icon> Sair
           </button>
         </mat-menu>
       </div>

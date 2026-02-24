@@ -19,6 +19,12 @@ Integra com:
 - **node-b2b-orders** (3000) — Pedidos e inventário
 - **py-payments-ledger** (8000) — Pagamentos e ledger
 
+**Execução E2E e hospedagem:** Ver [docs/E2E-RUN.md](docs/E2E-RUN.md) para subir os 4 repositórios integrados e sugestões de deploy na nuvem (Railway, Render, AWS, Fly.io). Para validar os backends com Docker: `./scripts/e2e-integrated.sh`.
+
+**Regras de negócio:** Resumo em [docs/regras-de-negocio.md](docs/regras-de-negocio.md) (auth, pedidos, pagamentos, inventário, core, frontend).
+
+**Documentação:** [docs/README.md](docs/README.md) — E2E, regras de negócio, [DAS](docs/DAS.md), [C4](docs/C4-suite.md), [histórias de usuário](docs/historias-de-usuario.md), [implantação](docs/documento-implantacao.md).
+
 ---
 
 ## Arquitetura

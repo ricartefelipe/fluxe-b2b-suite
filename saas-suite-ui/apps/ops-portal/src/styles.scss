@@ -161,6 +161,26 @@ table.mat-mdc-table {
   background: var(--app-hover) !important;
 }
 
+/* Focus e acessibilidade */
+button:focus-visible,
+a:focus-visible,
+[mat-button]:focus-visible,
+[mat-raised-button]:focus-visible {
+  outline: 2px solid var(--app-primary);
+  outline-offset: 2px;
+}
+
+/* Cards com transição suave */
+.page-card,
+mat-card,
+.filters {
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+.page-card:focus-within,
+mat-card:focus-within {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
 code {
   background: var(--app-code-bg);
   padding: 2px 8px;

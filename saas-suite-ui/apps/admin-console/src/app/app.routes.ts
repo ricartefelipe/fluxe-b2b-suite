@@ -38,6 +38,11 @@ export const appRoutes: Route[] = [
         data: { permissions: ['audit:read'] },
       },
       {
+        path: 'onboarding',
+        loadComponent: () => import('./pages/tenant-onboarding.page').then(m => m.TenantOnboardingPage),
+        data: { permissions: ['tenants:write'] },
+      },
+      {
         path: '403',
         loadComponent: () => import('@saas-suite/shared/ui').then(m => m.ErrorPageComponent),
         data: { code: 403, title: 'Acesso Negado', message: 'Você não tem permissão para acessar este recurso.' },

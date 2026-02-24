@@ -4818,7 +4818,7 @@
                 }
               ],
               "styles": [
-                "apps/shop/src/styles.css"
+                "apps/shop/src/styles.scss"
               ],
               "server": "apps/shop/src/main.server.ts",
               "ssr": {
@@ -21901,6 +21901,16 @@
       },
       {
         "source": "admin-console",
+        "target": "npm:@angular/common",
+        "type": "static"
+      },
+      {
+        "source": "admin-console",
+        "target": "domain-admin",
+        "type": "static"
+      },
+      {
+        "source": "admin-console",
         "target": "npm:@angular/compiler",
         "type": "static"
       },
@@ -21934,6 +21944,16 @@
       {
         "source": "domain-admin",
         "target": "npm:@angular/core",
+        "type": "static"
+      },
+      {
+        "source": "domain-admin",
+        "target": "npm:rxjs",
+        "type": "static"
+      },
+      {
+        "source": "domain-admin",
+        "target": "data-access-core",
         "type": "static"
       },
       {
@@ -22052,6 +22072,26 @@
       {
         "source": "domain-ops",
         "target": "npm:@angular/core",
+        "type": "static"
+      },
+      {
+        "source": "domain-ops",
+        "target": "npm:rxjs",
+        "type": "static"
+      },
+      {
+        "source": "domain-ops",
+        "target": "data-access-orders",
+        "type": "static"
+      },
+      {
+        "source": "domain-ops",
+        "target": "data-access-payments",
+        "type": "static"
+      },
+      {
+        "source": "domain-ops",
+        "target": "shared-telemetry",
         "type": "static"
       },
       {
@@ -22416,6 +22456,11 @@
       },
       {
         "source": "ops-portal",
+        "target": "domain-ops",
+        "type": "static"
+      },
+      {
+        "source": "ops-portal",
         "target": "data-access-payments",
         "type": "static"
       },
@@ -22530,6 +22575,11 @@
       },
       {
         "source": "ui",
+        "target": "shared-i18n",
+        "type": "static"
+      },
+      {
+        "source": "ui",
         "target": "npm:@angular/common",
         "type": "static"
       },
@@ -22639,6 +22689,16 @@
       },
       {
         "source": "shop",
+        "target": "npm:@angular/material",
+        "type": "static"
+      },
+      {
+        "source": "shop",
+        "target": "data",
+        "type": "static"
+      },
+      {
+        "source": "shop",
         "target": "npm:@angular/common",
         "type": "static"
       },
@@ -22649,22 +22709,12 @@
       },
       {
         "source": "shop",
-        "target": "data",
-        "type": "static"
-      },
-      {
-        "source": "shop",
         "target": "data-access-orders",
         "type": "static"
       },
       {
         "source": "shop",
-        "target": "shared-util",
-        "type": "static"
-      },
-      {
-        "source": "shop",
-        "target": "ui",
+        "target": "data-access-payments",
         "type": "static"
       },
       {
@@ -46126,5 +46176,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1771875118500
+  "computedAt": 1771891489297
 }

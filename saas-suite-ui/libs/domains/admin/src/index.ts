@@ -1,1 +1,2 @@
 export * from './lib/domain-admin/domain-admin';
+export * from './lib/tenant-onboarding/tenant-onboarding.store';

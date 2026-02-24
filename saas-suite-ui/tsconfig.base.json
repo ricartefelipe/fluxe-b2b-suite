@@ -25,6 +25,8 @@
       "@saas-suite/shared/ui": ["libs/shared/ui/src/index.ts"],
       "@saas-suite/shared/telemetry": ["libs/shared/telemetry/src/index.ts"],
       "@saas-suite/shared/i18n": ["libs/shared/i18n/src/index.ts"],
+      "@saas-suite/shared/search": ["libs/shared/search/src/index.ts"],
+      "@saas-suite/shared/notifications": ["libs/shared/notifications/src/index.ts"],
       "@saas-suite/data-access/core": ["libs/data-access/core/src/index.ts"],
       "@saas-suite/data-access/orders": ["libs/data-access/orders/src/index.ts"],
       "@saas-suite/data-access/payments": ["libs/data-access/payments/src/index.ts"],
@@ -36,7 +38,9 @@
       "@union.solutions/shop/feature-products": ["libs/shop/feature-products/src/index.ts"],
       "@union.solutions/shop/feature-product-detail": ["libs/shop/feature-product-detail/src/index.ts"],
       "@union.solutions/shop/shared-ui": ["libs/shop/shared-ui/src/index.ts"],
-      "@union.solutions/api/products": ["libs/api/products/src/index.ts"]
+      "@union.solutions/api/products": ["libs/api/products/src/index.ts"],
+      "@union.solutions/shop/performance": ["libs/shop/performance/src/index.ts"],
+      "@union.solutions/shop/pwa": ["libs/shop/pwa/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

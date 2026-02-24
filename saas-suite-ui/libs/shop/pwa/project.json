@@ -1,0 +1,13 @@
+{
+  "name": "shop-pwa",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shop/pwa/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:shop", "type:feature"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

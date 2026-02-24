@@ -11,7 +11,7 @@ import { NavItem } from './nav-item.model';
   template: `
     <div class="sidebar">
       <div class="brand">
-        <div class="brand-icon">
+        <div class="brand-icon" aria-hidden="true">
           <mat-icon>dashboard</mat-icon>
         </div>
         <div class="brand-text">
@@ -19,15 +19,21 @@ import { NavItem } from './nav-item.model';
           <span class="brand-sub">{{ appTitle }}</span>
         </div>
       </div>
-      <nav class="nav-list">
+      <nav class="nav-list" role="navigation" aria-label="Main navigation">
         @for (item of visibleItems(); track item.route) {
-          <a class="nav-item" [routerLink]="item.route" routerLinkActive="active">
-            <mat-icon class="nav-icon">{{ item.icon }}</mat-icon>
+          <a
+            class="nav-item"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            #rla="routerLinkActive"
+            [attr.aria-current]="rla.isActive ? 'page' : null"
+            [attr.aria-label]="item.label">
+            <mat-icon class="nav-icon" aria-hidden="true">{{ item.icon }}</mat-icon>
             <span class="nav-label">{{ item.label }}</span>
           </a>
         }
       </nav>
-      <div class="sidebar-footer">
+      <div class="sidebar-footer" aria-hidden="true">
         <span class="version">v1.0.0</span>
       </div>
     </div>
@@ -105,6 +111,10 @@ import { NavItem } from './nav-item.model';
     .nav-item:hover {
       background: rgba(255,255,255,0.06);
       color: #fff;
+    }
+    .nav-item:focus-visible {
+      outline: 2px solid var(--app-primary, #1565c0);
+      outline-offset: -2px;
     }
     .nav-item.active {
       background: var(--app-primary, #1565c0);

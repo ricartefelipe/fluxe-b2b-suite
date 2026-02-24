@@ -8,11 +8,15 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'products',
+    title: 'Products | Fluxe Shop',
+    data: { preload: true },
     loadChildren: () =>
       import('@union.solutions/shop/feature-products').then(m => m.featureProductsRoutes),
   },
   {
-    path: 'products',
+    path: 'product',
+    title: 'Product Details | Fluxe Shop',
+    data: { preload: true },
     loadChildren: () =>
       import('@union.solutions/shop/feature-product-detail').then(
         m => m.featureProductDetailRoutes
@@ -20,11 +24,13 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'checkout',
+    title: 'Checkout | Fluxe Shop',
     loadComponent: () =>
       import('./checkout/checkout.component').then((m) => m.CheckoutComponent),
   },
   {
     path: 'orders',
+    title: 'My Orders | Fluxe Shop',
     loadComponent: () =>
       import('./orders/orders.component').then((m) => m.OrdersComponent),
   },

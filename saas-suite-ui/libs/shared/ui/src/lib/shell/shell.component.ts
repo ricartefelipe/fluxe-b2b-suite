@@ -3,19 +3,26 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header.component';
 import { SidebarComponent } from './sidebar.component';
 import { NavItem } from './nav-item.model';
+import { SkipLinkComponent } from '../a11y/skip-link.component';
+import { FocusOnNavDirective } from '../a11y/focus-on-nav.directive';
 
 @Component({
   selector: 'saas-shell',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, SidebarComponent],
+  imports: [RouterOutlet, HeaderComponent, SidebarComponent, SkipLinkComponent, FocusOnNavDirective],
   template: `
+    <saas-skip-link />
     <div class="shell" [class.sidebar-collapsed]="!sidebarOpen()">
-      <aside class="shell-sidebar" [class.open]="sidebarOpen()">
+      <aside
+        class="shell-sidebar"
+        [class.open]="sidebarOpen()"
+        role="complementary"
+        aria-label="Sidebar">
         <saas-sidebar [navItems]="navItems" [appTitle]="appTitle" />
       </aside>
       <div class="shell-content">
         <saas-header [appTitle]="appTitle" (menuToggle)="toggleSidebar()" />
-        <main class="shell-main">
+        <main id="main-content" class="shell-main" saasFocusOnNav>
           <router-outlet />
         </main>
       </div>
@@ -53,6 +60,10 @@ import { NavItem } from './nav-item.model';
       padding: 24px;
       overflow-y: auto;
       background: var(--app-bg, #f4f6f9);
+    }
+
+    .shell-main:focus {
+      outline: none;
     }
   `],
 })

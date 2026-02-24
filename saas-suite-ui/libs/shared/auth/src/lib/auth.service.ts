@@ -84,6 +84,11 @@ export class AuthService {
   }
 
   async restoreSession(): Promise<void> {
+    if (this.config.get('authMode') === 'oidc' && this.oidcAuth) {
+      await this.oidcAuth.configureAndTryLogin();
+      return;
+    }
+
     const token = sessionStorage.getItem('dev_token');
     if (token) {
       const session = sessionFromJwt(token);

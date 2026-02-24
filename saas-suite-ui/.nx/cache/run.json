@@ -1,18 +1,18 @@
 {
   "run": {
-    "command": "nx run admin-console:lint",
-    "startTime": "2026-02-23T19:31:58.543Z",
-    "endTime": "2026-02-23T19:32:00.045Z",
+    "command": "nx build shop --configuration=development --skip-nx-cache",
+    "startTime": "2026-02-24T00:04:47.514Z",
+    "endTime": "2026-02-24T00:04:57.017Z",
     "inner": false
   },
   "tasks": [
     {
-      "taskId": "admin-console:lint",
-      "target": "lint",
-      "projectName": "admin-console",
-      "hash": "13392205124864962125",
-      "startTime": "2026-02-23T19:31:58.565Z",
-      "endTime": "2026-02-23T19:32:00.042Z",
+      "taskId": "shop:build:development",
+      "target": "build",
+      "projectName": "shop",
+      "hash": "8738723649734138480",
+      "startTime": "2026-02-24T00:04:47.522Z",
+      "endTime": "2026-02-24T00:04:57.017Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 0

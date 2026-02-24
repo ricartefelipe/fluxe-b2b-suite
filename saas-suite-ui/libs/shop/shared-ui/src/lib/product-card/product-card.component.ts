@@ -1,10 +1,11 @@
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { Product } from '@union.solutions/models';
+import { OptimizedImageComponent } from '../optimized-image/optimized-image.component';
 
 @Component({
   selector: 'shop-product-card',
-  imports: [CommonModule, CurrencyPipe],
+  imports: [CurrencyPipe, OptimizedImageComponent],
   template: `
     <div
       class="product-card"
@@ -17,7 +18,13 @@ import { Product } from '@union.solutions/models';
       [attr.aria-label]="'View details for ' + product().name"
     >
       <div class="product-image">
-        <img [src]="product().imageUrl" [alt]="product().name" />
+        <shop-optimized-image
+          [src]="product().imageUrl"
+          [alt]="product().name"
+          [width]="400"
+          [height]="400"
+          [priority]="priority()"
+        />
         @if (!product().inStock) {
           <div class="out-of-stock-overlay">Out of Stock</div>
         }
@@ -64,18 +71,9 @@ import { Product } from '@union.solutions/models';
     .product-image {
       position: relative;
       width: 100%;
-      padding-top: 100%;
+      aspect-ratio: 1;
       overflow: hidden;
       background: #f5f5f5;
-    }
-
-    .product-image img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
     }
 
     .out-of-stock-overlay {
@@ -88,6 +86,7 @@ import { Product } from '@union.solutions/models';
       padding: 8px 16px;
       border-radius: 4px;
       font-weight: bold;
+      z-index: 1;
     }
 
     .product-info {
@@ -146,6 +145,7 @@ import { Product } from '@union.solutions/models';
 })
 export class ProductCardComponent {
   readonly product = input.required<Product>();
+  readonly priority = input<boolean>(false);
   readonly productClick = output<Product>();
 
   getStars(): boolean[] {

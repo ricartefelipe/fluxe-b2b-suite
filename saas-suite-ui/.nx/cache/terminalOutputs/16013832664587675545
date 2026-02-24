@@ -1,0 +1,272 @@
+❯ Building...
+Detected a matBadge on an "aria-hidden" "<mat-icon>". Consider setting aria-hidden="false" in order to surface the information assistive technology.
+<mat-icon _ngcontent-ng-c2253778590="" role="img" matbadgecolor="warn" matbadgesize="small" class="mat-icon notranslate mat-badge mat-badge-warn material-icons mat-ligature-font mat-icon-no-color mat-badge-overlap mat-badge-above mat-badge-after mat-badge-small mat-badge-hidden" aria-hidden="true" data-mat-icon-type="font">shopping_cart</mat-icon>
+Detected a matBadge on an "aria-hidden" "<mat-icon>". Consider setting aria-hidden="false" in order to surface the information assistive technology.
+<mat-icon _ngcontent-ng-c2253778590="" role="img" matbadgecolor="warn" matbadgesize="small" class="mat-icon notranslate mat-badge mat-badge-warn material-icons mat-ligature-font mat-icon-no-color mat-badge-overlap mat-badge-above mat-badge-after mat-badge-small mat-badge-hidden" aria-hidden="true" data-mat-icon-type="font">shopping_cart</mat-icon>
+[2026-02-24T00:03:02.108Z] [ERROR] HTTP 0 http://localhost:3333/api/products-metadata/categories {
+  correlationId: 'unknown',
+  status: 0,
+  error: HttpErrorResponse {
+    headers: _HttpHeaders {
+      headers: Map(0) {},
+      normalizedNames: Map(0) {},
+      lazyInit: undefined,
+      lazyUpdate: null
+    },
+    status: 0,
+    statusText: 'Unknown Error',
+    url: 'http://localhost:3333/api/products-metadata/categories',
+    ok: false,
+    type: undefined,
+    redirected: undefined,
+    responseType: undefined,
+    name: 'HttpErrorResponse',
+    message: 'Http failure response for http://localhost:3333/api/products-metadata/categories: 0 undefined',
+    error: TypeError: fetch failed
+        at node:internal/deps/undici/undici:15845:13
+        at _ZoneDelegate.invoke (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:367:158)
+        at _ZoneImpl2.run (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:134:35)
+        at <anonymous> (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:1077:30)
+        at _ZoneDelegate.invokeTask (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:393:171)
+        at _ZoneImpl2.runTask (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:172:37)
+        at drainMicroTaskQueue (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:553:23)
+        at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+      [cause]: [Error]
+    }
+  }
+}
+Error loading categories: HttpErrorResponse {
+  headers: _HttpHeaders {
+    headers: Map(0) {},
+    normalizedNames: Map(0) {},
+    lazyInit: undefined,
+    lazyUpdate: null
+  },
+  status: 0,
+  statusText: 'Unknown Error',
+  url: 'http://localhost:3333/api/products-metadata/categories',
+  ok: false,
+  type: undefined,
+  redirected: undefined,
+  responseType: undefined,
+  name: 'HttpErrorResponse',
+  message: 'Http failure response for http://localhost:3333/api/products-metadata/categories: 0 undefined',
+  error: TypeError: fetch failed
+      at node:internal/deps/undici/undici:15845:13
+      at _ZoneDelegate.invoke (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:367:158)
+      at _ZoneImpl2.run (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:134:35)
+      at <anonymous> (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:1077:30)
+      at _ZoneDelegate.invokeTask (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:393:171)
+      at _ZoneImpl2.runTask (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:172:37)
+      at drainMicroTaskQueue (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:553:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+    [cause]: Error: connect ECONNREFUSED 127.0.0.1:3333
+        at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16) {
+      errno: -111,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 3333
+    }
+  }
+}
+[2026-02-24T00:03:02.111Z] [ERROR] HTTP 0 http://localhost:3333/api/products {
+  correlationId: 'unknown',
+  status: 0,
+  error: HttpErrorResponse {
+    headers: _HttpHeaders {
+      headers: Map(0) {},
+      normalizedNames: Map(0) {},
+      lazyInit: undefined,
+      lazyUpdate: null
+    },
+    status: 0,
+    statusText: 'Unknown Error',
+    url: 'http://localhost:3333/api/products?page=1&pageSize=12',
+    ok: false,
+    type: undefined,
+    redirected: undefined,
+    responseType: undefined,
+    name: 'HttpErrorResponse',
+    message: 'Http failure response for http://localhost:3333/api/products?page=1&pageSize=12: 0 undefined',
+    error: TypeError: fetch failed
+        at node:internal/deps/undici/undici:15845:13
+        at _ZoneDelegate.invoke (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:367:158)
+        at _ZoneImpl2.run (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:134:35)
+        at <anonymous> (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:1077:30)
+        at _ZoneDelegate.invokeTask (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:393:171)
+        at _ZoneImpl2.runTask (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:172:37)
+        at drainMicroTaskQueue (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:553:23)
+        at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+      [cause]: [Error]
+    }
+  }
+}
+Error loading products: HttpErrorResponse {
+  headers: _HttpHeaders {
+    headers: Map(0) {},
+    normalizedNames: Map(0) {},
+    lazyInit: undefined,
+    lazyUpdate: null
+  },
+  status: 0,
+  statusText: 'Unknown Error',
+  url: 'http://localhost:3333/api/products?page=1&pageSize=12',
+  ok: false,
+  type: undefined,
+  redirected: undefined,
+  responseType: undefined,
+  name: 'HttpErrorResponse',
+  message: 'Http failure response for http://localhost:3333/api/products?page=1&pageSize=12: 0 undefined',
+  error: TypeError: fetch failed
+      at node:internal/deps/undici/undici:15845:13
+      at _ZoneDelegate.invoke (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:367:158)
+      at _ZoneImpl2.run (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:134:35)
+      at <anonymous> (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:1077:30)
+      at _ZoneDelegate.invokeTask (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:393:171)
+      at _ZoneImpl2.runTask (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:172:37)
+      at drainMicroTaskQueue (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/d93568d4-a397-461f-8c7a-45d2f0f19f45/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:553:23)
+      at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+    [cause]: Error: connect ECONNREFUSED 127.0.0.1:3333
+        at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1637:16) {
+      errno: -111,
+      code: 'ECONNREFUSED',
+      syscall: 'connect',
+      address: '127.0.0.1',
+      port: 3333
+    }
+  }
+}
+[2026-02-24T00:03:02.131Z] [ERROR] HTTP 0 http://localhost:3000/v1/orders {
+  correlationId: 'unknown',
+  status: 0,
+  error: HttpErrorResponse {
+    headers: _HttpHeaders {
+      headers: Map(0) {},
+      normalizedNames: Map(0) {},
+      lazyInit: undefined,
+      lazyUpdate: null
+    },
+    status: 0,
+    statusText: 'Unknown Error',
+    url: 'http://localhost:3000/v1/orders',
+    ok: false,
+    type: undefined,
+    redirected: undefined,
+    responseType: undefined,
+    name: 'HttpErrorResponse',
+    message: 'Http failure response for http://localhost:3000/v1/orders: 0 undefined',
+    error: TypeError: fetch failed
+        at node:internal/deps/undici/undici:15845:13
+        at _ZoneDelegate.invoke (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/0767149b-ece1-4d35-bf34-09ad4358a0b3/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:367:158)
+        at _ZoneImpl2.run (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/0767149b-ece1-4d35-bf34-09ad4358a0b3/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:134:35)
+        at <anonymous> (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/0767149b-ece1-4d35-bf34-09ad4358a0b3/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:1077:30)
+        at _ZoneDelegate.invokeTask (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/0767149b-ece1-4d35-bf34-09ad4358a0b3/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:393:171)
+        at _ZoneImpl2.runTask (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/0767149b-ece1-4d35-bf34-09ad4358a0b3/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:172:37)
+        at drainMicroTaskQueue (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/0767149b-ece1-4d35-bf34-09ad4358a0b3/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:553:23)
+        at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+      [cause]: [Error]
+    }
+  }
+}
+[2026-02-24T00:03:02.133Z] [ERROR] loadOrders failed {
+  error: HttpErrorResponse {
+    headers: _HttpHeaders {
+      headers: Map(0) {},
+      normalizedNames: Map(0) {},
+      lazyInit: undefined,
+      lazyUpdate: null
+    },
+    status: 0,
+    statusText: 'Unknown Error',
+    url: 'http://localhost:3000/v1/orders',
+    ok: false,
+    type: undefined,
+    redirected: undefined,
+    responseType: undefined,
+    name: 'HttpErrorResponse',
+    message: 'Http failure response for http://localhost:3000/v1/orders: 0 undefined',
+    error: TypeError: fetch failed
+        at node:internal/deps/undici/undici:15845:13
+        at _ZoneDelegate.invoke (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/0767149b-ece1-4d35-bf34-09ad4358a0b3/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:367:158)
+        at _ZoneImpl2.run (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/0767149b-ece1-4d35-bf34-09ad4358a0b3/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:134:35)
+        at <anonymous> (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/0767149b-ece1-4d35-bf34-09ad4358a0b3/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:1077:30)
+        at _ZoneDelegate.invokeTask (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/0767149b-ece1-4d35-bf34-09ad4358a0b3/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:393:171)
+        at _ZoneImpl2.runTask (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/0767149b-ece1-4d35-bf34-09ad4358a0b3/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:172:37)
+        at drainMicroTaskQueue (/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/.angular/prerender-root/0767149b-ece1-4d35-bf34-09ad4358a0b3/node_modules/.pnpm/zone.js@0.16.0/node_modules/zone.js/fesm2015/zone-node.js:553:23)
+        at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+      [cause]: [Error]
+    }
+  }
+}
+Detected a matBadge on an "aria-hidden" "<mat-icon>". Consider setting aria-hidden="false" in order to surface the information assistive technology.
+<mat-icon _ngcontent-ng-c2253778590="" role="img" matbadgecolor="warn" matbadgesize="small" class="mat-icon notranslate mat-badge mat-badge-warn material-icons mat-ligature-font mat-icon-no-color mat-badge-overlap mat-badge-above mat-badge-after mat-badge-small mat-badge-hidden" aria-hidden="true" data-mat-icon-type="font">shopping_cart</mat-icon>
+✔ Building...
+Browser bundles     
+Initial chunk files  | Names              |  Raw size
+chunk-7C62GOKU.js    | -                  | 957.87 kB | 
+chunk-VL3MXENV.js    | -                  | 881.76 kB | 
+chunk-B6GFE7PH.js    | -                  | 494.50 kB | 
+chunk-O5PVIRVE.js    | -                  | 153.58 kB | 
+polyfills.js         | polyfills          |  92.45 kB | 
+main.js              | main               |  33.97 kB | 
+styles.css           | styles             |   8.75 kB | 
+chunk-QSJ7G3J7.js    | -                  |   6.02 kB | 
+chunk-WDMUDEB6.js    | -                  |   1.93 kB | 
+
+                     | Initial total      |   2.63 MB
+
+Lazy chunk files     | Names              |  Raw size
+chunk-GKAN2VGI.js    | orders-component   | 210.27 kB | 
+chunk-VADJEN35.js    | browser            | 154.14 kB | 
+chunk-ZI5QQQ7P.js    | checkout-component | 143.73 kB | 
+chunk-US3O5X3O.js    | -                  |  23.84 kB | 
+chunk-IDT5VXWA.js    | index              |  22.27 kB | 
+chunk-4OUKAWIA.js    | index              |  19.68 kB | 
+chunk-EBFMIORS.js    | -                  |  11.43 kB | 
+chunk-OVLBBNKQ.js    | web-vitals         |   8.59 kB | 
+
+
+Server bundles      
+Initial chunk files  | Names              |  Raw size
+server.mjs           | server             |   1.97 MB | 
+chunk-JJTOD2IA.mjs   | -                  | 948.79 kB | 
+main.server.mjs      | main.server        | 924.76 kB | 
+chunk-WY7F2JUL.mjs   | -                  | 881.62 kB | 
+polyfills.server.mjs | polyfills.server   | 511.07 kB | 
+chunk-COV4KB7A.mjs   | -                  | 492.11 kB | 
+chunk-HUXMY7KZ.mjs   | -                  | 153.62 kB | 
+chunk-BFESYPNC.mjs   | -                  |   6.06 kB | 
+chunk-TXMZZVXC.mjs   | -                  |   5.04 kB | 
+chunk-3II4UTYF.mjs   | -                  |   2.81 kB | 
+
+Lazy chunk files     | Names              |  Raw size
+chunk-IXEGG76D.mjs   | orders-component   | 210.31 kB | 
+chunk-4WTBQIVG.mjs   | browser            | 154.18 kB | 
+chunk-HJL3KFKD.mjs   | checkout-component | 143.78 kB | 
+chunk-YVV4CWTD.mjs   | xhr2               |  40.17 kB | 
+chunk-RH2IE7WJ.mjs   | xhr2               |  40.10 kB | 
+chunk-IJ4NZPTR.mjs   | -                  |  23.88 kB | 
+chunk-AUSM2YED.mjs   | index              |  22.31 kB | 
+chunk-RESVVZ6G.mjs   | index              |  19.73 kB | 
+chunk-3CB5UKKA.mjs   | -                  |  11.46 kB | 
+chunk-NT2L7JU3.mjs   | web-vitals         |   8.63 kB | 
+
+Prerendered 4 static routes.
+Application bundle generation complete. [6.810 seconds] - 2026-02-24T00:03:02.405Z
+
+▲ [WARNING] NG8011: Node matches the ".material-icons:not([iconPositionEnd]), mat-icon:not([iconPositionEnd]), [matButtonIcon]:not([iconPositionEnd])" slot of the "MatButton" component, but will not be projected into the specific slot because the surrounding @else has more than one node at its root. To project the node in the right slot, you can:
+
+1. Wrap the content of the @else block in an <ng-container/> that matches the ".material-icons:not([iconPositionEnd]), mat-icon:not([iconPositionEnd]), [matButtonIcon]:not([iconPositionEnd])" selector.
+2. Split the content of the @else block across multiple @else blocks such that each one only has a single projectable node at its root.
+3. Remove all content from the @else block, except for the node being projected.
+
+This check can be disabled using the `extendedDiagnostics.checks.controlFlowPreventingContentProjection = "suppress" compiler option.` [plugin angular-compiler]
+
+    apps/shop/src/app/checkout/checkout.component.ts:238:20:
+      238 │                     <ng-container matButtonIcon>
+          ╵                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+Output location: /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/dist/apps/shop
+

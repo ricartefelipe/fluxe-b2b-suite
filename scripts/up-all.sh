@@ -1,13 +1,15 @@
 #!/usr/bin/env bash
 # Sobe toda a suite: backends (Docker) + frontend.
+# RabbitMQ é compartilhado (Spring); Node e Python usam o mesmo broker para E2E pedido->PAID.
 # Uso: ./scripts/up-all.sh
-# Requer: Docker acessível (seu usuário no grupo docker ou sudo).
-# Acesse: http://localhost:4200 (Ops Portal), login com "Ops User".
+# Requer: Docker acessível. Portas: Spring 8080, Node 3000, Python 8000, Grafana Spring 3030.
+# Acesse: http://localhost:4200 (Ops Portal), login "Ops User".
 
 set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SUITE_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 WKS="$(cd "$SUITE_ROOT/.." && pwd)"
+export RABBITMQ_SUITE_URL="amqp://guest:guest@fluxe-rabbitmq:5672"
 
 # --- Verificar Docker ---
 echo "=== Verificando Docker ==="
@@ -19,6 +21,11 @@ if ! docker info &>/dev/null; then
   exit 1
 fi
 echo "  Docker OK"
+
+# --- Rede compartilhada (RabbitMQ do Spring acessível por Node e Python) ---
+echo "=== Rede fluxe_shared ==="
+docker network create fluxe_shared 2>/dev/null || true
+echo "  Rede OK"
 echo ""
 
 # --- Garantir .env com JWT E2E (Node e Python) ---
@@ -64,36 +71,41 @@ else
 fi
 echo ""
 
-echo "--- [2/3] node-b2b-orders ---"
+echo "--- [2/3] node-b2b-orders (RabbitMQ compartilhado: fluxe-rabbitmq) ---"
 if [ ! -d "$WKS/node-b2b-orders" ]; then
   echo "  SKIP: pasta não encontrada"
 else
-  ( cd "$WKS/node-b2b-orders" && docker compose up -d --build ) || { echo "  ERRO ao subir Node"; FAILED="$FAILED node"; }
-  sleep 5
+  ( cd "$WKS/node-b2b-orders" && RABBITMQ_URL="$RABBITMQ_SUITE_URL" docker compose up -d --build ) || { echo "  ERRO ao subir Node"; FAILED="$FAILED node"; }
+  echo "  Aguardando API Node (até 90s)..."
+  for i in $(seq 1 45); do
+    if curl -sf http://localhost:3000/v1/healthz &>/dev/null; then
+      echo "  Node OK: http://localhost:3000"
+      break
+    fi
+    [ "$i" -eq 45 ] && echo "  WARN: timeout Node API"
+    sleep 2
+  done
   ( cd "$WKS/node-b2b-orders" && docker compose run --rm api npx prisma migrate deploy ) || true
   ( cd "$WKS/node-b2b-orders" && docker compose run --rm api npx prisma db seed ) || true
-  if curl -sf http://localhost:3000/v1/healthz &>/dev/null; then
-    echo "  Node OK: http://localhost:3000"
-  else
-    echo "  WARN: Node pode ainda estar subindo (porta 3000)"
-  fi
 fi
 echo ""
 
-echo "--- [3/3] py-payments-ledger ---"
+echo "--- [3/3] py-payments-ledger (RabbitMQ compartilhado + ORDERS_INTEGRATION) ---"
 if [ ! -d "$WKS/py-payments-ledger" ]; then
   echo "  SKIP: pasta não encontrada"
 else
-  ( cd "$WKS/py-payments-ledger" && docker compose up -d --build ) || { echo "  ERRO ao subir Python"; FAILED="$FAILED py"; }
-  echo "  Aguardando Postgres..."
-  sleep 10
+  ( cd "$WKS/py-payments-ledger" && RABBITMQ_URL="$RABBITMQ_SUITE_URL" docker compose up -d --build ) || { echo "  ERRO ao subir Python"; FAILED="$FAILED py"; }
+  echo "  Aguardando API Python (até 90s)..."
+  for i in $(seq 1 45); do
+    if curl -sf http://localhost:8000/healthz &>/dev/null; then
+      echo "  Python OK: http://localhost:8000"
+      break
+    fi
+    [ "$i" -eq 45 ] && echo "  WARN: timeout Python API"
+    sleep 2
+  done
   ( cd "$WKS/py-payments-ledger" && docker compose run --rm api alembic upgrade head ) || true
   ( cd "$WKS/py-payments-ledger" && docker compose run --rm api python -m src.infrastructure.db.seed ) || true
-  if curl -sf http://localhost:8000/healthz &>/dev/null; then
-    echo "  Python OK: http://localhost:8000"
-  else
-    echo "  WARN: Python pode ainda estar subindo (porta 8000)"
-  fi
 fi
 echo ""
 

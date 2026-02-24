@@ -5,7 +5,7 @@ export function provideRuntimeConfig(): EnvironmentProviders {
   return makeEnvironmentProviders([
     {
       provide: APP_INITIALIZER,
-      useFactory: (cfg: RuntimeConfigService) => () => cfg.load(),
+      useFactory: (cfg: RuntimeConfigService) => () => cfg.load().catch(() => {}),
       deps: [RuntimeConfigService],
       multi: true,
     },

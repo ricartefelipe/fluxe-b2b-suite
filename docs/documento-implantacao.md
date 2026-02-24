@@ -104,4 +104,5 @@ Usar esses endpoints no orquestrador (Kubernetes, ECS, etc.) para liveness e rea
 ## 6. Referências
 
 - [E2E-RUN.md](E2E-RUN.md) — Subida local e sugestões de hospedagem (Railway, AWS, etc.).
+- [LACUNAS-CLOUD-IAC.md](LACUNAS-CLOUD-IAC.md) — O que falta para 100%, cloud e estratégia com IaC (Terraform etc.).
 - [regras-de-negocio.md](regras-de-negocio.md) — Regras que impactam contratos e compatibilidade.

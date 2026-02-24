@@ -11,7 +11,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { EmptyStateComponent, ConfirmDialogComponent } from '@saas-suite/shared/ui';
-import { PoliciesFacade, Policy, CreatePolicyRequest, PolicyEffect } from '@saas-suite/data-access/core';
+import { PoliciesFacade, Policy, CreatePolicyRequest } from '@saas-suite/data-access/core';
 import { firstValueFrom } from 'rxjs';
 
 @Component({

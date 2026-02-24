@@ -10,7 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
-import { StatusChipComponent, EmptyStateComponent, ConfirmDialogComponent } from '@saas-suite/shared/ui';
+import { StatusChipComponent, EmptyStateComponent } from '@saas-suite/shared/ui';
 import { TenantsFacade, Tenant, TenantStatus, TenantPlan } from '@saas-suite/data-access/core';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
 import { formatDateTime } from '@saas-suite/shared/util';

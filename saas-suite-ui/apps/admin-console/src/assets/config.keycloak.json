@@ -1,0 +1,13 @@
+{
+  "coreApiBaseUrl": "http://localhost:8080",
+  "ordersApiBaseUrl": "http://localhost:3000",
+  "paymentsApiBaseUrl": "http://localhost:8000",
+  "authMode": "oidc",
+  "oidc": {
+    "issuer": "http://localhost:8180/realms/fluxe-b2b",
+    "clientId": "fluxe-admin",
+    "scope": "openid profile email roles"
+  },
+  "logLevel": "debug",
+  "version": "0.1.0"
+}

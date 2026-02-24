@@ -1,0 +1,13 @@
+{
+  "coreApiBaseUrl": "${CORE_API_BASE_URL}",
+  "ordersApiBaseUrl": "${ORDERS_API_BASE_URL}",
+  "paymentsApiBaseUrl": "${PAYMENTS_API_BASE_URL}",
+  "authMode": "${AUTH_MODE}",
+  "oidc": {
+    "issuer": "${OIDC_ISSUER}",
+    "clientId": "${OIDC_CLIENT_ID}",
+    "scope": "${OIDC_SCOPE}"
+  },
+  "logLevel": "${LOG_LEVEL}",
+  "version": "${APP_VERSION}"
+}

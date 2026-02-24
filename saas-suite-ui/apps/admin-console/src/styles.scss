@@ -12,6 +12,18 @@ html {
   ));
 }
 
+html.dark-theme {
+  @include mat.theme((
+    color: (
+      theme-type: dark,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
 :root {
   --app-primary: #1565c0;
   --app-primary-light: #1976d2;
@@ -19,6 +31,7 @@ html {
   --app-accent: #42a5f5;
   --app-bg: #f4f6f9;
   --app-surface: #fff;
+  --app-surface-variant: #f8fafc;
   --app-text: #263238;
   --app-text-secondary: #546e7a;
   --app-border: #e0e0e0;
@@ -27,6 +40,40 @@ html {
   --app-sidebar-active: #1565c0;
   --app-header-bg: #ffffff;
   --app-header-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  --app-hover: #f0f7ff;
+  --app-code-bg: #eef2f7;
+  --app-chip-allow-bg: #e8f5e9;
+  --app-chip-allow-text: #2e7d32;
+  --app-chip-deny-bg: #ffebee;
+  --app-chip-deny-text: #c62828;
+  --app-scrollbar: #c0c0c0;
+  --app-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+html.dark-theme {
+  --app-primary: #42a5f5;
+  --app-primary-light: #64b5f6;
+  --app-primary-dark: #1e88e5;
+  --app-accent: #90caf9;
+  --app-bg: #121212;
+  --app-surface: #1e1e1e;
+  --app-surface-variant: #2a2a2a;
+  --app-text: #e0e0e0;
+  --app-text-secondary: #9e9e9e;
+  --app-border: #333;
+  --app-sidebar-bg: #0a1520;
+  --app-sidebar-text: #a0b0c0;
+  --app-sidebar-active: #42a5f5;
+  --app-header-bg: #1e1e1e;
+  --app-header-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  --app-hover: #1a2533;
+  --app-code-bg: #2a2e33;
+  --app-chip-allow-bg: #1b3a1b;
+  --app-chip-allow-text: #81c784;
+  --app-chip-deny-bg: #3a1b1b;
+  --app-chip-deny-text: #ef9a9a;
+  --app-scrollbar: #555;
+  --app-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 *,
@@ -42,6 +89,7 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   color: var(--app-text);
   background: var(--app-bg);
+  transition: background-color 0.3s, color 0.3s;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -66,7 +114,8 @@ h3 { font-size: 15px; }
   background: var(--app-surface);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--app-shadow);
+  transition: background-color 0.3s;
 }
 
 .filters {
@@ -78,7 +127,8 @@ h3 { font-size: 15px; }
   padding: 16px;
   background: var(--app-surface);
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--app-shadow);
+  transition: background-color 0.3s;
 }
 
 .filters mat-form-field {
@@ -90,11 +140,13 @@ table.mat-mdc-table {
   background: var(--app-surface);
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--app-shadow);
+  transition: background-color 0.3s;
 }
 
 .mat-mdc-header-row {
-  background: #f8fafc !important;
+  background: var(--app-surface-variant) !important;
+  transition: background-color 0.3s;
 }
 
 .mat-mdc-header-cell {
@@ -106,21 +158,22 @@ table.mat-mdc-table {
 }
 
 .mat-mdc-row:hover {
-  background: #f0f7ff !important;
+  background: var(--app-hover) !important;
 }
 
 code {
-  background: #eef2f7;
+  background: var(--app-code-bg);
   padding: 2px 8px;
   border-radius: 4px;
   font-size: 12px;
   color: var(--app-primary);
   font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  transition: background-color 0.3s;
 }
 
 .chip-allow {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: var(--app-chip-allow-bg);
+  color: var(--app-chip-allow-text);
   padding: 3px 10px;
   border-radius: 12px;
   font-size: 11px;
@@ -130,8 +183,8 @@ code {
 }
 
 .chip-deny {
-  background: #ffebee;
-  color: #c62828;
+  background: var(--app-chip-deny-bg);
+  color: var(--app-chip-deny-text);
   padding: 3px 10px;
   border-radius: 12px;
   font-size: 11px;
@@ -150,6 +203,7 @@ code {
   background: var(--app-surface);
   border-radius: 12px;
   border: 1px dashed var(--app-border);
+  transition: background-color 0.3s;
 }
 
 .form-grid {
@@ -165,7 +219,8 @@ code {
 
 mat-card {
   border-radius: 12px !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+  box-shadow: var(--app-shadow) !important;
+  transition: background-color 0.3s !important;
 }
 
 .mat-mdc-progress-bar {
@@ -179,7 +234,7 @@ mat-card {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #c0c0c0;
+  background: var(--app-scrollbar);
   border-radius: 3px;
 }
 

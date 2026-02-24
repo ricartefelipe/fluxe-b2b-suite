@@ -1,4 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { DevLoginComponent } from './dev-auth/dev-login.component';
 import { OidcAuthService } from './oidc-auth.service';
@@ -6,13 +7,14 @@ import { OidcAuthService } from './oidc-auth.service';
 @Component({
   selector: 'saas-login-page',
   standalone: true,
-  imports: [DevLoginComponent],
+  imports: [DevLoginComponent, MatProgressSpinnerModule],
   template: `
     @if (authMode === 'dev') {
       <saas-dev-login />
     } @else {
       <div class="oidc-loading">
-        <p>Redirecionando para login...</p>
+        <mat-spinner diameter="36" />
+        <p>Redirecting to identity provider&hellip;</p>
       </div>
     }
   `,
@@ -20,8 +22,10 @@ import { OidcAuthService } from './oidc-auth.service';
     `
       .oidc-loading {
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
+        gap: 16px;
         min-height: 100vh;
         background: #f4f6f9;
       }

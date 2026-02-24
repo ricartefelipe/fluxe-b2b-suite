@@ -26,13 +26,24 @@ export function parseJwtPayload(token: string): Record<string, unknown> {
 export function sessionFromJwt(token: string): AuthSession {
   const payload = parseJwtPayload(token);
   const exp = (payload['exp'] as number) ?? 0;
+
+  const realmAccess = payload['realm_access'] as { roles?: string[] } | undefined;
+  const roles = (payload['roles'] as string[])
+    ?? realmAccess?.roles?.filter((r) => !r.startsWith('default-roles-'))
+    ?? [];
+
+  const perms = (payload['perms'] as string[]) ?? [];
+
   return {
     accessToken: token,
     userId: (payload['sub'] as string) ?? '',
-    email: (payload['email'] as string) ?? (payload['sub'] as string) ?? '',
+    email: (payload['email'] as string)
+      ?? (payload['preferred_username'] as string)
+      ?? (payload['sub'] as string)
+      ?? '',
     tenantId: (payload['tid'] as string) ?? null,
-    roles: (payload['roles'] as string[]) ?? [],
-    permissions: (payload['perms'] as string[]) ?? [],
+    roles,
+    permissions: perms,
     plan: (payload['plan'] as string) ?? '',
     region: (payload['region'] as string) ?? '',
     expiresAt: exp * 1000,

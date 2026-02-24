@@ -11,7 +11,12 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./ops-shell.component').then(m => m.OpsShellComponent),
     canActivate: [authGuard],
     children: [
-      { path: '', redirectTo: 'orders', pathMatch: 'full' },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./pages/dashboard.page').then(m => m.DashboardPage),
+        data: { permissions: ['orders:read'] },
+      },
       {
         path: 'orders',
         loadComponent: () => import('./pages/orders-list.page').then(m => m.OrdersListPage),

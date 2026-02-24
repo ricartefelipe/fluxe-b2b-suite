@@ -1,0 +1,126 @@
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme((
+    color: (
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+html.dark-theme {
+  @include mat.theme((
+    color: (
+      theme-type: dark,
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+:root {
+  --shop-primary: #1565c0;
+  --shop-primary-light: #42a5f5;
+  --shop-surface: #ffffff;
+  --shop-bg: #f4f6f9;
+  --shop-text: #263238;
+  --shop-text-secondary: #546e7a;
+  --shop-border: #e0e0e0;
+  --shop-success: #2e7d32;
+  --shop-success-bg: #e8f5e9;
+  --shop-error: #c62828;
+  --shop-error-bg: #ffebee;
+  --shop-hover: #f0f7ff;
+  --shop-code-bg: #eef2f7;
+  --shop-scrollbar: #c0c0c0;
+  --shop-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+html.dark-theme {
+  --shop-primary: #42a5f5;
+  --shop-primary-light: #64b5f6;
+  --shop-surface: #1e1e1e;
+  --shop-bg: #121212;
+  --shop-text: #e0e0e0;
+  --shop-text-secondary: #9e9e9e;
+  --shop-border: #333;
+  --shop-success: #81c784;
+  --shop-success-bg: #1b3a1b;
+  --shop-error: #ef9a9a;
+  --shop-error-bg: #3a1b1b;
+  --shop-hover: #1a2533;
+  --shop-code-bg: #2a2e33;
+  --shop-scrollbar: #555;
+  --shop-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  color: var(--shop-text);
+  background: var(--shop-bg);
+  transition: background-color 0.3s, color 0.3s;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--shop-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  font-family: inherit;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+h1, h2, h3, h4 {
+  margin: 0;
+  font-weight: 600;
+}
+
+mat-card {
+  border-radius: 12px !important;
+  box-shadow: var(--shop-shadow) !important;
+  transition: background-color 0.3s !important;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--shop-scrollbar);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}

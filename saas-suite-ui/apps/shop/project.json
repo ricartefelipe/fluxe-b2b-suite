@@ -18,9 +18,11 @@
           {
             "glob": "**/*",
             "input": "apps/shop/public"
-          }
+          },
+          "apps/shop/src/manifest.webmanifest"
         ],
-        "styles": ["apps/shop/src/styles.css"],
+        "styles": ["apps/shop/src/styles.scss"],
+        "serviceWorker": "apps/shop/ngsw-config.json",
         "server": "apps/shop/src/main.server.ts",
         "ssr": {
           "entry": "apps/shop/src/server.ts"

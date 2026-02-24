@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { PaymentsApiClient } from './payments-api.client';
-import { PaymentIntent, PaymentListParams } from './models/payment.model';
+import { PaymentIntent, CreatePaymentIntentRequest, PaymentListParams } from './models/payment.model';
 import { LoggerService } from '@saas-suite/shared/telemetry';
 import { generateIdempotencyKey } from '@saas-suite/shared/util';
 
@@ -25,6 +25,14 @@ export class PaymentsFacade {
       this._payments.set(r.data); this._total.set(r.total);
     } catch (e) { this.logger.error('loadPayments failed', e); }
     finally { this._loading.set(false); }
+  }
+
+  async createPayment(req: CreatePaymentIntentRequest): Promise<PaymentIntent | null> {
+    const key = generateIdempotencyKey('pay-create');
+    try {
+      const p = await firstValueFrom(this.api.createPayment(req, key));
+      this._payments.update(list => [p, ...list]); return p;
+    } catch (e) { this.logger.error('createPayment failed', e); return null; }
   }
 
   async confirmPayment(id: string): Promise<PaymentIntent | null> {

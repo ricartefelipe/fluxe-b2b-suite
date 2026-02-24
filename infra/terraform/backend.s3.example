@@ -1,0 +1,13 @@
+# Copie para backend.tf e ajuste bucket/region para usar state remoto no S3.
+# terraform init -migrate-state
+# terraform init -reconfigure
+
+terraform {
+  backend "s3" {
+    bucket         = "SEU-BUCKET-TERRAFORM-STATE"
+    key            = "fluxe-b2b-suite/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "terraform-lock"
+    encrypt        = true
+  }
+}

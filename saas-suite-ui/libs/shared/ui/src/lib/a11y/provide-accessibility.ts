@@ -10,12 +10,18 @@ function accessibilityInitializerFactory(): () => void {
   const announcer = inject(LiveAnnouncerService);
 
   return () => {
-    router.events
-      .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-      .subscribe(() => {
-        const pageTitle = title.getTitle() || 'Page';
-        announcer.announcePageChange(pageTitle);
-      });
+    try {
+      setTimeout(() => {
+        router.events
+          .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
+          .subscribe(() => {
+            const pageTitle = title.getTitle() || 'Page';
+            announcer.announcePageChange(pageTitle);
+          });
+      }, 0);
+    } catch {
+      // não quebra o bootstrap
+    }
   };
 }
 

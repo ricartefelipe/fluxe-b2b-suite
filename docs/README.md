@@ -8,6 +8,7 @@
 
 | Documento | Descrição |
 |-----------|-----------|
+| [PUBLICAR-PASSO-A-PASSO.md](PUBLICAR-PASSO-A-PASSO.md) | **Para quem não é de TI:** publicar só o frontend (GitHub Pages) ou a aplicação completa (Railway), passo a passo |
 | [E2E-RUN.md](E2E-RUN.md) | Como subir os 4 repos integrados (ordem, envs, JWT, RabbitMQ) e sugestões de hospedagem na nuvem (Railway, Render, AWS, Fly.io) |
 | [regras-de-negocio.md](regras-de-negocio.md) | Regras de negócio: auth, pedidos, pagamentos, inventário, core, frontend |
 | [DAS.md](DAS.md) | Documento de Arquitetura de Software: visão geral, decisões, stack, riscos |

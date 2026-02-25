@@ -2,7 +2,7 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { ProductDetailComponent } from './product-detail.component';
-import { ProductsService } from '@union.solutions/shop/data';
+import { ProductsService, CartService } from '@union.solutions/shop/data';
 import { Product } from '@union.solutions/models';
 import { describe, it, beforeEach, expect, vi } from 'vitest';
 
@@ -10,6 +10,7 @@ describe('ProductDetailComponent', () => {
   let component: ProductDetailComponent;
   let fixture: ComponentFixture<ProductDetailComponent>;
   let mockProductsService: Partial<ProductsService>;
+  let mockCartService: { addItem: ReturnType<typeof vi.fn> };
   let mockRouter: Partial<Router>;
   let mockActivatedRoute: Partial<ActivatedRoute>;
 
@@ -30,6 +31,7 @@ describe('ProductDetailComponent', () => {
       getProductById: vi.fn(),
     };
 
+    mockCartService = { addItem: vi.fn() };
     mockRouter = {
       navigate: vi.fn(),
     };
@@ -46,6 +48,7 @@ describe('ProductDetailComponent', () => {
       imports: [ProductDetailComponent],
       providers: [
         { provide: ProductsService, useValue: mockProductsService },
+        { provide: CartService, useValue: mockCartService },
         { provide: Router, useValue: mockRouter },
         { provide: ActivatedRoute, useValue: mockActivatedRoute },
       ],
@@ -101,13 +104,11 @@ describe('ProductDetailComponent', () => {
   });
 
   it('should handle add to cart action', () => {
-    const alertSpy = vi.spyOn(window, 'alert').mockImplementation(() => undefined);
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined);
     component.product.set(mockProduct);
 
     component.addToCart();
 
-    expect(consoleSpy).toHaveBeenCalledWith('Adding to cart:', '1');
-    expect(alertSpy).toHaveBeenCalledWith('Product added to cart!');
+    expect(mockCartService.addItem).toHaveBeenCalledWith(mockProduct, 1);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/checkout']);
   });
 });

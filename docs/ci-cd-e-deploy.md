@@ -8,10 +8,10 @@ Resumo do que existe nos quatro repositórios: CI, CD automatizado (imagens + fr
 
 | Repositório | Workflow | Gatilho | O que roda |
 |-------------|----------|---------|------------|
-| **fluxe-b2b-suite** | `saas-suite-ui/.github/workflows/ci.yml` | `push` (main), `pull_request` | Nx Cloud, Node 20, `npm ci`, Playwright, `nx run-many -t lint test build typecheck e2e` |
-| **node-b2b-orders** | `.github/workflows/ci.yml` | `push`, `pull_request` | Node 20, `npm install`, build, test, export OpenAPI |
-| **py-payments-ledger** | `.github/workflows/ci.yml` | `push`, `pull_request` | Python 3.12, ruff, black, mypy, pytest, export OpenAPI |
-| **spring-saas-core** | `.github/workflows/ci.yml` | `push` (main/master), `pull_request` | JDK 21, Maven test, spotless, package, Docker build, upload OpenAPI/jacoco |
+| **fluxe-b2b-suite** | `saas-suite-ui/.github/workflows/ci.yml` | `push` (main), `pull_request` | Nx, Node 20, pnpm, `nx run-many -t lint test build typecheck e2e` |
+| **spring-saas-core** | `.github/workflows/ci.yml` | `push` (main/master), `pull_request` | JDK 21, Maven test (excl. integration), spotless, package, Docker build, upload OpenAPI/jacoco |
+| **node-b2b-orders** | `.github/workflows/ci.yml` | `push` (main/master), `pull_request` | Node 20, `npm ci`, build, test, export OpenAPI |
+| **py-payments-ledger** | `.github/workflows/ci.yml` | `push` (main/master), `pull_request` | Python 3.12, ruff, black, mypy, pytest, export OpenAPI |
 
 ---
 

@@ -140,6 +140,7 @@ export class InstallPromptComponent implements OnInit {
   }
 
   private isStandalone(): boolean {
+    if (typeof window.matchMedia !== 'function') return false;
     return window.matchMedia('(display-mode: standalone)').matches;
   }
 }

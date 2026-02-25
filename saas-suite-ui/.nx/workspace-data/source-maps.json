@@ -2006,66 +2006,6 @@
       "apps/admin-console/Dockerfile",
       "@nx/docker"
     ],
-    "targets.test": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.options": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.cache": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.inputs": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.outputs": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.executor": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.options.cwd": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.options.command": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.technologies": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.technologies.0": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.description": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.help": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.help.command": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.help.example": [
-      "apps/admin-console/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
     "targets.typecheck": [
       "apps/admin-console/vite.config.mts",
       "@nx/vite/plugin"
@@ -2370,6 +2310,30 @@
       "apps/admin-console/project.json",
       "nx/core/project-json"
     ],
+    "targets.test": [
+      "apps/admin-console/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.executor": [
+      "apps/admin-console/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.outputs": [
+      "apps/admin-console/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options": [
+      "apps/admin-console/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options.reportsDirectory": [
+      "apps/admin-console/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options.passWithNoTests": [
+      "apps/admin-console/project.json",
+      "nx/core/project-json"
+    ],
     "targets.serve-static": [
       "apps/admin-console/project.json",
       "nx/core/project-json"
@@ -2411,6 +2375,18 @@
       "nx/target-defaults"
     ],
     "targets.lint.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.cache": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.inputs": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.parallelism": [
       "nx.json",
       "nx/target-defaults"
     ],
@@ -3186,66 +3162,6 @@
       "apps/ops-portal/Dockerfile",
       "@nx/docker"
     ],
-    "targets.test": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.options": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.cache": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.inputs": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.outputs": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.executor": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.options.cwd": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.options.command": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.technologies": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.technologies.0": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.description": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.help": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.help.command": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.help.example": [
-      "apps/ops-portal/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
     "targets.typecheck": [
       "apps/ops-portal/vite.config.mts",
       "@nx/vite/plugin"
@@ -3550,6 +3466,30 @@
       "apps/ops-portal/project.json",
       "nx/core/project-json"
     ],
+    "targets.test": [
+      "apps/ops-portal/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.executor": [
+      "apps/ops-portal/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.outputs": [
+      "apps/ops-portal/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options": [
+      "apps/ops-portal/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options.reportsDirectory": [
+      "apps/ops-portal/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options.passWithNoTests": [
+      "apps/ops-portal/project.json",
+      "nx/core/project-json"
+    ],
     "targets.serve-static": [
       "apps/ops-portal/project.json",
       "nx/core/project-json"
@@ -3591,6 +3531,18 @@
       "nx/target-defaults"
     ],
     "targets.lint.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.cache": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.inputs": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.parallelism": [
       "nx.json",
       "nx/target-defaults"
     ],
@@ -4678,6 +4630,158 @@
       "eslint.config.mjs",
       "@nx/eslint/plugin"
     ],
+    "targets.typecheck": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.cache": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.inputs": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.options": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.metadata": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.executor": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.options.cwd": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.options.command": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.metadata.description": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.metadata.technologies": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.metadata.technologies.0": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.metadata.help": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.metadata.help.command": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.typecheck.metadata.help.example": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.build-deps": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.build-deps.dependsOn": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.watch-deps": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.watch-deps.continuous": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.watch-deps.dependsOn": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.watch-deps.executor": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.watch-deps.options": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "targets.watch-deps.options.command": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vite/plugin"
+    ],
+    "projectType": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.vite:test": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.options": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.cache": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.inputs": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.outputs": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.metadata": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.executor": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.options.cwd": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.options.command": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.metadata.technologies": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.metadata.technologies.0": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.metadata.description": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.metadata.help": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.metadata.help.command": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
+    "targets.vite:test.metadata.help.example": [
+      "libs/shop/performance/vite.config.mts",
+      "@nx/vitest"
+    ],
     "name": [
       "libs/shop/performance/project.json",
       "nx/core/project-json"
@@ -4691,10 +4795,6 @@
       "nx/core/project-json"
     ],
     "prefix": [
-      "libs/shop/performance/project.json",
-      "nx/core/project-json"
-    ],
-    "projectType": [
       "libs/shop/performance/project.json",
       "nx/core/project-json"
     ],
@@ -4727,6 +4827,10 @@
       "nx/core/project-json"
     ],
     "targets.test.options.reportsDirectory": [
+      "libs/shop/performance/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options.passWithNoTests": [
       "libs/shop/performance/project.json",
       "nx/core/project-json"
     ],

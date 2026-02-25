@@ -25,15 +25,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
+          cache: 'pnpm'
+          cache-dependency-path: saas-suite-ui/pnpm-lock.yaml
 
-      - run: npm ci
-      - run: npx nx build ops-portal --configuration=production --base-href=/ops-portal/
-      - run: npx nx build admin-console --configuration=production --base-href=/admin-console/
-      - run: npx nx build shop --configuration=production --base-href=/shop/
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: saas-suite-ui
+
+      - run: pnpm nx build ops-portal --configuration=production --base-href=/ops-portal/
+        working-directory: saas-suite-ui
+      - run: pnpm nx build admin-console --configuration=production --base-href=/admin-console/
+        working-directory: saas-suite-ui
+      - run: pnpm nx build shop --configuration=production --base-href=/shop/
+        working-directory: saas-suite-ui
 
       - name: Prepare site for Pages
         run: |

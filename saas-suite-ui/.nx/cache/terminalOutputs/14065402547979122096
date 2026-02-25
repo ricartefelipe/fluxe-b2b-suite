@@ -1,0 +1,12 @@
+> vitest
+
+
+ RUN  v4.0.9 /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/libs/domains/tenancy
+
+ ✓ |domain-tenancy| src/lib/domain-tenancy/domain-tenancy.spec.ts (1 test) 105ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  21:50:25
+   Duration  1.91s (transform 912ms, setup 1.20s, collect 60ms, tests 105ms, environment 346ms, prepare 422ms)
+

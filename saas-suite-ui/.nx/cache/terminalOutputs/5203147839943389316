@@ -1,0 +1,12 @@
+> vitest
+
+
+ RUN  v4.0.9 /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/libs/data-access/orders
+
+ ✓ |data-access-orders| src/lib/data-access-orders/data-access-orders.spec.ts (1 test) 104ms
+
+ Test Files  1 passed (1)
+      Tests  1 passed (1)
+   Start at  21:50:09
+   Duration  1.98s (transform 876ms, setup 1.15s, collect 46ms, tests 104ms, environment 450ms, prepare 550ms)
+

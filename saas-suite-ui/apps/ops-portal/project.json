@@ -67,6 +67,14 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/apps/ops-portal",
+        "passWithNoTests": true
+      }
+    },
     "serve-static": {
       "continuous": true,
       "executor": "@nx/web:file-server",

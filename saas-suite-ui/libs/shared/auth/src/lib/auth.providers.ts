@@ -7,7 +7,8 @@ export function provideAuth(): EnvironmentProviders {
   return makeEnvironmentProviders([
     {
       provide: APP_INITIALIZER,
-      useFactory: authInitializer,
+      useFactory: (auth: AuthService, config: RuntimeConfigService, oidcAuth: OidcAuthService) =>
+        () => authInitializer(auth, config, oidcAuth),
       deps: [AuthService, RuntimeConfigService, OidcAuthService],
       multi: true,
     },

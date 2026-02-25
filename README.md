@@ -1,29 +1,63 @@
 # Fluxe B2B Suite
 
-Plataforma B2B multi-tenant para e-commerce, operações e gestão administrativa. Suíte completa desenvolvida com Angular, Nx monorepo e integração com backends Spring/Node/Python.
+[![Angular](https://img.shields.io/badge/Angular-21-DD0031.svg)](https://angular.io/)
+[![Nx](https://img.shields.io/badge/Nx-22.5-143055.svg)](https://nx.dev/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+Plataforma B2B **multi-tenant** para e-commerce, operações e gestão administrativa. Suíte completa em **Angular** (Nx monorepo) com integração a backends **Spring** (core), **Node** (pedidos) e **Python** (pagamentos).
 
 **Repositório:** [github.com/ricartefelipe/fluxe-b2b-suite](https://github.com/ricartefelipe/fluxe-b2b-suite)
 
 ---
 
+## Índice
+
+- [O que é a Suite](#o-que-é-a-suite)
+- [Quando usar](#quando-usar)
+- [Arquitetura](#arquitetura)
+- [Quick Start](#quick-start)
+- [URLs após subir](#urls-após-subir)
+- [Demo em 3 minutos](#demo-em-3-minutos)
+- [Configuração dos backends](#configuração-e-urls-dos-backends)
+- [Segurança e ambientes](#segurança-e-ambientes)
+- [Comandos](#comandos)
+- [OpenAPI e documentação dos serviços](#openapi--documentação-dos-serviços)
+- [Estrutura do monorepo](#estrutura-saas-suite-ui)
+- [E2E e implantação](#execução-e2e-e-hospedagem)
+- [Documentação adicional](#documentação)
+- [Licença](#licença)
+
+---
+
 ## O que é a Suite
 
-- **Shop** — E-commerce Angular com SSR, catálogo de produtos e checkout com pedidos
-- **Ops Portal** — Pedidos, inventário, pagamentos e ledger para operações
-- **Admin Console** — Tenants, políticas ABAC, feature flags e audit log
-- **API** — Backend Express (produtos) e proxy para desenvolvimento local
+A **Fluxe B2B Suite** reúne três aplicações Angular e uma API auxiliar:
 
-Integra com:
+| Aplicação | Descrição |
+|-----------|-----------|
+| **Shop** | E-commerce Angular com SSR: catálogo de produtos, carrinho e checkout com pedidos (Idempotency-Key). |
+| **Ops Portal** | Pedidos, inventário (ajustes), pagamentos e ledger para equipes de operações. |
+| **Admin Console** | Tenants, políticas ABAC, feature flags, audit log e onboarding de novos tenants. |
+| **API** | Backend Express (produtos) e proxy para desenvolvimento local do Shop. |
 
-- **spring-saas-core** (8080) — Tenants, policies, flags, audit
-- **node-b2b-orders** (3000) — Pedidos e inventário
-- **py-payments-ledger** (8000) — Pagamentos e ledger
+### Integração com backends
 
-**Execução E2E e hospedagem:** Ver [docs/E2E-RUN.md](docs/E2E-RUN.md) para subir os 4 repositórios integrados e sugestões de deploy na nuvem (Railway, Render, AWS, Fly.io). Para validar os backends com Docker: `./scripts/e2e-integrated.sh`.
+| Backend | Porta | Responsabilidade |
+|---------|-------|------------------|
+| **spring-saas-core** | 8080 | Tenants, policies, flags, audit, identidade (JWT). |
+| **node-b2b-orders** | 3000 | Pedidos e inventário. |
+| **py-payments-ledger** | 8000 | Pagamentos e ledger. |
 
-**Regras de negócio:** Resumo em [docs/regras-de-negocio.md](docs/regras-de-negocio.md) (auth, pedidos, pagamentos, inventário, core, frontend).
+O frontend obtém o token (em modo dev ou OIDC) e envia nas requisições aos backends; cada backend valida o JWT e aplica ABAC.
 
-**Documentação:** [docs/README.md](docs/README.md) — E2E, regras de negócio, [DAS](docs/DAS.md), [C4](docs/C4-suite.md), [histórias de usuário](docs/historias-de-usuario.md), [implantação](docs/documento-implantacao.md).
+---
+
+## Quando usar
+
+- Você precisa de um **frontend unificado** para loja (Shop), operações (Ops Portal) e administração (Admin Console).
+- Os backends (spring-saas-core, node-b2b-orders, py-payments-ledger) já estão ou estarão disponíveis.
+- Quer **modo dev** com login local (perfis) e **modo produção** com OIDC.
+- Deseja rodar **tudo local** com um script (ex.: `./scripts/rodar-local.sh`) ou seguir [E2E-RUN.md](docs/E2E-RUN.md) para deploy.
 
 ---
 
@@ -55,59 +89,71 @@ Integra com:
 
 ## Quick Start
 
+### Pré-requisitos
+
+- **Node.js 20+**, **pnpm** (recomendado)
+- Backends opcionais para desenvolvimento: pode rodar apenas o frontend com **Dev Auth** (chamadas HTTP falham, mas a UI demonstra os fluxos).
+
+### Passos
+
 ```bash
-# Clone o repositório
 git clone https://github.com/ricartefelipe/fluxe-b2b-suite.git
 cd fluxe-b2b-suite/saas-suite-ui
 
-# Instale dependências
 pnpm install
 
-# Rode a API de produtos (necessária para o shop)
+# API de produtos (necessária para o Shop)
 pnpm nx serve api
 
-# Em outro terminal: rode o shop (com SSR e proxy para API)
+# Em outro terminal: Shop (SSR + proxy para API)
 pnpm nx serve shop
 
-# Ou rode o ops-portal ou admin-console (com Dev Auth para demo)
+# Ou Ops Portal ou Admin Console (Dev Auth para demo)
 pnpm nx serve ops-portal
 # ou
 pnpm nx serve admin-console
 ```
 
-**URLs após subir:**
+Para subir **toda a suíte** (backends via Docker + frontend), use o script na raiz do repositório:
 
-- Shop: http://localhost:4200
-- Ops Portal: http://localhost:4200 (serve ops-portal)
-- Admin Console: http://localhost:4200 (serve admin-console)
-- API produtos: http://localhost:3333
+```bash
+./scripts/rodar-local.sh
+```
 
----
-
-## Demo em 3 Minutos
-
-1. **Ops Portal**
-   - Rode `pnpm nx serve ops-portal`
-   - Acesse http://localhost:4200 → tela de login (Dev Auth)
-   - Selecione perfil "Super Admin" ou "Ops User" → Login
-   - Navegue: Pedidos, Inventário (Ajustes), Pagamentos, Ledger
-   - Mostre lista de pedidos e status (CREATED, RESERVED, CONFIRMED etc.)
-
-2. **Admin Console**
-   - Rode `pnpm nx serve admin-console`
-   - Faça login com Dev Auth
-   - Navegue: Tenants, Policies, Feature Flags, Audit Log
-   - Mostre CRUD de tenants e toggle de flags
-
-3. **Shop**
-   - Rode `pnpm nx serve api` + `pnpm nx serve shop`
-   - Acesse catálogo de produtos
-   - Mostre produto e checkout (cria pedido com Idempotency-Key)
-   - Página "Meus Pedidos"
+Requisito: pastas `spring-saas-core`, `node-b2b-orders` e `py-payments-ledger` no mesmo nível que `fluxe-b2b-suite` (ex.: `Documentos/wks/`). Ver [docs/E2E-RUN.md](docs/E2E-RUN.md).
 
 ---
 
-## Configuração e URLs dos Backends
+## URLs após subir
+
+| Aplicação | URL (após serve) |
+|-----------|-------------------|
+| Shop | http://localhost:4200 |
+| Ops Portal | http://localhost:4200 (ao rodar `serve ops-portal`) |
+| Admin Console | http://localhost:4200 (ao rodar `serve admin-console`) |
+| API produtos | http://localhost:3333 |
+
+---
+
+## Demo em 3 minutos
+
+1. **Ops Portal**  
+   - `pnpm nx serve ops-portal`  
+   - http://localhost:4200 → login (Dev Auth)  
+   - Perfis "Super Admin" ou "Ops User" → Pedidos, Inventário, Pagamentos, Ledger  
+
+2. **Admin Console**  
+   - `pnpm nx serve admin-console`  
+   - Login com Dev Auth  
+   - Tenants, Policies, Feature Flags, Audit Log; CRUD de tenants e toggle de flags  
+
+3. **Shop**  
+   - `pnpm nx serve api` + `pnpm nx serve shop`  
+   - Catálogo, produto, checkout (cria pedido com Idempotency-Key), "Meus Pedidos"  
+
+---
+
+## Configuração e URLs dos backends
 
 Edite `apps/<app>/public/assets/config.json` (ops-portal e admin-console):
 
@@ -125,14 +171,14 @@ Edite `apps/<app>/public/assets/config.json` (ops-portal e admin-console):
 }
 ```
 
-- **authMode:** `dev` = tela de login local com perfis; `oidc` = OAuth2/OIDC real
-- Para desenvolvimento local sem backends, use `authMode: "dev"` — as chamadas HTTP falharão mas a UI demonstra os fluxos
+- **authMode:** `dev` = login local com perfis; `oidc` = OAuth2/OIDC real.
+- Desenvolvimento sem backends: use `authMode: "dev"`; a UI funciona, chamadas HTTP falham.
 
 ---
 
-## Segurança e Ambientes
+## Segurança e ambientes
 
-- **Dev Auth:** Disponível apenas quando `authMode === 'dev'`. Gera JWT local para demos.
+- **Dev Auth:** Apenas quando `authMode === 'dev'`. Gera JWT local para demos.
 - **Produção:** Use `authMode: 'oidc'` e configure issuer/clientId/scope. Dev Auth não deve estar acessível em produção.
 
 ---
@@ -140,26 +186,26 @@ Edite `apps/<app>/public/assets/config.json` (ops-portal e admin-console):
 ## Comandos
 
 | Comando | Descrição |
-|--------|-----------|
+|---------|-----------|
 | `pnpm install` | Instala dependências (em saas-suite-ui) |
-| `pnpm nx serve shop` | Sobe o shop (depende da API) |
+| `pnpm nx serve shop` | Sobe o Shop (depende da API) |
 | `pnpm nx serve api` | Sobe API Express (produtos) |
 | `pnpm nx serve ops-portal` | Sobe portal de operações |
 | `pnpm nx serve admin-console` | Sobe console admin |
 | `pnpm nx run-many -t lint,test,build` | Lint, testes e build |
-| `pnpm nx e2e shop-e2e` | Testes E2E do shop |
-| `pnpm format` | Formata código com Prettier |
-| `pnpm lint` | ESLint em todo workspace |
+| `pnpm nx e2e shop-e2e` | Testes E2E do Shop |
+| `pnpm format` | Formata código (Prettier) |
+| `pnpm lint` | ESLint no workspace |
 
 ---
 
-## OpenAPI / Documentação dos Serviços
+## OpenAPI / documentação dos serviços
 
 - **spring-saas-core:** `/v1/tenants`, `/v1/policies`, `/v1/tenants/{id}/flags`, `/v1/audit`
 - **node-b2b-orders:** `/v1/orders`, `/v1/inventory/adjustments`
 - **py-payments-ledger:** `/v1/payment-intents`, `/v1/ledger/entries`, `/v1/ledger/balances`
 
-(Consulte a documentação de cada serviço para specs OpenAPI completas.)
+Consulte a documentação de cada serviço para specs OpenAPI completas.
 
 ---
 
@@ -184,6 +230,26 @@ saas-suite-ui/
 
 ---
 
+## Execução E2E e hospedagem
+
+- **Rodar os 4 repositórios integrados e deploy:** [docs/E2E-RUN.md](docs/E2E-RUN.md)  
+- **Validar backends com Docker:** `./scripts/e2e-integrated.sh`  
+- **Regras de negócio:** [docs/regras-de-negocio.md](docs/regras-de-negocio.md) (auth, pedidos, pagamentos, inventário, core, frontend)
+
+---
+
+## Documentação
+
+- [docs/README.md](docs/README.md) — Índice da documentação
+- [docs/E2E-RUN.md](docs/E2E-RUN.md) — E2E e deploy
+- [docs/regras-de-negocio.md](docs/regras-de-negocio.md) — Regras de negócio
+- [docs/DAS.md](docs/DAS.md) — Design e arquitetura
+- [docs/C4-suite.md](docs/C4-suite.md) — Diagramas C4
+- [docs/historias-de-usuario.md](docs/historias-de-usuario.md) — Histórias de usuário
+- [docs/documento-implantacao.md](docs/documento-implantacao.md) — Implantação
+
+---
+
 ## Licença
 
-MIT
+MIT — ver [LICENSE](LICENSE).

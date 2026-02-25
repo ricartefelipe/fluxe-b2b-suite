@@ -1,0 +1,21 @@
+> vitest
+
+
+ RUN  v4.0.9 /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/ops-portal
+
+No test files found, exiting with code 1
+
+include: {src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}
+exclude:  **/node_modules/**, **/.git/**
+
+> vitest
+
+
+ RUN  v4.0.9 /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/ops-portal
+
+No test files found, exiting with code 1
+
+include: {src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}
+exclude:  **/node_modules/**, **/.git/**
+
+Warning: command "vitest" exited with non-zero status code

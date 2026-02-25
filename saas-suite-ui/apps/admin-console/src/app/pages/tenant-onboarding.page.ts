@@ -99,10 +99,10 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Organization Name</mat-label>
                 <input matInput formControlName="name" placeholder="Acme Corporation" (input)="onNameChange()">
-                @if (orgForm.controls.name.hasError('required') && orgForm.controls.name.touched) {
+                @if (orgForm.controls['name'].hasError('required') && orgForm.controls['name'].touched) {
                   <mat-error>Name is required</mat-error>
                 }
-                @if (orgForm.controls.name.hasError('minlength')) {
+                @if (orgForm.controls['name'].hasError('minlength')) {
                   <mat-error>Name must be at least 3 characters</mat-error>
                 }
               </mat-form-field>
@@ -111,10 +111,10 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
                 <mat-label>Slug</mat-label>
                 <input matInput formControlName="slug" placeholder="acme-corporation">
                 <mat-hint>URL-safe identifier (lowercase, hyphens only)</mat-hint>
-                @if (orgForm.controls.slug.hasError('required') && orgForm.controls.slug.touched) {
+                @if (orgForm.controls['slug'].hasError('required') && orgForm.controls['slug'].touched) {
                   <mat-error>Slug is required</mat-error>
                 }
-                @if (orgForm.controls.slug.hasError('slug')) {
+                @if (orgForm.controls['slug'].hasError('slug')) {
                   <mat-error>Must be lowercase letters, numbers, and hyphens only</mat-error>
                 }
               </mat-form-field>
@@ -240,10 +240,10 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Admin Email</mat-label>
                     <input matInput formControlName="adminEmail" placeholder="admin@example.com" type="email">
-                    @if (configForm.controls.adminEmail.hasError('required') && configForm.controls.adminEmail.touched) {
+                    @if (configForm.controls['adminEmail'].hasError('required') && configForm.controls['adminEmail'].touched) {
                       <mat-error>Admin email is required</mat-error>
                     }
-                    @if (configForm.controls.adminEmail.hasError('email')) {
+                    @if (configForm.controls['adminEmail'].hasError('email')) {
                       <mat-error>Enter a valid email address</mat-error>
                     }
                   </mat-form-field>
@@ -360,8 +360,10 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
                 @if (store.submitting()) {
                   Creating...
                 } @else {
-                  <mat-icon>check</mat-icon>
-                  Create Tenant
+                  <ng-container>
+                    <mat-icon>check</mat-icon>
+                    Create Tenant
+                  </ng-container>
                 }
               </button>
             </div>

@@ -19,12 +19,13 @@ export class LoggerService {
     const entry: LogEntry = { level, message, context, timestamp: new Date().toISOString() };
 
     if (this.isDev) {
-      const fn =
+      const fn: (arg: string, ...rest: unknown[]) => void =
         level === 'error' ? console.error
         : level === 'warn' ? console.warn
         : level === 'debug' ? console.debug
         : console.info;
-      fn(`[${entry.timestamp}] [${level.toUpperCase()}] ${message}`, context ?? '');
+      const logFn = typeof fn === 'function' ? fn : console.log;
+      logFn(`[${entry.timestamp}] [${level.toUpperCase()}] ${message}`, context ?? '');
     }
 
     this.handlers.forEach(h => h(entry));

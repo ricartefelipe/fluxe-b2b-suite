@@ -9,7 +9,7 @@ import {
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
-  selector: 'lib-offline-indicator',
+  selector: 'shop-offline-indicator',
   standalone: true,
   imports: [MatIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,

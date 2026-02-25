@@ -4340,8 +4340,8 @@
                 "budgets": [
                   {
                     "type": "initial",
-                    "maximumWarning": "500kb",
-                    "maximumError": "1mb"
+                    "maximumWarning": "900kb",
+                    "maximumError": "1.5mb"
                   },
                   {
                     "type": "anyComponentStyle",
@@ -6291,6 +6291,15 @@
         "version": "21.1.1",
         "packageName": "@angular/router",
         "hash": "sha512-3ypbtH3KfzuVgebdEET9+bRwn1VzP//KI0tIqleCGi4rblP3WQ/HwIGa5Qhdcxmw/kbmABKLRXX2kRUvidKs/Q=="
+      }
+    },
+    "npm:@angular/service-worker": {
+      "type": "npm",
+      "name": "npm:@angular/service-worker",
+      "data": {
+        "version": "21.1.1",
+        "packageName": "@angular/service-worker",
+        "hash": "sha512-ByVSU0j3CDcZwigyuGFgVts1mI6Y9LW3SMaNUszc3PFQSyvPtmFfYMYKkZ9ek1DXDaM7jbiJu8Jm1y8j4tqidA=="
       }
     },
     "npm:@angular/ssr": {
@@ -23485,6 +23494,11 @@
       },
       {
         "source": "shop-pwa",
+        "target": "npm:@angular/service-worker",
+        "type": "static"
+      },
+      {
+        "source": "shop-pwa",
         "target": "npm:rxjs",
         "type": "static"
       }
@@ -23518,6 +23532,11 @@
       {
         "source": "shop",
         "target": "npm:@angular/common",
+        "type": "static"
+      },
+      {
+        "source": "shop",
+        "target": "npm:@angular/service-worker",
         "type": "static"
       },
       {
@@ -24247,6 +24266,11 @@
       },
       {
         "source": "npm:@angular-devkit/build-angular",
+        "target": "npm:@angular/service-worker",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular-devkit/build-angular",
         "target": "npm:@angular/ssr",
         "type": "static"
       },
@@ -24756,6 +24780,11 @@
       },
       {
         "source": "npm:@angular/build",
+        "target": "npm:@angular/service-worker",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/build",
         "target": "npm:@angular/ssr",
         "type": "static"
       },
@@ -25163,6 +25192,23 @@
       },
       {
         "source": "npm:@angular/router",
+        "target": "npm:tslib",
+        "type": "static"
+      }
+    ],
+    "npm:@angular/service-worker": [
+      {
+        "source": "npm:@angular/service-worker",
+        "target": "npm:@angular/core",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/service-worker",
+        "target": "npm:rxjs",
+        "type": "static"
+      },
+      {
+        "source": "npm:@angular/service-worker",
         "target": "npm:tslib",
         "type": "static"
       }
@@ -47049,5 +47095,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1771961690934
+  "computedAt": 1771977114174
 }

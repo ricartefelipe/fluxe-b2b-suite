@@ -571,6 +571,11 @@
   },
   {
     "source": "npm:@angular-devkit/build-angular",
+    "target": "npm:@angular/service-worker",
+    "type": "static"
+  },
+  {
+    "source": "npm:@angular-devkit/build-angular",
     "target": "npm:@angular/ssr",
     "type": "static"
   },
@@ -1056,6 +1061,11 @@
   },
   {
     "source": "npm:@angular/build",
+    "target": "npm:@angular/service-worker",
+    "type": "static"
+  },
+  {
+    "source": "npm:@angular/build",
     "target": "npm:@angular/ssr",
     "type": "static"
   },
@@ -1247,6 +1257,11 @@
   {
     "source": "npm:@angular/build",
     "target": "npm:@angular/platform-server",
+    "type": "static"
+  },
+  {
+    "source": "npm:@angular/build",
+    "target": "npm:@angular/service-worker",
     "type": "static"
   },
   {
@@ -1631,6 +1646,21 @@
   },
   {
     "source": "npm:@angular/router",
+    "target": "npm:tslib",
+    "type": "static"
+  },
+  {
+    "source": "npm:@angular/service-worker",
+    "target": "npm:@angular/core",
+    "type": "static"
+  },
+  {
+    "source": "npm:@angular/service-worker",
+    "target": "npm:rxjs",
+    "type": "static"
+  },
+  {
+    "source": "npm:@angular/service-worker",
     "target": "npm:tslib",
     "type": "static"
   },

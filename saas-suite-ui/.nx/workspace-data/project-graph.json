@@ -1419,7 +1419,8 @@
               "{options.reportsDirectory}"
             ],
             "options": {
-              "reportsDirectory": "../../../coverage/libs/shop/performance"
+              "reportsDirectory": "../../../coverage/libs/shop/performance",
+              "passWithNoTests": true
             },
             "configurations": {},
             "parallelism": true,
@@ -1428,13 +1429,108 @@
               "default",
               "^production"
             ]
+          },
+          "typecheck": {
+            "cache": true,
+            "inputs": [
+              "production",
+              "^production",
+              {
+                "externalDependencies": [
+                  "typescript"
+                ]
+              }
+            ],
+            "options": {
+              "cwd": "libs/shop/performance",
+              "command": "tsc --noEmit -p tsconfig.lib.json"
+            },
+            "metadata": {
+              "description": "Runs type-checking for the project.",
+              "technologies": [
+                "typescript"
+              ],
+              "help": {
+                "command": "pnpm exec tsc -p tsconfig.lib.json --help",
+                "example": {
+                  "options": {
+                    "noEmit": true
+                  }
+                }
+              }
+            },
+            "executor": "nx:run-commands",
+            "configurations": {},
+            "parallelism": true
+          },
+          "build-deps": {
+            "dependsOn": [
+              "^build"
+            ],
+            "configurations": {},
+            "options": {},
+            "parallelism": true,
+            "executor": "nx:noop"
+          },
+          "watch-deps": {
+            "continuous": true,
+            "dependsOn": [
+              "build-deps"
+            ],
+            "executor": "nx:run-commands",
+            "options": {
+              "command": "pnpm exec nx watch --projects shop-performance --includeDependentProjects -- pnpm exec nx build-deps shop-performance"
+            },
+            "configurations": {},
+            "parallelism": true
+          },
+          "vite:test": {
+            "options": {
+              "cwd": "libs/shop/performance",
+              "command": "vitest"
+            },
+            "cache": true,
+            "inputs": [
+              "default",
+              "^production",
+              {
+                "externalDependencies": [
+                  "vitest"
+                ]
+              },
+              {
+                "env": "CI"
+              }
+            ],
+            "outputs": [
+              "{workspaceRoot}/coverage/libs/shop/performance"
+            ],
+            "metadata": {
+              "technologies": [
+                "vitest"
+              ],
+              "description": "Run Vitest tests",
+              "help": {
+                "command": "pnpm exec vitest --help",
+                "example": {
+                  "options": {
+                    "bail": 1,
+                    "coverage": true
+                  }
+                }
+              }
+            },
+            "executor": "nx:run-commands",
+            "configurations": {},
+            "parallelism": true
           }
         },
+        "metadata": {},
+        "projectType": "library",
         "name": "shop-performance",
         "$schema": "../../../node_modules/nx/schemas/project-schema.json",
         "sourceRoot": "libs/shop/performance/src",
         "prefix": "lib",
-        "projectType": "library",
         "tags": [
           "scope:shop",
           "type:util"
@@ -2254,44 +2350,21 @@
             "parallelism": true
           },
           "test": {
+            "executor": "@nx/vitest:test",
+            "outputs": [
+              "{options.reportsDirectory}"
+            ],
             "options": {
-              "cwd": "apps/admin-console",
-              "command": "vitest"
+              "reportsDirectory": "../../coverage/apps/admin-console",
+              "passWithNoTests": true
             },
+            "configurations": {},
+            "parallelism": true,
             "cache": true,
             "inputs": [
               "default",
-              "^production",
-              {
-                "externalDependencies": [
-                  "vitest"
-                ]
-              },
-              {
-                "env": "CI"
-              }
-            ],
-            "outputs": [
-              "{workspaceRoot}/coverage/apps/admin-console"
-            ],
-            "metadata": {
-              "technologies": [
-                "vite"
-              ],
-              "description": "Run Vite tests",
-              "help": {
-                "command": "pnpm exec vitest --help",
-                "example": {
-                  "options": {
-                    "bail": 1,
-                    "coverage": true
-                  }
-                }
-              }
-            },
-            "executor": "nx:run-commands",
-            "configurations": {},
-            "parallelism": true
+              "^production"
+            ]
           },
           "typecheck": {
             "cache": true,
@@ -4182,44 +4255,21 @@
             "parallelism": true
           },
           "test": {
+            "executor": "@nx/vitest:test",
+            "outputs": [
+              "{options.reportsDirectory}"
+            ],
             "options": {
-              "cwd": "apps/ops-portal",
-              "command": "vitest"
+              "reportsDirectory": "../../coverage/apps/ops-portal",
+              "passWithNoTests": true
             },
+            "configurations": {},
+            "parallelism": true,
             "cache": true,
             "inputs": [
               "default",
-              "^production",
-              {
-                "externalDependencies": [
-                  "vitest"
-                ]
-              },
-              {
-                "env": "CI"
-              }
-            ],
-            "outputs": [
-              "{workspaceRoot}/coverage/apps/ops-portal"
-            ],
-            "metadata": {
-              "technologies": [
-                "vite"
-              ],
-              "description": "Run Vite tests",
-              "help": {
-                "command": "pnpm exec vitest --help",
-                "example": {
-                  "options": {
-                    "bail": 1,
-                    "coverage": true
-                  }
-                }
-              }
-            },
-            "executor": "nx:run-commands",
-            "configurations": {},
-            "parallelism": true
+              "^production"
+            ]
           },
           "typecheck": {
             "cache": true,
@@ -22393,6 +22443,16 @@
         "source": "shop-performance",
         "target": "npm:web-vitals",
         "type": "dynamic"
+      },
+      {
+        "source": "shop-performance",
+        "target": "npm:vite",
+        "type": "static"
+      },
+      {
+        "source": "shop-performance",
+        "target": "npm:@nx/vite",
+        "type": "static"
       }
     ],
     "domain-tenancy": [
@@ -47095,5 +47155,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1771978999716
+  "computedAt": 1771980604234
 }

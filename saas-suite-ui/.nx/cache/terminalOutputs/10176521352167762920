@@ -1,0 +1,10 @@
+
+ RUN  v4.0.9 /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/libs/shop/feature-product-detail
+
+ ✓ |feature-product-detail| src/lib/product-detail/product-detail.component.spec.ts (6 tests) 153ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  21:50:38
+   Duration  2.84s (transform 1.04s, setup 1.29s, collect 249ms, tests 153ms, environment 787ms, prepare 966ms)
+

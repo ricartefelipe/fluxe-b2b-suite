@@ -1,4 +1,5 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { IMAGE_LOADER } from '@angular/common';
 import { ProductCardComponent } from './product-card.component';
 import { Product } from '@union.solutions/models';
 import { describe, it, beforeEach, expect, vi } from 'vitest';
@@ -22,6 +23,7 @@ describe('ProductCardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ProductCardComponent],
+      providers: [{ provide: IMAGE_LOADER, useValue: (config: { src: string }) => config.src }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProductCardComponent);

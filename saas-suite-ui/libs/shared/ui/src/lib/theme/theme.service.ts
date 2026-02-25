@@ -34,6 +34,9 @@ export class ThemeService {
       return stored;
     }
 
+    if (typeof window.matchMedia !== 'function') {
+      return 'light';
+    }
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     return prefersDark ? 'dark' : 'light';
   }

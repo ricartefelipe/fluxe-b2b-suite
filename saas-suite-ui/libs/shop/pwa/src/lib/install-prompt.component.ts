@@ -18,7 +18,7 @@ const DISMISS_STORAGE_KEY = 'pwa-install-dismissed';
 const DISMISS_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
 
 @Component({
-  selector: 'lib-install-prompt',
+  selector: 'shop-install-prompt',
   standalone: true,
   imports: [MatButton, MatIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,

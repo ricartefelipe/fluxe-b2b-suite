@@ -1,18 +1,40 @@
 {
   "run": {
-    "command": "nx run ops-portal:build --skip-nx-cache",
-    "startTime": "2026-02-24T19:34:44.998Z",
-    "endTime": "2026-02-24T19:35:06.338Z",
+    "command": "nx run-many -t build --projects=ops-portal,shop,admin-console --skip-nx-cache",
+    "startTime": "2026-02-24T23:51:51.301Z",
+    "endTime": "2026-02-24T23:52:14.707Z",
     "inner": false
   },
   "tasks": [
     {
+      "taskId": "admin-console:build:production",
+      "target": "build",
+      "projectName": "admin-console",
+      "hash": "3179384552590191850",
+      "startTime": "2026-02-24T23:51:51.312Z",
+      "endTime": "2026-02-24T23:52:12.593Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
       "taskId": "ops-portal:build:production",
       "target": "build",
       "projectName": "ops-portal",
-      "hash": "14744952441448565534",
-      "startTime": "2026-02-24T19:34:45.026Z",
-      "endTime": "2026-02-24T19:35:06.336Z",
+      "hash": "4392523544109749425",
+      "startTime": "2026-02-24T23:51:51.312Z",
+      "endTime": "2026-02-24T23:52:13.718Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    },
+    {
+      "taskId": "shop:build:production",
+      "target": "build",
+      "projectName": "shop",
+      "hash": "13909229568899086332",
+      "startTime": "2026-02-24T23:51:51.312Z",
+      "endTime": "2026-02-24T23:52:14.706Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 0

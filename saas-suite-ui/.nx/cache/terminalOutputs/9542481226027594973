@@ -1,0 +1,45 @@
+
+ RUN  v4.0.9 /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/shop
+
+ ❯ |shop| src/app/app.spec.ts (6 tests | 6 failed) 423ms
+     × should create the app component 245ms
+     × should render title in header 45ms
+     × should render navigation links 39ms
+     × should render footer with correct copyright 33ms
+     × should have router outlet for dynamic content 31ms
+     × should apply change detection strategy OnPush 27ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |shop| src/app/app.spec.ts > App > should create the app component
+ FAIL  |shop| src/app/app.spec.ts > App > should render title in header
+ FAIL  |shop| src/app/app.spec.ts > App > should render navigation links
+ FAIL  |shop| src/app/app.spec.ts > App > should render footer with correct copyright
+ FAIL  |shop| src/app/app.spec.ts > App > should have router outlet for dynamic content
+ FAIL  |shop| src/app/app.spec.ts > App > should apply change detection strategy OnPush
+TypeError: window.matchMedia is not a function
+ ❯ InstallPromptComponent2.isStandalone ../../libs/shop/pwa/src/lib/install-prompt.component.ts:143:19
+    141| 
+    142|   private isStandalone(): boolean {
+    143|     return window.matchMedia('(display-mode: standalone)').matches;
+       |                   ^
+    144|   }
+    145| }
+ ❯ InstallPromptComponent2.ngOnInit ../../libs/shop/pwa/src/lib/install-prompt.component.ts:103:14
+ ❯ callHookInternal ../../node_modules/.pnpm/@angular+core@21.1.1_@angular+compiler@21.1.1_rxjs@7.8.2_zone.js@0.16.0/node_modules/@angular/core/fesm2022/_debug_node-chunk.mjs:555:10
+ ❯ callHook ../../node_modules/.pnpm/@angular+core@21.1.1_@angular+compiler@21.1.1_rxjs@7.8.2_zone.js@0.16.0/node_modules/@angular/core/fesm2022/_debug_node-chunk.mjs:570:7
+ ❯ callHooks ../../node_modules/.pnpm/@angular+core@21.1.1_@angular+compiler@21.1.1_rxjs@7.8.2_zone.js@0.16.0/node_modules/@angular/core/fesm2022/_debug_node-chunk.mjs:544:9
+ ❯ executeInitAndCheckHooks ../../node_modules/.pnpm/@angular+core@21.1.1_@angular+compiler@21.1.1_rxjs@7.8.2_zone.js@0.16.0/node_modules/@angular/core/fesm2022/_debug_node-chunk.mjs:513:5
+ ❯ refreshView ../../node_modules/.pnpm/@angular+core@21.1.1_@angular+compiler@21.1.1_rxjs@7.8.2_zone.js@0.16.0/node_modules/@angular/core/fesm2022/_debug_node-chunk.mjs:5516:11
+ ❯ detectChangesInView ../../node_modules/.pnpm/@angular+core@21.1.1_@angular+compiler@21.1.1_rxjs@7.8.2_zone.js@0.16.0/node_modules/@angular/core/fesm2022/_debug_node-chunk.mjs:5644:5
+ ❯ detectChangesInViewIfAttached ../../node_modules/.pnpm/@angular+core@21.1.1_@angular+compiler@21.1.1_rxjs@7.8.2_zone.js@0.16.0/node_modules/@angular/core/fesm2022/_debug_node-chunk.mjs:5627:3
+ ❯ detectChangesInComponent ../../node_modules/.pnpm/@angular+core@21.1.1_@angular+compiler@21.1.1_rxjs@7.8.2_zone.js@0.16.0/node_modules/@angular/core/fesm2022/_debug_node-chunk.mjs:5618:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed (6)
+   Start at  21:35:20
+   Duration  4.73s (transform 1.89s, setup 1.12s, collect 2.28s, tests 423ms, environment 506ms, prepare 638ms)
+

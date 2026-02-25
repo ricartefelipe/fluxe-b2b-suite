@@ -25,7 +25,7 @@ describe('App', () => {
 
   it('should render title in header', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Union Solutions B2B Suite');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Fluxe B2B Suite');
   });
 
   it('should render navigation links', () => {
@@ -40,10 +40,8 @@ describe('App', () => {
   it('should render footer with correct copyright', () => {
     const footer = fixture.nativeElement.querySelector('.app-footer');
     expect(footer).toBeTruthy();
-    expect(footer?.textContent).toContain('© 2026 Union Solutions');
-    expect(footer?.textContent).toContain(
-      'Plataforma B2B para gestão empresarial'
-    );
+    expect(footer?.textContent).toContain('© 2026 Fluxe B2B Suite');
+    expect(footer?.textContent).toContain('Multi-tenant B2B Platform');
   });
 
   it('should have router outlet for dynamic content', () => {

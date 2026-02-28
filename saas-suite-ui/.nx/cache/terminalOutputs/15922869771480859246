@@ -32,7 +32,7 @@ chunk-ZD2PSZN2.js   | ops-shell-component    |   1.31 kB |               574 byt
 chunk-ABQ67LUQ.js   | index                  | 684 bytes |               684 bytes
 ...and 1 more lazy chunks files. Use "--verbose" to show all the files.
 
-Application bundle generation complete. [6.459 seconds] - 2026-02-25T22:04:17.645Z
+Application bundle generation complete. [29.311 seconds] - 2026-02-28T20:13:55.134Z
 
 Output location: /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/dist/apps/ops-portal
 

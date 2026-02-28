@@ -92,7 +92,6 @@ import { firstValueFrom } from 'rxjs';
     .actions { display: flex; gap: 8px; }
     .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .full-width { width: 100%; }
-    code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
     @media (max-width: 768px) { .details-grid { grid-template-columns: 1fr; } }
   `],
 })

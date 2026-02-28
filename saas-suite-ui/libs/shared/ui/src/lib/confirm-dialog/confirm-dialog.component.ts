@@ -1,6 +1,7 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { I18nService } from '@saas-suite/shared/i18n';
 
 export interface ConfirmDialogData {
   title: string;
@@ -18,13 +19,13 @@ export interface ConfirmDialogData {
     <h2 mat-dialog-title id="confirm-dialog-title">{{ data.title }}</h2>
     <mat-dialog-content id="confirm-dialog-description">{{ data.message }}</mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>{{ data.cancelLabel ?? 'Cancelar' }}</button>
+      <button mat-button mat-dialog-close>{{ data.cancelLabel ?? i18n.messages().common.cancel }}</button>
       <button
         mat-raised-button
         [color]="data.danger ? 'warn' : 'primary'"
         [mat-dialog-close]="true"
         cdkFocusInitial>
-        {{ data.confirmLabel ?? 'Confirmar' }}
+        {{ data.confirmLabel ?? i18n.messages().common.confirm }}
       </button>
     </mat-dialog-actions>
   `,
@@ -35,6 +36,7 @@ export interface ConfirmDialogData {
   },
 })
 export class ConfirmDialogComponent {
+  protected i18n = inject(I18nService);
   constructor(
     public dialogRef: MatDialogRef<ConfirmDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData,

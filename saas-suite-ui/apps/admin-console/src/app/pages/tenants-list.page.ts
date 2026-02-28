@@ -11,6 +11,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { StatusChipComponent, EmptyStateComponent } from '@saas-suite/shared/ui';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantsFacade, Tenant, TenantStatus, TenantPlan } from '@saas-suite/data-access/core';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
 import { formatDateTime } from '@saas-suite/shared/util';
@@ -25,33 +26,33 @@ import { formatDateTime } from '@saas-suite/shared/util';
   ],
   template: `
     <div class="page-header">
-      <h1>Tenants</h1>
+      <h1>{{ i18n.messages().tenant.listTitle }}</h1>
       <button mat-raised-button color="primary" (click)="openCreate()">
-        <mat-icon>add</mat-icon> Novo Tenant
+        <mat-icon>add</mat-icon> {{ i18n.messages().tenant.newTenant }}
       </button>
     </div>
 
     <div class="filters">
       <mat-form-field appearance="outline">
-        <mat-label>Buscar por nome</mat-label>
-        <input matInput [(ngModel)]="filterName" (ngModelChange)="search()" placeholder="Nome...">
+        <mat-label>{{ i18n.messages().tenant.searchByName }}</mat-label>
+        <input matInput [(ngModel)]="filterName" (ngModelChange)="search()" [placeholder]="i18n.messages().common.name + '...'">
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Status</mat-label>
+        <mat-label>{{ i18n.messages().common.status }}</mat-label>
         <mat-select [(ngModel)]="filterStatus" (ngModelChange)="search()">
-          <mat-option [value]="undefined">Todos</mat-option>
-          <mat-option value="ACTIVE">Ativo</mat-option>
-          <mat-option value="SUSPENDED">Suspenso</mat-option>
-          <mat-option value="PENDING">Pendente</mat-option>
+          <mat-option [value]="undefined">{{ i18n.messages().common.all }}</mat-option>
+          <mat-option value="ACTIVE">{{ i18n.messages().tenant.statusActive }}</mat-option>
+          <mat-option value="SUSPENDED">{{ i18n.messages().tenant.statusSuspended }}</mat-option>
+          <mat-option value="PENDING">{{ i18n.messages().tenant.statusPending }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Plano</mat-label>
+        <mat-label>{{ i18n.messages().tenant.tenantPlan }}</mat-label>
         <mat-select [(ngModel)]="filterPlan" (ngModelChange)="search()">
-          <mat-option [value]="undefined">Todos</mat-option>
-          <mat-option value="starter">Starter</mat-option>
-          <mat-option value="professional">Professional</mat-option>
-          <mat-option value="enterprise">Enterprise</mat-option>
+          <mat-option [value]="undefined">{{ i18n.messages().common.all }}</mat-option>
+          <mat-option value="starter">{{ i18n.messages().tenant.planStarter }}</mat-option>
+          <mat-option value="professional">{{ i18n.messages().tenant.planProfessional }}</mat-option>
+          <mat-option value="enterprise">{{ i18n.messages().tenant.planEnterprise }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -59,27 +60,27 @@ import { formatDateTime } from '@saas-suite/shared/util';
     @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
 
     @if (facade.tenants().length === 0 && !facade.loading()) {
-      <saas-empty-state icon="business" title="Nenhum tenant encontrado" />
+      <saas-empty-state icon="business" [title]="i18n.messages().tenant.noTenantsFound" />
     } @else {
       <table mat-table [dataSource]="facade.tenants()" class="full-width">
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Nome</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.name }}</th>
           <td mat-cell *matCellDef="let t">{{ t.name }}</td>
         </ng-container>
         <ng-container matColumnDef="slug">
-          <th mat-header-cell *matHeaderCellDef>Slug</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().tenant.tenantSlug }}</th>
           <td mat-cell *matCellDef="let t"><code>{{ t.slug }}</code></td>
         </ng-container>
         <ng-container matColumnDef="plan">
-          <th mat-header-cell *matHeaderCellDef>Plano</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().tenant.tenantPlan }}</th>
           <td mat-cell *matCellDef="let t">{{ t.plan }}</td>
         </ng-container>
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.status }}</th>
           <td mat-cell *matCellDef="let t"><saas-status-chip [status]="t.status" /></td>
         </ng-container>
         <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef>Criado em</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().tenant.createdAt }}</th>
           <td mat-cell *matCellDef="let t">{{ fmtDate(t.createdAt) }}</td>
         </ng-container>
         <ng-container matColumnDef="actions">
@@ -100,11 +101,11 @@ import { formatDateTime } from '@saas-suite/shared/util';
     .filters mat-form-field { min-width: 180px; }
     .full-width { width: 100%; }
     .clickable-row:hover { background: rgba(0,0,0,.04); }
-    code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
   `],
 })
 export class TenantsListPage implements OnInit {
   protected facade = inject(TenantsFacade);
+  protected i18n = inject(I18nService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private tenantStore = inject(TenantContextStore);

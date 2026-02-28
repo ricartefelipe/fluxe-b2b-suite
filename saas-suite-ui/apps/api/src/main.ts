@@ -2,8 +2,8 @@ import express from 'express';
 import { ProductsService } from '@union.solutions/api/products';
 import { ApiResponse, Product, ProductFilter, PaginatedResponse } from '@union.solutions/models';
 
-const host = process.env.HOST ?? 'localhost';
-const port = process.env.PORT ? Number(process.env.PORT) : 3333;
+const host = process.env['HOST'] ?? 'localhost';
+const port = process.env['PORT'] ? Number(process.env['PORT']) : 3333;
 
 const app = express();
 const productsService = new ProductsService();
@@ -28,25 +28,26 @@ app.get('/', (req, res) => {
 app.get('/api/products', (req, res) => {
   try {
     const filter: ProductFilter = {};
+    const q = req.query as Record<string, string | undefined>;
 
-    if (req.query.category) {
-      filter.category = req.query.category as string;
+    if (q['category']) {
+      filter.category = q['category'] as string;
     }
-    if (req.query.minPrice) {
-      filter.minPrice = Number(req.query.minPrice);
+    if (q['minPrice']) {
+      filter.minPrice = Number(q['minPrice']);
     }
-    if (req.query.maxPrice) {
-      filter.maxPrice = Number(req.query.maxPrice);
+    if (q['maxPrice']) {
+      filter.maxPrice = Number(q['maxPrice']);
     }
-    if (req.query.inStock !== undefined) {
-      filter.inStock = req.query.inStock === 'true';
+    if (q['inStock'] !== undefined) {
+      filter.inStock = q['inStock'] === 'true';
     }
-    if (req.query.searchTerm) {
-      filter.searchTerm = req.query.searchTerm as string;
+    if (q['searchTerm']) {
+      filter.searchTerm = q['searchTerm'] as string;
     }
 
-    const page = req.query.page ? Number(req.query.page) : 1;
-    const pageSize = req.query.pageSize ? Number(req.query.pageSize) : 12;
+    const page = q['page'] ? Number(q['page']) : 1;
+    const pageSize = q['pageSize'] ? Number(q['pageSize']) : 12;
 
     const result = productsService.getAllProducts(filter, page, pageSize);
 
@@ -68,7 +69,7 @@ app.get('/api/products', (req, res) => {
 
 app.get('/api/products/:id', (req, res) => {
   try {
-    const product = productsService.getProductById(req.params.id);
+    const product = productsService.getProductById(req.params['id'] ?? '');
 
     if (!product) {
       const response: ApiResponse<null> = {

@@ -116,53 +116,6 @@
   ],
   "fileMap": {
     "projectFileMap": {
-      "api": [
-        {
-          "file": "apps/api/Dockerfile",
-          "hash": "1171390772596198581"
-        },
-        {
-          "file": "apps/api/eslint.config.mjs",
-          "hash": "2624537849564014525"
-        },
-        {
-          "file": "apps/api/project.json",
-          "hash": "6679066583482502144"
-        },
-        {
-          "file": "apps/api/src/assets/.gitkeep",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "apps/api/src/main.ts",
-          "hash": "5115745235240714988",
-          "deps": [
-            "npm:express",
-            "products",
-            "models"
-          ]
-        },
-        {
-          "file": "apps/api/tsconfig.app.json",
-          "hash": "11137898450640994363"
-        },
-        {
-          "file": "apps/api/tsconfig.json",
-          "hash": "3490524966360018312"
-        },
-        {
-          "file": "apps/api/tsconfig.spec.json",
-          "hash": "16829233919054324066"
-        },
-        {
-          "file": "apps/api/vite.config.ts",
-          "hash": "8653386337510922465",
-          "deps": [
-            "npm:vite",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
       "domain-ops": [
         {
           "file": "libs/domains/ops/README.md",
@@ -225,6 +178,10 @@
           ]
         },
         {
+          "file": "libs/domains/ops/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
           "file": "libs/domains/ops/tsconfig.json",
           "hash": "1973382141025117759"
         },
@@ -239,6 +196,1036 @@
         {
           "file": "libs/domains/ops/vite.config.mts",
           "hash": "5336663301868100261",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "products": [
+        {
+          "file": "libs/api/products/README.md",
+          "hash": "6958633013195591019"
+        },
+        {
+          "file": "libs/api/products/eslint.config.mjs",
+          "hash": "10511035923162149759",
+          "deps": [
+            [
+              "npm:jsonc-eslint-parser",
+              "dynamic"
+            ]
+          ]
+        },
+        {
+          "file": "libs/api/products/package.json",
+          "hash": "14742526119745514961",
+          "deps": [
+            "npm:tslib"
+          ]
+        },
+        {
+          "file": "libs/api/products/project.json",
+          "hash": "11328989028963807227"
+        },
+        {
+          "file": "libs/api/products/src/index.ts",
+          "hash": "9758670300368784364"
+        },
+        {
+          "file": "libs/api/products/src/lib/products.service.spec.ts",
+          "hash": "2232052381425872650",
+          "deps": [
+            "models"
+          ]
+        },
+        {
+          "file": "libs/api/products/src/lib/products.service.ts",
+          "hash": "16956941701887786896",
+          "deps": [
+            "models"
+          ]
+        },
+        {
+          "file": "libs/api/products/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/api/products/tsconfig.json",
+          "hash": "6693614989438379715"
+        },
+        {
+          "file": "libs/api/products/tsconfig.lib.json",
+          "hash": "5554291030212586824"
+        },
+        {
+          "file": "libs/api/products/tsconfig.spec.json",
+          "hash": "16992467545950447943"
+        },
+        {
+          "file": "libs/api/products/vite.config.ts",
+          "hash": "17431080146550447749",
+          "deps": [
+            "npm:vite",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "search": [
+        {
+          "file": "libs/shared/search/project.json",
+          "hash": "12821144760383891903"
+        },
+        {
+          "file": "libs/shared/search/src/index.ts",
+          "hash": "4644354212156748521"
+        },
+        {
+          "file": "libs/shared/search/src/lib/global-search.component.ts",
+          "hash": "2375207747191347813",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "libs/shared/search/src/lib/provide-search.ts",
+          "hash": "636405598182911347",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/search/src/lib/search-trigger.component.ts",
+          "hash": "17971503792279084828",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "libs/shared/search/src/lib/search.model.ts",
+          "hash": "6698125533140377674"
+        },
+        {
+          "file": "libs/shared/search/src/lib/search.service.ts",
+          "hash": "2472538445975316681",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs",
+            "data-access-core",
+            "data-access-orders",
+            "data-access-payments",
+            "products",
+            "models"
+          ]
+        },
+        {
+          "file": "libs/shared/search/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/shared/search/tsconfig.json",
+          "hash": "7139907096856141056"
+        },
+        {
+          "file": "libs/shared/search/tsconfig.lib.json",
+          "hash": "1317626009648939439"
+        }
+      ],
+      "ops-portal-e2e": [
+        {
+          "file": "apps/ops-portal-e2e/eslint.config.mjs",
+          "hash": "16571454440592814835",
+          "deps": [
+            "npm:eslint-plugin-playwright"
+          ]
+        },
+        {
+          "file": "apps/ops-portal-e2e/playwright.config.ts",
+          "hash": "2621386989342032068",
+          "deps": [
+            "npm:@playwright/test",
+            "npm:@nx/playwright",
+            "npm:@nx/devkit"
+          ]
+        },
+        {
+          "file": "apps/ops-portal-e2e/project.json",
+          "hash": "5849173248664820971"
+        },
+        {
+          "file": "apps/ops-portal-e2e/src/dashboard.spec.ts",
+          "hash": "18261473172627247707",
+          "deps": [
+            "npm:@playwright/test"
+          ]
+        },
+        {
+          "file": "apps/ops-portal-e2e/src/login-flow.spec.ts",
+          "hash": "15690552191201739810",
+          "deps": [
+            "npm:@playwright/test"
+          ]
+        },
+        {
+          "file": "apps/ops-portal-e2e/src/navigation.spec.ts",
+          "hash": "13251688729057260896",
+          "deps": [
+            "npm:@playwright/test"
+          ]
+        },
+        {
+          "file": "apps/ops-portal-e2e/src/orders-management.spec.ts",
+          "hash": "2684403689477416488",
+          "deps": [
+            "npm:@playwright/test"
+          ]
+        },
+        {
+          "file": "apps/ops-portal-e2e/tsconfig.json",
+          "hash": "15726545290547512047"
+        }
+      ],
+      "shop-pwa": [
+        {
+          "file": "libs/shop/pwa/project.json",
+          "hash": "18043473401655111212"
+        },
+        {
+          "file": "libs/shop/pwa/src/index.ts",
+          "hash": "2379430710669817996"
+        },
+        {
+          "file": "libs/shop/pwa/src/lib/install-prompt.component.ts",
+          "hash": "6331891622852732442",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "libs/shop/pwa/src/lib/offline-indicator.component.ts",
+          "hash": "995779456910236694",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "libs/shop/pwa/src/lib/sw-update.service.ts",
+          "hash": "15606554305365412209",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/service-worker",
+            "npm:@angular/material",
+            "npm:rxjs"
+          ]
+        }
+      ],
+      "api": [
+        {
+          "file": "apps/api/Dockerfile",
+          "hash": "1171390772596198581"
+        },
+        {
+          "file": "apps/api/eslint.config.mjs",
+          "hash": "2624537849564014525"
+        },
+        {
+          "file": "apps/api/project.json",
+          "hash": "6679066583482502144"
+        },
+        {
+          "file": "apps/api/src/assets/.gitkeep",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "apps/api/src/main.ts",
+          "hash": "5115745235240714988",
+          "deps": [
+            "npm:express",
+            "products",
+            "models"
+          ]
+        },
+        {
+          "file": "apps/api/tsconfig.app.json",
+          "hash": "11137898450640994363"
+        },
+        {
+          "file": "apps/api/tsconfig.json",
+          "hash": "3490524966360018312"
+        },
+        {
+          "file": "apps/api/tsconfig.spec.json",
+          "hash": "16829233919054324066"
+        },
+        {
+          "file": "apps/api/vite.config.ts",
+          "hash": "8653386337510922465",
+          "deps": [
+            "npm:vite",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "data": [
+        {
+          "file": "libs/shop/data/README.md",
+          "hash": "17743058128600665272"
+        },
+        {
+          "file": "libs/shop/data/eslint.config.mjs",
+          "hash": "5551293590253346027",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "libs/shop/data/project.json",
+          "hash": "8725000587227485629"
+        },
+        {
+          "file": "libs/shop/data/src/index.ts",
+          "hash": "10297922055020317920"
+        },
+        {
+          "file": "libs/shop/data/src/lib/services/cart.service.ts",
+          "hash": "18099488817029499956",
+          "deps": [
+            "npm:@angular/core",
+            "models",
+            "data-access-orders"
+          ]
+        },
+        {
+          "file": "libs/shop/data/src/lib/services/products.service.spec.ts",
+          "hash": "10002506360246904943",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "models"
+          ]
+        },
+        {
+          "file": "libs/shop/data/src/lib/services/products.service.ts",
+          "hash": "2559653305545143147",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:rxjs",
+            "models"
+          ]
+        },
+        {
+          "file": "libs/shop/data/src/test-setup.ts",
+          "hash": "539921863778627670",
+          "deps": [
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular",
+            "npm:@angular/platform-browser",
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shop/data/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/shop/data/tsconfig.json",
+          "hash": "17908557310041184646"
+        },
+        {
+          "file": "libs/shop/data/tsconfig.lib.json",
+          "hash": "9162017831943094349"
+        },
+        {
+          "file": "libs/shop/data/tsconfig.spec.json",
+          "hash": "6529800329236341072"
+        },
+        {
+          "file": "libs/shop/data/vite.config.mts",
+          "hash": "3518452045901793512",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "ui": [
+        {
+          "file": "libs/shared/ui/README.md",
+          "hash": "3098996868279451883"
+        },
+        {
+          "file": "libs/shared/ui/eslint.config.mjs",
+          "hash": "5551293590253346027",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/project.json",
+          "hash": "11816565509864683005"
+        },
+        {
+          "file": "libs/shared/ui/src/index.ts",
+          "hash": "17233082299771635698"
+        },
+        {
+          "file": "libs/shared/ui/src/lib/a11y/_a11y.scss",
+          "hash": "5201289161687520969"
+        },
+        {
+          "file": "libs/shared/ui/src/lib/a11y/focus-on-nav.directive.ts",
+          "hash": "5849260765335474416",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/a11y/live-announcer.service.ts",
+          "hash": "10700348156979641777",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/cdk"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/a11y/provide-accessibility.ts",
+          "hash": "6815620702839860947",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/platform-browser",
+            "npm:rxjs"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/a11y/skip-link.component.ts",
+          "hash": "16928408010074281017",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/confirm-dialog/confirm-dialog.component.ts",
+          "hash": "1046481225244986078",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/empty-state/empty-state.component.ts",
+          "hash": "10187725102229405009",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/error-page/error-page.component.ts",
+          "hash": "13407887817701791715",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/language-switcher/language-switcher.component.ts",
+          "hash": "2126837138459061169",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/material",
+            "shared-i18n"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/shell/header.component.ts",
+          "hash": "10520442877129373375",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/material",
+            "shared-auth",
+            "shared-notifications",
+            "search"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/shell/nav-item.model.ts",
+          "hash": "6095301039982612336"
+        },
+        {
+          "file": "libs/shared/ui/src/lib/shell/shell.component.ts",
+          "hash": "13997112338713589390",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/shell/sidebar.component.ts",
+          "hash": "12551711966972105938",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/material",
+            "shared-auth"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/status-chip/status-chip.component.ts",
+          "hash": "16705688944860592046",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/tenant-switcher/tenant-switcher.component.ts",
+          "hash": "7891254802345815222",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/material",
+            "npm:@angular/forms",
+            "shared-http"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/theme/theme-toggle.component.ts",
+          "hash": "2293212704165298157",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/theme/theme.service.ts",
+          "hash": "16221884629080546903",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/ui/ui.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/ui/src/lib/ui/ui.html",
+          "hash": "11089220566535924882"
+        },
+        {
+          "file": "libs/shared/ui/src/lib/ui/ui.spec.ts",
+          "hash": "15848068596344699442",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/lib/ui/ui.ts",
+          "hash": "1810374238182138446",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/src/test-setup.ts",
+          "hash": "13866865793787813771",
+          "deps": [
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular"
+          ]
+        },
+        {
+          "file": "libs/shared/ui/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/shared/ui/tsconfig.json",
+          "hash": "1973382141025117759"
+        },
+        {
+          "file": "libs/shared/ui/tsconfig.lib.json",
+          "hash": "1317626009648939439"
+        },
+        {
+          "file": "libs/shared/ui/tsconfig.spec.json",
+          "hash": "5958551803246193814"
+        },
+        {
+          "file": "libs/shared/ui/vite.config.mts",
+          "hash": "3065539762031857398",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "shared-telemetry": [
+        {
+          "file": "libs/shared/telemetry/README.md",
+          "hash": "6057892011411017892"
+        },
+        {
+          "file": "libs/shared/telemetry/eslint.config.mjs",
+          "hash": "5551293590253346027",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "libs/shared/telemetry/project.json",
+          "hash": "14987982995357539705"
+        },
+        {
+          "file": "libs/shared/telemetry/src/index.ts",
+          "hash": "8633861497676053085"
+        },
+        {
+          "file": "libs/shared/telemetry/src/lib/logger.service.ts",
+          "hash": "3290245758963896267",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/telemetry/src/lib/shared-telemetry/shared-telemetry.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/telemetry/src/lib/shared-telemetry/shared-telemetry.html",
+          "hash": "9030376803342762421"
+        },
+        {
+          "file": "libs/shared/telemetry/src/lib/shared-telemetry/shared-telemetry.spec.ts",
+          "hash": "13581486169820014020",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/telemetry/src/lib/shared-telemetry/shared-telemetry.ts",
+          "hash": "1782526422885794134",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/telemetry/src/lib/telemetry.providers.ts",
+          "hash": "10663474519110605719",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/telemetry/src/lib/web-vitals.service.ts",
+          "hash": "7955577376886289138",
+          "deps": [
+            "npm:@angular/core",
+            [
+              "npm:web-vitals",
+              "dynamic"
+            ]
+          ]
+        },
+        {
+          "file": "libs/shared/telemetry/src/test-setup.ts",
+          "hash": "13866865793787813771",
+          "deps": [
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular"
+          ]
+        },
+        {
+          "file": "libs/shared/telemetry/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/shared/telemetry/tsconfig.json",
+          "hash": "1973382141025117759"
+        },
+        {
+          "file": "libs/shared/telemetry/tsconfig.lib.json",
+          "hash": "1317626009648939439"
+        },
+        {
+          "file": "libs/shared/telemetry/tsconfig.spec.json",
+          "hash": "5958551803246193814"
+        },
+        {
+          "file": "libs/shared/telemetry/vite.config.mts",
+          "hash": "17815512752359181204",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "shared-ui": [
+        {
+          "file": "libs/shop/shared-ui/README.md",
+          "hash": "16248885516767211022"
+        },
+        {
+          "file": "libs/shop/shared-ui/eslint.config.mjs",
+          "hash": "17738533128086673021",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "libs/shop/shared-ui/project.json",
+          "hash": "3932229529355697017"
+        },
+        {
+          "file": "libs/shop/shared-ui/src/index.ts",
+          "hash": "4099092841620356680"
+        },
+        {
+          "file": "libs/shop/shared-ui/src/lib/error-message/error-message.component.ts",
+          "hash": "7494730913715566680",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "libs/shop/shared-ui/src/lib/loading-spinner/loading-spinner.component.ts",
+          "hash": "2255192232616050497",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "libs/shop/shared-ui/src/lib/optimized-image/optimized-image.component.ts",
+          "hash": "6692442904487787938",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "libs/shop/shared-ui/src/lib/product-card/product-card.component.spec.ts",
+          "hash": "10475705524137401667",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "models",
+            "npm:vitest"
+          ]
+        },
+        {
+          "file": "libs/shop/shared-ui/src/lib/product-card/product-card.component.ts",
+          "hash": "18344124105523432098",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "models"
+          ]
+        },
+        {
+          "file": "libs/shop/shared-ui/src/lib/product-grid/product-grid.component.ts",
+          "hash": "16322145342607021456",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "models"
+          ]
+        },
+        {
+          "file": "libs/shop/shared-ui/src/test-setup.ts",
+          "hash": "539921863778627670",
+          "deps": [
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular",
+            "npm:@angular/platform-browser",
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shop/shared-ui/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/shop/shared-ui/tsconfig.json",
+          "hash": "17908557310041184646"
+        },
+        {
+          "file": "libs/shop/shared-ui/tsconfig.lib.json",
+          "hash": "9162017831943094349"
+        },
+        {
+          "file": "libs/shop/shared-ui/tsconfig.spec.json",
+          "hash": "6529800329236341072"
+        },
+        {
+          "file": "libs/shop/shared-ui/vite.config.mts",
+          "hash": "3533250378011566472",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "domain-tenancy": [
+        {
+          "file": "libs/domains/tenancy/README.md",
+          "hash": "11274091897279609112"
+        },
+        {
+          "file": "libs/domains/tenancy/eslint.config.mjs",
+          "hash": "5551293590253346027",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "libs/domains/tenancy/project.json",
+          "hash": "7210954858695021906"
+        },
+        {
+          "file": "libs/domains/tenancy/src/index.ts",
+          "hash": "4236630278095461631"
+        },
+        {
+          "file": "libs/domains/tenancy/src/lib/domain-tenancy/domain-tenancy.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/domains/tenancy/src/lib/domain-tenancy/domain-tenancy.html",
+          "hash": "14844977131426092012"
+        },
+        {
+          "file": "libs/domains/tenancy/src/lib/domain-tenancy/domain-tenancy.spec.ts",
+          "hash": "18197705894758200236",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/domains/tenancy/src/lib/domain-tenancy/domain-tenancy.ts",
+          "hash": "7339020089805971276",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/domains/tenancy/src/lib/tenancy.providers.ts",
+          "hash": "5578108169317141704",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/domains/tenancy/src/lib/tenant-context.guard.ts",
+          "hash": "7455424992355077311",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "libs/domains/tenancy/src/lib/tenant-context.store.ts",
+          "hash": "13829414790943628863",
+          "deps": [
+            "npm:@angular/core",
+            "data-access-core",
+            "shared-http"
+          ]
+        },
+        {
+          "file": "libs/domains/tenancy/src/test-setup.ts",
+          "hash": "13866865793787813771",
+          "deps": [
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular"
+          ]
+        },
+        {
+          "file": "libs/domains/tenancy/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/domains/tenancy/tsconfig.json",
+          "hash": "1973382141025117759"
+        },
+        {
+          "file": "libs/domains/tenancy/tsconfig.lib.json",
+          "hash": "1317626009648939439"
+        },
+        {
+          "file": "libs/domains/tenancy/tsconfig.spec.json",
+          "hash": "5958551803246193814"
+        },
+        {
+          "file": "libs/domains/tenancy/vite.config.mts",
+          "hash": "12898836079119141503",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "shared-http": [
+        {
+          "file": "libs/shared/http/README.md",
+          "hash": "9665866629908757873"
+        },
+        {
+          "file": "libs/shared/http/eslint.config.mjs",
+          "hash": "5551293590253346027",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "libs/shared/http/project.json",
+          "hash": "15699624689624178102"
+        },
+        {
+          "file": "libs/shared/http/src/index.ts",
+          "hash": "11732285755890818351"
+        },
+        {
+          "file": "libs/shared/http/src/lib/http.providers.ts",
+          "hash": "3523197026411972057",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "libs/shared/http/src/lib/interceptors/auth.interceptor.ts",
+          "hash": "6773085608915925310",
+          "deps": [
+            "npm:@angular/common",
+            "npm:@angular/core",
+            "shared-auth",
+            "shared-util"
+          ]
+        },
+        {
+          "file": "libs/shared/http/src/lib/interceptors/correlation.interceptor.ts",
+          "hash": "16052973229550856284",
+          "deps": [
+            "npm:@angular/common",
+            "npm:@angular/core",
+            "shared-util"
+          ]
+        },
+        {
+          "file": "libs/shared/http/src/lib/interceptors/error.interceptor.ts",
+          "hash": "13738021962532705599",
+          "deps": [
+            "npm:@angular/common",
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:rxjs",
+            "npm:@angular/material",
+            "shared-auth",
+            "shared-telemetry"
+          ]
+        },
+        {
+          "file": "libs/shared/http/src/lib/interceptors/idempotency.interceptor.ts",
+          "hash": "13746846281465621860",
+          "deps": [
+            "npm:@angular/common",
+            "shared-util"
+          ]
+        },
+        {
+          "file": "libs/shared/http/src/lib/interceptors/tenant.interceptor.ts",
+          "hash": "6429072645388450302",
+          "deps": [
+            "npm:@angular/common",
+            "npm:@angular/core",
+            "shared-util"
+          ]
+        },
+        {
+          "file": "libs/shared/http/src/lib/models/problem-details.model.ts",
+          "hash": "14317649331368671385"
+        },
+        {
+          "file": "libs/shared/http/src/lib/services/correlation-context.service.ts",
+          "hash": "14073272397703607305",
+          "deps": [
+            "npm:@angular/core",
+            "shared-util"
+          ]
+        },
+        {
+          "file": "libs/shared/http/src/lib/services/tenant-context-ref.service.ts",
+          "hash": "16333888025601872587",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/http/src/lib/shared-http/shared-http.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/http/src/lib/shared-http/shared-http.html",
+          "hash": "1565879849432459750"
+        },
+        {
+          "file": "libs/shared/http/src/lib/shared-http/shared-http.spec.ts",
+          "hash": "16888792470446751138",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/http/src/lib/shared-http/shared-http.ts",
+          "hash": "13725031200342985047",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/http/src/test-setup.ts",
+          "hash": "13866865793787813771",
+          "deps": [
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular"
+          ]
+        },
+        {
+          "file": "libs/shared/http/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/shared/http/tsconfig.json",
+          "hash": "1973382141025117759"
+        },
+        {
+          "file": "libs/shared/http/tsconfig.lib.json",
+          "hash": "1317626009648939439"
+        },
+        {
+          "file": "libs/shared/http/tsconfig.spec.json",
+          "hash": "5958551803246193814"
+        },
+        {
+          "file": "libs/shared/http/vite.config.mts",
+          "hash": "14988697325435661218",
           "deps": [
             "npm:vite",
             "npm:@analogjs/vite-plugin-angular",
@@ -317,6 +1304,10 @@
           ]
         },
         {
+          "file": "libs/shared/config/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
           "file": "libs/shared/config/tsconfig.json",
           "hash": "1973382141025117759"
         },
@@ -331,488 +1322,6 @@
         {
           "file": "libs/shared/config/vite.config.mts",
           "hash": "10076771318663957153",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "domain-admin": [
-        {
-          "file": "libs/domains/admin/README.md",
-          "hash": "6921512250199163563"
-        },
-        {
-          "file": "libs/domains/admin/eslint.config.mjs",
-          "hash": "5551293590253346027",
-          "deps": [
-            "npm:@nx/eslint-plugin"
-          ]
-        },
-        {
-          "file": "libs/domains/admin/project.json",
-          "hash": "5372603206805992769"
-        },
-        {
-          "file": "libs/domains/admin/src/index.ts",
-          "hash": "3494197010916183491"
-        },
-        {
-          "file": "libs/domains/admin/src/lib/domain-admin/domain-admin.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/domains/admin/src/lib/domain-admin/domain-admin.html",
-          "hash": "1091403174056088113"
-        },
-        {
-          "file": "libs/domains/admin/src/lib/domain-admin/domain-admin.spec.ts",
-          "hash": "15194603149273818098",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/domains/admin/src/lib/domain-admin/domain-admin.ts",
-          "hash": "11215712969290679102",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/domains/admin/src/lib/tenant-onboarding/tenant-onboarding.store.ts",
-          "hash": "3547972048998439507",
-          "deps": [
-            "npm:@angular/core",
-            "npm:rxjs",
-            "data-access-core"
-          ]
-        },
-        {
-          "file": "libs/domains/admin/src/test-setup.ts",
-          "hash": "13866865793787813771",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular"
-          ]
-        },
-        {
-          "file": "libs/domains/admin/tsconfig.json",
-          "hash": "1973382141025117759"
-        },
-        {
-          "file": "libs/domains/admin/tsconfig.lib.json",
-          "hash": "1317626009648939439"
-        },
-        {
-          "file": "libs/domains/admin/tsconfig.spec.json",
-          "hash": "5958551803246193814"
-        },
-        {
-          "file": "libs/domains/admin/vite.config.mts",
-          "hash": "5852118608101106908",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "admin-console-e2e": [
-        {
-          "file": "apps/admin-console-e2e/eslint.config.mjs",
-          "hash": "16571454440592814835",
-          "deps": [
-            "npm:eslint-plugin-playwright"
-          ]
-        },
-        {
-          "file": "apps/admin-console-e2e/playwright.config.ts",
-          "hash": "12776177092239530968",
-          "deps": [
-            "npm:@playwright/test",
-            "npm:@nx/playwright",
-            "npm:@nx/devkit"
-          ]
-        },
-        {
-          "file": "apps/admin-console-e2e/project.json",
-          "hash": "4373125424408627476"
-        },
-        {
-          "file": "apps/admin-console-e2e/src/login-flow.spec.ts",
-          "hash": "12043240949757543710",
-          "deps": [
-            "npm:@playwright/test"
-          ]
-        },
-        {
-          "file": "apps/admin-console-e2e/src/navigation.spec.ts",
-          "hash": "8770676856827820106",
-          "deps": [
-            "npm:@playwright/test"
-          ]
-        },
-        {
-          "file": "apps/admin-console-e2e/src/onboarding-wizard.spec.ts",
-          "hash": "3188187669594769560",
-          "deps": [
-            "npm:@playwright/test"
-          ]
-        },
-        {
-          "file": "apps/admin-console-e2e/src/tenants-management.spec.ts",
-          "hash": "1773235589586949495",
-          "deps": [
-            "npm:@playwright/test"
-          ]
-        },
-        {
-          "file": "apps/admin-console-e2e/tsconfig.json",
-          "hash": "15726545290547512047"
-        }
-      ],
-      "data-access-orders": [
-        {
-          "file": "libs/data-access/orders/README.md",
-          "hash": "9580678290059240539"
-        },
-        {
-          "file": "libs/data-access/orders/eslint.config.mjs",
-          "hash": "5551293590253346027",
-          "deps": [
-            "npm:@nx/eslint-plugin"
-          ]
-        },
-        {
-          "file": "libs/data-access/orders/project.json",
-          "hash": "10696487910540123852"
-        },
-        {
-          "file": "libs/data-access/orders/src/index.ts",
-          "hash": "3563537647651842266"
-        },
-        {
-          "file": "libs/data-access/orders/src/lib/data-access-orders/data-access-orders.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/data-access/orders/src/lib/data-access-orders/data-access-orders.html",
-          "hash": "18410886372051454985"
-        },
-        {
-          "file": "libs/data-access/orders/src/lib/data-access-orders/data-access-orders.spec.ts",
-          "hash": "513556000244376720",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/data-access/orders/src/lib/data-access-orders/data-access-orders.ts",
-          "hash": "2219245276957744401",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/data-access/orders/src/lib/inventory.facade.ts",
-          "hash": "17533488282327260529",
-          "deps": [
-            "npm:@angular/core",
-            "npm:rxjs",
-            "shared-telemetry",
-            "shared-util"
-          ]
-        },
-        {
-          "file": "libs/data-access/orders/src/lib/models/index.ts",
-          "hash": "17413328404074700822"
-        },
-        {
-          "file": "libs/data-access/orders/src/lib/models/inventory.model.ts",
-          "hash": "5235856026107352200"
-        },
-        {
-          "file": "libs/data-access/orders/src/lib/models/order.model.ts",
-          "hash": "4047831101862991258"
-        },
-        {
-          "file": "libs/data-access/orders/src/lib/orders-api.client.ts",
-          "hash": "994449791252227607",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
-            "npm:rxjs",
-            "shared-config",
-            "shared-util"
-          ]
-        },
-        {
-          "file": "libs/data-access/orders/src/lib/orders.facade.ts",
-          "hash": "16048468461052831064",
-          "deps": [
-            "npm:@angular/core",
-            "npm:rxjs",
-            "shared-telemetry",
-            "shared-util"
-          ]
-        },
-        {
-          "file": "libs/data-access/orders/src/test-setup.ts",
-          "hash": "13866865793787813771",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular"
-          ]
-        },
-        {
-          "file": "libs/data-access/orders/tsconfig.json",
-          "hash": "1973382141025117759"
-        },
-        {
-          "file": "libs/data-access/orders/tsconfig.lib.json",
-          "hash": "1317626009648939439"
-        },
-        {
-          "file": "libs/data-access/orders/tsconfig.spec.json",
-          "hash": "5958551803246193814"
-        },
-        {
-          "file": "libs/data-access/orders/vite.config.mts",
-          "hash": "8432565095152033096",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "data-access-core": [
-        {
-          "file": "libs/data-access/core/README.md",
-          "hash": "10290229060941805763"
-        },
-        {
-          "file": "libs/data-access/core/eslint.config.mjs",
-          "hash": "5551293590253346027",
-          "deps": [
-            "npm:@nx/eslint-plugin"
-          ]
-        },
-        {
-          "file": "libs/data-access/core/project.json",
-          "hash": "8457226324282447147"
-        },
-        {
-          "file": "libs/data-access/core/src/index.ts",
-          "hash": "7023638953426770654"
-        },
-        {
-          "file": "libs/data-access/core/src/lib/audit.facade.ts",
-          "hash": "16540688622484483086",
-          "deps": [
-            "npm:@angular/core",
-            "npm:rxjs",
-            "shared-telemetry"
-          ]
-        },
-        {
-          "file": "libs/data-access/core/src/lib/core-api.client.ts",
-          "hash": "3176898911653508717",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
-            "npm:rxjs",
-            "shared-config"
-          ]
-        },
-        {
-          "file": "libs/data-access/core/src/lib/data-access-core/data-access-core.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/data-access/core/src/lib/data-access-core/data-access-core.html",
-          "hash": "16525765279622727704"
-        },
-        {
-          "file": "libs/data-access/core/src/lib/data-access-core/data-access-core.spec.ts",
-          "hash": "1729972739025218350",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/data-access/core/src/lib/data-access-core/data-access-core.ts",
-          "hash": "3081539455251570838",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/data-access/core/src/lib/flags.facade.ts",
-          "hash": "15806809426961298904",
-          "deps": [
-            "npm:@angular/core",
-            "npm:rxjs",
-            "shared-telemetry"
-          ]
-        },
-        {
-          "file": "libs/data-access/core/src/lib/models/audit.model.ts",
-          "hash": "3802461701288276248"
-        },
-        {
-          "file": "libs/data-access/core/src/lib/models/flag.model.ts",
-          "hash": "286466961417406030"
-        },
-        {
-          "file": "libs/data-access/core/src/lib/models/index.ts",
-          "hash": "3492526992364611959"
-        },
-        {
-          "file": "libs/data-access/core/src/lib/models/policy.model.ts",
-          "hash": "9156237309154204603"
-        },
-        {
-          "file": "libs/data-access/core/src/lib/models/tenant.model.ts",
-          "hash": "3559901638128730154"
-        },
-        {
-          "file": "libs/data-access/core/src/lib/policies.facade.ts",
-          "hash": "16808244764698917957",
-          "deps": [
-            "npm:@angular/core",
-            "npm:rxjs",
-            "shared-telemetry"
-          ]
-        },
-        {
-          "file": "libs/data-access/core/src/lib/tenants.facade.ts",
-          "hash": "1698916638817380328",
-          "deps": [
-            "npm:@angular/core",
-            "npm:rxjs",
-            "shared-telemetry"
-          ]
-        },
-        {
-          "file": "libs/data-access/core/src/test-setup.ts",
-          "hash": "13866865793787813771",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular"
-          ]
-        },
-        {
-          "file": "libs/data-access/core/tsconfig.json",
-          "hash": "1973382141025117759"
-        },
-        {
-          "file": "libs/data-access/core/tsconfig.lib.json",
-          "hash": "1317626009648939439"
-        },
-        {
-          "file": "libs/data-access/core/tsconfig.spec.json",
-          "hash": "5958551803246193814"
-        },
-        {
-          "file": "libs/data-access/core/vite.config.mts",
-          "hash": "7509032462530524047",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "shared-i18n": [
-        {
-          "file": "libs/shared/i18n/README.md",
-          "hash": "4382391624125042019"
-        },
-        {
-          "file": "libs/shared/i18n/eslint.config.mjs",
-          "hash": "5551293590253346027",
-          "deps": [
-            "npm:@nx/eslint-plugin"
-          ]
-        },
-        {
-          "file": "libs/shared/i18n/project.json",
-          "hash": "7764565399553624764"
-        },
-        {
-          "file": "libs/shared/i18n/src/index.ts",
-          "hash": "10304499150952658015"
-        },
-        {
-          "file": "libs/shared/i18n/src/lib/en-us.messages.ts",
-          "hash": "5754377679453645268"
-        },
-        {
-          "file": "libs/shared/i18n/src/lib/i18n.service.ts",
-          "hash": "15008774545231845398",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/i18n/src/lib/i18n.tokens.ts",
-          "hash": "14300809453080950085",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/i18n/src/lib/pt-br.messages.ts",
-          "hash": "7573108681411602751"
-        },
-        {
-          "file": "libs/shared/i18n/src/lib/shared-i18n/shared-i18n.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/shared/i18n/src/lib/shared-i18n/shared-i18n.html",
-          "hash": "10231362905936779303"
-        },
-        {
-          "file": "libs/shared/i18n/src/lib/shared-i18n/shared-i18n.spec.ts",
-          "hash": "16029113864579055340",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/i18n/src/lib/shared-i18n/shared-i18n.ts",
-          "hash": "5908290075648552049",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/i18n/src/test-setup.ts",
-          "hash": "13866865793787813771",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular"
-          ]
-        },
-        {
-          "file": "libs/shared/i18n/tsconfig.json",
-          "hash": "1973382141025117759"
-        },
-        {
-          "file": "libs/shared/i18n/tsconfig.lib.json",
-          "hash": "1317626009648939439"
-        },
-        {
-          "file": "libs/shared/i18n/tsconfig.spec.json",
-          "hash": "5958551803246193814"
-        },
-        {
-          "file": "libs/shared/i18n/vite.config.mts",
-          "hash": "5606858291934265858",
           "deps": [
             "npm:vite",
             "npm:@analogjs/vite-plugin-angular",
@@ -886,663 +1395,6 @@
         {
           "file": "apps/shop-e2e/tsconfig.json",
           "hash": "15726545290547512047"
-        }
-      ],
-      "domain-tenancy": [
-        {
-          "file": "libs/domains/tenancy/README.md",
-          "hash": "11274091897279609112"
-        },
-        {
-          "file": "libs/domains/tenancy/eslint.config.mjs",
-          "hash": "5551293590253346027",
-          "deps": [
-            "npm:@nx/eslint-plugin"
-          ]
-        },
-        {
-          "file": "libs/domains/tenancy/project.json",
-          "hash": "7210954858695021906"
-        },
-        {
-          "file": "libs/domains/tenancy/src/index.ts",
-          "hash": "4236630278095461631"
-        },
-        {
-          "file": "libs/domains/tenancy/src/lib/domain-tenancy/domain-tenancy.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/domains/tenancy/src/lib/domain-tenancy/domain-tenancy.html",
-          "hash": "14844977131426092012"
-        },
-        {
-          "file": "libs/domains/tenancy/src/lib/domain-tenancy/domain-tenancy.spec.ts",
-          "hash": "18197705894758200236",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/domains/tenancy/src/lib/domain-tenancy/domain-tenancy.ts",
-          "hash": "7339020089805971276",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/domains/tenancy/src/lib/tenancy.providers.ts",
-          "hash": "5578108169317141704",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/domains/tenancy/src/lib/tenant-context.guard.ts",
-          "hash": "7455424992355077311",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "libs/domains/tenancy/src/lib/tenant-context.store.ts",
-          "hash": "13829414790943628863",
-          "deps": [
-            "npm:@angular/core",
-            "data-access-core",
-            "shared-http"
-          ]
-        },
-        {
-          "file": "libs/domains/tenancy/src/test-setup.ts",
-          "hash": "13866865793787813771",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular"
-          ]
-        },
-        {
-          "file": "libs/domains/tenancy/tsconfig.json",
-          "hash": "1973382141025117759"
-        },
-        {
-          "file": "libs/domains/tenancy/tsconfig.lib.json",
-          "hash": "1317626009648939439"
-        },
-        {
-          "file": "libs/domains/tenancy/tsconfig.spec.json",
-          "hash": "5958551803246193814"
-        },
-        {
-          "file": "libs/domains/tenancy/vite.config.mts",
-          "hash": "12898836079119141503",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "data": [
-        {
-          "file": "libs/shop/data/README.md",
-          "hash": "17743058128600665272"
-        },
-        {
-          "file": "libs/shop/data/eslint.config.mjs",
-          "hash": "5551293590253346027",
-          "deps": [
-            "npm:@nx/eslint-plugin"
-          ]
-        },
-        {
-          "file": "libs/shop/data/project.json",
-          "hash": "8725000587227485629"
-        },
-        {
-          "file": "libs/shop/data/src/index.ts",
-          "hash": "10297922055020317920"
-        },
-        {
-          "file": "libs/shop/data/src/lib/services/cart.service.ts",
-          "hash": "18099488817029499956",
-          "deps": [
-            "npm:@angular/core",
-            "models",
-            "data-access-orders"
-          ]
-        },
-        {
-          "file": "libs/shop/data/src/lib/services/products.service.spec.ts",
-          "hash": "10002506360246904943",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
-            "models"
-          ]
-        },
-        {
-          "file": "libs/shop/data/src/lib/services/products.service.ts",
-          "hash": "2559653305545143147",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
-            "npm:rxjs",
-            "models"
-          ]
-        },
-        {
-          "file": "libs/shop/data/src/test-setup.ts",
-          "hash": "539921863778627670",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular",
-            "npm:@angular/platform-browser",
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shop/data/tsconfig.json",
-          "hash": "17908557310041184646"
-        },
-        {
-          "file": "libs/shop/data/tsconfig.lib.json",
-          "hash": "9162017831943094349"
-        },
-        {
-          "file": "libs/shop/data/tsconfig.spec.json",
-          "hash": "6529800329236341072"
-        },
-        {
-          "file": "libs/shop/data/vite.config.mts",
-          "hash": "3518452045901793512",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "feature-product-detail": [
-        {
-          "file": "libs/shop/feature-product-detail/project.json",
-          "hash": "15469439129175134223"
-        },
-        {
-          "file": "libs/shop/feature-product-detail/src/index.ts",
-          "hash": "17005774761272856003"
-        },
-        {
-          "file": "libs/shop/feature-product-detail/src/lib/feature-product-detail.routes.ts",
-          "hash": "8697188306380904734",
-          "deps": [
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "libs/shop/feature-product-detail/src/lib/product-detail/product-detail.component.spec.ts",
-          "hash": "3391670416307855900",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:rxjs",
-            "data",
-            "models",
-            "npm:vitest"
-          ]
-        },
-        {
-          "file": "libs/shop/feature-product-detail/src/lib/product-detail/product-detail.component.ts",
-          "hash": "16002479860884267246",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
-            "npm:@angular/router",
-            "data",
-            "models",
-            "shared-ui"
-          ]
-        },
-        {
-          "file": "libs/shop/feature-product-detail/src/test-setup.ts",
-          "hash": "539921863778627670",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular",
-            "npm:@angular/platform-browser",
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shop/feature-product-detail/tsconfig.json",
-          "hash": "4836666628674667138"
-        },
-        {
-          "file": "libs/shop/feature-product-detail/tsconfig.lib.json",
-          "hash": "5199950494069393534"
-        },
-        {
-          "file": "libs/shop/feature-product-detail/tsconfig.spec.json",
-          "hash": "6529800329236341072"
-        },
-        {
-          "file": "libs/shop/feature-product-detail/vite.config.mts",
-          "hash": "2175013963316325649",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "shop": [
-        {
-          "file": "apps/shop/eslint.config.mjs",
-          "hash": "6205274907689530090",
-          "deps": [
-            "npm:@nx/eslint-plugin"
-          ]
-        },
-        {
-          "file": "apps/shop/ngsw-config.json",
-          "hash": "13580673569818506310"
-        },
-        {
-          "file": "apps/shop/project.json",
-          "hash": "9190436245460177056"
-        },
-        {
-          "file": "apps/shop/proxy.conf.json",
-          "hash": "439815953088613986"
-        },
-        {
-          "file": "apps/shop/public/assets/config.json",
-          "hash": "13706076583279404598"
-        },
-        {
-          "file": "apps/shop/public/favicon.ico",
-          "hash": "9303420814833116677"
-        },
-        {
-          "file": "apps/shop/src/app/app.config.server.ts",
-          "hash": "16664769899172877666",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/ssr"
-          ]
-        },
-        {
-          "file": "apps/shop/src/app/app.config.ts",
-          "hash": "18171844007109996019",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:@angular/platform-browser",
-            "npm:@angular/common",
-            "npm:@angular/service-worker",
-            "shared-config",
-            "shared-http",
-            "shop-performance"
-          ]
-        },
-        {
-          "file": "apps/shop/src/app/app.css",
-          "hash": "17037380481054947374"
-        },
-        {
-          "file": "apps/shop/src/app/app.html",
-          "hash": "17709984013782621299"
-        },
-        {
-          "file": "apps/shop/src/app/app.routes.server.ts",
-          "hash": "178042955744632192",
-          "deps": [
-            "npm:@angular/ssr"
-          ]
-        },
-        {
-          "file": "apps/shop/src/app/app.routes.ts",
-          "hash": "5112944019975269450",
-          "deps": [
-            "npm:@angular/router",
-            [
-              "feature-products",
-              "dynamic"
-            ],
-            [
-              "feature-product-detail",
-              "dynamic"
-            ]
-          ]
-        },
-        {
-          "file": "apps/shop/src/app/app.spec.ts",
-          "hash": "12137950053271106808",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:@angular/platform-browser"
-          ]
-        },
-        {
-          "file": "apps/shop/src/app/app.ts",
-          "hash": "17099974181096776882",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
-            "npm:@angular/router",
-            "npm:@angular/platform-browser",
-            "npm:@angular/material",
-            "data",
-            "ui",
-            "shop-pwa"
-          ]
-        },
-        {
-          "file": "apps/shop/src/app/checkout/checkout.component.ts",
-          "hash": "18252016241045854006",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:@angular/common",
-            "npm:@angular/forms",
-            "npm:@angular/material",
-            "data",
-            "data-access-orders",
-            "data-access-payments",
-            "shared-http"
-          ]
-        },
-        {
-          "file": "apps/shop/src/app/orders/orders.component.ts",
-          "hash": "13059547198429549852",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:@angular/common",
-            "npm:@angular/forms",
-            "npm:@angular/material",
-            "data-access-orders",
-            "shared-http"
-          ]
-        },
-        {
-          "file": "apps/shop/src/assets/config.keycloak.json",
-          "hash": "2887083610923451598"
-        },
-        {
-          "file": "apps/shop/src/index.html",
-          "hash": "11435550611710723824"
-        },
-        {
-          "file": "apps/shop/src/main.server.ts",
-          "hash": "1958165360174922007",
-          "deps": [
-            "npm:@angular/platform-browser"
-          ]
-        },
-        {
-          "file": "apps/shop/src/main.ts",
-          "hash": "3314327030169821486",
-          "deps": [
-            "npm:@angular/platform-browser"
-          ]
-        },
-        {
-          "file": "apps/shop/src/manifest.webmanifest",
-          "hash": "2464807150953436239"
-        },
-        {
-          "file": "apps/shop/src/server.ts",
-          "hash": "3189346723369329637",
-          "deps": [
-            "npm:@angular/ssr",
-            "npm:express"
-          ]
-        },
-        {
-          "file": "apps/shop/src/styles.scss",
-          "hash": "11378177357592040010"
-        },
-        {
-          "file": "apps/shop/src/test-setup.ts",
-          "hash": "539921863778627670",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular",
-            "npm:@angular/platform-browser",
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "apps/shop/tsconfig.app.json",
-          "hash": "13491904879835704887"
-        },
-        {
-          "file": "apps/shop/tsconfig.json",
-          "hash": "3990888975341484296"
-        },
-        {
-          "file": "apps/shop/tsconfig.spec.json",
-          "hash": "11359119564988205903"
-        },
-        {
-          "file": "apps/shop/vite.config.mts",
-          "hash": "10878439224320045282",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "shared-notifications": [
-        {
-          "file": "libs/shared/notifications/project.json",
-          "hash": "4925806681051560769"
-        },
-        {
-          "file": "libs/shared/notifications/src/index.ts",
-          "hash": "8958666314270564069"
-        },
-        {
-          "file": "libs/shared/notifications/src/lib/notification-bell.component.ts",
-          "hash": "1718251680707446699",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
-            "npm:@angular/router",
-            "npm:@angular/material"
-          ]
-        },
-        {
-          "file": "libs/shared/notifications/src/lib/notification-toast.component.ts",
-          "hash": "16809336541815250381",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/material",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "libs/shared/notifications/src/lib/notification.model.ts",
-          "hash": "4346397198923468367"
-        },
-        {
-          "file": "libs/shared/notifications/src/lib/notification.store.ts",
-          "hash": "78727594292272923",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/notifications/src/lib/provide-notifications.ts",
-          "hash": "13237456278910383029",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/notifications/src/lib/sse.service.ts",
-          "hash": "13295506913014755836",
-          "deps": [
-            "npm:@angular/core",
-            "shared-config"
-          ]
-        }
-      ],
-      "shared-auth": [
-        {
-          "file": "libs/shared/auth/README.md",
-          "hash": "3235320632858507844"
-        },
-        {
-          "file": "libs/shared/auth/eslint.config.mjs",
-          "hash": "5551293590253346027",
-          "deps": [
-            "npm:@nx/eslint-plugin"
-          ]
-        },
-        {
-          "file": "libs/shared/auth/project.json",
-          "hash": "13264407414501603455"
-        },
-        {
-          "file": "libs/shared/auth/src/index.ts",
-          "hash": "9164810041657161325"
-        },
-        {
-          "file": "libs/shared/auth/src/lib/auth.providers.ts",
-          "hash": "3232060236527514496",
-          "deps": [
-            "npm:@angular/core",
-            "shared-config"
-          ]
-        },
-        {
-          "file": "libs/shared/auth/src/lib/auth.service.ts",
-          "hash": "14879217687452925962",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
-            "npm:@angular/router",
-            "npm:rxjs",
-            "shared-config",
-            "shared-http",
-            "shared-util"
-          ]
-        },
-        {
-          "file": "libs/shared/auth/src/lib/auth.store.ts",
-          "hash": "15951368536199114055",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/auth/src/lib/dev-auth/dev-login.component.ts",
-          "hash": "15361171805088354428",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/forms",
-            "npm:@angular/material"
-          ]
-        },
-        {
-          "file": "libs/shared/auth/src/lib/guards/auth.guard.ts",
-          "hash": "17265834549558916054",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "libs/shared/auth/src/lib/guards/permission.guard.ts",
-          "hash": "11842468918749449861",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "libs/shared/auth/src/lib/login-page.component.ts",
-          "hash": "588508476789539780",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/material",
-            "shared-config"
-          ]
-        },
-        {
-          "file": "libs/shared/auth/src/lib/models/auth-session.model.ts",
-          "hash": "13072435344883672059"
-        },
-        {
-          "file": "libs/shared/auth/src/lib/oidc-auth.service.ts",
-          "hash": "12090977038282905778",
-          "deps": [
-            "npm:@angular/core",
-            "npm:angular-oauth2-oidc",
-            "npm:rxjs",
-            "shared-config",
-            "shared-http"
-          ]
-        },
-        {
-          "file": "libs/shared/auth/src/lib/shared-auth/shared-auth.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/shared/auth/src/lib/shared-auth/shared-auth.html",
-          "hash": "17046198231803368107"
-        },
-        {
-          "file": "libs/shared/auth/src/lib/shared-auth/shared-auth.spec.ts",
-          "hash": "16127937012421025649",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/auth/src/lib/shared-auth/shared-auth.ts",
-          "hash": "10782512915210925917",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/auth/src/test-setup.ts",
-          "hash": "13866865793787813771",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular"
-          ]
-        },
-        {
-          "file": "libs/shared/auth/tsconfig.app.json",
-          "hash": "11039847394266596915"
-        },
-        {
-          "file": "libs/shared/auth/tsconfig.json",
-          "hash": "1973382141025117759"
-        },
-        {
-          "file": "libs/shared/auth/tsconfig.lib.json",
-          "hash": "1317626009648939439"
-        },
-        {
-          "file": "libs/shared/auth/tsconfig.spec.json",
-          "hash": "5958551803246193814"
-        },
-        {
-          "file": "libs/shared/auth/vite.config.mts",
-          "hash": "13460277409148991953",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
         }
       ],
       "ops-portal": [
@@ -1861,80 +1713,177 @@
           ]
         }
       ],
-      "shared-ui": [
+      "shop": [
         {
-          "file": "libs/shop/shared-ui/README.md",
-          "hash": "16248885516767211022"
-        },
-        {
-          "file": "libs/shop/shared-ui/eslint.config.mjs",
-          "hash": "17738533128086673021",
+          "file": "apps/shop/eslint.config.mjs",
+          "hash": "6205274907689530090",
           "deps": [
             "npm:@nx/eslint-plugin"
           ]
         },
         {
-          "file": "libs/shop/shared-ui/project.json",
-          "hash": "3932229529355697017"
+          "file": "apps/shop/ngsw-config.json",
+          "hash": "13580673569818506310"
         },
         {
-          "file": "libs/shop/shared-ui/src/index.ts",
-          "hash": "4099092841620356680"
+          "file": "apps/shop/project.json",
+          "hash": "9190436245460177056"
         },
         {
-          "file": "libs/shop/shared-ui/src/lib/error-message/error-message.component.ts",
-          "hash": "7494730913715566680",
+          "file": "apps/shop/proxy.conf.json",
+          "hash": "439815953088613986"
+        },
+        {
+          "file": "apps/shop/public/assets/config.json",
+          "hash": "13706076583279404598"
+        },
+        {
+          "file": "apps/shop/public/favicon.ico",
+          "hash": "9303420814833116677"
+        },
+        {
+          "file": "apps/shop/src/app/app.config.server.ts",
+          "hash": "16664769899172877666",
           "deps": [
             "npm:@angular/core",
-            "npm:@angular/common"
+            "npm:@angular/ssr"
           ]
         },
         {
-          "file": "libs/shop/shared-ui/src/lib/loading-spinner/loading-spinner.component.ts",
-          "hash": "2255192232616050497",
+          "file": "apps/shop/src/app/app.config.ts",
+          "hash": "18171844007109996019",
           "deps": [
             "npm:@angular/core",
-            "npm:@angular/common"
+            "npm:@angular/router",
+            "npm:@angular/platform-browser",
+            "npm:@angular/common",
+            "npm:@angular/service-worker",
+            "shared-config",
+            "shared-http",
+            "shop-performance"
           ]
         },
         {
-          "file": "libs/shop/shared-ui/src/lib/optimized-image/optimized-image.component.ts",
-          "hash": "6692442904487787938",
+          "file": "apps/shop/src/app/app.css",
+          "hash": "17037380481054947374"
+        },
+        {
+          "file": "apps/shop/src/app/app.html",
+          "hash": "17709984013782621299"
+        },
+        {
+          "file": "apps/shop/src/app/app.routes.server.ts",
+          "hash": "178042955744632192",
           "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common"
+            "npm:@angular/ssr"
           ]
         },
         {
-          "file": "libs/shop/shared-ui/src/lib/product-card/product-card.component.spec.ts",
-          "hash": "10475705524137401667",
+          "file": "apps/shop/src/app/app.routes.ts",
+          "hash": "5112944019975269450",
+          "deps": [
+            "npm:@angular/router",
+            [
+              "feature-products",
+              "dynamic"
+            ],
+            [
+              "feature-product-detail",
+              "dynamic"
+            ]
+          ]
+        },
+        {
+          "file": "apps/shop/src/app/app.spec.ts",
+          "hash": "12137950053271106808",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:@angular/platform-browser"
+          ]
+        },
+        {
+          "file": "apps/shop/src/app/app.ts",
+          "hash": "17099974181096776882",
           "deps": [
             "npm:@angular/core",
             "npm:@angular/common",
-            "models",
-            "npm:vitest"
+            "npm:@angular/router",
+            "npm:@angular/platform-browser",
+            "npm:@angular/material",
+            "data",
+            "ui",
+            "shop-pwa"
           ]
         },
         {
-          "file": "libs/shop/shared-ui/src/lib/product-card/product-card.component.ts",
-          "hash": "18344124105523432098",
+          "file": "apps/shop/src/app/checkout/checkout.component.ts",
+          "hash": "18252016241045854006",
           "deps": [
             "npm:@angular/core",
+            "npm:@angular/router",
             "npm:@angular/common",
-            "models"
+            "npm:@angular/forms",
+            "npm:@angular/material",
+            "data",
+            "data-access-orders",
+            "data-access-payments",
+            "shared-http"
           ]
         },
         {
-          "file": "libs/shop/shared-ui/src/lib/product-grid/product-grid.component.ts",
-          "hash": "16322145342607021456",
+          "file": "apps/shop/src/app/orders/orders.component.ts",
+          "hash": "13059547198429549852",
           "deps": [
             "npm:@angular/core",
+            "npm:@angular/router",
             "npm:@angular/common",
-            "models"
+            "npm:@angular/forms",
+            "npm:@angular/material",
+            "data-access-orders",
+            "shared-http"
           ]
         },
         {
-          "file": "libs/shop/shared-ui/src/test-setup.ts",
+          "file": "apps/shop/src/assets/config.keycloak.json",
+          "hash": "2887083610923451598"
+        },
+        {
+          "file": "apps/shop/src/index.html",
+          "hash": "11435550611710723824"
+        },
+        {
+          "file": "apps/shop/src/main.server.ts",
+          "hash": "1958165360174922007",
+          "deps": [
+            "npm:@angular/platform-browser"
+          ]
+        },
+        {
+          "file": "apps/shop/src/main.ts",
+          "hash": "3314327030169821486",
+          "deps": [
+            "npm:@angular/platform-browser"
+          ]
+        },
+        {
+          "file": "apps/shop/src/manifest.webmanifest",
+          "hash": "2464807150953436239"
+        },
+        {
+          "file": "apps/shop/src/server.ts",
+          "hash": "3189346723369329637",
+          "deps": [
+            "npm:@angular/ssr",
+            "npm:express"
+          ]
+        },
+        {
+          "file": "apps/shop/src/styles.scss",
+          "hash": "11378177357592040010"
+        },
+        {
+          "file": "apps/shop/src/test-setup.ts",
           "hash": "539921863778627670",
           "deps": [
             "npm:@angular/compiler",
@@ -1944,672 +1893,20 @@
           ]
         },
         {
-          "file": "libs/shop/shared-ui/tsconfig.json",
-          "hash": "17908557310041184646"
+          "file": "apps/shop/tsconfig.app.json",
+          "hash": "13491904879835704887"
         },
         {
-          "file": "libs/shop/shared-ui/tsconfig.lib.json",
-          "hash": "9162017831943094349"
+          "file": "apps/shop/tsconfig.json",
+          "hash": "3990888975341484296"
         },
         {
-          "file": "libs/shop/shared-ui/tsconfig.spec.json",
-          "hash": "6529800329236341072"
+          "file": "apps/shop/tsconfig.spec.json",
+          "hash": "11359119564988205903"
         },
         {
-          "file": "libs/shop/shared-ui/vite.config.mts",
-          "hash": "3533250378011566472",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "models": [
-        {
-          "file": "libs/shared/models/README.md",
-          "hash": "10156869114925785952"
-        },
-        {
-          "file": "libs/shared/models/eslint.config.mjs",
-          "hash": "16759498837230279251"
-        },
-        {
-          "file": "libs/shared/models/project.json",
-          "hash": "10257694158849000508"
-        },
-        {
-          "file": "libs/shared/models/src/index.ts",
-          "hash": "15435369489968961164"
-        },
-        {
-          "file": "libs/shared/models/src/lib/product.model.ts",
-          "hash": "15711376159432448200"
-        },
-        {
-          "file": "libs/shared/models/tsconfig.json",
-          "hash": "9505886339790543345"
-        },
-        {
-          "file": "libs/shared/models/tsconfig.lib.json",
-          "hash": "2310906518119603203"
-        },
-        {
-          "file": "libs/shared/models/tsconfig.spec.json",
-          "hash": "16992467545950447943"
-        },
-        {
-          "file": "libs/shared/models/vite.config.ts",
-          "hash": "14393829475409195689",
-          "deps": [
-            "npm:vite",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "shared-util": [
-        {
-          "file": "libs/shared/util/README.md",
-          "hash": "18300357987773754435"
-        },
-        {
-          "file": "libs/shared/util/eslint.config.mjs",
-          "hash": "5551293590253346027",
-          "deps": [
-            "npm:@nx/eslint-plugin"
-          ]
-        },
-        {
-          "file": "libs/shared/util/project.json",
-          "hash": "9548374715880322895"
-        },
-        {
-          "file": "libs/shared/util/src/index.ts",
-          "hash": "4667930143018506043"
-        },
-        {
-          "file": "libs/shared/util/src/lib/date.util.ts",
-          "hash": "2711383791636149320"
-        },
-        {
-          "file": "libs/shared/util/src/lib/http-context.tokens.ts",
-          "hash": "17253637867882974042",
-          "deps": [
-            "npm:@angular/common"
-          ]
-        },
-        {
-          "file": "libs/shared/util/src/lib/paginator.util.ts",
-          "hash": "2047244570323900150"
-        },
-        {
-          "file": "libs/shared/util/src/lib/shared-util/shared-util.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/shared/util/src/lib/shared-util/shared-util.html",
-          "hash": "4204266256673019883"
-        },
-        {
-          "file": "libs/shared/util/src/lib/shared-util/shared-util.spec.ts",
-          "hash": "11570153039281296",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/util/src/lib/shared-util/shared-util.ts",
-          "hash": "14670015206357407139",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/util/src/lib/uuid.util.ts",
-          "hash": "11690385445563895253",
-          "deps": [
-            "npm:uuid"
-          ]
-        },
-        {
-          "file": "libs/shared/util/src/test-setup.ts",
-          "hash": "13866865793787813771",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular"
-          ]
-        },
-        {
-          "file": "libs/shared/util/tsconfig.json",
-          "hash": "1973382141025117759"
-        },
-        {
-          "file": "libs/shared/util/tsconfig.lib.json",
-          "hash": "1317626009648939439"
-        },
-        {
-          "file": "libs/shared/util/tsconfig.spec.json",
-          "hash": "5958551803246193814"
-        },
-        {
-          "file": "libs/shared/util/vite.config.mts",
-          "hash": "10950807001677116674",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "shared-http": [
-        {
-          "file": "libs/shared/http/README.md",
-          "hash": "9665866629908757873"
-        },
-        {
-          "file": "libs/shared/http/eslint.config.mjs",
-          "hash": "5551293590253346027",
-          "deps": [
-            "npm:@nx/eslint-plugin"
-          ]
-        },
-        {
-          "file": "libs/shared/http/project.json",
-          "hash": "15699624689624178102"
-        },
-        {
-          "file": "libs/shared/http/src/index.ts",
-          "hash": "11732285755890818351"
-        },
-        {
-          "file": "libs/shared/http/src/lib/http.providers.ts",
-          "hash": "3523197026411972057",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common"
-          ]
-        },
-        {
-          "file": "libs/shared/http/src/lib/interceptors/auth.interceptor.ts",
-          "hash": "6773085608915925310",
-          "deps": [
-            "npm:@angular/common",
-            "npm:@angular/core",
-            "shared-auth",
-            "shared-util"
-          ]
-        },
-        {
-          "file": "libs/shared/http/src/lib/interceptors/correlation.interceptor.ts",
-          "hash": "16052973229550856284",
-          "deps": [
-            "npm:@angular/common",
-            "npm:@angular/core",
-            "shared-util"
-          ]
-        },
-        {
-          "file": "libs/shared/http/src/lib/interceptors/error.interceptor.ts",
-          "hash": "13738021962532705599",
-          "deps": [
-            "npm:@angular/common",
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:rxjs",
-            "npm:@angular/material",
-            "shared-auth",
-            "shared-telemetry"
-          ]
-        },
-        {
-          "file": "libs/shared/http/src/lib/interceptors/idempotency.interceptor.ts",
-          "hash": "13746846281465621860",
-          "deps": [
-            "npm:@angular/common",
-            "shared-util"
-          ]
-        },
-        {
-          "file": "libs/shared/http/src/lib/interceptors/tenant.interceptor.ts",
-          "hash": "6429072645388450302",
-          "deps": [
-            "npm:@angular/common",
-            "npm:@angular/core",
-            "shared-util"
-          ]
-        },
-        {
-          "file": "libs/shared/http/src/lib/models/problem-details.model.ts",
-          "hash": "14317649331368671385"
-        },
-        {
-          "file": "libs/shared/http/src/lib/services/correlation-context.service.ts",
-          "hash": "14073272397703607305",
-          "deps": [
-            "npm:@angular/core",
-            "shared-util"
-          ]
-        },
-        {
-          "file": "libs/shared/http/src/lib/services/tenant-context-ref.service.ts",
-          "hash": "16333888025601872587",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/http/src/lib/shared-http/shared-http.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/shared/http/src/lib/shared-http/shared-http.html",
-          "hash": "1565879849432459750"
-        },
-        {
-          "file": "libs/shared/http/src/lib/shared-http/shared-http.spec.ts",
-          "hash": "16888792470446751138",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/http/src/lib/shared-http/shared-http.ts",
-          "hash": "13725031200342985047",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/http/src/test-setup.ts",
-          "hash": "13866865793787813771",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular"
-          ]
-        },
-        {
-          "file": "libs/shared/http/tsconfig.json",
-          "hash": "1973382141025117759"
-        },
-        {
-          "file": "libs/shared/http/tsconfig.lib.json",
-          "hash": "1317626009648939439"
-        },
-        {
-          "file": "libs/shared/http/tsconfig.spec.json",
-          "hash": "5958551803246193814"
-        },
-        {
-          "file": "libs/shared/http/vite.config.mts",
-          "hash": "14988697325435661218",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "shared-telemetry": [
-        {
-          "file": "libs/shared/telemetry/README.md",
-          "hash": "6057892011411017892"
-        },
-        {
-          "file": "libs/shared/telemetry/eslint.config.mjs",
-          "hash": "5551293590253346027",
-          "deps": [
-            "npm:@nx/eslint-plugin"
-          ]
-        },
-        {
-          "file": "libs/shared/telemetry/project.json",
-          "hash": "14987982995357539705"
-        },
-        {
-          "file": "libs/shared/telemetry/src/index.ts",
-          "hash": "8633861497676053085"
-        },
-        {
-          "file": "libs/shared/telemetry/src/lib/logger.service.ts",
-          "hash": "3290245758963896267",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/telemetry/src/lib/shared-telemetry/shared-telemetry.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/shared/telemetry/src/lib/shared-telemetry/shared-telemetry.html",
-          "hash": "9030376803342762421"
-        },
-        {
-          "file": "libs/shared/telemetry/src/lib/shared-telemetry/shared-telemetry.spec.ts",
-          "hash": "13581486169820014020",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/telemetry/src/lib/shared-telemetry/shared-telemetry.ts",
-          "hash": "1782526422885794134",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/telemetry/src/lib/telemetry.providers.ts",
-          "hash": "10663474519110605719",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/telemetry/src/lib/web-vitals.service.ts",
-          "hash": "7955577376886289138",
-          "deps": [
-            "npm:@angular/core",
-            [
-              "npm:web-vitals",
-              "dynamic"
-            ]
-          ]
-        },
-        {
-          "file": "libs/shared/telemetry/src/test-setup.ts",
-          "hash": "13866865793787813771",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular"
-          ]
-        },
-        {
-          "file": "libs/shared/telemetry/tsconfig.json",
-          "hash": "1973382141025117759"
-        },
-        {
-          "file": "libs/shared/telemetry/tsconfig.lib.json",
-          "hash": "1317626009648939439"
-        },
-        {
-          "file": "libs/shared/telemetry/tsconfig.spec.json",
-          "hash": "5958551803246193814"
-        },
-        {
-          "file": "libs/shared/telemetry/vite.config.mts",
-          "hash": "17815512752359181204",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "search": [
-        {
-          "file": "libs/shared/search/project.json",
-          "hash": "12821144760383891903"
-        },
-        {
-          "file": "libs/shared/search/src/index.ts",
-          "hash": "4644354212156748521"
-        },
-        {
-          "file": "libs/shared/search/src/lib/global-search.component.ts",
-          "hash": "2375207747191347813",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:@angular/material"
-          ]
-        },
-        {
-          "file": "libs/shared/search/src/lib/provide-search.ts",
-          "hash": "636405598182911347",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/search/src/lib/search-trigger.component.ts",
-          "hash": "17971503792279084828",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/material"
-          ]
-        },
-        {
-          "file": "libs/shared/search/src/lib/search.model.ts",
-          "hash": "6698125533140377674"
-        },
-        {
-          "file": "libs/shared/search/src/lib/search.service.ts",
-          "hash": "2472538445975316681",
-          "deps": [
-            "npm:@angular/core",
-            "npm:rxjs",
-            "data-access-core",
-            "data-access-orders",
-            "data-access-payments",
-            "products",
-            "models"
-          ]
-        },
-        {
-          "file": "libs/shared/search/tsconfig.json",
-          "hash": "7139907096856141056"
-        },
-        {
-          "file": "libs/shared/search/tsconfig.lib.json",
-          "hash": "1317626009648939439"
-        }
-      ],
-      "ui": [
-        {
-          "file": "libs/shared/ui/README.md",
-          "hash": "3098996868279451883"
-        },
-        {
-          "file": "libs/shared/ui/eslint.config.mjs",
-          "hash": "5551293590253346027",
-          "deps": [
-            "npm:@nx/eslint-plugin"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/project.json",
-          "hash": "11816565509864683005"
-        },
-        {
-          "file": "libs/shared/ui/src/index.ts",
-          "hash": "17233082299771635698"
-        },
-        {
-          "file": "libs/shared/ui/src/lib/a11y/_a11y.scss",
-          "hash": "5201289161687520969"
-        },
-        {
-          "file": "libs/shared/ui/src/lib/a11y/focus-on-nav.directive.ts",
-          "hash": "5849260765335474416",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:rxjs"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/a11y/live-announcer.service.ts",
-          "hash": "10700348156979641777",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/cdk"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/a11y/provide-accessibility.ts",
-          "hash": "6815620702839860947",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:@angular/platform-browser",
-            "npm:rxjs"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/a11y/skip-link.component.ts",
-          "hash": "16928408010074281017",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/confirm-dialog/confirm-dialog.component.ts",
-          "hash": "1046481225244986078",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/material"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/empty-state/empty-state.component.ts",
-          "hash": "10187725102229405009",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/material"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/error-page/error-page.component.ts",
-          "hash": "13407887817701791715",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:@angular/material"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/language-switcher/language-switcher.component.ts",
-          "hash": "2126837138459061169",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/material",
-            "shared-i18n"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/shell/header.component.ts",
-          "hash": "10520442877129373375",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
-            "npm:@angular/material",
-            "shared-auth",
-            "shared-notifications",
-            "search"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/shell/nav-item.model.ts",
-          "hash": "6095301039982612336"
-        },
-        {
-          "file": "libs/shared/ui/src/lib/shell/shell.component.ts",
-          "hash": "13997112338713589390",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/shell/sidebar.component.ts",
-          "hash": "12551711966972105938",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:@angular/material",
-            "shared-auth"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/status-chip/status-chip.component.ts",
-          "hash": "16705688944860592046",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/material"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/tenant-switcher/tenant-switcher.component.ts",
-          "hash": "7891254802345815222",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/material",
-            "npm:@angular/forms",
-            "shared-http"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/theme/theme-toggle.component.ts",
-          "hash": "2293212704165298157",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/material"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/theme/theme.service.ts",
-          "hash": "16221884629080546903",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/ui/ui.css",
-          "hash": "3244421341483603138"
-        },
-        {
-          "file": "libs/shared/ui/src/lib/ui/ui.html",
-          "hash": "11089220566535924882"
-        },
-        {
-          "file": "libs/shared/ui/src/lib/ui/ui.spec.ts",
-          "hash": "15848068596344699442",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/lib/ui/ui.ts",
-          "hash": "1810374238182138446",
-          "deps": [
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/src/test-setup.ts",
-          "hash": "13866865793787813771",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular"
-          ]
-        },
-        {
-          "file": "libs/shared/ui/tsconfig.json",
-          "hash": "1973382141025117759"
-        },
-        {
-          "file": "libs/shared/ui/tsconfig.lib.json",
-          "hash": "1317626009648939439"
-        },
-        {
-          "file": "libs/shared/ui/tsconfig.spec.json",
-          "hash": "5958551803246193814"
-        },
-        {
-          "file": "libs/shared/ui/vite.config.mts",
-          "hash": "3065539762031857398",
+          "file": "apps/shop/vite.config.mts",
+          "hash": "10878439224320045282",
           "deps": [
             "npm:vite",
             "npm:@analogjs/vite-plugin-angular",
@@ -2658,6 +1955,10 @@
           ]
         },
         {
+          "file": "libs/shop/performance/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
           "file": "libs/shop/performance/tsconfig.json",
           "hash": "8498460753787982743"
         },
@@ -2674,40 +1975,200 @@
           ]
         }
       ],
-      "shop-pwa": [
+      "data-access-core": [
         {
-          "file": "libs/shop/pwa/project.json",
-          "hash": "18043473401655111212"
+          "file": "libs/data-access/core/README.md",
+          "hash": "10290229060941805763"
         },
         {
-          "file": "libs/shop/pwa/src/index.ts",
-          "hash": "2379430710669817996"
-        },
-        {
-          "file": "libs/shop/pwa/src/lib/install-prompt.component.ts",
-          "hash": "6331891622852732442",
+          "file": "libs/data-access/core/eslint.config.mjs",
+          "hash": "5551293590253346027",
           "deps": [
-            "npm:@angular/core",
-            "npm:@angular/material"
+            "npm:@nx/eslint-plugin"
           ]
         },
         {
-          "file": "libs/shop/pwa/src/lib/offline-indicator.component.ts",
-          "hash": "995779456910236694",
+          "file": "libs/data-access/core/project.json",
+          "hash": "8457226324282447147"
+        },
+        {
+          "file": "libs/data-access/core/src/index.ts",
+          "hash": "7023638953426770654"
+        },
+        {
+          "file": "libs/data-access/core/src/lib/audit.facade.ts",
+          "hash": "16540688622484483086",
           "deps": [
             "npm:@angular/core",
-            "npm:@angular/material"
+            "npm:rxjs",
+            "shared-telemetry"
           ]
         },
         {
-          "file": "libs/shop/pwa/src/lib/sw-update.service.ts",
-          "hash": "15606554305365412209",
+          "file": "libs/data-access/core/src/lib/core-api.client.ts",
+          "hash": "3176898911653508717",
           "deps": [
             "npm:@angular/core",
-            "npm:@angular/service-worker",
-            "npm:@angular/material",
-            "npm:rxjs"
+            "npm:@angular/common",
+            "npm:rxjs",
+            "shared-config"
           ]
+        },
+        {
+          "file": "libs/data-access/core/src/lib/data-access-core/data-access-core.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/data-access/core/src/lib/data-access-core/data-access-core.html",
+          "hash": "16525765279622727704"
+        },
+        {
+          "file": "libs/data-access/core/src/lib/data-access-core/data-access-core.spec.ts",
+          "hash": "1729972739025218350",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/data-access/core/src/lib/data-access-core/data-access-core.ts",
+          "hash": "3081539455251570838",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/data-access/core/src/lib/flags.facade.ts",
+          "hash": "15806809426961298904",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs",
+            "shared-telemetry"
+          ]
+        },
+        {
+          "file": "libs/data-access/core/src/lib/models/audit.model.ts",
+          "hash": "3802461701288276248"
+        },
+        {
+          "file": "libs/data-access/core/src/lib/models/flag.model.ts",
+          "hash": "286466961417406030"
+        },
+        {
+          "file": "libs/data-access/core/src/lib/models/index.ts",
+          "hash": "3492526992364611959"
+        },
+        {
+          "file": "libs/data-access/core/src/lib/models/policy.model.ts",
+          "hash": "9156237309154204603"
+        },
+        {
+          "file": "libs/data-access/core/src/lib/models/tenant.model.ts",
+          "hash": "3559901638128730154"
+        },
+        {
+          "file": "libs/data-access/core/src/lib/policies.facade.ts",
+          "hash": "16808244764698917957",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs",
+            "shared-telemetry"
+          ]
+        },
+        {
+          "file": "libs/data-access/core/src/lib/tenants.facade.ts",
+          "hash": "1698916638817380328",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs",
+            "shared-telemetry"
+          ]
+        },
+        {
+          "file": "libs/data-access/core/src/test-setup.ts",
+          "hash": "13866865793787813771",
+          "deps": [
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular"
+          ]
+        },
+        {
+          "file": "libs/data-access/core/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/data-access/core/tsconfig.json",
+          "hash": "1973382141025117759"
+        },
+        {
+          "file": "libs/data-access/core/tsconfig.lib.json",
+          "hash": "1317626009648939439"
+        },
+        {
+          "file": "libs/data-access/core/tsconfig.spec.json",
+          "hash": "5958551803246193814"
+        },
+        {
+          "file": "libs/data-access/core/vite.config.mts",
+          "hash": "7509032462530524047",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "admin-console-e2e": [
+        {
+          "file": "apps/admin-console-e2e/eslint.config.mjs",
+          "hash": "16571454440592814835",
+          "deps": [
+            "npm:eslint-plugin-playwright"
+          ]
+        },
+        {
+          "file": "apps/admin-console-e2e/playwright.config.ts",
+          "hash": "12776177092239530968",
+          "deps": [
+            "npm:@playwright/test",
+            "npm:@nx/playwright",
+            "npm:@nx/devkit"
+          ]
+        },
+        {
+          "file": "apps/admin-console-e2e/project.json",
+          "hash": "4373125424408627476"
+        },
+        {
+          "file": "apps/admin-console-e2e/src/login-flow.spec.ts",
+          "hash": "12043240949757543710",
+          "deps": [
+            "npm:@playwright/test"
+          ]
+        },
+        {
+          "file": "apps/admin-console-e2e/src/navigation.spec.ts",
+          "hash": "8770676856827820106",
+          "deps": [
+            "npm:@playwright/test"
+          ]
+        },
+        {
+          "file": "apps/admin-console-e2e/src/onboarding-wizard.spec.ts",
+          "hash": "3188187669594769560",
+          "deps": [
+            "npm:@playwright/test"
+          ]
+        },
+        {
+          "file": "apps/admin-console-e2e/src/tenants-management.spec.ts",
+          "hash": "1773235589586949495",
+          "deps": [
+            "npm:@playwright/test"
+          ]
+        },
+        {
+          "file": "apps/admin-console-e2e/tsconfig.json",
+          "hash": "15726545290547512047"
         }
       ],
       "data-access-payments": [
@@ -2803,6 +2264,10 @@
           ]
         },
         {
+          "file": "libs/data-access/payments/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
           "file": "libs/data-access/payments/tsconfig.json",
           "hash": "1973382141025117759"
         },
@@ -2817,79 +2282,6 @@
         {
           "file": "libs/data-access/payments/vite.config.mts",
           "hash": "14704739072682825434",
-          "deps": [
-            "npm:vite",
-            "npm:@analogjs/vite-plugin-angular",
-            "npm:@nx/vite"
-          ]
-        }
-      ],
-      "feature-products": [
-        {
-          "file": "libs/shop/feature-products/project.json",
-          "hash": "11552218587548601081"
-        },
-        {
-          "file": "libs/shop/feature-products/src/index.ts",
-          "hash": "15088183317454958452"
-        },
-        {
-          "file": "libs/shop/feature-products/src/lib/feature-products.routes.ts",
-          "hash": "4579953290505949435",
-          "deps": [
-            "npm:@angular/router"
-          ]
-        },
-        {
-          "file": "libs/shop/feature-products/src/lib/product-list/product-list.component.spec.ts",
-          "hash": "2194889724282841567",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/router",
-            "npm:rxjs",
-            "data",
-            "models",
-            "npm:vitest"
-          ]
-        },
-        {
-          "file": "libs/shop/feature-products/src/lib/product-list/product-list.component.ts",
-          "hash": "6036459081355418785",
-          "deps": [
-            "npm:@angular/core",
-            "npm:@angular/common",
-            "npm:@angular/forms",
-            "npm:@angular/router",
-            "data",
-            "models",
-            "shared-ui"
-          ]
-        },
-        {
-          "file": "libs/shop/feature-products/src/test-setup.ts",
-          "hash": "539921863778627670",
-          "deps": [
-            "npm:@angular/compiler",
-            "npm:@analogjs/vitest-angular",
-            "npm:@angular/platform-browser",
-            "npm:@angular/core"
-          ]
-        },
-        {
-          "file": "libs/shop/feature-products/tsconfig.json",
-          "hash": "4836666628674667138"
-        },
-        {
-          "file": "libs/shop/feature-products/tsconfig.lib.json",
-          "hash": "5199950494069393534"
-        },
-        {
-          "file": "libs/shop/feature-products/tsconfig.spec.json",
-          "hash": "6529800329236341072"
-        },
-        {
-          "file": "libs/shop/feature-products/vite.config.mts",
-          "hash": "3178436680889187018",
           "deps": [
             "npm:vite",
             "npm:@analogjs/vite-plugin-angular",
@@ -3162,123 +2554,811 @@
           ]
         }
       ],
-      "products": [
+      "feature-products": [
         {
-          "file": "libs/api/products/README.md",
-          "hash": "6958633013195591019"
+          "file": "libs/shop/feature-products/project.json",
+          "hash": "11552218587548601081"
         },
         {
-          "file": "libs/api/products/eslint.config.mjs",
-          "hash": "10511035923162149759",
+          "file": "libs/shop/feature-products/src/index.ts",
+          "hash": "15088183317454958452"
+        },
+        {
+          "file": "libs/shop/feature-products/src/lib/feature-products.routes.ts",
+          "hash": "4579953290505949435",
           "deps": [
-            [
-              "npm:jsonc-eslint-parser",
-              "dynamic"
-            ]
+            "npm:@angular/router"
           ]
         },
         {
-          "file": "libs/api/products/package.json",
-          "hash": "14742526119745514961",
+          "file": "libs/shop/feature-products/src/lib/product-list/product-list.component.spec.ts",
+          "hash": "2194889724282841567",
           "deps": [
-            "npm:tslib"
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:rxjs",
+            "data",
+            "models",
+            "npm:vitest"
           ]
         },
         {
-          "file": "libs/api/products/project.json",
-          "hash": "11328989028963807227"
-        },
-        {
-          "file": "libs/api/products/src/index.ts",
-          "hash": "9758670300368784364"
-        },
-        {
-          "file": "libs/api/products/src/lib/products.service.spec.ts",
-          "hash": "2232052381425872650",
+          "file": "libs/shop/feature-products/src/lib/product-list/product-list.component.ts",
+          "hash": "6036459081355418785",
           "deps": [
-            "models"
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/forms",
+            "npm:@angular/router",
+            "data",
+            "models",
+            "shared-ui"
           ]
         },
         {
-          "file": "libs/api/products/src/lib/products.service.ts",
-          "hash": "16956941701887786896",
+          "file": "libs/shop/feature-products/src/test-setup.ts",
+          "hash": "539921863778627670",
           "deps": [
-            "models"
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular",
+            "npm:@angular/platform-browser",
+            "npm:@angular/core"
           ]
         },
         {
-          "file": "libs/api/products/tsconfig.json",
-          "hash": "6693614989438379715"
+          "file": "libs/shop/feature-products/tsconfig.app.json",
+          "hash": "3053556676114069271"
         },
         {
-          "file": "libs/api/products/tsconfig.lib.json",
-          "hash": "5554291030212586824"
+          "file": "libs/shop/feature-products/tsconfig.json",
+          "hash": "4836666628674667138"
         },
         {
-          "file": "libs/api/products/tsconfig.spec.json",
+          "file": "libs/shop/feature-products/tsconfig.lib.json",
+          "hash": "5199950494069393534"
+        },
+        {
+          "file": "libs/shop/feature-products/tsconfig.spec.json",
+          "hash": "6529800329236341072"
+        },
+        {
+          "file": "libs/shop/feature-products/vite.config.mts",
+          "hash": "3178436680889187018",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "shared-util": [
+        {
+          "file": "libs/shared/util/README.md",
+          "hash": "18300357987773754435"
+        },
+        {
+          "file": "libs/shared/util/eslint.config.mjs",
+          "hash": "5551293590253346027",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "libs/shared/util/project.json",
+          "hash": "9548374715880322895"
+        },
+        {
+          "file": "libs/shared/util/src/index.ts",
+          "hash": "4667930143018506043"
+        },
+        {
+          "file": "libs/shared/util/src/lib/date.util.ts",
+          "hash": "2711383791636149320"
+        },
+        {
+          "file": "libs/shared/util/src/lib/http-context.tokens.ts",
+          "hash": "17253637867882974042",
+          "deps": [
+            "npm:@angular/common"
+          ]
+        },
+        {
+          "file": "libs/shared/util/src/lib/paginator.util.ts",
+          "hash": "2047244570323900150"
+        },
+        {
+          "file": "libs/shared/util/src/lib/shared-util/shared-util.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/util/src/lib/shared-util/shared-util.html",
+          "hash": "4204266256673019883"
+        },
+        {
+          "file": "libs/shared/util/src/lib/shared-util/shared-util.spec.ts",
+          "hash": "11570153039281296",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/util/src/lib/shared-util/shared-util.ts",
+          "hash": "14670015206357407139",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/util/src/lib/uuid.util.ts",
+          "hash": "11690385445563895253",
+          "deps": [
+            "npm:uuid"
+          ]
+        },
+        {
+          "file": "libs/shared/util/src/test-setup.ts",
+          "hash": "13866865793787813771",
+          "deps": [
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular"
+          ]
+        },
+        {
+          "file": "libs/shared/util/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/shared/util/tsconfig.json",
+          "hash": "1973382141025117759"
+        },
+        {
+          "file": "libs/shared/util/tsconfig.lib.json",
+          "hash": "1317626009648939439"
+        },
+        {
+          "file": "libs/shared/util/tsconfig.spec.json",
+          "hash": "5958551803246193814"
+        },
+        {
+          "file": "libs/shared/util/vite.config.mts",
+          "hash": "10950807001677116674",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "data-access-orders": [
+        {
+          "file": "libs/data-access/orders/README.md",
+          "hash": "9580678290059240539"
+        },
+        {
+          "file": "libs/data-access/orders/eslint.config.mjs",
+          "hash": "5551293590253346027",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "libs/data-access/orders/project.json",
+          "hash": "10696487910540123852"
+        },
+        {
+          "file": "libs/data-access/orders/src/index.ts",
+          "hash": "3563537647651842266"
+        },
+        {
+          "file": "libs/data-access/orders/src/lib/data-access-orders/data-access-orders.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/data-access/orders/src/lib/data-access-orders/data-access-orders.html",
+          "hash": "18410886372051454985"
+        },
+        {
+          "file": "libs/data-access/orders/src/lib/data-access-orders/data-access-orders.spec.ts",
+          "hash": "513556000244376720",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/data-access/orders/src/lib/data-access-orders/data-access-orders.ts",
+          "hash": "2219245276957744401",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/data-access/orders/src/lib/inventory.facade.ts",
+          "hash": "17533488282327260529",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs",
+            "shared-telemetry",
+            "shared-util"
+          ]
+        },
+        {
+          "file": "libs/data-access/orders/src/lib/models/index.ts",
+          "hash": "17413328404074700822"
+        },
+        {
+          "file": "libs/data-access/orders/src/lib/models/inventory.model.ts",
+          "hash": "5235856026107352200"
+        },
+        {
+          "file": "libs/data-access/orders/src/lib/models/order.model.ts",
+          "hash": "4047831101862991258"
+        },
+        {
+          "file": "libs/data-access/orders/src/lib/orders-api.client.ts",
+          "hash": "994449791252227607",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:rxjs",
+            "shared-config",
+            "shared-util"
+          ]
+        },
+        {
+          "file": "libs/data-access/orders/src/lib/orders.facade.ts",
+          "hash": "16048468461052831064",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs",
+            "shared-telemetry",
+            "shared-util"
+          ]
+        },
+        {
+          "file": "libs/data-access/orders/src/test-setup.ts",
+          "hash": "13866865793787813771",
+          "deps": [
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular"
+          ]
+        },
+        {
+          "file": "libs/data-access/orders/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/data-access/orders/tsconfig.json",
+          "hash": "1973382141025117759"
+        },
+        {
+          "file": "libs/data-access/orders/tsconfig.lib.json",
+          "hash": "1317626009648939439"
+        },
+        {
+          "file": "libs/data-access/orders/tsconfig.spec.json",
+          "hash": "5958551803246193814"
+        },
+        {
+          "file": "libs/data-access/orders/vite.config.mts",
+          "hash": "8432565095152033096",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "domain-admin": [
+        {
+          "file": "libs/domains/admin/README.md",
+          "hash": "6921512250199163563"
+        },
+        {
+          "file": "libs/domains/admin/eslint.config.mjs",
+          "hash": "5551293590253346027",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "libs/domains/admin/project.json",
+          "hash": "5372603206805992769"
+        },
+        {
+          "file": "libs/domains/admin/src/index.ts",
+          "hash": "3494197010916183491"
+        },
+        {
+          "file": "libs/domains/admin/src/lib/domain-admin/domain-admin.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/domains/admin/src/lib/domain-admin/domain-admin.html",
+          "hash": "1091403174056088113"
+        },
+        {
+          "file": "libs/domains/admin/src/lib/domain-admin/domain-admin.spec.ts",
+          "hash": "15194603149273818098",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/domains/admin/src/lib/domain-admin/domain-admin.ts",
+          "hash": "11215712969290679102",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/domains/admin/src/lib/tenant-onboarding/tenant-onboarding.store.ts",
+          "hash": "3547972048998439507",
+          "deps": [
+            "npm:@angular/core",
+            "npm:rxjs",
+            "data-access-core"
+          ]
+        },
+        {
+          "file": "libs/domains/admin/src/test-setup.ts",
+          "hash": "13866865793787813771",
+          "deps": [
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular"
+          ]
+        },
+        {
+          "file": "libs/domains/admin/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/domains/admin/tsconfig.json",
+          "hash": "1973382141025117759"
+        },
+        {
+          "file": "libs/domains/admin/tsconfig.lib.json",
+          "hash": "1317626009648939439"
+        },
+        {
+          "file": "libs/domains/admin/tsconfig.spec.json",
+          "hash": "5958551803246193814"
+        },
+        {
+          "file": "libs/domains/admin/vite.config.mts",
+          "hash": "5852118608101106908",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "feature-product-detail": [
+        {
+          "file": "libs/shop/feature-product-detail/project.json",
+          "hash": "15469439129175134223"
+        },
+        {
+          "file": "libs/shop/feature-product-detail/src/index.ts",
+          "hash": "17005774761272856003"
+        },
+        {
+          "file": "libs/shop/feature-product-detail/src/lib/feature-product-detail.routes.ts",
+          "hash": "8697188306380904734",
+          "deps": [
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "libs/shop/feature-product-detail/src/lib/product-detail/product-detail.component.spec.ts",
+          "hash": "3391670416307855900",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router",
+            "npm:rxjs",
+            "data",
+            "models",
+            "npm:vitest"
+          ]
+        },
+        {
+          "file": "libs/shop/feature-product-detail/src/lib/product-detail/product-detail.component.ts",
+          "hash": "16002479860884267246",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/router",
+            "data",
+            "models",
+            "shared-ui"
+          ]
+        },
+        {
+          "file": "libs/shop/feature-product-detail/src/test-setup.ts",
+          "hash": "539921863778627670",
+          "deps": [
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular",
+            "npm:@angular/platform-browser",
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shop/feature-product-detail/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/shop/feature-product-detail/tsconfig.json",
+          "hash": "4836666628674667138"
+        },
+        {
+          "file": "libs/shop/feature-product-detail/tsconfig.lib.json",
+          "hash": "5199950494069393534"
+        },
+        {
+          "file": "libs/shop/feature-product-detail/tsconfig.spec.json",
+          "hash": "6529800329236341072"
+        },
+        {
+          "file": "libs/shop/feature-product-detail/vite.config.mts",
+          "hash": "2175013963316325649",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "models": [
+        {
+          "file": "libs/shared/models/README.md",
+          "hash": "10156869114925785952"
+        },
+        {
+          "file": "libs/shared/models/eslint.config.mjs",
+          "hash": "16759498837230279251"
+        },
+        {
+          "file": "libs/shared/models/project.json",
+          "hash": "10257694158849000508"
+        },
+        {
+          "file": "libs/shared/models/src/index.ts",
+          "hash": "15435369489968961164"
+        },
+        {
+          "file": "libs/shared/models/src/lib/product.model.ts",
+          "hash": "15711376159432448200"
+        },
+        {
+          "file": "libs/shared/models/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/shared/models/tsconfig.json",
+          "hash": "9505886339790543345"
+        },
+        {
+          "file": "libs/shared/models/tsconfig.lib.json",
+          "hash": "2310906518119603203"
+        },
+        {
+          "file": "libs/shared/models/tsconfig.spec.json",
           "hash": "16992467545950447943"
         },
         {
-          "file": "libs/api/products/vite.config.ts",
-          "hash": "17431080146550447749",
+          "file": "libs/shared/models/vite.config.ts",
+          "hash": "14393829475409195689",
           "deps": [
             "npm:vite",
             "npm:@nx/vite"
           ]
         }
       ],
-      "ops-portal-e2e": [
+      "shared-notifications": [
         {
-          "file": "apps/ops-portal-e2e/eslint.config.mjs",
-          "hash": "16571454440592814835",
+          "file": "libs/shared/notifications/project.json",
+          "hash": "4925806681051560769"
+        },
+        {
+          "file": "libs/shared/notifications/src/index.ts",
+          "hash": "8958666314270564069"
+        },
+        {
+          "file": "libs/shared/notifications/src/lib/notification-bell.component.ts",
+          "hash": "1718251680707446699",
           "deps": [
-            "npm:eslint-plugin-playwright"
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/router",
+            "npm:@angular/material"
           ]
         },
         {
-          "file": "apps/ops-portal-e2e/playwright.config.ts",
-          "hash": "2621386989342032068",
+          "file": "libs/shared/notifications/src/lib/notification-toast.component.ts",
+          "hash": "16809336541815250381",
           "deps": [
-            "npm:@playwright/test",
-            "npm:@nx/playwright",
-            "npm:@nx/devkit"
+            "npm:@angular/core",
+            "npm:@angular/material",
+            "npm:@angular/router"
           ]
         },
         {
-          "file": "apps/ops-portal-e2e/project.json",
-          "hash": "5849173248664820971"
+          "file": "libs/shared/notifications/src/lib/notification.model.ts",
+          "hash": "4346397198923468367"
         },
         {
-          "file": "apps/ops-portal-e2e/src/dashboard.spec.ts",
-          "hash": "18261473172627247707",
+          "file": "libs/shared/notifications/src/lib/notification.store.ts",
+          "hash": "78727594292272923",
           "deps": [
-            "npm:@playwright/test"
+            "npm:@angular/core"
           ]
         },
         {
-          "file": "apps/ops-portal-e2e/src/login-flow.spec.ts",
-          "hash": "15690552191201739810",
+          "file": "libs/shared/notifications/src/lib/provide-notifications.ts",
+          "hash": "13237456278910383029",
           "deps": [
-            "npm:@playwright/test"
+            "npm:@angular/core"
           ]
         },
         {
-          "file": "apps/ops-portal-e2e/src/navigation.spec.ts",
-          "hash": "13251688729057260896",
+          "file": "libs/shared/notifications/src/lib/sse.service.ts",
+          "hash": "13295506913014755836",
           "deps": [
-            "npm:@playwright/test"
+            "npm:@angular/core",
+            "shared-config"
+          ]
+        }
+      ],
+      "shared-i18n": [
+        {
+          "file": "libs/shared/i18n/README.md",
+          "hash": "4382391624125042019"
+        },
+        {
+          "file": "libs/shared/i18n/eslint.config.mjs",
+          "hash": "5551293590253346027",
+          "deps": [
+            "npm:@nx/eslint-plugin"
           ]
         },
         {
-          "file": "apps/ops-portal-e2e/src/orders-management.spec.ts",
-          "hash": "2684403689477416488",
+          "file": "libs/shared/i18n/project.json",
+          "hash": "7764565399553624764"
+        },
+        {
+          "file": "libs/shared/i18n/src/index.ts",
+          "hash": "10304499150952658015"
+        },
+        {
+          "file": "libs/shared/i18n/src/lib/en-us.messages.ts",
+          "hash": "5754377679453645268"
+        },
+        {
+          "file": "libs/shared/i18n/src/lib/i18n.service.ts",
+          "hash": "15008774545231845398",
           "deps": [
-            "npm:@playwright/test"
+            "npm:@angular/core"
           ]
         },
         {
-          "file": "apps/ops-portal-e2e/tsconfig.json",
-          "hash": "15726545290547512047"
+          "file": "libs/shared/i18n/src/lib/i18n.tokens.ts",
+          "hash": "14300809453080950085",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/i18n/src/lib/pt-br.messages.ts",
+          "hash": "7573108681411602751"
+        },
+        {
+          "file": "libs/shared/i18n/src/lib/shared-i18n/shared-i18n.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/i18n/src/lib/shared-i18n/shared-i18n.html",
+          "hash": "10231362905936779303"
+        },
+        {
+          "file": "libs/shared/i18n/src/lib/shared-i18n/shared-i18n.spec.ts",
+          "hash": "16029113864579055340",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/i18n/src/lib/shared-i18n/shared-i18n.ts",
+          "hash": "5908290075648552049",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/i18n/src/test-setup.ts",
+          "hash": "13866865793787813771",
+          "deps": [
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular"
+          ]
+        },
+        {
+          "file": "libs/shared/i18n/tsconfig.app.json",
+          "hash": "3053556676114069271"
+        },
+        {
+          "file": "libs/shared/i18n/tsconfig.json",
+          "hash": "1973382141025117759"
+        },
+        {
+          "file": "libs/shared/i18n/tsconfig.lib.json",
+          "hash": "1317626009648939439"
+        },
+        {
+          "file": "libs/shared/i18n/tsconfig.spec.json",
+          "hash": "5958551803246193814"
+        },
+        {
+          "file": "libs/shared/i18n/vite.config.mts",
+          "hash": "5606858291934265858",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
+        }
+      ],
+      "shared-auth": [
+        {
+          "file": "libs/shared/auth/README.md",
+          "hash": "3235320632858507844"
+        },
+        {
+          "file": "libs/shared/auth/eslint.config.mjs",
+          "hash": "5551293590253346027",
+          "deps": [
+            "npm:@nx/eslint-plugin"
+          ]
+        },
+        {
+          "file": "libs/shared/auth/project.json",
+          "hash": "13264407414501603455"
+        },
+        {
+          "file": "libs/shared/auth/src/index.ts",
+          "hash": "9164810041657161325"
+        },
+        {
+          "file": "libs/shared/auth/src/lib/auth.providers.ts",
+          "hash": "3232060236527514496",
+          "deps": [
+            "npm:@angular/core",
+            "shared-config"
+          ]
+        },
+        {
+          "file": "libs/shared/auth/src/lib/auth.service.ts",
+          "hash": "14879217687452925962",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/common",
+            "npm:@angular/router",
+            "npm:rxjs",
+            "shared-config",
+            "shared-http",
+            "shared-util"
+          ]
+        },
+        {
+          "file": "libs/shared/auth/src/lib/auth.store.ts",
+          "hash": "15951368536199114055",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/auth/src/lib/dev-auth/dev-login.component.ts",
+          "hash": "15361171805088354428",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/forms",
+            "npm:@angular/material"
+          ]
+        },
+        {
+          "file": "libs/shared/auth/src/lib/guards/auth.guard.ts",
+          "hash": "17265834549558916054",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "libs/shared/auth/src/lib/guards/permission.guard.ts",
+          "hash": "11842468918749449861",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/router"
+          ]
+        },
+        {
+          "file": "libs/shared/auth/src/lib/login-page.component.ts",
+          "hash": "588508476789539780",
+          "deps": [
+            "npm:@angular/core",
+            "npm:@angular/material",
+            "shared-config"
+          ]
+        },
+        {
+          "file": "libs/shared/auth/src/lib/models/auth-session.model.ts",
+          "hash": "13072435344883672059"
+        },
+        {
+          "file": "libs/shared/auth/src/lib/oidc-auth.service.ts",
+          "hash": "12090977038282905778",
+          "deps": [
+            "npm:@angular/core",
+            "npm:angular-oauth2-oidc",
+            "npm:rxjs",
+            "shared-config",
+            "shared-http"
+          ]
+        },
+        {
+          "file": "libs/shared/auth/src/lib/shared-auth/shared-auth.css",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "libs/shared/auth/src/lib/shared-auth/shared-auth.html",
+          "hash": "17046198231803368107"
+        },
+        {
+          "file": "libs/shared/auth/src/lib/shared-auth/shared-auth.spec.ts",
+          "hash": "16127937012421025649",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/auth/src/lib/shared-auth/shared-auth.ts",
+          "hash": "10782512915210925917",
+          "deps": [
+            "npm:@angular/core"
+          ]
+        },
+        {
+          "file": "libs/shared/auth/src/test-setup.ts",
+          "hash": "13866865793787813771",
+          "deps": [
+            "npm:@angular/compiler",
+            "npm:@analogjs/vitest-angular"
+          ]
+        },
+        {
+          "file": "libs/shared/auth/tsconfig.app.json",
+          "hash": "11039847394266596915"
+        },
+        {
+          "file": "libs/shared/auth/tsconfig.json",
+          "hash": "1973382141025117759"
+        },
+        {
+          "file": "libs/shared/auth/tsconfig.lib.json",
+          "hash": "1317626009648939439"
+        },
+        {
+          "file": "libs/shared/auth/tsconfig.spec.json",
+          "hash": "5958551803246193814"
+        },
+        {
+          "file": "libs/shared/auth/vite.config.mts",
+          "hash": "13460277409148991953",
+          "deps": [
+            "npm:vite",
+            "npm:@analogjs/vite-plugin-angular",
+            "npm:@nx/vite"
+          ]
         }
       ]
     },

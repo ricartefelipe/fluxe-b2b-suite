@@ -52,11 +52,11 @@ import { formatDateTime } from '@saas-suite/shared/util';
   styles: [`
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .balances-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-    .balance-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+    .balance-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--app-border); }
     .balance-row.total { border-bottom: none; font-weight: 700; font-size: 18px; }
-    .label { color: #666; }
-    .credit { color: #2e7d32; }
-    .debit { color: #c62828; }
+    .label { color: var(--app-text-secondary); }
+    .credit { color: var(--app-chip-allow-text); }
+    .debit { color: var(--app-chip-deny-text); }
   `],
 })
 export class LedgerBalancesPage implements OnInit {

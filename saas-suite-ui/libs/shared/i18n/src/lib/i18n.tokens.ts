@@ -33,6 +33,8 @@ export interface Messages {
     description: string;
     type: string;
     category: string;
+    all: string;
+    id: string;
   };
   errors: {
     unauthorized: string;
@@ -69,6 +71,17 @@ export interface Messages {
     tenantStatus: string;
     createTenant: string;
     editTenant: string;
+    listTitle: string;
+    newTenant: string;
+    searchByName: string;
+    statusActive: string;
+    statusSuspended: string;
+    statusPending: string;
+    planStarter: string;
+    planProfessional: string;
+    planEnterprise: string;
+    createdAt: string;
+    noTenantsFound: string;
   };
   orders: {
     orderList: string;
@@ -80,11 +93,13 @@ export interface Messages {
     orderTotal: string;
     orderItems: string;
     customer: string;
+    customerId: string;
     draft: string;
     reserved: string;
     confirmed: string;
     cancelled: string;
     paid: string;
+    noOrdersFound: string;
   };
   inventory: {
     adjustments: string;
@@ -157,6 +172,16 @@ export interface Messages {
     toggleDarkMode: string;
     increaseFont: string;
     decreaseFont: string;
+  };
+  app: {
+    menuTooltip: string;
+    userMenuLabel: string;
+  };
+  errorPage: {
+    backToHome: string;
+    defaultTitle: string;
+    defaultMessage: string;
+    correlationIdLabel: string;
   };
 }
 

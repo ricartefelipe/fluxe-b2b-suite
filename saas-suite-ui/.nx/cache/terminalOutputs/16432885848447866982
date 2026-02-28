@@ -1,0 +1,12 @@
+> vitest
+
+
+ RUN  v4.0.9 /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/libs/api/products
+
+ ✓ |products| src/lib/products.service.spec.ts (10 tests) 16ms
+
+ Test Files  1 passed (1)
+      Tests  10 passed (10)
+   Start at  20:01:20
+   Duration  338ms (transform 70ms, setup 0ms, collect 89ms, tests 16ms, environment 0ms, prepare 17ms)
+

@@ -16,6 +16,7 @@
     "serve:shop": "nx serve shop",
     "serve:api": "nx serve api",
     "serve:ops-portal": "nx serve ops-portal",
+    "serve:ops-portal:alt": "nx serve ops-portal --port 4201",
     "serve:admin-console": "nx serve admin-console"
   },
   "private": true,

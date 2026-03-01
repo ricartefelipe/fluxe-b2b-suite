@@ -1,0 +1,34 @@
+❯ Building...
+✔ Building...
+Initial chunk files | Names                  |  Raw size
+chunk-GIHPQY3V.js   | -                      |   1.54 MB | 
+chunk-6WVJZ4Y5.js   | -                      | 894.47 kB | 
+chunk-MKBJC2UM.js   | -                      | 352.38 kB | 
+styles.css          | styles                 |  22.49 kB | 
+main.js             | main                   |  14.67 kB | 
+chunk-UAGUQH4L.js   | -                      |   1.85 kB | 
+chunk-GOMI4DH3.js   | -                      |   1.37 kB | 
+
+                    | Initial total          |   2.83 MB
+
+Lazy chunk files    | Names                  |  Raw size
+chunk-YZ2FMDU5.js   | tenant-onboarding-page | 366.30 kB | 
+chunk-PNRW6ENY.js   | -                      | 192.63 kB | 
+chunk-7EGTKS6U.js   | browser                | 154.14 kB | 
+chunk-PMHCCCWH.js   | -                      | 113.48 kB | 
+chunk-HCSTEY3U.js   | -                      |  54.74 kB | 
+chunk-T7MWJYJT.js   | tenants-list-page      |  24.99 kB | 
+chunk-27EQ6527.js   | -                      |  24.23 kB | 
+chunk-S3WAWTAD.js   | tenant-detail-page     |  22.21 kB | 
+chunk-N5QJ6LKQ.js   | flags-list-page        |  21.28 kB | 
+chunk-ZKB3B2AN.js   | policies-list-page     |  21.24 kB | 
+chunk-LZJD7ZKY.js   | audit-list-page        |  18.11 kB | 
+chunk-CBEI4HQU.js   | web-vitals             |   8.59 kB | 
+chunk-5JL5WZV6.js   | admin-shell-component  |   2.32 kB | 
+chunk-AE45YZZV.js   | index                  | 902 bytes | 
+chunk-3AHFHCRU.js   | index                  | 526 bytes | 
+
+Application bundle generation complete. [17.799 seconds] - 2026-03-01T09:26:33.837Z
+
+Output location: /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/dist/apps/admin-console
+

@@ -2,6 +2,7 @@ import { Component, Input, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthStore } from '@saas-suite/shared/auth';
+import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { NavItem } from './nav-item.model';
 
 @Component({
@@ -148,8 +149,12 @@ export class SidebarComponent {
   @Input() navItems: NavItem[] = [];
   @Input() appTitle = '';
   private auth = inject(AuthStore);
+  private config = inject(RuntimeConfigService);
 
-  visibleItems() {
+  visibleItems(): NavItem[] {
+    if (this.config.get('authMode') === 'dev') {
+      return this.navItems;
+    }
     return this.navItems.filter(
       item => !item.permission || this.auth.hasPermission(item.permission),
     );

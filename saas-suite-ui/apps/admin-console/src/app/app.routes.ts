@@ -11,7 +11,13 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./admin-shell.component').then(m => m.AdminShellComponent),
     canActivate: [authGuard],
     children: [
-      { path: '', redirectTo: 'tenants', pathMatch: 'full' },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./pages/dashboard.page').then(m => m.AdminDashboardPage),
+        canActivate: [permissionGuard],
+        data: { permissions: ['tenants:read'] },
+      },
       {
         path: 'tenants',
         loadComponent: () => import('./pages/tenants-list.page').then(m => m.TenantsListPage),
@@ -27,6 +33,12 @@ export const appRoutes: Route[] = [
       {
         path: 'policies',
         loadComponent: () => import('./pages/policies-list.page').then(m => m.PoliciesListPage),
+        canActivate: [permissionGuard],
+        data: { permissions: ['policies:read'] },
+      },
+      {
+        path: 'policies/:id',
+        loadComponent: () => import('./pages/policy-detail.page').then(m => m.PolicyDetailPage),
         canActivate: [permissionGuard],
         data: { permissions: ['policies:read'] },
       },
@@ -51,7 +63,7 @@ export const appRoutes: Route[] = [
       {
         path: '403',
         loadComponent: () => import('@saas-suite/shared/ui').then(m => m.ErrorPageComponent),
-        data: { code: 403, title: 'Acesso Negado', message: 'Você não tem permissão para acessar este recurso.' },
+        data: { code: 403 },
       },
     ],
   },

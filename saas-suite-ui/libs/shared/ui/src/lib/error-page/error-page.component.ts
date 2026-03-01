@@ -35,9 +35,11 @@ export class ErrorPageComponent {
   protected i18n = inject(I18nService);
 
   get titleDisplay(): string {
+    if (String(this.code) === '403') return this.title || this.i18n.messages().auth.accessDenied;
     return this.title || this.i18n.messages().errorPage.defaultTitle;
   }
   get messageDisplay(): string {
+    if (String(this.code) === '403') return this.message || this.i18n.messages().errors.forbidden;
     return this.message || this.i18n.messages().errorPage.defaultMessage;
   }
 }

@@ -1,17 +1,12 @@
-feat(saas-suite-ui): polimento front, empty states com CTA, i18n e correções
+fix(ui): 403 em dev, i18n no menu e página 403, mais telas
 
-- Empty states padronizados: CTAs em listagens (tenants→onboarding, orders→new,
-  adjustments→new, policies/flags→abrir form), subtítulos em audit/payments/ledger
-- Componente EmptyStateComponent com actionLabel, actionRouterLink, subtitle e (action)
-- Shop: empty state de pedidos usando EmptyStateComponent com CTA "Browse Products"
-- i18n: chave noTenantsFoundSubtitle (pt-BR/en-US)
-- Locale pt-BR: LOCALE_ID e registerLocaleData(pt) em admin-console, ops-portal e shop
-  para moeda (R$), datas e números seguirem o locale brasileiro
-- Design: admin-console alinhado ao ops-portal (dark theme contraste, cards 14px,
-  hover/transição, botões :active scale, animação modal); ops-portal sem regra duplicada mat-card
-- Segurança: permissionGuard em modo dev permite acesso quando autenticado sem permissões
-  no token (evita 403 ao usar token local ou backend fora)
-- Build: budgets ops-portal (anyComponentStyle 6kb/10kb) e shop (initial 900kb/1.5mb,
-  anyComponentStyle 6kb/10kb); script postinstall e patch timeout extração de rotas (600s)
-  para shop SSR; script build:shop com NODE_OPTIONS
-- Empty-state: fallback do botão de ação usa common.create em vez de common.new
+- permission guard: em authMode dev, qualquer usuário autenticado acessa
+  todas as rotas (bypass de permissões para demo)
+- sidebar: em dev exibe todos os itens do menu (sem filtrar por permissão)
+- i18n: chaves nav (pt-BR/en-US) para labels do menu; shells usam
+  I18nService para labels traduzidos; página 403 usa auth.accessDenied e
+  errors.forbidden
+- admin: dashboard como home, policy detail/edit, rota /policies/:id
+- ops: payment detail, rota /payments/:id; links na lista de pagamentos
+- policies list: link do permission code para tela de detalhe
+- LOCALE_ID pt-BR e registerLocaleData já presentes; moeda/datas em pt-BR

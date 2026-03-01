@@ -55,6 +55,12 @@ export const appRoutes: Route[] = [
         data: { permissions: ['payments:read'] },
       },
       {
+        path: 'payments/:id',
+        loadComponent: () => import('./pages/payment-detail.page').then(m => m.PaymentDetailPage),
+        canActivate: [permissionGuard],
+        data: { permissions: ['payments:read'] },
+      },
+      {
         path: 'ledger/entries',
         loadComponent: () => import('./pages/ledger-entries.page').then(m => m.LedgerEntriesPage),
         canActivate: [permissionGuard],
@@ -69,7 +75,7 @@ export const appRoutes: Route[] = [
       {
         path: '403',
         loadComponent: () => import('@saas-suite/shared/ui').then(m => m.ErrorPageComponent),
-        data: { code: 403, title: 'Acesso Negado', message: 'Você não tem permissão para acessar este recurso.' },
+        data: { code: 403 },
       },
     ],
   },

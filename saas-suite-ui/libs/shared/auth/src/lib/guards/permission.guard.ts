@@ -10,8 +10,8 @@ export const permissionGuard: CanActivateFn = (route: ActivatedRouteSnapshot) =>
   const required: string[] = route.data['permissions'] ?? [];
   if (!required.length) return true;
   if (store.hasAnyPermission(required)) return true;
-  // Em modo dev: se o usuário está autenticado mas o token não tem permissões (ex.: backend fora, token antigo), permite acesso.
-  if (config.get('authMode') === 'dev' && store.isAuthenticated() && store.permissions().length === 0) {
+  // Em modo dev: usuário autenticado pode acessar todas as rotas (bypass de permissões para demo).
+  if (config.get('authMode') === 'dev' && store.isAuthenticated()) {
     return true;
   }
   return router.createUrlTree(['/403']);

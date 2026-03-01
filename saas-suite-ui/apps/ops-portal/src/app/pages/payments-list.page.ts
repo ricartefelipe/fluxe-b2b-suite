@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,7 +19,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
   standalone: true,
   imports: [
     FormsModule, DecimalPipe, MatTableModule, MatButtonModule, MatIconModule, MatProgressBarModule,
-    MatFormFieldModule, MatInputModule, MatSelectModule, MatSnackBarModule, StatusChipComponent, EmptyStateComponent,
+    MatFormFieldModule, MatInputModule, MatSelectModule, MatSnackBarModule, StatusChipComponent, EmptyStateComponent, RouterLink,
   ],
   template: `
     <div class="page-header"><h1>Pagamentos</h1></div>
@@ -52,7 +53,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
       <table mat-table [dataSource]="facade.payments()" class="full-width">
         <ng-container matColumnDef="id">
           <th mat-header-cell *matHeaderCellDef>ID</th>
-          <td mat-cell *matCellDef="let p"><code>{{ p.id.substring(0, 8) }}</code></td>
+          <td mat-cell *matCellDef="let p"><a [routerLink]="['/payments', p.id]" class="id-link"><code>{{ p.id.substring(0, 8) }}</code></a></td>
         </ng-container>
         <ng-container matColumnDef="orderId">
           <th mat-header-cell *matHeaderCellDef>Pedido</th>
@@ -87,6 +88,8 @@ import { formatDateTime } from '@saas-suite/shared/util';
     .page-header { margin-bottom: 16px; }
     .filters { display: flex; gap: 12px; margin-bottom: 16px; }
     .full-width { width: 100%; }
+    .id-link { color: var(--app-primary); text-decoration: none; }
+    .id-link:hover { text-decoration: underline; }
   `],
 })
 export class PaymentsListPage implements OnInit {

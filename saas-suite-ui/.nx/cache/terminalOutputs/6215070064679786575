@@ -1,0 +1,18 @@
+❯ Building...
+✔ Building...
+Application bundle generation failed. [9.366 seconds] - 2026-03-01T09:52:47.280Z
+
+✘ [ERROR] TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap. [plugin angular-compiler]
+
+    libs/shared/ui/src/lib/error-page/error-page.component.ts:38:8:
+      38 │     if (this.code === 403 || this.code === '403') return this.titl...
+         ╵         ~~~~~~~~~~~~~~~~~
+
+
+✘ [ERROR] TS2367: This comparison appears to be unintentional because the types 'string' and 'number' have no overlap. [plugin angular-compiler]
+
+    libs/shared/ui/src/lib/error-page/error-page.component.ts:42:8:
+      42 │     if (this.code === 403 || this.code === '403') return this.mess...
+         ╵         ~~~~~~~~~~~~~~~~~
+
+

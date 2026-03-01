@@ -22611,6 +22611,11 @@
       },
       {
         "source": "admin-console",
+        "target": "shared-i18n",
+        "type": "static"
+      },
+      {
+        "source": "admin-console",
         "target": "npm:@angular/router",
         "type": "static"
       },
@@ -22647,11 +22652,6 @@
       {
         "source": "admin-console",
         "target": "shared-telemetry",
-        "type": "static"
-      },
-      {
-        "source": "admin-console",
-        "target": "shared-i18n",
         "type": "static"
       },
       {
@@ -23478,6 +23478,11 @@
       {
         "source": "ui",
         "target": "search",
+        "type": "static"
+      },
+      {
+        "source": "ui",
+        "target": "shared-config",
         "type": "static"
       },
       {
@@ -47157,5 +47162,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1772357175770
+  "computedAt": 1772358795673
 }

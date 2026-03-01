@@ -7432,66 +7432,6 @@
       "libs/shared/http/eslint.config.mjs",
       "@nx/eslint/plugin"
     ],
-    "targets.test": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.options": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.cache": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.inputs": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.outputs": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.executor": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.options.cwd": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.options.command": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.technologies": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.technologies.0": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.description": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.help": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.help.command": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
-    "targets.test.metadata.help.example": [
-      "libs/shared/http/vite.config.mts",
-      "@nx/vite/plugin"
-    ],
     "targets.typecheck": [
       "libs/shared/http/vite.config.mts",
       "@nx/vite/plugin"
@@ -7680,6 +7620,30 @@
       "libs/shared/http/project.json",
       "nx/core/project-json"
     ],
+    "targets.test": [
+      "libs/shared/http/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.executor": [
+      "libs/shared/http/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.outputs": [
+      "libs/shared/http/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options": [
+      "libs/shared/http/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options.reportsDirectory": [
+      "libs/shared/http/project.json",
+      "nx/core/project-json"
+    ],
+    "targets.test.options.passWithNoTests": [
+      "libs/shared/http/project.json",
+      "nx/core/project-json"
+    ],
     "targets.lint.cache": [
       "nx.json",
       "nx/target-defaults"
@@ -7689,6 +7653,18 @@
       "nx/target-defaults"
     ],
     "targets.lint.parallelism": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.cache": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.inputs": [
+      "nx.json",
+      "nx/target-defaults"
+    ],
+    "targets.test.parallelism": [
       "nx.json",
       "nx/target-defaults"
     ]

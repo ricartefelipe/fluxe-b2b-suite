@@ -33,23 +33,23 @@ import { MatIconModule } from '@angular/material/icon';
       height: 14px;
     }
     .chip-active, .chip-paid, .chip-confirmed, .chip-success, .chip-allow, .chip-in {
-      background: #e8f5e9;
-      color: #2e7d32;
+      background: var(--app-chip-allow-bg);
+      color: var(--app-chip-allow-text);
     }
     .chip-suspended, .chip-cancelled, .chip-failed, .chip-denied, .chip-error, .chip-deny {
-      background: #ffebee;
-      color: #c62828;
+      background: var(--app-chip-deny-bg);
+      color: var(--app-chip-deny-text);
     }
     .chip-pending, .chip-reserved, .chip-out {
-      background: #fff3e0;
-      color: #e65100;
+      background: var(--app-chip-warn-bg, #fff3e0);
+      color: var(--app-chip-warn-text, #e65100);
     }
     .chip-draft, .chip-adjustment {
-      background: #eceff1;
-      color: #546e7a;
+      background: var(--app-surface-variant);
+      color: var(--app-text-secondary);
     }
-    .chip-credit { background: #e8f5e9; color: #2e7d32; }
-    .chip-debit { background: #fce4ec; color: #c62828; }
+    .chip-credit { background: var(--app-chip-allow-bg); color: var(--app-chip-allow-text); }
+    .chip-debit { background: var(--app-chip-deny-bg); color: var(--app-chip-deny-text); }
   `],
 })
 export class StatusChipComponent {

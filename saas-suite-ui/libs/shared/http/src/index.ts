@@ -1,4 +1,5 @@
 export * from './lib/models/problem-details.model';
+export * from './lib/models/page-response';
 export * from './lib/services/correlation-context.service';
 export * from './lib/services/tenant-context-ref.service';
 export * from './lib/interceptors/auth.interceptor';

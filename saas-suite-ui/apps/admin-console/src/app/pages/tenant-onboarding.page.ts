@@ -639,8 +639,8 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
       gap: 12px;
       margin-top: 16px;
       padding: 16px;
-      background: #fef2f2;
-      color: #dc2626;
+      background: var(--app-chip-deny-bg);
+      color: var(--app-chip-deny-text);
       border-radius: 8px;
     }
 
@@ -656,7 +656,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
       font-size: 80px;
       width: 80px;
       height: 80px;
-      color: #16a34a;
+      color: var(--app-chip-allow-text);
       animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .success-title {

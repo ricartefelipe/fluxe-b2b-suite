@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { StatusChipComponent, EmptyStateComponent } from '@saas-suite/shared/ui';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { OrdersFacade, OrderStatus } from '@saas-suite/data-access/orders';
 import { formatDateTime } from '@saas-suite/shared/util';
 
@@ -22,26 +23,26 @@ import { formatDateTime } from '@saas-suite/shared/util';
   ],
   template: `
     <div class="page-header">
-      <h1>Pedidos</h1>
+      <h1>{{ i18n.messages().orders.orderList }}</h1>
       <button mat-raised-button color="primary" (click)="router.navigate(['/orders/new'])">
-        <mat-icon>add</mat-icon> Novo Pedido
+        <mat-icon>add</mat-icon> {{ i18n.messages().orders.createOrder }}
       </button>
     </div>
 
     <div class="filters">
       <mat-form-field appearance="outline">
-        <mat-label>Status</mat-label>
+        <mat-label>{{ i18n.messages().common.status }}</mat-label>
         <mat-select [(ngModel)]="filterStatus" (ngModelChange)="search()">
-          <mat-option [value]="undefined">Todos</mat-option>
-          <mat-option value="DRAFT">Draft</mat-option>
-          <mat-option value="RESERVED">Reservado</mat-option>
-          <mat-option value="CONFIRMED">Confirmado</mat-option>
-          <mat-option value="PAID">Pago</mat-option>
-          <mat-option value="CANCELLED">Cancelado</mat-option>
+          <mat-option [value]="undefined">{{ i18n.messages().common.all }}</mat-option>
+          <mat-option value="DRAFT">{{ i18n.messages().orders.draft }}</mat-option>
+          <mat-option value="RESERVED">{{ i18n.messages().orders.reserved }}</mat-option>
+          <mat-option value="CONFIRMED">{{ i18n.messages().orders.confirmed }}</mat-option>
+          <mat-option value="PAID">{{ i18n.messages().orders.paid }}</mat-option>
+          <mat-option value="CANCELLED">{{ i18n.messages().orders.cancelled }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Cliente ID</mat-label>
+        <mat-label>{{ i18n.messages().orders.customerId }}</mat-label>
         <input matInput [(ngModel)]="filterCustomer" (ngModelChange)="search()">
       </mat-form-field>
     </div>
@@ -49,27 +50,27 @@ import { formatDateTime } from '@saas-suite/shared/util';
     @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
 
     @if (facade.orders().length === 0 && !facade.loading()) {
-      <saas-empty-state icon="receipt_long" title="Nenhum pedido encontrado" />
+      <saas-empty-state icon="receipt_long" [title]="i18n.messages().orders.noOrdersFound" />
     } @else {
       <table mat-table [dataSource]="facade.orders()" class="full-width">
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.id }}</th>
           <td mat-cell *matCellDef="let o"><code>{{ o.id.substring(0, 8) }}</code></td>
         </ng-container>
         <ng-container matColumnDef="customerId">
-          <th mat-header-cell *matHeaderCellDef>Cliente</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().orders.customer }}</th>
           <td mat-cell *matCellDef="let o">{{ o.customerId }}</td>
         </ng-container>
         <ng-container matColumnDef="totalAmount">
-          <th mat-header-cell *matHeaderCellDef>Total</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().orders.orderTotal }}</th>
           <td mat-cell *matCellDef="let o">{{ o.currency }} {{ o.totalAmount | number:'1.2-2' }}</td>
         </ng-container>
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.status }}</th>
           <td mat-cell *matCellDef="let o"><saas-status-chip [status]="o.status" /></td>
         </ng-container>
         <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef>Data</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.date }}</th>
           <td mat-cell *matCellDef="let o">{{ fmtDate(o.createdAt) }}</td>
         </ng-container>
         <ng-container matColumnDef="actions">
@@ -87,12 +88,12 @@ import { formatDateTime } from '@saas-suite/shared/util';
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .filters { display: flex; gap: 12px; margin-bottom: 16px; }
     .full-width { width: 100%; }
-    code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
   `],
 })
 export class OrdersListPage implements OnInit {
   protected facade = inject(OrdersFacade);
   protected router = inject(Router);
+  protected i18n = inject(I18nService);
   filterStatus?: OrderStatus;
   filterCustomer?: string;
   columns = ['id', 'customerId', 'totalAmount', 'status', 'createdAt', 'actions'];

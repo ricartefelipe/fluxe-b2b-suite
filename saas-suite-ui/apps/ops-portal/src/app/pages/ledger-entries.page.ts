@@ -39,7 +39,11 @@ import { formatDateTime } from '@saas-suite/shared/util';
     @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
 
     @if (facade.entries().length === 0 && !facade.loading()) {
-      <saas-empty-state icon="account_balance" title="Nenhum lançamento encontrado" />
+      <saas-empty-state
+        icon="account_balance"
+        title="Nenhum lançamento encontrado"
+        subtitle="Altere o período ou aguarde lançamentos gerados pelos pagamentos."
+      />
     } @else {
       <table mat-table [dataSource]="facade.entries()" class="full-width">
         <ng-container matColumnDef="createdAt">

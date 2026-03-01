@@ -1,0 +1,43 @@
+❯ Building...
+✔ Building...
+Initial chunk files | Names                  |  Raw size | Estimated transfer size
+chunk-VTE6ZFE5.js   | -                      | 534.78 kB |               110.68 kB
+chunk-FH6QPE2W.js   | -                      | 172.08 kB |                50.39 kB
+chunk-ACS36AAN.js   | -                      | 141.67 kB |                30.75 kB
+styles-3PALIJU6.css | styles                 |  17.99 kB |                 2.31 kB
+main-GAOYZZP4.js    | main                   |   5.66 kB |                 2.00 kB
+chunk-A3RUBXP5.js   | -                      | 793 bytes |               793 bytes
+chunk-7CGTOI24.js   | -                      | 618 bytes |               618 bytes
+
+                    | Initial total          | 873.59 kB |               197.54 kB
+
+Lazy chunk files    | Names                  |  Raw size | Estimated transfer size
+chunk-QIIKEJ6O.js   | tenant-onboarding-page |  84.54 kB |                17.13 kB
+chunk-GWE2IRT4.js   | browser                |  67.78 kB |                17.82 kB
+chunk-3B6HI3ZI.js   | -                      |  39.70 kB |                 8.51 kB
+chunk-VBEFLSVJ.js   | -                      |  33.58 kB |                 6.05 kB
+chunk-YN7XVWVP.js   | -                      |  24.90 kB |                 4.33 kB
+chunk-BCWLDJ7M.js   | -                      |  11.03 kB |                 2.46 kB
+chunk-XWBYNWQV.js   | tenants-list-page      |   7.67 kB |                 2.26 kB
+chunk-Q43BP7DE.js   | tenant-detail-page     |   7.28 kB |                 2.21 kB
+chunk-KY4CRLGI.js   | policies-list-page     |   6.45 kB |                 2.14 kB
+chunk-EYXUTFCH.js   | flags-list-page        |   6.41 kB |                 2.10 kB
+chunk-LXB4EFRX.js   | web-vitals             |   5.69 kB |                 2.13 kB
+chunk-IERRSCLH.js   | audit-list-page        |   5.50 kB |                 1.84 kB
+chunk-O4KHDK5U.js   | admin-shell-component  |   1.01 kB |                 1.01 kB
+chunk-K2K33W42.js   | index                  | 630 bytes |               630 bytes
+chunk-KQJPFOKC.js   | index                  | 391 bytes |               391 bytes
+
+Application bundle generation complete. [7.507 seconds] - 2026-03-01T07:49:39.657Z
+
+▲ [WARNING] bundle initial exceeded maximum budget. Budget 500.00 kB was not met by 373.59 kB with a total of 873.59 kB.
+
+
+▲ [WARNING] angular:styles/component:scss;b6e62bf13049f7c137962d2f99156ce12d40c87fc7a5027243c64a27701543b4;/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/libs/shared/auth/src/lib/dev-auth/dev-login.component.ts exceeded maximum budget. Budget 4.00 kB was not met by 197 bytes with a total of 4.20 kB.
+
+
+▲ [WARNING] angular:styles/component:scss;7fdb1c6181279d879db89bc87638f7913e5efbec157fafd9cab167782a739754;/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/admin-console/src/app/pages/tenant-onboarding.page.ts exceeded maximum budget. Budget 4.00 kB was not met by 910 bytes with a total of 4.91 kB.
+
+
+Output location: /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/dist/apps/admin-console
+

@@ -10,8 +10,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
-import { OrdersFacade, Order, OrderStatus } from '@saas-suite/data-access/orders';
+import { OrdersFacade, OrderStatus } from '@saas-suite/data-access/orders';
 import { TenantContextService } from '@saas-suite/shared/http';
+import { EmptyStateComponent } from '@saas-suite/shared/ui';
 
 const DEMO_TENANTS = [
   { id: '00000000-0000-0000-0000-000000000001', name: 'Tenant A' },
@@ -48,6 +49,7 @@ function statusColorClass(status: OrderStatus): string {
     MatDividerModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    EmptyStateComponent,
   ],
   template: `
     <div class="orders-container">
@@ -79,15 +81,14 @@ function statusColorClass(status: OrderStatus): string {
           <p>Loading orders...</p>
         </div>
       } @else if (facade.orders().length === 0) {
-        <div class="empty-state">
-          <mat-icon class="empty-icon">receipt_long</mat-icon>
-          <h2>No orders yet</h2>
-          <p>Your order history will appear here once you place an order.</p>
-          <a mat-flat-button routerLink="/checkout">
-            <mat-icon>shopping_cart</mat-icon>
-            Go to Checkout
-          </a>
-        </div>
+        <saas-empty-state
+          icon="receipt_long"
+          title="No orders yet"
+          subtitle="Your order history will appear here once you place an order."
+          actionLabel="Browse Products"
+          actionRouterLink="/products"
+          actionIcon="storefront"
+        />
       } @else {
         <div class="orders-grid">
           @for (order of facade.orders(); track order.id) {
@@ -162,31 +163,6 @@ function statusColorClass(status: OrderStatus): string {
       padding: 60px 0;
       gap: 16px;
       color: var(--shop-text-secondary);
-    }
-
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 80px 24px;
-      text-align: center;
-      gap: 12px;
-    }
-
-    .empty-icon {
-      font-size: 64px;
-      width: 64px;
-      height: 64px;
-      color: #b0bec5;
-    }
-
-    .empty-state h2 {
-      margin-top: 8px;
-    }
-
-    .empty-state p {
-      color: var(--shop-text-secondary);
-      margin-bottom: 12px;
     }
 
     .orders-grid {

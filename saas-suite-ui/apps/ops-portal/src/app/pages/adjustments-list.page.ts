@@ -46,7 +46,13 @@ import { formatDateTime } from '@saas-suite/shared/util';
     @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
 
     @if (facade.adjustments().length === 0 && !facade.loading()) {
-      <saas-empty-state icon="inventory_2" title="Nenhum ajuste encontrado" />
+      <saas-empty-state
+        icon="inventory_2"
+        title="Nenhum ajuste encontrado"
+        subtitle="Crie um ajuste de entrada, saída ou correção para registrar movimentações no estoque."
+        actionLabel="Novo Ajuste"
+        actionRouterLink="/inventory/adjustments/new"
+      />
     } @else {
       <table mat-table [dataSource]="facade.adjustments()" class="full-width">
         <ng-container matColumnDef="createdAt">

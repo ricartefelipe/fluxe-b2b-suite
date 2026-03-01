@@ -10,7 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
-import { StatusChipComponent, ConfirmDialogComponent } from '@saas-suite/shared/ui';
+import { StatusChipComponent, ConfirmDialogComponent, PlanChipComponent } from '@saas-suite/shared/ui';
 import { TenantsFacade, Tenant, TenantPlan } from '@saas-suite/data-access/core';
 import { CoreApiClient } from '@saas-suite/data-access/core';
 import { firstValueFrom } from 'rxjs';
@@ -21,7 +21,7 @@ import { firstValueFrom } from 'rxjs';
   imports: [
     FormsModule, MatCardModule, MatButtonModule, MatFormFieldModule,
     MatInputModule, MatSelectModule, MatIconModule, MatProgressBarModule,
-    MatSnackBarModule, MatDialogModule, StatusChipComponent,
+    MatSnackBarModule, MatDialogModule, StatusChipComponent, PlanChipComponent,
   ],
   template: `
     @if (loading()) { <mat-progress-bar mode="indeterminate" /> }
@@ -64,7 +64,10 @@ import { firstValueFrom } from 'rxjs';
       <div class="page-header">
         <div>
           <h1>{{ tenant()!.name }}</h1>
-          <saas-status-chip [status]="tenant()!.status" />
+          <div class="header-chips">
+            <saas-status-chip [status]="tenant()!.status" />
+            <saas-plan-chip [plan]="tenant()!.plan" />
+          </div>
         </div>
         <div class="actions">
           <button mat-stroked-button (click)="goBack()"><mat-icon>arrow_back</mat-icon> Voltar</button>
@@ -108,10 +111,13 @@ import { firstValueFrom } from 'rxjs';
     }
   `,
   styles: [`
-    .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
-    .page-header h1 { margin: 0 12px 0 0; display: inline; }
+    .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+    .page-header h1 { margin: 0 12px 0 0; font-size: 24px; font-weight: 600; color: var(--app-text, #263238); }
+    .header-chips { display: flex; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
     .actions { display: flex; gap: 8px; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+    mat-card { border-radius: 12px; }
+    mat-card-content { padding: 20px !important; }
   `],
 })
 export class TenantDetailPage implements OnInit {

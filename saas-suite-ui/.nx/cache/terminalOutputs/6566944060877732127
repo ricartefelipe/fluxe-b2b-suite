@@ -1,0 +1,36 @@
+❯ Building...
+✔ Building...
+Initial chunk files | Names                  |  Raw size | Estimated transfer size
+chunk-PGE5JDHW.js   | -                      | 539.12 kB |               112.84 kB
+chunk-TK3W5WLC.js   | -                      | 172.29 kB |                50.41 kB
+chunk-VPEMFNRV.js   | -                      | 140.44 kB |                30.80 kB
+styles-73AGX3DL.css | styles                 |  19.86 kB |                 2.74 kB
+main-VAYEO42K.js    | main                   |   6.47 kB |                 2.17 kB
+chunk-4RWC5NSH.js   | -                      |   3.24 kB |               795 bytes
+chunk-32OKGQUP.js   | -                      | 793 bytes |               793 bytes
+chunk-7CGTOI24.js   | -                      | 618 bytes |               618 bytes
+
+                    | Initial total          | 882.84 kB |               201.16 kB
+
+Lazy chunk files    | Names                  |  Raw size | Estimated transfer size
+chunk-HKOYQ7P5.js   | browser                |  67.78 kB |                17.80 kB
+chunk-7ERPBGS7.js   | dashboard-page         |  41.95 kB |                 8.67 kB
+chunk-NHODZJHA.js   | -                      |  39.70 kB |                 8.52 kB
+chunk-PSOUL6XE.js   | -                      |  11.03 kB |                 2.46 kB
+chunk-VNYSNE75.js   | order-detail-page      |   6.15 kB |                 2.11 kB
+chunk-NYF6DD6P.js   | orders-list-page       |   6.09 kB |                 1.92 kB
+chunk-LXB4EFRX.js   | web-vitals             |   5.69 kB |                 2.13 kB
+chunk-KHIAJBHO.js   | payments-list-page     |   5.35 kB |                 1.87 kB
+chunk-Y6A2NT3Z.js   | adjustments-list-page  |   4.88 kB |                 1.76 kB
+chunk-IT5Z73YI.js   | ledger-entries-page    |   4.57 kB |                 1.68 kB
+chunk-HCVJLSYX.js   | order-create-page      |   4.33 kB |                 1.58 kB
+chunk-TNRAJA36.js   | ledger-balances-page   |   3.15 kB |                 1.33 kB
+chunk-SWHIV5QL.js   | adjustment-create-page |   3.11 kB |                 1.23 kB
+chunk-2DDLLXMB.js   | ops-shell-component    |   1.26 kB |               559 bytes
+chunk-PC7GZO6A.js   | index                  | 658 bytes |               658 bytes
+...and 1 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [12.375 seconds] - 2026-03-01T08:50:40.964Z
+
+Output location: /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/dist/apps/ops-portal
+

@@ -1,0 +1,10 @@
+
+Linting "shop-performance"...
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/libs/shop/performance/src/lib/preload-strategy.ts
+  3:22  warning  'EMPTY' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 1 problem (0 errors, 1 warning)
+
+✖ 1 problem (0 errors, 1 warning)
+

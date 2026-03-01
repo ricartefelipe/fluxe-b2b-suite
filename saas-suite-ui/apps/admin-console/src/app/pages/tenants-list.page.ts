@@ -10,7 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
-import { StatusChipComponent, EmptyStateComponent } from '@saas-suite/shared/ui';
+import { StatusChipComponent, EmptyStateComponent, PlanChipComponent } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantsFacade, Tenant, TenantStatus, TenantPlan } from '@saas-suite/data-access/core';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
@@ -22,7 +22,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
   imports: [
     MatTableModule, MatButtonModule, MatIconModule, MatProgressBarModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatChipsModule,
-    MatDialogModule, FormsModule, StatusChipComponent, EmptyStateComponent,
+    MatDialogModule, FormsModule, StatusChipComponent, EmptyStateComponent, PlanChipComponent,
   ],
   template: `
     <div class="page-header">
@@ -60,7 +60,13 @@ import { formatDateTime } from '@saas-suite/shared/util';
     @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
 
     @if (facade.tenants().length === 0 && !facade.loading()) {
-      <saas-empty-state icon="business" [title]="i18n.messages().tenant.noTenantsFound" />
+      <saas-empty-state
+        icon="business"
+        [title]="i18n.messages().tenant.noTenantsFound"
+        [subtitle]="i18n.messages().tenant.noTenantsFoundSubtitle"
+        [actionLabel]="i18n.messages().tenant.newTenant"
+        actionRouterLink="/onboarding"
+      />
     } @else {
       <table mat-table [dataSource]="facade.tenants()" class="full-width">
         <ng-container matColumnDef="name">
@@ -73,7 +79,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
         </ng-container>
         <ng-container matColumnDef="plan">
           <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().tenant.tenantPlan }}</th>
-          <td mat-cell *matCellDef="let t">{{ t.plan }}</td>
+          <td mat-cell *matCellDef="let t"><saas-plan-chip [plan]="t.plan" /></td>
         </ng-container>
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.status }}</th>
@@ -96,11 +102,15 @@ import { formatDateTime } from '@saas-suite/shared/util';
     }
   `,
   styles: [`
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .filters { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-    .filters mat-form-field { min-width: 180px; }
-    .full-width { width: 100%; }
-    .clickable-row:hover { background: rgba(0,0,0,.04); }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+    .page-header h1 { font-size: 26px; font-weight: 600; color: var(--app-text, #263238); margin: 0; }
+    .filters { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; padding: 16px; background: var(--app-surface-variant, #f8fafc); border-radius: 12px; }
+    .filters mat-form-field { min-width: 200px; }
+    .full-width { width: 100%; border-radius: 12px; overflow: hidden; }
+    table.mat-mdc-table { background: var(--app-surface, #fff); }
+    .clickable-row { cursor: pointer; }
+    .clickable-row:hover { background: var(--app-hover, rgba(0,0,0,.04)); }
+    td code { font-size: 12px; background: var(--app-code-bg, #eef2f7); padding: 4px 10px; border-radius: 6px; color: var(--app-primary, #1565c0); }
   `],
 })
 export class TenantsListPage implements OnInit {

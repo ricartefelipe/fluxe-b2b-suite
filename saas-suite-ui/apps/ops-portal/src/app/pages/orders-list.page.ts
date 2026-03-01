@@ -50,7 +50,12 @@ import { formatDateTime } from '@saas-suite/shared/util';
     @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
 
     @if (facade.orders().length === 0 && !facade.loading()) {
-      <saas-empty-state icon="receipt_long" [title]="i18n.messages().orders.noOrdersFound" />
+      <saas-empty-state
+        icon="receipt_long"
+        [title]="i18n.messages().orders.noOrdersFound"
+        [actionLabel]="i18n.messages().orders.createOrder"
+        actionRouterLink="/orders/new"
+      />
     } @else {
       <table mat-table [dataSource]="facade.orders()" class="full-width">
         <ng-container matColumnDef="id">

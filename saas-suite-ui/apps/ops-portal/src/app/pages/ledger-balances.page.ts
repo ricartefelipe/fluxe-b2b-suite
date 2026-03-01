@@ -21,7 +21,11 @@ import { formatDateTime } from '@saas-suite/shared/util';
     @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
 
     @if (facade.balances().length === 0 && !facade.loading()) {
-      <saas-empty-state icon="balance" title="Nenhum balanço disponível" />
+      <saas-empty-state
+        icon="balance"
+        title="Nenhum balanço disponível"
+        subtitle="Os saldos por moeda serão exibidos após existirem lançamentos no ledger."
+      />
     } @else {
       <div class="balances-grid">
         @for (b of facade.balances(); track b.currency) {

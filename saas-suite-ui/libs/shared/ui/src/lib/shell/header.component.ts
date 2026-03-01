@@ -12,7 +12,9 @@ import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantSwitcherComponent } from '../tenant-switcher/tenant-switcher.component';
 import { ThemeToggleComponent } from '../theme/theme-toggle.component';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
+/* eslint-disable-next-line @nx/enforce-module-boundaries -- Shell header needs notifications (type:feature) */
 import { NotificationBellComponent } from '@saas-suite/shared/notifications';
+/* eslint-disable-next-line @nx/enforce-module-boundaries -- Shell header needs search trigger (type:feature) */
 import { SearchTriggerComponent } from '@saas-suite/shared/search';
 
 @Component({

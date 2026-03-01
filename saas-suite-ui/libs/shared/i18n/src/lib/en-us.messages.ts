@@ -82,6 +82,7 @@ export const EN_US_MESSAGES: Messages = {
     planEnterprise: 'Enterprise',
     createdAt: 'Created at',
     noTenantsFound: 'No tenants found',
+    noTenantsFoundSubtitle: 'Use onboarding to register the first tenant.',
   },
   orders: {
     orderList: 'Orders',

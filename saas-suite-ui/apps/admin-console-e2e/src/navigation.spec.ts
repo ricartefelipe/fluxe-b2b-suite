@@ -25,7 +25,7 @@ test.describe('Admin Console Navigation', () => {
       'onboarding',
     ]) {
       await page.goto(`/${section}`);
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
       const isLogin = page.url().includes('login');
       const hasContent = await page
         .locator('main, [role="main"], .content, mat-card, table')

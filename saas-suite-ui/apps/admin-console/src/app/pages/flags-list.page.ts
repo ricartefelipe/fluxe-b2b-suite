@@ -53,7 +53,13 @@ import { TenantContextStore } from '@saas-suite/domains/tenancy';
       @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
 
       @if (facade.flags().length === 0 && !facade.loading()) {
-        <saas-empty-state icon="flag" title="Nenhuma flag encontrada para este tenant" />
+        <saas-empty-state
+          icon="flag"
+          title="Nenhuma flag encontrada para este tenant"
+          subtitle="Crie feature flags para habilitar ou desabilitar funcionalidades por tenant."
+          actionLabel="Nova Flag"
+          (action)="showForm = true"
+        />
       } @else {
         <table mat-table [dataSource]="facade.flags()" class="full-width">
           <ng-container matColumnDef="name">

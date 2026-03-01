@@ -49,7 +49,11 @@ import { formatDateTime } from '@saas-suite/shared/util';
     @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
 
     @if (facade.logs().length === 0 && !facade.loading()) {
-      <saas-empty-state icon="history" title="Nenhum registro de audit encontrado" />
+      <saas-empty-state
+        icon="history"
+        title="Nenhum registro de audit encontrado"
+        subtitle="Os registros aparecem conforme as ações sensíveis são realizadas na plataforma."
+      />
     } @else {
       <table mat-table [dataSource]="facade.logs()" class="full-width">
         <ng-container matColumnDef="createdAt">

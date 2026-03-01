@@ -2485,13 +2485,13 @@
                 "budgets": [
                   {
                     "type": "initial",
-                    "maximumWarning": "500kb",
-                    "maximumError": "1mb"
+                    "maximumWarning": "900kb",
+                    "maximumError": "1.5mb"
                   },
                   {
                     "type": "anyComponentStyle",
-                    "maximumWarning": "4kb",
-                    "maximumError": "8kb"
+                    "maximumWarning": "6kb",
+                    "maximumError": "10kb"
                   }
                 ],
                 "outputHashing": "all",
@@ -4372,8 +4372,8 @@
                   },
                   {
                     "type": "anyComponentStyle",
-                    "maximumWarning": "4kb",
-                    "maximumError": "8kb"
+                    "maximumWarning": "6kb",
+                    "maximumError": "10kb"
                   }
                 ],
                 "outputHashing": "all",
@@ -5478,13 +5478,13 @@
                 "budgets": [
                   {
                     "type": "initial",
-                    "maximumWarning": "500kb",
-                    "maximumError": "1mb"
+                    "maximumWarning": "900kb",
+                    "maximumError": "1.5mb"
                   },
                   {
                     "type": "anyComponentStyle",
-                    "maximumWarning": "4kb",
-                    "maximumError": "8kb"
+                    "maximumWarning": "6kb",
+                    "maximumError": "10kb"
                   }
                 ],
                 "outputHashing": "all",
@@ -23593,11 +23593,6 @@
       },
       {
         "source": "shop",
-        "target": "npm:@angular/common",
-        "type": "static"
-      },
-      {
-        "source": "shop",
         "target": "npm:@angular/service-worker",
         "type": "static"
       },
@@ -23625,6 +23620,11 @@
         "source": "shop",
         "target": "feature-product-detail",
         "type": "dynamic"
+      },
+      {
+        "source": "shop",
+        "target": "npm:@angular/common",
+        "type": "static"
       },
       {
         "source": "shop",
@@ -47157,5 +47157,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1772322041701
+  "computedAt": 1772357175770
 }

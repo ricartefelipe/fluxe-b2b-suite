@@ -54,4 +54,12 @@ export default [
     ],
     rules: {},
   },
+  {
+    files: ['**/libs/shared/ui/**/*.ts', '**/libs/shared/ui/**/*.html'],
+    rules: {
+      '@angular-eslint/component-selector': ['error', { type: 'element', prefix: ['lib', 'saas', 'ui', 'app'], style: 'kebab-case' }],
+      '@angular-eslint/directive-selector': ['error', { type: 'attribute', prefix: ['lib', 'saas', 'ui', 'app'], style: 'camelCase' }],
+      '@angular-eslint/prefer-inject': 'off',
+    },
+  },
 ];

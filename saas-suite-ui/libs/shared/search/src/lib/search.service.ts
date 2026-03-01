@@ -6,10 +6,11 @@ import { catchError, debounceTime, map, switchMap } from 'rxjs/operators';
 import { CoreApiClient, Tenant, AuditLog } from '@saas-suite/data-access/core';
 import { OrdersApiClient, Order, InventoryItem } from '@saas-suite/data-access/orders';
 import { PaymentsApiClient, PaymentIntent } from '@saas-suite/data-access/payments';
+/* eslint-disable @nx/enforce-module-boundaries -- Search is used by ops/admin apps which need product search; ProductsService is scope:api. */
 import { ProductsService } from '@union.solutions/api/products';
 import { Product } from '@union.solutions/models';
 
-import { SearchResult, SearchEntityType, SearchConfig } from './search.model';
+import { SearchResult, SearchConfig } from './search.model';
 import { SEARCH_CONFIG, DEFAULT_SEARCH_CONFIG } from './provide-search';
 
 @Injectable({ providedIn: 'root' })

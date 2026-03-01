@@ -43,7 +43,11 @@ import { formatDateTime } from '@saas-suite/shared/util';
     @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
 
     @if (facade.payments().length === 0 && !facade.loading()) {
-      <saas-empty-state icon="payments" title="Nenhum pagamento encontrado" />
+      <saas-empty-state
+        icon="payments"
+        title="Nenhum pagamento encontrado"
+        subtitle="Os pagamentos vinculados aos pedidos aparecerão aqui."
+      />
     } @else {
       <table mat-table [dataSource]="facade.payments()" class="full-width">
         <ng-container matColumnDef="id">

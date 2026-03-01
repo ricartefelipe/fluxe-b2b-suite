@@ -1,0 +1,24 @@
+> eslint .
+
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/admin-console-e2e/src/login-flow.spec.ts
+  14:3  warning  Test has no assertions              playwright/expect-expect
+  22:5  warning  Avoid having conditionals in tests  playwright/no-conditional-in-test
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/admin-console-e2e/src/navigation.spec.ts
+  42:5  warning  Avoid having conditionals in tests  playwright/no-conditional-in-test
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/admin-console-e2e/src/onboarding-wizard.spec.ts
+  23:5  warning  Avoid having conditionals in tests     playwright/no-conditional-in-test
+  24:7  warning  Avoid calling `expect` conditionally`  playwright/no-conditional-expect
+  33:5  warning  Avoid having conditionals in tests     playwright/no-conditional-in-test
+  45:5  warning  Avoid having conditionals in tests     playwright/no-conditional-in-test
+  52:7  warning  Avoid calling `expect` conditionally`  playwright/no-conditional-expect
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/admin-console-e2e/src/tenants-management.spec.ts
+  17:3  warning  Test has no assertions              playwright/expect-expect
+  29:5  warning  Avoid having conditionals in tests  playwright/no-conditional-in-test
+  29:9  warning  Avoid having conditionals in tests  playwright/no-conditional-in-test
+
+✖ 11 problems (0 errors, 11 warnings)
+

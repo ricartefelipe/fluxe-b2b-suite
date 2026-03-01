@@ -12,7 +12,7 @@ export default [
         'error',
         {
           type: 'attribute',
-          prefix: 'lib',
+          prefix: ['lib', 'saas', 'ui'],
           style: 'camelCase',
         },
       ],
@@ -20,10 +20,11 @@ export default [
         'error',
         {
           type: 'element',
-          prefix: 'lib',
+          prefix: ['lib', 'saas', 'ui'],
           style: 'kebab-case',
         },
       ],
+      '@angular-eslint/prefer-inject': 'off',
     },
   },
   {

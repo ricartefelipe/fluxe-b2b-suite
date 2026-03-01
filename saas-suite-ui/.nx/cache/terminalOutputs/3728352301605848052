@@ -1,0 +1,15 @@
+> eslint .
+
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/shop-e2e/src/checkout-flow.spec.ts
+  29:5  warning  Avoid having conditionals in tests  playwright/no-conditional-in-test
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/shop-e2e/src/product-detail.spec.ts
+  88:5  warning  Avoid having conditionals in tests  playwright/no-conditional-in-test
+
+/home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/apps/shop-e2e/src/product-listing.spec.ts
+   73:11  warning  Unexpected use of page.waitForTimeout()  playwright/no-wait-for-timeout
+  109:5   warning  Avoid having conditionals in tests       playwright/no-conditional-in-test
+
+✖ 4 problems (0 errors, 4 warnings)
+

@@ -82,6 +82,7 @@ export interface Messages {
     planEnterprise: string;
     createdAt: string;
     noTenantsFound: string;
+    noTenantsFoundSubtitle: string;
   };
   orders: {
     orderList: string;

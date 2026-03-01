@@ -1,0 +1,34 @@
+❯ Building...
+✔ Building...
+Initial chunk files | Names                  |  Raw size | Estimated transfer size
+chunk-WIKT7EPP.js   | -                      | 536.63 kB |               110.99 kB
+chunk-FH6QPE2W.js   | -                      | 172.08 kB |                50.39 kB
+chunk-P6TCIG7T.js   | -                      | 141.86 kB |                30.73 kB
+styles-LHQHNPFJ.css | styles                 |  19.15 kB |                 2.53 kB
+main-YOYQ3DXW.js    | main                   |   5.93 kB |                 2.06 kB
+chunk-2RUBMAQP.js   | -                      | 793 bytes |               793 bytes
+chunk-7CGTOI24.js   | -                      | 618 bytes |               618 bytes
+
+                    | Initial total          | 877.06 kB |               198.12 kB
+
+Lazy chunk files    | Names                  |  Raw size | Estimated transfer size
+chunk-NLQVRPTB.js   | tenant-onboarding-page |  84.64 kB |                17.15 kB
+chunk-GWE2IRT4.js   | browser                |  67.78 kB |                17.82 kB
+chunk-HWVKVGPP.js   | -                      |  39.70 kB |                 8.52 kB
+chunk-FRED4L4H.js   | -                      |  33.59 kB |                 6.04 kB
+chunk-5K4CCY66.js   | -                      |  24.90 kB |                 4.33 kB
+chunk-RBHIMW2T.js   | -                      |  11.03 kB |                 2.46 kB
+chunk-JZDBA6JX.js   | tenants-list-page      |   7.67 kB |                 2.28 kB
+chunk-FNEOVYYB.js   | tenant-detail-page     |   7.28 kB |                 2.21 kB
+chunk-GHI2IFGM.js   | policies-list-page     |   6.45 kB |                 2.14 kB
+chunk-3CVWTYD5.js   | flags-list-page        |   6.41 kB |                 2.10 kB
+chunk-LXB4EFRX.js   | web-vitals             |   5.69 kB |                 2.13 kB
+chunk-S3EMXW73.js   | audit-list-page        |   5.50 kB |                 1.84 kB
+chunk-LTRYXGOJ.js   | admin-shell-component  |   1.01 kB |                 1.01 kB
+chunk-USIJGN4I.js   | index                  | 630 bytes |               630 bytes
+chunk-X7LIBHMH.js   | index                  | 391 bytes |               391 bytes
+
+Application bundle generation complete. [10.611 seconds] - 2026-03-01T08:00:03.333Z
+
+Output location: /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/dist/apps/admin-console
+

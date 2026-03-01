@@ -82,6 +82,7 @@ export const PT_BR_MESSAGES: Messages = {
     planEnterprise: 'Enterprise',
     createdAt: 'Criado em',
     noTenantsFound: 'Nenhum tenant encontrado',
+    noTenantsFoundSubtitle: 'Use o onboarding para cadastrar o primeiro tenant da plataforma.',
   },
   orders: {
     orderList: 'Pedidos',

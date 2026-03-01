@@ -1,5 +1,6 @@
 import {
   ApplicationConfig,
+  LOCALE_ID,
   isDevMode,
   provideBrowserGlobalErrorListeners,
   provideZoneChangeDetection,
@@ -15,9 +16,8 @@ import {
   provideClientHydration,
   withEventReplay,
 } from '@angular/platform-browser';
-import { provideHttpClient, withFetch } from '@angular/common/http';
-import { provideServiceWorker } from '@angular/service-worker';
 import { appRoutes } from './app.routes';
+import { provideServiceWorker } from '@angular/service-worker';
 import { provideRuntimeConfig } from '@saas-suite/shared/config';
 import { provideHttpLayer } from '@saas-suite/shared/http';
 import { SelectivePreloadStrategy, providePerformanceMonitoring } from '@union.solutions/shop/performance';
@@ -26,6 +26,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideClientHydration(withEventReplay()),
     provideBrowserGlobalErrorListeners(),
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideAnimationsAsync(),
     provideRouter(
@@ -37,9 +38,8 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
       }),
     ),
-    provideHttpClient(withFetch()),
-    provideRuntimeConfig(),
     provideHttpLayer(),
+    provideRuntimeConfig(),
     providePerformanceMonitoring(),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),

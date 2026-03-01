@@ -55,7 +55,13 @@ import { firstValueFrom } from 'rxjs';
     @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
 
     @if (facade.policies().length === 0 && !facade.loading()) {
-      <saas-empty-state icon="policy" title="Nenhuma policy encontrada" />
+      <saas-empty-state
+        icon="policy"
+        title="Nenhuma policy encontrada"
+        subtitle="Defina permissões ALLOW ou DENY para controlar acesso por código."
+        actionLabel="Nova Policy"
+        (action)="showForm = true"
+      />
     } @else {
       <table mat-table [dataSource]="facade.policies()" class="full-width">
         <ng-container matColumnDef="permissionCode">

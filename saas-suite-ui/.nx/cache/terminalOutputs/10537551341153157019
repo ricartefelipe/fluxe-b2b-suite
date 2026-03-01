@@ -1,0 +1,11 @@
+❯ Building...
+✔ Building...
+Application bundle generation failed. [9.288 seconds] - 2026-03-01T08:17:00.578Z
+
+✘ [ERROR] TS2339: Property 'new' does not exist on type '{ save: string; cancel: string; confirm: string; delete: string; loading: string; noData: string; search: string; filter: string; create: string; edit: string; back: string; next: string; previous: string; ... 19 more ...; id: string; }'. [plugin angular-compiler]
+
+    libs/shared/ui/src/lib/empty-state/empty-state.component.ts:23:55:
+      23 │               {{ actionLabel || i18n.messages().common.new }}
+         ╵                                                        ~~~
+
+

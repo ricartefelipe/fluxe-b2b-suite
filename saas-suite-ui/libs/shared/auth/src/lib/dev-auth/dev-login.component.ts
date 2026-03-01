@@ -99,6 +99,7 @@ const DEV_PROFILES: DevProfile[] = [
                 <div class="profile-info">
                   <span class="profile-name">{{ p.label }}</span>
                   <span class="profile-email">{{ p.email }}</span>
+                  <span class="profile-plan">{{ p.plan }}</span>
                 </div>
                 @if (selectedProfile === p) {
                   <mat-icon class="check-icon">check_circle</mat-icon>
@@ -255,6 +256,19 @@ const DEV_PROFILES: DevProfile[] = [
     .profile-info { flex: 1; display: flex; flex-direction: column; min-width: 0; }
     .profile-name { font-weight: 600; font-size: 15px; color: #1e293b; }
     .profile-email { font-size: 12px; color: #64748b; margin-top: 2px; }
+    .profile-plan {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #0d47a1;
+      background: #e3f2fd;
+      padding: 2px 8px;
+      border-radius: 6px;
+      width: fit-content;
+    }
 
     .check-icon { color: #1565c0; flex-shrink: 0; }
 

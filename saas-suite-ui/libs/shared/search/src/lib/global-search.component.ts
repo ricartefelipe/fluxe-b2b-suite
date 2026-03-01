@@ -404,11 +404,21 @@ export class GlobalSearchComponent {
 
   highlightMatch(text: string): string {
     const query = this.searchService.query();
-    if (!query) return text;
-
-    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    if (!query) return this.escapeHtml(text);
+    const safeText = this.escapeHtml(text);
+    const safeQuery = this.escapeHtml(query);
+    const escaped = safeQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(`(${escaped})`, 'gi');
-    return text.replace(regex, '<mark>$1</mark>');
+    return safeText.replace(regex, '<mark>$1</mark>');
+  }
+
+  private escapeHtml(s: string): string {
+    return s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   private selectByIndex(index: number): void {

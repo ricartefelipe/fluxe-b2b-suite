@@ -3,6 +3,7 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
+/* eslint-disable-next-line @nx/enforce-module-boundaries -- circular with shared-auth (AuthStore); see auth.service.ts */
 import { AuthStore } from '@saas-suite/shared/auth';
 import { LoggerService } from '@saas-suite/shared/telemetry';
 import { I18nService } from '@saas-suite/shared/i18n';

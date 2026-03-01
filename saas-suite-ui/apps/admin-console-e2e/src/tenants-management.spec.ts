@@ -28,7 +28,7 @@ test.describe('Tenants Management', () => {
 
     if (isVisible && !page.url().includes('login')) {
       await tenantRow.click();
-      await page.waitForURL(/tenants\/.+/, { timeout: 5000 }).catch(() => {});
+      await page.waitForURL(/tenants\/.+/, { timeout: 5000 }).catch(() => undefined);
     }
   });
 });

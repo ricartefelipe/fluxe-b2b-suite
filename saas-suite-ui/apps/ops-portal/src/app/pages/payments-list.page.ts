@@ -12,6 +12,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DecimalPipe } from '@angular/common';
 import { StatusChipComponent, EmptyStateComponent } from '@saas-suite/shared/ui';
 import { PaymentsFacade, PaymentStatus } from '@saas-suite/data-access/payments';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { formatDateTime } from '@saas-suite/shared/util';
 
 @Component({
@@ -22,21 +23,21 @@ import { formatDateTime } from '@saas-suite/shared/util';
     MatFormFieldModule, MatInputModule, MatSelectModule, MatSnackBarModule, StatusChipComponent, EmptyStateComponent, RouterLink,
   ],
   template: `
-    <div class="page-header"><h1>Pagamentos</h1></div>
+    <div class="page-header"><h1>{{ i18n.messages().payments.paymentList }}</h1></div>
 
     <div class="filters">
       <mat-form-field appearance="outline">
-        <mat-label>Status</mat-label>
+        <mat-label>{{ i18n.messages().common.status }}</mat-label>
         <mat-select [(ngModel)]="filterStatus" (ngModelChange)="search()">
-          <mat-option [value]="undefined">Todos</mat-option>
-          <mat-option value="PENDING">Pendente</mat-option>
-          <mat-option value="CONFIRMED">Confirmado</mat-option>
-          <mat-option value="FAILED">Falhou</mat-option>
-          <mat-option value="CANCELLED">Cancelado</mat-option>
+          <mat-option [value]="undefined">{{ i18n.messages().common.all }}</mat-option>
+          <mat-option value="PENDING">{{ i18n.messages().payments.pending }}</mat-option>
+          <mat-option value="CONFIRMED">{{ i18n.messages().payments.confirmed }}</mat-option>
+          <mat-option value="FAILED">{{ i18n.messages().payments.failed }}</mat-option>
+          <mat-option value="CANCELLED">{{ i18n.messages().orders.cancelled }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Order ID</mat-label>
+        <mat-label>{{ i18n.messages().ops.orderIdLabel }} ID</mat-label>
         <input matInput [(ngModel)]="filterOrder" (ngModelChange)="search()">
       </mat-form-field>
     </div>
@@ -46,36 +47,36 @@ import { formatDateTime } from '@saas-suite/shared/util';
     @if (facade.payments().length === 0 && !facade.loading()) {
       <saas-empty-state
         icon="payments"
-        title="Nenhum pagamento encontrado"
-        subtitle="Os pagamentos vinculados aos pedidos aparecerão aqui."
+        [title]="i18n.messages().ops.noPaymentsFound"
+        [subtitle]="i18n.messages().ops.noPaymentsFoundSubtitle"
       />
     } @else {
       <table mat-table [dataSource]="facade.payments()" class="full-width">
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.id }}</th>
           <td mat-cell *matCellDef="let p"><a [routerLink]="['/payments', p.id]" class="id-link"><code>{{ p.id.substring(0, 8) }}</code></a></td>
         </ng-container>
         <ng-container matColumnDef="orderId">
-          <th mat-header-cell *matHeaderCellDef>Pedido</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().ops.orderIdLabel }}</th>
           <td mat-cell *matCellDef="let p"><code>{{ p.orderId.substring(0, 8) }}</code></td>
         </ng-container>
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef>Valor</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.amount }}</th>
           <td mat-cell *matCellDef="let p">{{ p.currency }} {{ p.amount | number:'1.2-2' }}</td>
         </ng-container>
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.status }}</th>
           <td mat-cell *matCellDef="let p"><saas-status-chip [status]="p.status" /></td>
         </ng-container>
         <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef>Data</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.date }}</th>
           <td mat-cell *matCellDef="let p">{{ fmtDate(p.createdAt) }}</td>
         </ng-container>
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let p">
             @if (p.status === 'PENDING') {
-              <button mat-raised-button color="primary" (click)="confirmPayment(p.id)">Confirmar</button>
+              <button mat-raised-button color="primary" (click)="confirmPayment(p.id)">{{ i18n.messages().common.confirm }}</button>
             }
           </td>
         </ng-container>
@@ -85,8 +86,8 @@ import { formatDateTime } from '@saas-suite/shared/util';
     }
   `,
   styles: [`
-    .page-header { margin-bottom: 16px; }
-    .filters { display: flex; gap: 12px; margin-bottom: 16px; }
+    .page-header { margin-bottom: var(--app-space-16, 16px); }
+    .filters { display: flex; gap: var(--app-space-12, 12px); margin-bottom: var(--app-space-16, 16px); }
     .full-width { width: 100%; }
     .id-link { color: var(--app-primary); text-decoration: none; }
     .id-link:hover { text-decoration: underline; }
@@ -94,6 +95,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
 })
 export class PaymentsListPage implements OnInit {
   protected facade = inject(PaymentsFacade);
+  protected i18n = inject(I18nService);
   private snackBar = inject(MatSnackBar);
   filterStatus?: PaymentStatus;
   filterOrder?: string;
@@ -105,7 +107,7 @@ export class PaymentsListPage implements OnInit {
   }
   async confirmPayment(id: string): Promise<void> {
     const p = await this.facade.confirmPayment(id);
-    if (p) this.snackBar.open('Pagamento confirmado', 'OK', { duration: 2000 });
+    if (p) this.snackBar.open(this.i18n.messages().ops.paymentConfirmedSnackbar, 'OK', { duration: 2000 });
   }
   fmtDate(d: string): string { return formatDateTime(d); }
 }

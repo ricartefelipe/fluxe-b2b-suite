@@ -1,0 +1,43 @@
+❯ Building...
+✔ Building...
+Initial chunk files | Names                  |  Raw size | Estimated transfer size
+chunk-QT3QSOQO.js   | -                      | 547.32 kB |               114.68 kB
+chunk-VWM2CTBY.js   | -                      | 172.44 kB |                50.44 kB
+chunk-WYRGLIAW.js   | -                      | 140.66 kB |                30.91 kB
+styles-73AGX3DL.css | styles                 |  19.86 kB |                 2.74 kB
+main-JKRDOOFG.js    | main                   |   7.95 kB |                 2.75 kB
+chunk-3YKJQ6NY.js   | -                      |   3.24 kB |               792 bytes
+chunk-3THP2LVX.js   | -                      | 793 bytes |               793 bytes
+chunk-7CGTOI24.js   | -                      | 618 bytes |               618 bytes
+
+                    | Initial total          | 892.88 kB |               203.71 kB
+
+Lazy chunk files    | Names                  |  Raw size | Estimated transfer size
+chunk-N6KZUTP4.js   | browser                |  67.78 kB |                17.76 kB
+chunk-LJXB3GW6.js   | dashboard-page         |  43.05 kB |                 8.69 kB
+chunk-AH6LLDM2.js   | -                      |  39.70 kB |                 8.51 kB
+chunk-MLDDUJLE.js   | -                      |  11.03 kB |                 2.45 kB
+chunk-6BZS5MND.js   | order-detail-page      |   6.92 kB |                 2.15 kB
+chunk-SK64CN4W.js   | payments-list-page     |   6.33 kB |                 1.99 kB
+chunk-KM7C6FQK.js   | orders-list-page       |   6.09 kB |                 1.93 kB
+chunk-LXB4EFRX.js   | web-vitals             |   5.69 kB |                 2.13 kB
+chunk-POZWFGOY.js   | adjustments-list-page  |   5.55 kB |                 1.76 kB
+chunk-O6PFFWCK.js   | payment-detail-page    |   5.09 kB |                 1.81 kB
+chunk-RJRMPKT5.js   | ledger-entries-page    |   5.05 kB |                 1.68 kB
+chunk-Y5GLXI43.js   | order-create-page      |   4.90 kB |                 1.63 kB
+chunk-FT2DIVYZ.js   | adjustment-create-page |   3.58 kB |                 1.25 kB
+chunk-2PVYZPDE.js   | ledger-balances-page   |   3.46 kB |                 1.33 kB
+chunk-ALARAMOR.js   | ops-shell-component    |   1.33 kB |               579 bytes
+...and 2 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [13.077 seconds] - 2026-03-01T10:12:12.026Z
+
+▲ [WARNING] NG8113: ConfirmDialogComponent is not used within the template of PaymentDetailPage [plugin angular-compiler]
+
+    apps/ops-portal/src/app/pages/payment-detail.page.ts:30:4:
+      30 │     ConfirmDialogComponent,
+         ╵     ~~~~~~~~~~~~~~~~~~~~~~
+
+
+Output location: /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/dist/apps/ops-portal
+

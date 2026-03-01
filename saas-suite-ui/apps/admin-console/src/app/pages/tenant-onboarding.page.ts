@@ -16,6 +16,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { TenantOnboardingStore, OrgInfo, OnboardingConfig } from '@saas-suite/domains/admin';
 import { TenantPlan } from '@saas-suite/data-access/core';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { PlanChipComponent } from '@saas-suite/shared/ui';
 
 interface PlanOption {
@@ -85,14 +86,14 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
     <div class="onboarding-container">
       <header class="onboarding-header">
         <mat-icon class="header-icon">rocket_launch</mat-icon>
-        <h1>Criar novo tenant</h1>
-        <p>Configure uma nova organização em poucos passos</p>
+        <h1>{{ i18n.messages().onboarding.createNewTenant }}</h1>
+        <p>{{ i18n.messages().onboarding.stepSubtitle }}</p>
       </header>
 
       <mat-stepper linear #stepper class="onboarding-stepper" (selectionChange)="onStepChange($event)">
 
         <!-- Step 1: Organization Info -->
-        <mat-step [stepControl]="orgForm" label="Organização">
+        <mat-step [stepControl]="orgForm" [label]="i18n.messages().onboarding.stepOrg">
           <div class="step-content">
             <h2 class="step-title">Dados da organização</h2>
             <p class="step-subtitle">Informe os dados do novo tenant</p>
@@ -133,7 +134,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
 
             <div class="step-actions">
               <button mat-flat-button color="primary" matStepperNext [disabled]="orgForm.invalid">
-                Continuar
+                {{ i18n.messages().common.next }}
                 <mat-icon iconPositionEnd>arrow_forward</mat-icon>
               </button>
             </div>
@@ -141,7 +142,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
         </mat-step>
 
         <!-- Step 2: Plan Selection -->
-        <mat-step [completed]="selectedPlan() !== null" label="Plano">
+        <mat-step [completed]="selectedPlan() !== null" [label]="i18n.messages().onboarding.planSelection">
           <div class="step-content">
             <h2 class="step-title">Escolha o plano</h2>
             <p class="step-subtitle">Selecione o plano que melhor atende sua operação</p>
@@ -158,7 +159,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
                   (keydown.space)="selectPlan(plan.key)">
 
                   @if (plan.recommended) {
-                    <div class="recommended-badge">Recomendado</div>
+                    <div class="recommended-badge">{{ i18n.messages().onboarding.recommended }}</div>
                   }
 
                   <mat-card-header>
@@ -183,7 +184,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
                   <mat-card-actions align="end">
                     <button mat-stroked-button
                       [color]="selectedPlan() === plan.key ? 'primary' : undefined">
-                      {{ selectedPlan() === plan.key ? 'Selecionado' : 'Selecionar' }}
+                      {{ selectedPlan() === plan.key ? i18n.messages().onboarding.selected : i18n.messages().onboarding.select }}
                     </button>
                   </mat-card-actions>
                 </mat-card>
@@ -193,10 +194,10 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
             <div class="step-actions">
               <button mat-button matStepperPrevious>
                 <mat-icon>arrow_back</mat-icon>
-                Voltar
+                {{ i18n.messages().common.back }}
               </button>
               <button mat-flat-button color="primary" matStepperNext [disabled]="!selectedPlan()">
-                Continuar
+                {{ i18n.messages().common.next }}
                 <mat-icon iconPositionEnd>arrow_forward</mat-icon>
               </button>
             </div>
@@ -204,7 +205,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
         </mat-step>
 
         <!-- Step 3: Configuration -->
-        <mat-step [stepControl]="configForm" label="Configuração">
+        <mat-step [stepControl]="configForm" [label]="i18n.messages().onboarding.configuration">
           <div class="step-content">
             <h2 class="step-title">Configuração inicial</h2>
             <p class="step-subtitle">Feature flags e primeiro administrador</p>
@@ -259,10 +260,10 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
             <div class="step-actions">
               <button mat-button matStepperPrevious>
                 <mat-icon>arrow_back</mat-icon>
-                Voltar
+                {{ i18n.messages().common.back }}
               </button>
               <button mat-flat-button color="primary" matStepperNext [disabled]="configForm.invalid">
-                Revisar
+                {{ i18n.messages().onboarding.review }}
                 <mat-icon iconPositionEnd>arrow_forward</mat-icon>
               </button>
             </div>
@@ -270,7 +271,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
         </mat-step>
 
         <!-- Step 4: Review & Create -->
-        <mat-step label="Revisão" [editable]="!store.submitting()">
+        <mat-step [label]="i18n.messages().onboarding.review" [editable]="!store.submitting()">
           <div class="step-content">
             <h2 class="step-title">Revisar e criar</h2>
             <p class="step-subtitle">Confira os dados antes de criar o tenant</p>
@@ -342,7 +343,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
 
             @if (store.submitting()) {
               <mat-progress-bar mode="determinate" [value]="store.progress()" class="creation-progress" />
-              <p class="progress-text">Criando tenant... {{ store.progress() }}%</p>
+              <p class="progress-text">{{ i18n.messages().onboarding.creating }} {{ store.progress() }}%</p>
             }
 
             @if (store.error()) {
@@ -355,17 +356,17 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
             <div class="step-actions">
               <button mat-button matStepperPrevious [disabled]="store.submitting()">
                 <mat-icon>arrow_back</mat-icon>
-                Voltar
+                {{ i18n.messages().common.back }}
               </button>
               <button mat-flat-button color="primary"
                 [disabled]="store.submitting()"
                 (click)="onSubmit(stepper)">
                 @if (store.submitting()) {
-                  Criando...
+                  {{ i18n.messages().onboarding.creating }}
                 } @else {
                   <ng-container>
                     <mat-icon>check</mat-icon>
-                    Criar tenant
+                    {{ i18n.messages().onboarding.createTenant }}
                   </ng-container>
                 }
               </button>
@@ -374,13 +375,13 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
         </mat-step>
 
         <!-- Step 5: Success -->
-        <mat-step label="Concluído" [editable]="false">
+        <mat-step [label]="i18n.messages().onboarding.completedStep" [editable]="false">
           <div class="step-content success-content">
             <div class="success-icon-wrapper">
               <mat-icon class="success-icon">check_circle</mat-icon>
             </div>
-            <h2 class="success-title">Tenant criado com sucesso!</h2>
-            <p class="success-subtitle">Sua nova organização está pronta para uso</p>
+            <h2 class="success-title">{{ i18n.messages().onboarding.tenantCreatedSuccess }}</h2>
+            <p class="success-subtitle">{{ i18n.messages().onboarding.tenantReadySubtitle }}</p>
 
             @if (store.createdTenant(); as tenant) {
               <mat-card class="success-details">
@@ -408,11 +409,11 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
             <div class="success-actions">
               <button mat-flat-button color="primary" (click)="goToTenant()">
                 <mat-icon>open_in_new</mat-icon>
-                Ir para o tenant
+                {{ i18n.messages().onboarding.goToTenant }}
               </button>
               <button mat-stroked-button (click)="createAnother(stepper)">
                 <mat-icon>add</mat-icon>
-                Criar outro
+                {{ i18n.messages().onboarding.createAnother }}
               </button>
             </div>
           </div>
@@ -740,6 +741,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
 })
 export class TenantOnboardingPage implements OnInit, OnDestroy {
   readonly store = inject(TenantOnboardingStore);
+  readonly i18n = inject(I18nService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
 

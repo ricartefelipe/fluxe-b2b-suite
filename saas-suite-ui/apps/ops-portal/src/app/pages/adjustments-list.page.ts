@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { StatusChipComponent, EmptyStateComponent } from '@saas-suite/shared/ui';
 import { InventoryFacade, AdjustmentType } from '@saas-suite/data-access/orders';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { formatDateTime } from '@saas-suite/shared/util';
 
 @Component({
@@ -21,24 +22,24 @@ import { formatDateTime } from '@saas-suite/shared/util';
   ],
   template: `
     <div class="page-header">
-      <h1>Ajustes de Inventário</h1>
+      <h1>{{ i18n.messages().inventory.adjustments }}</h1>
       <button mat-raised-button color="primary" (click)="router.navigate(['/inventory/adjustments/new'])">
-        <mat-icon>add</mat-icon> Novo Ajuste
+        <mat-icon>add</mat-icon> {{ i18n.messages().inventory.createAdjustment }}
       </button>
     </div>
 
     <div class="filters">
       <mat-form-field appearance="outline">
-        <mat-label>SKU</mat-label>
+        <mat-label>{{ i18n.messages().inventory.sku }}</mat-label>
         <input matInput [(ngModel)]="filterSku" (ngModelChange)="search()">
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Tipo</mat-label>
+        <mat-label>{{ i18n.messages().common.type }}</mat-label>
         <mat-select [(ngModel)]="filterType" (ngModelChange)="search()">
-          <mat-option [value]="undefined">Todos</mat-option>
-          <mat-option value="IN">Entrada</mat-option>
-          <mat-option value="OUT">Saída</mat-option>
-          <mat-option value="ADJUSTMENT">Ajuste</mat-option>
+          <mat-option [value]="undefined">{{ i18n.messages().common.all }}</mat-option>
+          <mat-option value="IN">{{ i18n.messages().ops.adjustmentTypeIn }}</mat-option>
+          <mat-option value="OUT">{{ i18n.messages().ops.adjustmentTypeOut }}</mat-option>
+          <mat-option value="ADJUSTMENT">{{ i18n.messages().ops.adjustmentTypeAdj }}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -48,31 +49,31 @@ import { formatDateTime } from '@saas-suite/shared/util';
     @if (facade.adjustments().length === 0 && !facade.loading()) {
       <saas-empty-state
         icon="inventory_2"
-        title="Nenhum ajuste encontrado"
-        subtitle="Crie um ajuste de entrada, saída ou correção para registrar movimentações no estoque."
-        actionLabel="Novo Ajuste"
+        [title]="i18n.messages().ops.noAdjustmentsFound"
+        [subtitle]="i18n.messages().ops.noAdjustmentsFoundSubtitle"
+        [actionLabel]="i18n.messages().inventory.createAdjustment"
         actionRouterLink="/inventory/adjustments/new"
       />
     } @else {
       <table mat-table [dataSource]="facade.adjustments()" class="full-width">
         <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef>Data</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.date }}</th>
           <td mat-cell *matCellDef="let a">{{ fmtDate(a.createdAt) }}</td>
         </ng-container>
         <ng-container matColumnDef="sku">
-          <th mat-header-cell *matHeaderCellDef>SKU</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().inventory.sku }}</th>
           <td mat-cell *matCellDef="let a"><code>{{ a.sku }}</code></td>
         </ng-container>
         <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef>Tipo</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.type }}</th>
           <td mat-cell *matCellDef="let a"><saas-status-chip [status]="a.type" /></td>
         </ng-container>
         <ng-container matColumnDef="quantity">
-          <th mat-header-cell *matHeaderCellDef>Quantidade</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().inventory.quantity }}</th>
           <td mat-cell *matCellDef="let a">{{ a.quantity }}</td>
         </ng-container>
         <ng-container matColumnDef="reason">
-          <th mat-header-cell *matHeaderCellDef>Motivo</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().inventory.reason }}</th>
           <td mat-cell *matCellDef="let a">{{ a.reason }}</td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
@@ -81,14 +82,15 @@ import { formatDateTime } from '@saas-suite/shared/util';
     }
   `,
   styles: [`
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .filters { display: flex; gap: 12px; margin-bottom: 16px; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--app-space-16, 16px); }
+    .filters { display: flex; gap: var(--app-space-12, 12px); margin-bottom: var(--app-space-16, 16px); }
     .full-width { width: 100%; }
   `],
 })
 export class AdjustmentsListPage implements OnInit {
   protected facade = inject(InventoryFacade);
   protected router = inject(Router);
+  protected i18n = inject(I18nService);
   filterSku?: string;
   filterType?: AdjustmentType;
   columns = ['createdAt', 'sku', 'type', 'quantity', 'reason'];

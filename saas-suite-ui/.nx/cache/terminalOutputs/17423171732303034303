@@ -1,0 +1,36 @@
+❯ Building...
+✔ Building...
+Initial chunk files | Names                  |  Raw size | Estimated transfer size
+chunk-GKGJP27O.js   | -                      | 540.19 kB |               111.94 kB
+chunk-FS6WWE6K.js   | -                      | 172.23 kB |                50.40 kB
+chunk-T72BMDPA.js   | -                      | 137.33 kB |                30.32 kB
+styles-Y3MXJ7TX.css | styles                 |  20.07 kB |                 2.75 kB
+main-FMKHVB6T.js    | main                   |   7.59 kB |                 2.70 kB
+chunk-KBYZ4R6Y.js   | -                      |   6.59 kB |                 1.49 kB
+chunk-ABJ7WX7B.js   | -                      | 793 bytes |               793 bytes
+chunk-7CGTOI24.js   | -                      | 618 bytes |               618 bytes
+
+                    | Initial total          | 885.41 kB |               201.01 kB
+
+Lazy chunk files    | Names                  |  Raw size | Estimated transfer size
+chunk-WO4PMT24.js   | browser                |  67.78 kB |                17.78 kB
+chunk-DY5WQTFA.js   | tenant-onboarding-page |  58.38 kB |                13.81 kB
+chunk-JUQLD7UN.js   | -                      |  39.70 kB |                 8.52 kB
+chunk-UGP2RKBU.js   | -                      |  33.59 kB |                 6.04 kB
+chunk-2WIWRGG5.js   | -                      |  26.73 kB |                 4.34 kB
+chunk-2WHUGKIP.js   | -                      |  24.90 kB |                 4.34 kB
+chunk-5DJ36IT2.js   | -                      |  11.03 kB |                 2.46 kB
+chunk-25ZFJOUI.js   | tenants-list-page      |   7.88 kB |                 2.33 kB
+chunk-KDWW6H2P.js   | policies-list-page     |   7.66 kB |                 2.33 kB
+chunk-5HRR4WVO.js   | flags-list-page        |   7.40 kB |                 2.22 kB
+chunk-TMEQRJN5.js   | tenant-detail-page     |   7.31 kB |                 2.22 kB
+chunk-XISIATH5.js   | dashboard-page         |   6.66 kB |                 1.98 kB
+chunk-7XSKT7UE.js   | audit-list-page        |   6.23 kB |                 1.89 kB
+chunk-A5WNLXKN.js   | policy-detail-page     |   5.71 kB |                 1.99 kB
+chunk-LXB4EFRX.js   | web-vitals             |   5.69 kB |                 2.13 kB
+...and 3 more lazy chunks files. Use "--verbose" to show all the files.
+
+Application bundle generation complete. [8.292 seconds] - 2026-03-01T10:00:41.470Z
+
+Output location: /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/dist/apps/admin-console
+

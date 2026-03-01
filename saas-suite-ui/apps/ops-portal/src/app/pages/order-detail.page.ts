@@ -10,6 +10,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { StatusChipComponent, ConfirmDialogComponent } from '@saas-suite/shared/ui';
 import { OrdersFacade } from '@saas-suite/data-access/orders';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { formatDateTime } from '@saas-suite/shared/util';
 import { firstValueFrom } from 'rxjs';
 
@@ -27,43 +28,43 @@ import { firstValueFrom } from 'rxjs';
     @if (facade.selectedOrder(); as order) {
       <div class="page-header">
         <div>
-          <h1>Pedido <code>{{ order.id.substring(0, 8) }}...</code></h1>
+          <h1>{{ i18n.messages().orders.orderDetail }} <code>{{ order.id.substring(0, 8) }}...</code></h1>
           <saas-status-chip [status]="order.status" />
         </div>
         <div class="actions">
-          <button mat-stroked-button (click)="router.navigate(['/orders'])"><mat-icon>arrow_back</mat-icon> Voltar</button>
+          <button mat-stroked-button (click)="router.navigate(['/orders'])"><mat-icon>arrow_back</mat-icon> {{ i18n.messages().common.back }}</button>
           @if (order.status === 'DRAFT' || order.status === 'RESERVED') {
-            <button mat-raised-button color="primary" (click)="confirm()"><mat-icon>check</mat-icon> Confirmar</button>
-            <button mat-raised-button color="warn" (click)="cancel()"><mat-icon>close</mat-icon> Cancelar</button>
+            <button mat-raised-button color="primary" (click)="confirm()"><mat-icon>check</mat-icon> {{ i18n.messages().common.confirm }}</button>
+            <button mat-raised-button color="warn" (click)="cancel()"><mat-icon>close</mat-icon> {{ i18n.messages().common.cancel }}</button>
           }
         </div>
       </div>
 
       <div class="details-grid">
         <mat-card>
-          <mat-card-header><mat-card-title>Informações</mat-card-title></mat-card-header>
+          <mat-card-header><mat-card-title>{{ i18n.messages().ops.info }}</mat-card-title></mat-card-header>
           <mat-card-content>
-            <p><strong>Cliente:</strong> {{ order.customerId }}</p>
-            <p><strong>Moeda:</strong> {{ order.currency }}</p>
-            <p><strong>Total:</strong> {{ order.currency }} {{ order.totalAmount | number:'1.2-2' }}</p>
-            <p><strong>Criado em:</strong> {{ fmtDate(order.createdAt) }}</p>
-            <p><strong>Atualizado em:</strong> {{ fmtDate(order.updatedAt) }}</p>
+            <p><strong>{{ i18n.messages().orders.customer }}:</strong> {{ order.customerId }}</p>
+            <p><strong>{{ i18n.messages().payments.currency }}:</strong> {{ order.currency }}</p>
+            <p><strong>{{ i18n.messages().common.total }}:</strong> {{ order.currency }} {{ order.totalAmount | number:'1.2-2' }}</p>
+            <p><strong>{{ i18n.messages().ops.createdAt }}:</strong> {{ fmtDate(order.createdAt) }}</p>
+            <p><strong>{{ i18n.messages().ops.updatedAt }}:</strong> {{ fmtDate(order.updatedAt) }}</p>
             @if (order.correlationId) {
-              <p><strong>Correlation ID:</strong> <code>{{ order.correlationId }}</code></p>
+              <p><strong>{{ i18n.messages().admin.correlationId }}:</strong> <code>{{ order.correlationId }}</code></p>
             }
           </mat-card-content>
         </mat-card>
 
         <mat-card>
-          <mat-card-header><mat-card-title>Itens ({{ order.items.length }})</mat-card-title></mat-card-header>
+          <mat-card-header><mat-card-title>{{ i18n.messages().orders.orderItems }} ({{ order.items.length }})</mat-card-title></mat-card-header>
           <mat-card-content>
             <table mat-table [dataSource]="order.items" class="full-width">
               <ng-container matColumnDef="sku">
-                <th mat-header-cell *matHeaderCellDef>SKU</th>
+                <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().inventory.sku }}</th>
                 <td mat-cell *matCellDef="let i">{{ i.sku }}</td>
               </ng-container>
               <ng-container matColumnDef="description">
-                <th mat-header-cell *matHeaderCellDef>Descrição</th>
+                <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.description }}</th>
                 <td mat-cell *matCellDef="let i">{{ i.description || '—' }}</td>
               </ng-container>
               <ng-container matColumnDef="quantity">
@@ -71,11 +72,11 @@ import { firstValueFrom } from 'rxjs';
                 <td mat-cell *matCellDef="let i">{{ i.quantity }}</td>
               </ng-container>
               <ng-container matColumnDef="unitPrice">
-                <th mat-header-cell *matHeaderCellDef>Preço Unit.</th>
+                <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().ops.unitPrice }}</th>
                 <td mat-cell *matCellDef="let i">{{ i.unitPrice | number:'1.2-2' }}</td>
               </ng-container>
               <ng-container matColumnDef="subtotal">
-                <th mat-header-cell *matHeaderCellDef>Subtotal</th>
+                <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().ops.subtotal }}</th>
                 <td mat-cell *matCellDef="let i">{{ i.quantity * i.unitPrice | number:'1.2-2' }}</td>
               </ng-container>
               <tr mat-header-row *matHeaderRowDef="itemCols"></tr>
@@ -87,10 +88,10 @@ import { firstValueFrom } from 'rxjs';
     }
   `,
   styles: [`
-    .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
+    .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--app-space-16, 16px); }
     .page-header h1 { margin: 0 12px 0 0; display: inline; }
-    .actions { display: flex; gap: 8px; }
-    .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .actions { display: flex; gap: var(--app-space-8, 8px); }
+    .details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--app-space-16, 16px); }
     .full-width { width: 100%; }
     @media (max-width: 768px) { .details-grid { grid-template-columns: 1fr; } }
   `],
@@ -98,6 +99,7 @@ import { firstValueFrom } from 'rxjs';
 export class OrderDetailPage implements OnInit {
   protected facade = inject(OrdersFacade);
   protected router = inject(Router);
+  protected i18n = inject(I18nService);
   private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
@@ -112,21 +114,21 @@ export class OrderDetailPage implements OnInit {
   async confirm(): Promise<void> {
     const order = this.facade.selectedOrder();
     if (!order) return;
-    const ref = this.dialog.open(ConfirmDialogComponent, { data: { title: 'Confirmar pedido?', message: 'Esta ação confirmará o pedido e reservará o estoque.' } });
+    const ref = this.dialog.open(ConfirmDialogComponent, { data: { title: this.i18n.messages().ops.orderConfirmTitle, message: this.i18n.messages().ops.orderConfirmMessage } });
     const ok = await firstValueFrom(ref.afterClosed());
     if (!ok) return;
     const o = await this.facade.confirmOrder(order.id);
-    if (o) this.snackBar.open('Pedido confirmado', 'OK', { duration: 2000 });
+    if (o) this.snackBar.open(this.i18n.messages().ops.orderConfirmedSnackbar, 'OK', { duration: 2000 });
   }
 
   async cancel(): Promise<void> {
     const order = this.facade.selectedOrder();
     if (!order) return;
-    const ref = this.dialog.open(ConfirmDialogComponent, { data: { title: 'Cancelar pedido?', message: 'Esta ação cancelará o pedido.', danger: true } });
+    const ref = this.dialog.open(ConfirmDialogComponent, { data: { title: this.i18n.messages().ops.orderCancelTitle, message: this.i18n.messages().ops.orderCancelMessage, danger: true } });
     const ok = await firstValueFrom(ref.afterClosed());
     if (!ok) return;
     const o = await this.facade.cancelOrder(order.id);
-    if (o) this.snackBar.open('Pedido cancelado', 'OK', { duration: 2000 });
+    if (o) this.snackBar.open(this.i18n.messages().ops.orderCancelledSnackbar, 'OK', { duration: 2000 });
   }
 
   fmtDate(d: string): string { return formatDateTime(d); }

@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { InventoryFacade, AdjustmentType } from '@saas-suite/data-access/orders';
+import { I18nService } from '@saas-suite/shared/i18n';
 
 @Component({
   selector: 'app-adjustment-create',
@@ -19,46 +20,47 @@ import { InventoryFacade, AdjustmentType } from '@saas-suite/data-access/orders'
   ],
   template: `
     <div class="page-header">
-      <h1>Novo Ajuste de Inventário</h1>
-      <button mat-stroked-button (click)="router.navigate(['/inventory/adjustments'])"><mat-icon>arrow_back</mat-icon> Voltar</button>
+      <h1>{{ i18n.messages().inventory.createAdjustment }}</h1>
+      <button mat-stroked-button (click)="router.navigate(['/inventory/adjustments'])"><mat-icon>arrow_back</mat-icon> {{ i18n.messages().common.back }}</button>
     </div>
 
     <mat-card>
       <mat-card-content>
         <div class="form-grid">
           <mat-form-field appearance="outline">
-            <mat-label>SKU</mat-label>
-            <input matInput [(ngModel)]="sku" placeholder="SKU do produto">
+            <mat-label>{{ i18n.messages().inventory.sku }}</mat-label>
+            <input matInput [(ngModel)]="sku" [placeholder]="i18n.messages().inventory.sku">
           </mat-form-field>
           <mat-form-field appearance="outline">
-            <mat-label>Tipo</mat-label>
+            <mat-label>{{ i18n.messages().common.type }}</mat-label>
             <mat-select [(ngModel)]="type">
-              <mat-option value="IN">Entrada</mat-option>
-              <mat-option value="OUT">Saída</mat-option>
-              <mat-option value="ADJUSTMENT">Ajuste</mat-option>
+              <mat-option value="IN">{{ i18n.messages().ops.adjustmentTypeIn }}</mat-option>
+              <mat-option value="OUT">{{ i18n.messages().ops.adjustmentTypeOut }}</mat-option>
+              <mat-option value="ADJUSTMENT">{{ i18n.messages().ops.adjustmentTypeAdj }}</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field appearance="outline">
-            <mat-label>Quantidade</mat-label>
+            <mat-label>{{ i18n.messages().inventory.quantity }}</mat-label>
             <input matInput type="number" [(ngModel)]="quantity" min="1">
           </mat-form-field>
           <mat-form-field appearance="outline" class="full-span">
-            <mat-label>Motivo</mat-label>
-            <input matInput [(ngModel)]="reason" placeholder="Motivo do ajuste">
+            <mat-label>{{ i18n.messages().inventory.reason }}</mat-label>
+            <input matInput [(ngModel)]="reason" [placeholder]="i18n.messages().inventory.reason">
           </mat-form-field>
         </div>
-        <button mat-raised-button color="primary" (click)="submit()" [disabled]="submitting()">Criar Ajuste</button>
+        <button mat-raised-button color="primary" (click)="submit()" [disabled]="submitting()">{{ i18n.messages().inventory.createAdjustment }}</button>
       </mat-card-content>
     </mat-card>
   `,
   styles: [`
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--app-space-16, 16px); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--app-space-12, 12px); margin-bottom: var(--app-space-16, 16px); }
     .full-span { grid-column: 1 / -1; }
   `],
 })
 export class AdjustmentCreatePage {
   protected router = inject(Router);
+  protected i18n = inject(I18nService);
   private facade = inject(InventoryFacade);
   private snackBar = inject(MatSnackBar);
 
@@ -74,7 +76,7 @@ export class AdjustmentCreatePage {
     const adj = await this.facade.createAdjustment({ sku: this.sku, type: this.type, quantity: this.quantity, reason: this.reason });
     this.submitting.set(false);
     if (adj) {
-      this.snackBar.open('Ajuste criado', 'OK', { duration: 2000 });
+      this.snackBar.open(this.i18n.messages().ops.adjustmentCreatedSuccess, 'OK', { duration: 2000 });
       this.router.navigate(['/inventory/adjustments']);
     }
   }

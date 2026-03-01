@@ -12,6 +12,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CoreApiClient, PoliciesFacade, Policy, CreatePolicyRequest } from '@saas-suite/data-access/core';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { ConfirmDialogComponent } from '@saas-suite/shared/ui';
 import { firstValueFrom } from 'rxjs';
 
@@ -39,12 +40,12 @@ import { firstValueFrom } from 'rxjs';
     @if (policy(); as p) {
       <div class="page-header">
         <div>
-          <h1>Policy: <code>{{ p.permissionCode }}</code></h1>
+          <h1>{{ i18n.messages().admin.policyDetailTitle }}: <code>{{ p.permissionCode }}</code></h1>
           <span [class]="p.effect === 'ALLOW' ? 'chip-allow' : 'chip-deny'">{{ p.effect }}</span>
         </div>
         <div class="actions">
-          <button mat-stroked-button (click)="goBack()"><mat-icon>arrow_back</mat-icon> Voltar</button>
-          <button mat-raised-button color="warn" (click)="remove()"><mat-icon>delete</mat-icon> Remover</button>
+          <button mat-stroked-button (click)="goBack()"><mat-icon>arrow_back</mat-icon> {{ i18n.messages().common.back }}</button>
+          <button mat-raised-button color="warn" (click)="remove()"><mat-icon>delete</mat-icon> {{ i18n.messages().admin.remove }}</button>
         </div>
       </div>
 
@@ -52,42 +53,42 @@ import { firstValueFrom } from 'rxjs';
         <mat-card-content>
           <div class="form-grid">
             <mat-form-field appearance="outline">
-              <mat-label>Permission Code</mat-label>
-              <input matInput [(ngModel)]="edit.permissionCode" placeholder="ex: orders:write">
+              <mat-label>{{ i18n.messages().admin.permissionCode }}</mat-label>
+              <input matInput [(ngModel)]="edit.permissionCode" [placeholder]="i18n.messages().admin.permissionCodePlaceholder">
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>Efeito</mat-label>
+              <mat-label>{{ i18n.messages().admin.effect }}</mat-label>
               <mat-select [(ngModel)]="edit.effect">
                 <mat-option value="ALLOW">ALLOW</mat-option>
                 <mat-option value="DENY">DENY</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Descrição</mat-label>
-              <input matInput [(ngModel)]="edit.description" placeholder="Descrição opcional">
+              <mat-label>{{ i18n.messages().common.description }}</mat-label>
+              <input matInput [(ngModel)]="edit.description" [placeholder]="i18n.messages().admin.descriptionPlaceholder">
             </mat-form-field>
-            <mat-slide-toggle [(ngModel)]="edit.enabled">Habilitada</mat-slide-toggle>
+            <mat-slide-toggle [(ngModel)]="edit.enabled">{{ i18n.messages().admin.enabledLabel }}</mat-slide-toggle>
           </div>
           <button mat-raised-button color="primary" (click)="save()" [disabled]="saving()">
-            Salvar alterações
+            {{ i18n.messages().admin.saveChanges }}
           </button>
         </mat-card-content>
       </mat-card>
     } @else if (!loading()) {
-      <p>Policy não encontrada.</p>
-      <button mat-stroked-button (click)="goBack()">Voltar à lista</button>
+      <p>{{ i18n.messages().admin.policyNotFound }}.</p>
+      <button mat-stroked-button (click)="goBack()">{{ i18n.messages().admin.backToList }}</button>
     }
   `,
   styles: [`
-    .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
-    .page-header h1 { margin: 0 12px 0 0; font-size: 24px; font-weight: 600; color: var(--app-text); }
-    .actions { display: flex; gap: 8px; }
+    .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: var(--app-space-24, 24px); flex-wrap: wrap; gap: var(--app-space-16, 16px); }
+    .page-header h1 { margin: 0 var(--app-space-12, 12px) 0 0; font-size: var(--app-font-size-title, 24px); font-weight: 600; color: var(--app-text); }
+    .actions { display: flex; gap: var(--app-space-8, 8px); }
     .chip-allow { background: var(--app-chip-allow-bg); color: var(--app-chip-allow-text); padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
     .chip-deny { background: var(--app-chip-deny-bg); color: var(--app-chip-deny-text); padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
-    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--app-space-16, 16px); margin-bottom: var(--app-space-20, 20px); }
     .full-width { grid-column: 1 / -1; }
-    mat-card { border-radius: 12px; }
-    mat-card-content { padding: 20px !important; }
+    mat-card { border-radius: 14px; }
+    mat-card-content { padding: var(--app-space-20, 20px) !important; }
   `],
 })
 export class PolicyDetailPage implements OnInit {
@@ -97,6 +98,7 @@ export class PolicyDetailPage implements OnInit {
   private policiesFacade = inject(PoliciesFacade);
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
+  protected i18n = inject(I18nService);
 
   policy = signal<Policy | null>(null);
   loading = signal(true);
@@ -124,7 +126,7 @@ export class PolicyDetailPage implements OnInit {
         description: p.description ?? '',
       };
     } catch {
-      this.snackBar.open('Policy não encontrada', 'OK', { duration: 3000 });
+      this.snackBar.open(this.i18n.messages().admin.policyNotFound, 'OK', { duration: 3000 });
     } finally {
       this.loading.set(false);
     }
@@ -142,7 +144,7 @@ export class PolicyDetailPage implements OnInit {
     });
     if (updated) {
       this.policy.set(updated);
-      this.snackBar.open('Policy atualizada', 'OK', { duration: 2000 });
+      this.snackBar.open(this.i18n.messages().admin.policyUpdated, 'OK', { duration: 2000 });
     }
     this.saving.set(false);
   }
@@ -151,13 +153,13 @@ export class PolicyDetailPage implements OnInit {
     const p = this.policy();
     if (!p) return;
     const ref = this.dialog.open(ConfirmDialogComponent, {
-      data: { title: 'Remover policy?', message: `Deseja remover "${p.permissionCode}"?`, danger: true },
+      data: { title: this.i18n.messages().admin.removePolicyConfirm, message: `Deseja remover "${p.permissionCode}"?`, danger: true },
     });
     const confirmed = await firstValueFrom(ref.afterClosed());
     if (!confirmed) return;
     const ok = await this.policiesFacade.deletePolicy(p.id);
     if (ok) {
-      this.snackBar.open('Policy removida', 'OK', { duration: 2000 });
+      this.snackBar.open(this.i18n.messages().admin.policyRemoved, 'OK', { duration: 2000 });
       this.router.navigate(['/policies']);
     }
   }

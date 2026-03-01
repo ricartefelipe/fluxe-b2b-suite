@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DecimalPipe } from '@angular/common';
 import { OrdersFacade, OrderItem } from '@saas-suite/data-access/orders';
+import { I18nService } from '@saas-suite/shared/i18n';
 
 @Component({
   selector: 'app-order-create',
@@ -19,62 +20,63 @@ import { OrdersFacade, OrderItem } from '@saas-suite/data-access/orders';
   ],
   template: `
     <div class="page-header">
-      <h1>Novo Pedido</h1>
-      <button mat-stroked-button (click)="router.navigate(['/orders'])"><mat-icon>arrow_back</mat-icon> Voltar</button>
+      <h1>{{ i18n.messages().orders.createOrder }}</h1>
+      <button mat-stroked-button (click)="router.navigate(['/orders'])"><mat-icon>arrow_back</mat-icon> {{ i18n.messages().common.back }}</button>
     </div>
 
     <mat-card>
       <mat-card-content>
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Cliente ID</mat-label>
-          <input matInput [(ngModel)]="customerId" placeholder="ID do cliente">
+          <mat-label>{{ i18n.messages().orders.customerId }}</mat-label>
+          <input matInput [(ngModel)]="customerId" [placeholder]="i18n.messages().orders.customerId">
         </mat-form-field>
 
-        <h3>Itens</h3>
+        <h3>{{ i18n.messages().orders.orderItems }}</h3>
         @for (item of items; track $index) {
           <div class="item-row">
             <mat-form-field appearance="outline">
-              <mat-label>SKU</mat-label>
+              <mat-label>{{ i18n.messages().inventory.sku }}</mat-label>
               <input matInput [(ngModel)]="item.sku">
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 100px">
-              <mat-label>Qtd</mat-label>
+              <mat-label>{{ i18n.messages().inventory.quantity }}</mat-label>
               <input matInput type="number" [(ngModel)]="item.quantity" min="1">
             </mat-form-field>
             <mat-form-field appearance="outline" style="width: 120px">
-              <mat-label>Preço Unit.</mat-label>
+              <mat-label>{{ i18n.messages().ops.unitPrice }}</mat-label>
               <input matInput type="number" [(ngModel)]="item.unitPrice" min="0" step="0.01">
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>Descrição</mat-label>
+              <mat-label>{{ i18n.messages().common.description }}</mat-label>
               <input matInput [(ngModel)]="item.description">
             </mat-form-field>
             <button mat-icon-button color="warn" (click)="removeItem($index)"><mat-icon>delete</mat-icon></button>
           </div>
         }
-        <button mat-stroked-button (click)="addItem()"><mat-icon>add</mat-icon> Adicionar Item</button>
+        <button mat-stroked-button (click)="addItem()"><mat-icon>add</mat-icon> {{ i18n.messages().ops.addItem }}</button>
 
         <div class="total">
-          <strong>Total: BRL {{ calcTotal() | number:'1.2-2' }}</strong>
+          <strong>{{ i18n.messages().common.total }}: BRL {{ calcTotal() | number:'1.2-2' }}</strong>
         </div>
 
         <button mat-raised-button color="primary" (click)="submit()" [disabled]="submitting()" class="submit-btn">
-          Criar Pedido
+          {{ i18n.messages().orders.createOrder }}
         </button>
       </mat-card-content>
     </mat-card>
   `,
   styles: [`
-    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--app-space-16, 16px); }
     .full-width { width: 100%; }
-    .item-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+    .item-row { display: flex; gap: var(--app-space-8, 8px); align-items: center; margin-bottom: var(--app-space-8, 8px); }
     .item-row mat-form-field { flex: 1; }
-    .total { margin: 16px 0; font-size: 18px; text-align: right; }
-    .submit-btn { margin-top: 8px; }
+    .total { margin: var(--app-space-16, 16px) 0; font-size: var(--app-font-size-title, 18px); text-align: right; }
+    .submit-btn { margin-top: var(--app-space-8, 8px); }
   `],
 })
 export class OrderCreatePage {
   protected router = inject(Router);
+  protected i18n = inject(I18nService);
   private facade = inject(OrdersFacade);
   private snackBar = inject(MatSnackBar);
 
@@ -93,7 +95,7 @@ export class OrderCreatePage {
     const order = await this.facade.createOrder({ customerId: this.customerId, items: this.items, currency: 'BRL' });
     this.submitting.set(false);
     if (order) {
-      this.snackBar.open('Pedido criado com sucesso', 'OK', { duration: 3000 });
+      this.snackBar.open(this.i18n.messages().ops.orderCreatedSuccess, 'OK', { duration: 3000 });
       this.router.navigate(['/orders', order.id]);
     }
   }

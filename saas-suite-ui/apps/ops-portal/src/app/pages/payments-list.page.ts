@@ -83,7 +83,6 @@ import { formatDateTime } from '@saas-suite/shared/util';
     .page-header { margin-bottom: 16px; }
     .filters { display: flex; gap: 12px; margin-bottom: 16px; }
     .full-width { width: 100%; }
-    code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
   `],
 })
 export class PaymentsListPage implements OnInit {

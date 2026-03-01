@@ -1,0 +1,10 @@
+> vitest
+
+
+ RUN  v4.0.9 /home/frm/Documentos/wks/fluxe-b2b-suite/saas-suite-ui/libs/shared/models
+
+No test files found, exiting with code 0
+
+include: src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}
+exclude:  **/node_modules/**, **/.git/**
+

@@ -3680,44 +3680,21 @@
             ]
           },
           "test": {
+            "executor": "@nx/vitest:test",
+            "outputs": [
+              "{options.reportsDirectory}"
+            ],
             "options": {
-              "cwd": "libs/shared/http",
-              "command": "vitest"
+              "reportsDirectory": "../../coverage/libs/shared-http",
+              "passWithNoTests": true
             },
+            "configurations": {},
+            "parallelism": true,
             "cache": true,
             "inputs": [
               "default",
-              "^production",
-              {
-                "externalDependencies": [
-                  "vitest"
-                ]
-              },
-              {
-                "env": "CI"
-              }
-            ],
-            "outputs": [
-              "{workspaceRoot}/coverage/libs/shared/http"
-            ],
-            "metadata": {
-              "technologies": [
-                "vite"
-              ],
-              "description": "Run Vite tests",
-              "help": {
-                "command": "pnpm exec vitest --help",
-                "example": {
-                  "options": {
-                    "bail": 1,
-                    "coverage": true
-                  }
-                }
-              }
-            },
-            "executor": "nx:run-commands",
-            "configurations": {},
-            "parallelism": true
+              "^production"
+            ]
           },
           "typecheck": {
             "cache": true,
@@ -22174,6 +22151,11 @@
       },
       {
         "source": "data-access-payments",
+        "target": "shared-http",
+        "type": "static"
+      },
+      {
+        "source": "data-access-payments",
         "target": "npm:@angular/compiler",
         "type": "static"
       },
@@ -22263,6 +22245,11 @@
       },
       {
         "source": "data-access-orders",
+        "target": "shared-http",
+        "type": "static"
+      },
+      {
+        "source": "data-access-orders",
         "target": "npm:@angular/compiler",
         "type": "static"
       },
@@ -22343,6 +22330,11 @@
       {
         "source": "data-access-core",
         "target": "shared-config",
+        "type": "static"
+      },
+      {
+        "source": "data-access-core",
+        "target": "shared-http",
         "type": "static"
       },
       {
@@ -23096,6 +23088,16 @@
       {
         "source": "shared-http",
         "target": "shared-telemetry",
+        "type": "static"
+      },
+      {
+        "source": "shared-http",
+        "target": "shared-i18n",
+        "type": "static"
+      },
+      {
+        "source": "shared-http",
+        "target": "npm:vitest",
         "type": "static"
       },
       {
@@ -47155,5 +47157,5 @@
   },
   "version": "6.0",
   "errors": [],
-  "computedAt": 1772057080113
+  "computedAt": 1772322041701
 }

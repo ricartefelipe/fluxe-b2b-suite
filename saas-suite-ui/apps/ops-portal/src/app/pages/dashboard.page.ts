@@ -282,16 +282,16 @@ const BAR_MAX_HEIGHT = 170;
     }
 
     .kpi-icon mat-icon {
-      color: #fff;
+      color: var(--app-surface);
       font-size: 24px;
       width: 24px;
       height: 24px;
     }
 
-    .kpi-icon--blue  { background: #1976d2; }
-    .kpi-icon--green { background: #2e7d32; }
-    .kpi-icon--amber { background: #f9a825; }
-    .kpi-icon--orange { background: #e65100; }
+    .kpi-icon--blue  { background: var(--app-primary-light); }
+    .kpi-icon--green { background: var(--app-chip-allow-text); }
+    .kpi-icon--amber { background: var(--app-chip-warn-text); }
+    .kpi-icon--orange { background: var(--app-chip-warn-text); }
 
     .kpi-data {
       display: flex;
@@ -331,7 +331,7 @@ const BAR_MAX_HEIGHT = 170;
     }
 
     .bar {
-      fill: var(--app-primary, #4caf50);
+      fill: var(--app-primary);
       opacity: 0.85;
       transition: opacity 0.2s;
     }
@@ -341,18 +341,18 @@ const BAR_MAX_HEIGHT = 170;
     }
 
     .axis {
-      stroke: var(--app-border, #e0e0e0);
+      stroke: var(--app-border);
       stroke-width: 1;
     }
 
     .bar-label {
       font-size: 11px;
-      fill: var(--app-text-secondary, #757575);
+      fill: var(--app-text-secondary);
     }
 
     .bar-value {
       font-size: 9px;
-      fill: var(--app-text-secondary, #757575);
+      fill: var(--app-text-secondary);
       font-weight: 500;
     }
 
@@ -381,12 +381,12 @@ const BAR_MAX_HEIGHT = 170;
     .donut-total {
       font-size: 28px;
       font-weight: 600;
-      fill: var(--app-text, #212121);
+      fill: var(--app-text);
     }
 
     .donut-total-label {
       font-size: 12px;
-      fill: var(--app-text-secondary, #757575);
+      fill: var(--app-text-secondary);
     }
 
     .legend {
@@ -410,13 +410,13 @@ const BAR_MAX_HEIGHT = 170;
     }
 
     .legend-status {
-      color: var(--app-text-secondary, #757575);
+      color: var(--app-text-secondary);
       min-width: 80px;
     }
 
     .legend-count {
       font-weight: 600;
-      color: var(--app-text, #212121);
+      color: var(--app-text);
     }
 
     /* ── Bottom Row ───────────────────────────────────── */
@@ -437,7 +437,7 @@ const BAR_MAX_HEIGHT = 170;
     }
 
     .order-link {
-      color: var(--app-primary, #4caf50);
+      color: var(--app-primary);
       text-decoration: none;
       font-family: monospace;
       font-size: 12px;
@@ -465,7 +465,7 @@ const BAR_MAX_HEIGHT = 170;
     }
 
     .warning-icon {
-      color: #e65100;
+      color: var(--app-chip-warn-text);
     }
 
     /* ── Responsive ───────────────────────────────────── */

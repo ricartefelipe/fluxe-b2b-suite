@@ -1,9 +1,21 @@
 {
   "run": {
-    "command": "nx serve admin-console",
-    "startTime": "2026-02-25T22:04:37.630Z",
-    "endTime": "2026-02-25T22:04:40.243Z",
+    "command": "nx build ops-portal --configuration=production",
+    "startTime": "2026-02-28T23:40:39.139Z",
+    "endTime": "2026-02-28T23:40:50.367Z",
     "inner": false
   },
-  "tasks": []
+  "tasks": [
+    {
+      "taskId": "ops-portal:build:production",
+      "target": "build",
+      "projectName": "ops-portal",
+      "hash": "3014707037322102109",
+      "startTime": "2026-02-28T23:40:39.148Z",
+      "endTime": "2026-02-28T23:40:50.363Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 0
+    }
+  ]
 }

@@ -8,6 +8,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthStore } from '@saas-suite/shared/auth';
 import { AuthService } from '@saas-suite/shared/auth';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantSwitcherComponent } from '../tenant-switcher/tenant-switcher.component';
 import { ThemeToggleComponent } from '../theme/theme-toggle.component';
 import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
@@ -30,7 +31,7 @@ import { SearchTriggerComponent } from '@saas-suite/shared/search';
           class="menu-btn"
           (click)="menuToggle.emit()"
           aria-label="Toggle sidebar navigation"
-          matTooltip="Menu">
+          [matTooltip]="i18n.messages().app.menuTooltip">
           <mat-icon aria-hidden="true">menu</mat-icon>
         </button>
         <span class="app-title" aria-hidden="true">{{ appTitle }}</span>
@@ -44,7 +45,7 @@ import { SearchTriggerComponent } from '@saas-suite/shared/search';
         <button
           class="avatar-btn"
           [matMenuTriggerFor]="userMenu"
-          aria-label="User menu"
+          [attr.aria-label]="i18n.messages().app.userMenuLabel"
           aria-haspopup="true">
           <div class="avatar" aria-hidden="true">
             {{ (auth.session()?.email ?? 'U')[0] | uppercase }}
@@ -57,7 +58,7 @@ import { SearchTriggerComponent } from '@saas-suite/shared/search';
           </div>
           <mat-divider />
           <button mat-menu-item (click)="logout()">
-            <mat-icon aria-hidden="true">logout</mat-icon> Sair
+            <mat-icon aria-hidden="true">logout</mat-icon> {{ i18n.messages().auth.logout }}
           </button>
         </mat-menu>
       </div>
@@ -154,6 +155,7 @@ export class HeaderComponent {
   @Input() appTitle = 'SaaS Suite';
   @Output() menuToggle = new EventEmitter<void>();
   protected auth = inject(AuthStore);
+  protected i18n = inject(I18nService);
   private authService = inject(AuthService);
 
   async logout(): Promise<void> {

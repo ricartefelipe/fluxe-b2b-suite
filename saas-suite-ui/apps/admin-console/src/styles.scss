@@ -46,6 +46,8 @@ html.dark-theme {
   --app-chip-allow-text: #2e7d32;
   --app-chip-deny-bg: #ffebee;
   --app-chip-deny-text: #c62828;
+  --app-chip-warn-bg: #fff3e0;
+  --app-chip-warn-text: #e65100;
   --app-scrollbar: #c0c0c0;
   --app-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
@@ -72,6 +74,8 @@ html.dark-theme {
   --app-chip-allow-text: #81c784;
   --app-chip-deny-bg: #3a1b1b;
   --app-chip-deny-text: #ef9a9a;
+  --app-chip-warn-bg: #3a2e1a;
+  --app-chip-warn-text: #ffb74d;
   --app-scrollbar: #555;
   --app-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }

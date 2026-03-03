@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, importProvidersFrom } from '@angular/core';
+import { ApplicationConfig, ErrorHandler, provideBrowserGlobalErrorListeners, importProvidersFrom } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { OAuthModule } from 'angular-oauth2-oidc';
@@ -13,6 +13,7 @@ import { PT_BR_MESSAGES } from '@saas-suite/shared/i18n';
 import { provideNotifications } from '@saas-suite/shared/notifications';
 import { provideSearch } from '@saas-suite/shared/search';
 import { provideAccessibility } from '@saas-suite/shared/ui';
+import { GlobalErrorHandler } from '@saas-suite/shared/util';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,6 +27,7 @@ export const appConfig: ApplicationConfig = {
     provideTelemetry(),
     provideTenancyContext(),
     { provide: MESSAGES, useValue: PT_BR_MESSAGES },
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
     provideNotifications(),
     provideSearch({ enabledEntities: ['order', 'payment', 'inventory'], maxResultsPerEntity: 5, debounceMs: 300 }),
     provideAccessibility(),

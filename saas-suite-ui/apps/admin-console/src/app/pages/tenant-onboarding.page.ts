@@ -16,6 +16,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { TenantOnboardingStore, OrgInfo, OnboardingConfig } from '@saas-suite/domains/admin';
 import { TenantPlan } from '@saas-suite/data-access/core';
+import { I18nService } from '@saas-suite/shared/i18n';
 
 interface PlanOption {
   key: TenantPlan;
@@ -98,7 +99,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
             <form [formGroup]="orgForm" class="org-form">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Organization Name</mat-label>
-                <input matInput formControlName="name" placeholder="Acme Corporation" (input)="onNameChange()">
+                <input matInput formControlName="name" [placeholder]="i18n.messages().adminPlaceholders.orgName" (input)="onNameChange()">
                 @if (orgForm.controls['name'].hasError('required') && orgForm.controls['name'].touched) {
                   <mat-error>Name is required</mat-error>
                 }
@@ -109,7 +110,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
 
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Slug</mat-label>
-                <input matInput formControlName="slug" placeholder="acme-corporation">
+                <input matInput formControlName="slug" [placeholder]="i18n.messages().adminPlaceholders.orgSlug">
                 <mat-hint>URL-safe identifier (lowercase, hyphens only)</mat-hint>
                 @if (orgForm.controls['slug'].hasError('required') && orgForm.controls['slug'].touched) {
                   <mat-error>Slug is required</mat-error>
@@ -239,7 +240,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
                 <mat-card-content>
                   <mat-form-field appearance="outline" class="full-width">
                     <mat-label>Admin Email</mat-label>
-                    <input matInput formControlName="adminEmail" placeholder="admin@example.com" type="email">
+                    <input matInput formControlName="adminEmail" [placeholder]="i18n.messages().adminPlaceholders.adminEmail" type="email">
                     @if (configForm.controls['adminEmail'].hasError('required') && configForm.controls['adminEmail'].touched) {
                       <mat-error>Admin email is required</mat-error>
                     }
@@ -695,6 +696,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
 })
 export class TenantOnboardingPage implements OnInit, OnDestroy {
   readonly store = inject(TenantOnboardingStore);
+  protected readonly i18n = inject(I18nService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
 

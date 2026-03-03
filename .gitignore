@@ -4,8 +4,7 @@ node_modules/
 # Build outputs
 dist/
 .angular/
-.nx/cache/
-.nx/workspace-data/
+.nx/
 
 # Coverage
 coverage/

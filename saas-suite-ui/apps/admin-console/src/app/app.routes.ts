@@ -47,7 +47,18 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('@saas-suite/shared/ui').then(m => m.ErrorPageComponent),
         data: { code: 403, title: 'Acesso Negado', message: 'Você não tem permissão para acessar este recurso.' },
       },
+      {
+        path: '404',
+        loadComponent: () => import('@saas-suite/shared/ui').then(m => m.ErrorPageComponent),
+        data: { code: 404 },
+      },
+      { path: '**', redirectTo: '404' },
     ],
   },
-  { path: '**', redirectTo: 'login', pathMatch: 'full' },
+  {
+    path: '404',
+    loadComponent: () => import('@saas-suite/shared/ui').then(m => m.ErrorPageComponent),
+    data: { code: 404 },
+  },
+  { path: '**', redirectTo: '404', pathMatch: 'full' },
 ];

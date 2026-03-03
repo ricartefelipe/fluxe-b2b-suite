@@ -1,3 +1,8 @@
+/**
+ * @deprecated This Express mock API is deprecated and kept only as a local
+ * development fallback. Production and staging environments should use the
+ * real products API served by node-b2b-orders at /v1/products.
+ */
 import express from 'express';
 import { ProductsService } from '@union.solutions/api/products';
 import { ApiResponse, Product, ProductFilter, PaginatedResponse } from '@union.solutions/models';

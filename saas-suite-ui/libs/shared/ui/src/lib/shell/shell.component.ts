@@ -1,4 +1,4 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, HostListener, Input, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header.component';
 import { SidebarComponent } from './sidebar.component';
@@ -6,16 +6,22 @@ import { NavItem } from './nav-item.model';
 import { SkipLinkComponent } from '../a11y/skip-link.component';
 import { FocusOnNavDirective } from '../a11y/focus-on-nav.directive';
 
+const MOBILE_BREAKPOINT = 768;
+
 @Component({
   selector: 'saas-shell',
   standalone: true,
   imports: [RouterOutlet, HeaderComponent, SidebarComponent, SkipLinkComponent, FocusOnNavDirective],
   template: `
     <saas-skip-link />
-    <div class="shell" [class.sidebar-collapsed]="!sidebarOpen()">
+    @if (isMobile() && sidebarOpen()) {
+      <div class="sidebar-overlay" (click)="closeSidebar()" aria-hidden="true"></div>
+    }
+    <div class="shell" [class.sidebar-collapsed]="!sidebarOpen()" [class.mobile]="isMobile()">
       <aside
         class="shell-sidebar"
         [class.open]="sidebarOpen()"
+        [class.mobile-drawer]="isMobile()"
         role="complementary"
         aria-label="Sidebar">
         <saas-sidebar [navItems]="navItems" [appTitle]="appTitle" />
@@ -47,6 +53,29 @@ import { FocusOnNavDirective } from '../a11y/focus-on-nav.directive';
       margin-left: -250px;
     }
 
+    .shell-sidebar.mobile-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 200;
+      transition: transform 0.25s ease;
+      margin-left: 0;
+    }
+    .shell-sidebar.mobile-drawer:not(.open) {
+      transform: translateX(-100%);
+      margin-left: 0;
+    }
+    .shell-sidebar.mobile-drawer.open {
+      transform: translateX(0);
+    }
+
+    .sidebar-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 199;
+    }
+
     .shell-content {
       flex: 1;
       display: flex;
@@ -65,14 +94,42 @@ import { FocusOnNavDirective } from '../a11y/focus-on-nav.directive';
     .shell-main:focus {
       outline: none;
     }
+
+    @media (max-width: 768px) {
+      .shell-main {
+        padding: 16px;
+      }
+    }
   `],
 })
-export class ShellComponent {
+export class ShellComponent implements OnInit {
   @Input() navItems: NavItem[] = [];
   @Input() appTitle = 'SaaS Suite';
   sidebarOpen = signal(true);
+  isMobile = signal(false);
+
+  ngOnInit(): void {
+    this.checkViewport();
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.checkViewport();
+  }
 
   toggleSidebar(): void {
     this.sidebarOpen.update(v => !v);
+  }
+
+  closeSidebar(): void {
+    this.sidebarOpen.set(false);
+  }
+
+  private checkViewport(): void {
+    const mobile = window.innerWidth < MOBILE_BREAKPOINT;
+    this.isMobile.set(mobile);
+    if (mobile && this.sidebarOpen()) {
+      this.sidebarOpen.set(false);
+    }
   }
 }

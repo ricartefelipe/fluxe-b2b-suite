@@ -6,8 +6,9 @@ import {
   OnInit,
   OnDestroy,
   ChangeDetectionStrategy,
+  PLATFORM_ID,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, debounceTime, takeUntil } from 'rxjs';
@@ -788,6 +789,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   private readonly productsService = inject(ProductsService);
   private readonly cartService = inject(CartService);
   private readonly router = inject(Router);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   readonly msg = inject(MESSAGES);
 
   private readonly destroy$ = new Subject<void>();
@@ -941,7 +943,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     if (page < 1 || page > this.totalPages()) return;
     this.currentPage.set(page);
     this.loadProducts();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (this.isBrowser) window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   clearCategory(): void {

@@ -4,8 +4,10 @@ import {
   DestroyRef,
   inject,
   OnInit,
+  PLATFORM_ID,
   signal,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 
@@ -89,6 +91,7 @@ export class InstallPromptComponent implements OnInit {
 
   private deferredPrompt: BeforeInstallPromptEvent | null = null;
   private readonly destroyRef = inject(DestroyRef);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   private readonly onBeforeInstallPrompt = (e: Event): void => {
     e.preventDefault();
@@ -100,7 +103,7 @@ export class InstallPromptComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    if (this.isStandalone()) {
+    if (!this.isBrowser || this.isStandalone()) {
       return;
     }
 
@@ -128,10 +131,11 @@ export class InstallPromptComponent implements OnInit {
 
   dismiss(): void {
     this.showBanner.set(false);
-    localStorage.setItem(DISMISS_STORAGE_KEY, Date.now().toString());
+    if (this.isBrowser) localStorage.setItem(DISMISS_STORAGE_KEY, Date.now().toString());
   }
 
   private isDismissedRecently(): boolean {
+    if (!this.isBrowser) return false;
     const dismissed = localStorage.getItem(DISMISS_STORAGE_KEY);
     if (!dismissed) {
       return false;
@@ -140,6 +144,7 @@ export class InstallPromptComponent implements OnInit {
   }
 
   private isStandalone(): boolean {
+    if (!this.isBrowser) return false;
     if (typeof window.matchMedia !== 'function') return false;
     return window.matchMedia('(display-mode: standalone)').matches;
   }

@@ -420,6 +420,166 @@ For complete backup procedures, scripts, and restore instructions, see [`docs/OB
 
 ---
 
+## Deploy na Oracle Cloud Free Tier
+
+A Oracle Cloud oferece um **Always Free** tier com instância Ampere A1 (ARM64) — 4 OCPU, 24GB RAM, 200GB de disco — ideal para rodar toda a stack Fluxe em produção.
+
+### Passo a passo
+
+#### 1. Criar conta Oracle Cloud
+
+Acesse [cloud.oracle.com](https://cloud.oracle.com) e crie uma conta. O Free Tier é gratuito e não requer cartão de crédito após o trial (os recursos Always Free permanecem).
+
+#### 2. Criar VCN (Virtual Cloud Network)
+
+1. No console OCI: **Networking → Virtual Cloud Networks → Start VCN Wizard**
+2. Escolha "Create VCN with Internet Connectivity"
+3. Dê um nome (ex: `fluxe-vcn`), aceite os defaults
+4. Isso cria a VCN, subnet pública, Internet Gateway e Route Table
+
+#### 3. Configurar Security List (IMPORTANTE)
+
+A Oracle Cloud bloqueia **todo** tráfego de entrada por padrão via VCN Security Lists. Sem esta configuração, a VM não é acessível.
+
+1. Vá em **Networking → VCN → sua VCN → Security Lists → Default Security List**
+2. Adicione **Ingress Rules**:
+
+| Source CIDR   | Protocol | Dest Port | Descrição |
+|---------------|----------|-----------|-----------|
+| `0.0.0.0/0`  | TCP      | 22        | SSH       |
+| `0.0.0.0/0`  | TCP      | 80        | HTTP      |
+| `0.0.0.0/0`  | TCP      | 443       | HTTPS     |
+
+> **Nota:** A regra de SSH (22) geralmente já existe por padrão. Adicione apenas HTTP e HTTPS.
+
+#### 4. Criar instância Ampere A1
+
+1. **Compute → Instances → Create Instance**
+2. Configurações:
+   - **Shape:** VM.Standard.A1.Flex (Ampere — Always Free)
+   - **OCPUs:** 4
+   - **RAM:** 24 GB
+   - **Image:** Ubuntu 22.04 (Canonical) — aarch64
+   - **Boot Volume:** 200 GB (máximo do Free Tier)
+   - **VCN/Subnet:** selecione a VCN e subnet pública criadas acima
+   - **SSH Key:** adicione sua chave pública
+3. Clique em "Create"
+4. Anote o **Public IP** atribuído
+
+> **Dica:** Se a criação falhar com "Out of capacity", tente novamente em alguns minutos — é comum no Free Tier. Você pode usar um script de retry ou tentar em horários de menor demanda.
+
+#### 5. SSH na instância
+
+```bash
+ssh ubuntu@<public-ip>
+```
+
+O usuário padrão é `ubuntu` para imagens Ubuntu ou `opc` para Oracle Linux.
+
+#### 6. Rodar server-setup.sh
+
+```bash
+# Copiar o script
+scp deploy/server-setup.sh ubuntu@<public-ip>:/tmp/
+
+# SSH e executar como root
+ssh ubuntu@<public-ip>
+sudo bash /tmp/server-setup.sh
+```
+
+O script detecta automaticamente a arquitetura ARM64, instala Docker, configura iptables, cria o usuário `fluxe`, configura swap de 4GB, e cria a estrutura de diretórios.
+
+#### 7. Clonar e configurar
+
+```bash
+# Login como fluxe
+ssh fluxe@<public-ip>
+
+cd /opt/fluxe
+git clone https://github.com/<org>/fluxe-b2b-suite.git .
+
+# Configurar .env
+cp .env.example .env
+nano .env   # preencher todas as senhas e configurações
+```
+
+#### 8. Deploy
+
+```bash
+./scripts/deploy.sh
+```
+
+O script valida as variáveis de ambiente, puxa as imagens (multi-arch — linux/arm64 é detectado automaticamente), roda as migrations e sobe todos os serviços.
+
+#### 9. Configurar DNS (Cloudflare)
+
+No Cloudflare, crie os registros A apontando para o Public IP da instância Oracle:
+
+| Tipo | Nome              | Valor         | Proxy |
+|------|-------------------|---------------|-------|
+| A    | api.fluxe.com.br  | `<public-ip>` | Sim   |
+| A    | auth.fluxe.com.br | `<public-ip>` | Sim   |
+| A    | fluxe.com.br      | `<public-ip>` | Sim   |
+
+Com Cloudflare Proxy ativado, você obtém SSL automático e proteção DDoS.
+
+#### 10. Pronto!
+
+Verifique os serviços:
+
+```bash
+curl -sf https://api.fluxe.com.br/actuator/health/liveness
+curl -sf https://api.fluxe.com.br/v1/healthz   # orders (via nginx)
+curl -sf https://api.fluxe.com.br/payments/healthz  # payments (via nginx)
+```
+
+### Alocação de recursos (Oracle A1 — 4 OCPU / 24GB RAM)
+
+| Serviço          | Memória Limite | Notas                        |
+|------------------|---------------|------------------------------|
+| PostgreSQL       | 4 GB          | Banco principal              |
+| Redis            | 512 MB        | Cache e sessions             |
+| RabbitMQ         | 1 GB          | Broker de mensagens          |
+| Keycloak         | 1 GB          | OIDC provider                |
+| saas-core        | 2 GB          | Java/Spring precisa mais RAM |
+| orders-api       | 512 MB        | Node.js API                  |
+| orders-worker    | 256 MB        | Node.js worker               |
+| payments-api     | 512 MB        | Python API                   |
+| payments-worker  | 256 MB        | Python worker                |
+| nginx            | 128 MB        | Reverse proxy                |
+| Prometheus       | 512 MB        | Métricas                     |
+| Grafana          | 512 MB        | Dashboards                   |
+| **Total**        | **~11.2 GB**  | Restam ~12.8 GB para SO/swap |
+
+### Terraform (opcional)
+
+Se preferir infraestrutura como código, use os arquivos Terraform em `deploy/oracle-cloud/`:
+
+```bash
+cd deploy/oracle-cloud
+cp terraform.tfvars.example terraform.tfvars
+# Preencher com suas credenciais OCI
+terraform init
+terraform plan
+terraform apply
+```
+
+Veja `deploy/oracle-cloud/README.md` para detalhes.
+
+### Diferenças Oracle Cloud vs Hetzner
+
+| Aspecto              | Oracle Cloud Free Tier       | Hetzner VPS                |
+|----------------------|------------------------------|----------------------------|
+| Custo                | Gratuito (Always Free)       | A partir de €4.5/mês       |
+| Arquitetura          | ARM64 (Ampere A1)            | x86_64                     |
+| RAM                  | 24 GB                        | 4-16 GB (conforme plano)   |
+| Firewall             | VCN Security List + iptables | UFW                        |
+| Usuário SSH padrão   | ubuntu / opc                 | root                       |
+| Imagens Docker       | Devem suportar linux/arm64   | linux/amd64 padrão         |
+| Boot volume          | 200 GB                       | 40-160 GB (conforme plano) |
+
+---
+
 ## Troubleshooting
 
 | Symptom                          | Probable Cause                               | Fix                                                      |

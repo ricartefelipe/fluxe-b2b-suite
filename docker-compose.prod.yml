@@ -16,6 +16,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 4G
 
   redis:
     image: redis:7-alpine
@@ -30,6 +34,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -47,6 +55,10 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          memory: 1G
 
   keycloak:
     image: quay.io/keycloak/keycloak:26.0
@@ -64,10 +76,15 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 1G
 
   # === BACKENDS ===
   saas-core:
     image: ghcr.io/${GHCR_ORG}/spring-saas-core:${SAAS_CORE_TAG:-latest}
+    platform: linux/arm64
     restart: unless-stopped
     environment:
       SPRING_PROFILES_ACTIVE: prod
@@ -103,9 +120,14 @@ services:
       timeout: 5s
       retries: 5
       start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 2G
 
   orders-api:
     image: ghcr.io/${GHCR_ORG}/node-b2b-orders:${ORDERS_TAG:-latest}
+    platform: linux/arm64
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -132,9 +154,14 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   orders-worker:
     image: ghcr.io/${GHCR_ORG}/node-b2b-orders-worker:${ORDERS_TAG:-latest}
+    platform: linux/arm64
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -146,9 +173,14 @@ services:
     depends_on:
       orders-api:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   payments-api:
     image: ghcr.io/${GHCR_ORG}/py-payments-ledger:${PAYMENTS_TAG:-latest}
+    platform: linux/arm64
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql+psycopg://${DB_USER:-fluxe}:${DB_PASSWORD}@postgres:5432/payments
@@ -176,9 +208,14 @@ services:
       timeout: 5s
       retries: 3
       start_period: 5s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   payments-worker:
     image: ghcr.io/${GHCR_ORG}/py-payments-ledger-worker:${PAYMENTS_TAG:-latest}
+    platform: linux/arm64
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql+psycopg://${DB_USER:-fluxe}:${DB_PASSWORD}@postgres:5432/payments
@@ -191,6 +228,10 @@ services:
     depends_on:
       payments-api:
         condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   # === REVERSE PROXY ===
   nginx:
@@ -206,6 +247,10 @@ services:
       - orders-api
       - payments-api
       - keycloak
+    deploy:
+      resources:
+        limits:
+          memory: 128M
 
   # === OBSERVABILITY ===
   prometheus:
@@ -219,6 +264,10 @@ services:
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.retention.time=30d"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
   grafana:
     image: grafana/grafana:latest
@@ -232,6 +281,10 @@ services:
       - grafana_data:/var/lib/grafana
     ports:
       - "127.0.0.1:3030:3000"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
 
 volumes:
   postgres_data:

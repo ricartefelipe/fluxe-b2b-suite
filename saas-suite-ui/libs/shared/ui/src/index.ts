@@ -4,6 +4,7 @@ export * from './lib/shell/header.component';
 export * from './lib/shell/sidebar.component';
 export * from './lib/tenant-switcher/tenant-switcher.component';
 export * from './lib/empty-state/empty-state.component';
+export * from './lib/table-skeleton/table-skeleton.component';
 export * from './lib/status-chip/status-chip.component';
 export * from './lib/error-page/error-page.component';
 export * from './lib/confirm-dialog/confirm-dialog.component';

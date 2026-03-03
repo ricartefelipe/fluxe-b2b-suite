@@ -2,6 +2,7 @@ import { Component, Input, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { AuthStore } from '@saas-suite/shared/auth';
+import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { NavItem } from './nav-item.model';
 
 @Component({
@@ -34,7 +35,7 @@ import { NavItem } from './nav-item.model';
         }
       </nav>
       <div class="sidebar-footer" aria-hidden="true">
-        <span class="version">v1.0.0</span>
+        <span class="version">v{{ appVersion }}</span>
       </div>
     </div>
   `,
@@ -148,6 +149,11 @@ export class SidebarComponent {
   @Input() navItems: NavItem[] = [];
   @Input() appTitle = '';
   private auth = inject(AuthStore);
+  private configService = inject(RuntimeConfigService);
+
+  get appVersion(): string {
+    return this.configService.get('version') || '0.0.0';
+  }
 
   visibleItems() {
     return this.navItems.filter(

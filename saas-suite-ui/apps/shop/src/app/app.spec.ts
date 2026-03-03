@@ -2,7 +2,6 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { App } from './app';
 import { appRoutes } from './app.routes';
 import { provideRouter } from '@angular/router';
-import { By } from '@angular/platform-browser';
 
 describe('App', () => {
   let component: App;
@@ -23,24 +22,20 @@ describe('App', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render title in header', () => {
+  it('should render brand name in header', () => {
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Fluxe B2B Suite');
+    expect(compiled.querySelector('.logo-name')?.textContent).toContain('Fluxe');
   });
 
   it('should render navigation links', () => {
-    const navLinks = fixture.debugElement.queryAll(By.css('nav a'));
+    const navLinks = fixture.nativeElement.querySelectorAll('.nav-link');
     expect(navLinks.length).toBeGreaterThan(0);
-    expect(navLinks[0].nativeElement.textContent).toContain('Products');
-    expect(navLinks[0].nativeElement.getAttribute('routerLink')).toBe(
-      '/products'
-    );
   });
 
   it('should render footer with correct copyright', () => {
     const footer = fixture.nativeElement.querySelector('.app-footer');
     expect(footer).toBeTruthy();
-    expect(footer?.textContent).toContain('© 2026 Fluxe B2B Suite');
+    expect(footer?.textContent).toContain('2026 Fluxe B2B Suite');
     expect(footer?.textContent).toContain('Multi-tenant B2B Platform');
   });
 

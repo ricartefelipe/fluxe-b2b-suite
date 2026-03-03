@@ -1,0 +1,91 @@
+# Deploy das 3 apps Angular para Cloudflare Pages.
+# Produção: push em main | Preview: push em develop
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'saas-suite-ui/**'
+      - '.github/workflows/deploy-frontend.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-frontend-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '9'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: saas-suite-ui
+    strategy:
+      matrix:
+        app:
+          - name: shop
+            project: fluxe-shop
+            output: dist/apps/shop/browser
+          - name: ops-portal
+            project: fluxe-ops-portal
+            output: dist/apps/ops-portal/browser
+          - name: admin-console
+            project: fluxe-admin-console
+            output: dist/apps/admin-console/browser
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          cache-dependency-path: saas-suite-ui/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build ${{ matrix.app.name }}
+        run: pnpm nx build ${{ matrix.app.name }} --configuration=production
+
+      - name: Inject runtime config
+        if: github.ref == 'refs/heads/main'
+        env:
+          CORE_API_URL: ${{ vars.CORE_API_URL }}
+          ORDERS_API_URL: ${{ vars.ORDERS_API_URL }}
+          PAYMENTS_API_URL: ${{ vars.PAYMENTS_API_URL }}
+          KEYCLOAK_URL: ${{ vars.KEYCLOAK_URL }}
+          KEYCLOAK_REALM: ${{ vars.KEYCLOAK_REALM }}
+          KEYCLOAK_CLIENT_ID: ${{ vars.KEYCLOAK_CLIENT_ID }}
+        run: |
+          OUTPUT_DIR="${{ matrix.app.output }}"
+          cat > "${OUTPUT_DIR}/config.json" << CONF
+          {
+            "coreApiUrl": "${CORE_API_URL:-https://api.fluxe.com.br}",
+            "ordersApiUrl": "${ORDERS_API_URL:-https://orders.fluxe.com.br}",
+            "paymentsApiUrl": "${PAYMENTS_API_URL:-https://payments.fluxe.com.br}",
+            "keycloakUrl": "${KEYCLOAK_URL:-https://auth.fluxe.com.br}"
+          }
+          CONF
+          cat > "${OUTPUT_DIR}/config.keycloak.json" << KC
+          {
+            "url": "${KEYCLOAK_URL:-https://auth.fluxe.com.br}",
+            "realm": "${KEYCLOAK_REALM:-fluxe}",
+            "clientId": "${KEYCLOAK_CLIENT_ID:-${{ matrix.app.name }}}"
+          }
+          KC
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy ${{ matrix.app.output }} --project-name=${{ matrix.app.project }} --branch=${{ github.ref_name }}
+          workingDirectory: saas-suite-ui

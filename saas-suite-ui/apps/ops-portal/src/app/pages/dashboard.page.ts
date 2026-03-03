@@ -77,15 +77,23 @@ const BAR_MAX_HEIGHT = 170;
 
       <!-- Charts Row -->
       <div class="charts-row">
+        <!-- TODO: Replace with ngx-charts or chart.js when dependency is added -->
         <!-- Revenue Bar Chart -->
         <mat-card class="chart-card">
           <mat-card-header>
             <mat-card-title>Receita — Últimos 7 dias</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <svg viewBox="0 0 490 230" class="bar-chart" role="img" aria-label="Gráfico de receita dos últimos 7 dias">
+            <svg viewBox="-5 0 495 230" class="bar-chart" overflow="visible" role="img" aria-label="Gráfico de receita dos últimos 7 dias">
+              @for (tick of yAxisTicks(); track tick.label) {
+                <line x1="20" [attr.y1]="tick.y" x2="480" [attr.y2]="tick.y" class="grid-line" />
+                <text x="16" [attr.y]="tick.y + 3" text-anchor="end" class="axis-label">{{ tick.label }}</text>
+              }
+              <text x="16" y="193" text-anchor="end" class="axis-label">0</text>
+
               <line x1="20" y1="10" x2="20" y2="190" class="axis" />
               <line x1="20" y1="190" x2="480" y2="190" class="axis" />
+
               @for (day of store.dailyRevenue(); track day.date; let i = $index) {
                 <rect
                   [attr.x]="i * 64 + 36"
@@ -94,7 +102,8 @@ const BAR_MAX_HEIGHT = 170;
                   [attr.height]="barHeight(day.amount)"
                   rx="4"
                   class="bar"
-                  [matTooltip]="formatCurrency(day.amount)"
+                  [style.animation-delay]="i * 80 + 'ms'"
+                  [matTooltip]="day.label + ': ' + formatCurrency(day.amount)"
                 />
                 <text
                   [attr.x]="i * 64 + 58"
@@ -115,6 +124,7 @@ const BAR_MAX_HEIGHT = 170;
           </mat-card-content>
         </mat-card>
 
+        <!-- TODO: Replace with ngx-charts or chart.js when dependency is added -->
         <!-- Orders by Status Donut -->
         <mat-card class="chart-card">
           <mat-card-header>
@@ -123,7 +133,7 @@ const BAR_MAX_HEIGHT = 170;
           <mat-card-content class="donut-layout">
             <svg viewBox="0 0 200 200" class="donut-chart" role="img" aria-label="Gráfico de pedidos por status">
               <g transform="rotate(-90 100 100)">
-                @for (seg of donutSegments(); track seg.status) {
+                @for (seg of donutSegments(); track seg.status; let i = $index) {
                   @if (seg.count > 0) {
                     <circle
                       cx="100" cy="100" r="70"
@@ -132,8 +142,9 @@ const BAR_MAX_HEIGHT = 170;
                       stroke-width="28"
                       [attr.stroke-dasharray]="seg.dashArray"
                       [attr.stroke-dashoffset]="seg.dashOffset"
-                      [matTooltip]="seg.status + ': ' + seg.count"
+                      [matTooltip]="seg.status + ': ' + seg.count + ' (' + seg.pct + '%)'"
                       class="donut-segment"
+                      [style.animation-delay]="i * 120 + 'ms'"
                     />
                   }
                 }
@@ -142,11 +153,11 @@ const BAR_MAX_HEIGHT = 170;
               <text x="100" y="114" text-anchor="middle" class="donut-total-label">pedidos</text>
             </svg>
             <div class="legend">
-              @for (seg of store.ordersByStatus(); track seg.status) {
+              @for (seg of donutSegments(); track seg.status) {
                 <div class="legend-item">
                   <span class="legend-dot" [style.background]="seg.color"></span>
                   <span class="legend-status">{{ seg.status }}</span>
-                  <span class="legend-count">{{ seg.count }}</span>
+                  <span class="legend-count">{{ seg.count }} ({{ seg.pct }}%)</span>
                 </div>
               }
             </div>
@@ -330,14 +341,40 @@ const BAR_MAX_HEIGHT = 170;
       display: block;
     }
 
+    .grid-line {
+      stroke: var(--app-border);
+      stroke-width: 0.5;
+      stroke-dasharray: 4 3;
+      opacity: 0.5;
+    }
+
+    .axis-label {
+      font-size: 9px;
+      fill: var(--app-text-secondary);
+    }
+
     .bar {
       fill: var(--app-primary);
-      opacity: 0.85;
-      transition: opacity 0.2s;
+      transform-box: fill-box;
+      transform-origin: bottom center;
+      animation: bar-grow 0.5s ease-out both;
+      cursor: pointer;
     }
 
     .bar:hover {
       opacity: 1;
+      filter: brightness(1.15);
+    }
+
+    @keyframes bar-grow {
+      from {
+        transform: scaleY(0);
+        opacity: 0;
+      }
+      to {
+        transform: scaleY(1);
+        opacity: 0.85;
+      }
     }
 
     .axis {
@@ -371,11 +408,24 @@ const BAR_MAX_HEIGHT = 170;
     }
 
     .donut-segment {
-      transition: opacity 0.2s;
+      animation: donut-appear 0.6s ease-out both;
+      cursor: pointer;
     }
 
     .donut-segment:hover {
       opacity: 0.75;
+      filter: brightness(1.1);
+    }
+
+    @keyframes donut-appear {
+      from {
+        stroke-width: 0;
+        opacity: 0;
+      }
+      to {
+        stroke-width: 28;
+        opacity: 1;
+      }
     }
 
     .donut-total {
@@ -487,6 +537,15 @@ export class DashboardPage implements OnInit {
 
   orderColumns = ['id', 'customerId', 'status', 'totalAmount', 'createdAt'];
 
+  readonly yAxisTicks = computed(() => {
+    const max = this.store.maxDailyRevenue();
+    if (max === 0) return [];
+    return [0.25, 0.5, 0.75, 1].map(pct => ({
+      y: 190 - pct * BAR_MAX_HEIGHT,
+      label: this.shortCurrency(max * pct),
+    }));
+  });
+
   readonly donutSegments = computed(() => {
     const statuses = this.store.ordersByStatus();
     const total = this.store.totalOrdersForChart();
@@ -499,6 +558,7 @@ export class DashboardPage implements OnInit {
         ...s,
         dashArray: `${length} ${DONUT_CIRCUMFERENCE - length}`,
         dashOffset: offset,
+        pct: total > 0 ? Math.round((s.count / total) * 100) : 0,
       };
     });
   });

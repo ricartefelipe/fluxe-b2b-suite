@@ -10,12 +10,12 @@ import { I18nService } from '@saas-suite/shared/i18n';
   imports: [RouterLink, MatButtonModule, MatIconModule],
   template: `
     <div class="error-page">
-      <mat-icon class="error-icon">{{ icon }}</mat-icon>
+      <mat-icon class="error-icon">{{ iconDisplay }}</mat-icon>
       <h1>{{ code }}</h1>
       <h2>{{ titleDisplay }}</h2>
       <p>{{ messageDisplay }}</p>
       @if (correlationId) { <code>{{ i18n.messages().errorPage.correlationIdLabel }}: {{ correlationId }}</code> }
-      <button mat-raised-button color="primary" routerLink="/">{{ i18n.messages().errorPage.backToHome }}</button>
+      <button mat-raised-button color="primary" [routerLink]="backRoute">{{ backLabel }}</button>
     </div>
   `,
   styles: [`
@@ -29,15 +29,34 @@ export class ErrorPageComponent {
   @Input() code = '500';
   @Input() title = '';
   @Input() message = '';
-  @Input() icon = 'error_outline';
+  @Input() icon = '';
   @Input() correlationId?: string;
 
   protected i18n = inject(I18nService);
 
-  get titleDisplay(): string {
-    return this.title || this.i18n.messages().errorPage.defaultTitle;
+  get iconDisplay(): string {
+    if (this.icon) return this.icon;
+    return String(this.code) === '404' ? 'search_off' : 'error_outline';
   }
+
+  get titleDisplay(): string {
+    if (this.title) return this.title;
+    if (String(this.code) === '404') return this.i18n.messages().errorPage.notFoundTitle;
+    return this.i18n.messages().errorPage.defaultTitle;
+  }
+
   get messageDisplay(): string {
-    return this.message || this.i18n.messages().errorPage.defaultMessage;
+    if (this.message) return this.message;
+    if (String(this.code) === '404') return this.i18n.messages().errorPage.notFoundMessage;
+    return this.i18n.messages().errorPage.defaultMessage;
+  }
+
+  get backRoute(): string {
+    return String(this.code) === '404' ? '/' : '/';
+  }
+
+  get backLabel(): string {
+    if (String(this.code) === '404') return this.i18n.messages().errorPage.backToDashboard;
+    return this.i18n.messages().errorPage.backToHome;
   }
 }

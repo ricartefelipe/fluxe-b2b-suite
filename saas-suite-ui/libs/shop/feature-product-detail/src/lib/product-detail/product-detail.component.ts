@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -411,6 +411,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
 })
 export class ProductDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly productsService = inject(ProductsService);
   private readonly cartService = inject(CartService);
   private readonly snackBar = inject(MatSnackBar);
@@ -497,8 +498,7 @@ export class ProductDetailComponent implements OnInit {
       verticalPosition: 'bottom',
       panelClass: ['cart-snackbar'],
     }).onAction().subscribe(() => {
-      // Navigate handled by routerLink on checkout
-      window.location.href = '/checkout';
+      this.router.navigate(['/checkout']);
     });
   }
 }

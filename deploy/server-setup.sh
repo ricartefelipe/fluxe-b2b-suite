@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
-# Initial VPS setup for Fluxe B2B Suite on Hetzner (Ubuntu 22.04+).
-# Run ONCE as root on a fresh server: curl -sSL <url> | bash
-# or: scp server-setup.sh root@<ip>:/tmp/ && ssh root@<ip> bash /tmp/server-setup.sh
+# Initial server setup for Fluxe B2B Suite on Oracle Cloud Free Tier (Ampere A1).
+# Also supports Hetzner/generic Ubuntu VPS.
+# Run ONCE as root on a fresh server:
+#   scp server-setup.sh root@<ip>:/tmp/ && ssh root@<ip> bash /tmp/server-setup.sh
 set -euo pipefail
 
 FLUXE_USER="fluxe"
 PROJECT_DIR="/opt/fluxe"
+SWAP_SIZE_GB=4
 
 echo "============================================"
-echo " Fluxe B2B Suite — VPS Initial Setup"
+echo " Fluxe B2B Suite — Server Initial Setup"
 echo "============================================"
 echo ""
 
@@ -17,31 +19,87 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
+# ─── Detect OS and architecture ──────────────────────────────────────────────
+ARCH=$(uname -m)
+echo "Arquitetura detectada: ${ARCH}"
+
+if [ -f /etc/os-release ]; then
+  . /etc/os-release
+  OS_ID="${ID}"
+  OS_VERSION="${VERSION_ID}"
+  echo "Sistema operacional: ${PRETTY_NAME}"
+else
+  echo "ERRO: não foi possível detectar o SO."
+  exit 1
+fi
+
+IS_ORACLE_LINUX=false
+IS_UBUNTU=false
+IS_ARM=false
+
+case "${OS_ID}" in
+  ubuntu)   IS_UBUNTU=true ;;
+  ol|oraclelinux) IS_ORACLE_LINUX=true ;;
+  *)
+    echo "AVISO: SO '${OS_ID}' não testado. Tentando continuar como Ubuntu-like..."
+    IS_UBUNTU=true
+    ;;
+esac
+
+case "${ARCH}" in
+  aarch64|arm64) IS_ARM=true; echo "  → ARM64 detectado (Oracle Ampere A1 / similar)" ;;
+  x86_64)        echo "  → x86_64 detectado" ;;
+  *)             echo "AVISO: arquitetura '${ARCH}' não testada." ;;
+esac
+
+TOTAL_STEPS=9
+
 # ─── 1. System update ───────────────────────────────────────────────────────
-echo "[1/8] Atualizando sistema..."
-export DEBIAN_FRONTEND=noninteractive
-apt-get update -qq
-apt-get upgrade -y -qq
-apt-get install -y -qq \
-  curl wget git unzip htop ncdu jq \
-  ca-certificates gnupg lsb-release \
-  software-properties-common apt-transport-https
+echo ""
+echo "[1/${TOTAL_STEPS}] Atualizando sistema..."
+
+if $IS_UBUNTU; then
+  export DEBIAN_FRONTEND=noninteractive
+  apt-get update -qq
+  apt-get upgrade -y -qq
+  apt-get install -y -qq \
+    curl wget git unzip htop ncdu jq \
+    ca-certificates gnupg lsb-release \
+    software-properties-common apt-transport-https \
+    iptables-persistent
+elif $IS_ORACLE_LINUX; then
+  dnf update -y -q
+  dnf install -y -q \
+    curl wget git unzip htop jq \
+    ca-certificates gnupg2 \
+    iptables-services
+fi
 
 # ─── 2. Docker + Docker Compose ─────────────────────────────────────────────
-echo "[2/8] Instalando Docker..."
+echo ""
+echo "[2/${TOTAL_STEPS}] Instalando Docker..."
+
 if ! command -v docker &>/dev/null; then
-  install -m 0755 -d /etc/apt/keyrings
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
-    gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-  chmod a+r /etc/apt/keyrings/docker.gpg
+  if $IS_UBUNTU; then
+    install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+      gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    chmod a+r /etc/apt/keyrings/docker.gpg
 
-  echo \
-    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
-    https://download.docker.com/linux/ubuntu \
-    $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
+    echo \
+      "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] \
+      https://download.docker.com/linux/ubuntu \
+      $(lsb_release -cs) stable" > /etc/apt/sources.list.d/docker.list
 
-  apt-get update -qq
-  apt-get install -y -qq docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+    apt-get update -qq
+    apt-get install -y -qq docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+  elif $IS_ORACLE_LINUX; then
+    dnf install -y -q dnf-utils
+    dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    dnf install -y -q docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  fi
+
   systemctl enable docker
   systemctl start docker
   echo "  Docker $(docker --version) instalado."
@@ -49,57 +107,107 @@ else
   echo "  Docker já instalado: $(docker --version)"
 fi
 
-# ─── 3. fail2ban (SSH brute-force protection) ───────────────────────────────
-echo "[3/8] Instalando fail2ban..."
-apt-get install -y -qq fail2ban
-cat > /etc/fail2ban/jail.local << 'F2B'
+if $IS_ARM; then
+  echo "  ℹ  ARM64: todas as imagens Docker devem suportar linux/arm64."
+fi
+
+# ─── 3. fail2ban ─────────────────────────────────────────────────────────────
+echo ""
+echo "[3/${TOTAL_STEPS}] Instalando fail2ban..."
+
+if $IS_UBUNTU; then
+  apt-get install -y -qq fail2ban
+  F2B_LOGPATH="/var/log/auth.log"
+elif $IS_ORACLE_LINUX; then
+  dnf install -y -q epel-release || true
+  dnf install -y -q fail2ban
+  F2B_LOGPATH="/var/log/secure"
+fi
+
+cat > /etc/fail2ban/jail.local << EOF
 [sshd]
 enabled  = true
 port     = ssh
 filter   = sshd
-logpath  = /var/log/auth.log
+logpath  = ${F2B_LOGPATH}
 maxretry = 5
 bantime  = 3600
 findtime = 600
-F2B
+EOF
 systemctl enable fail2ban
 systemctl restart fail2ban
 echo "  fail2ban ativo (ban 1h após 5 tentativas)."
 
-# ─── 4. UFW firewall ────────────────────────────────────────────────────────
-echo "[4/8] Configurando UFW..."
-apt-get install -y -qq ufw
-ufw default deny incoming
-ufw default allow outgoing
-ufw allow 22/tcp   comment "SSH"
-ufw allow 80/tcp   comment "HTTP"
-ufw allow 443/tcp  comment "HTTPS"
-echo "y" | ufw enable
-ufw status verbose
-echo "  UFW ativo: 22, 80, 443."
+# ─── 4. Firewall (iptables — compatible with Oracle Cloud VCN) ──────────────
+echo ""
+echo "[4/${TOTAL_STEPS}] Configurando firewall (iptables)..."
+echo ""
+echo "  ╔══════════════════════════════════════════════════════════════╗"
+echo "  ║  ORACLE CLOUD: O firewall principal é o VCN Security List. ║"
+echo "  ║  Abra as portas 22, 80, 443 na Security List da sua VCN!  ║"
+echo "  ║  As regras abaixo são apenas proteção adicional no SO.     ║"
+echo "  ╚══════════════════════════════════════════════════════════════╝"
+echo ""
+
+iptables -F INPUT 2>/dev/null || true
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+iptables -A INPUT -p icmp -j ACCEPT
+iptables -P INPUT DROP
+
+if $IS_UBUNTU; then
+  netfilter-persistent save 2>/dev/null || iptables-save > /etc/iptables/rules.v4
+elif $IS_ORACLE_LINUX; then
+  iptables-save > /etc/sysconfig/iptables
+  systemctl enable iptables
+  systemctl restart iptables
+fi
+
+echo "  iptables configurado: SSH(22), HTTP(80), HTTPS(443)."
 
 # ─── 5. Create non-root user ────────────────────────────────────────────────
-echo "[5/8] Criando usuário '${FLUXE_USER}'..."
+echo ""
+echo "[5/${TOTAL_STEPS}] Criando usuário '${FLUXE_USER}'..."
+
 if id "${FLUXE_USER}" &>/dev/null; then
   echo "  Usuário '${FLUXE_USER}' já existe."
 else
-  adduser --disabled-password --gecos "Fluxe Deploy" "${FLUXE_USER}"
-  usermod -aG docker "${FLUXE_USER}"
-  usermod -aG sudo "${FLUXE_USER}"
-
-  # Copy SSH authorized_keys from root
-  mkdir -p /home/${FLUXE_USER}/.ssh
-  if [ -f /root/.ssh/authorized_keys ]; then
-    cp /root/.ssh/authorized_keys /home/${FLUXE_USER}/.ssh/
-    chown -R ${FLUXE_USER}:${FLUXE_USER} /home/${FLUXE_USER}/.ssh
-    chmod 700 /home/${FLUXE_USER}/.ssh
-    chmod 600 /home/${FLUXE_USER}/.ssh/authorized_keys
+  if $IS_UBUNTU; then
+    adduser --disabled-password --gecos "Fluxe Deploy" "${FLUXE_USER}"
+  elif $IS_ORACLE_LINUX; then
+    useradd -m -c "Fluxe Deploy" "${FLUXE_USER}"
   fi
+
+  usermod -aG docker "${FLUXE_USER}"
+
+  ORIGINAL_USER=""
+  if [ -d /home/ubuntu/.ssh ]; then
+    ORIGINAL_USER="ubuntu"
+  elif [ -d /home/opc/.ssh ]; then
+    ORIGINAL_USER="opc"
+  fi
+
+  mkdir -p /home/${FLUXE_USER}/.ssh
+  if [ -n "${ORIGINAL_USER}" ] && [ -f /home/${ORIGINAL_USER}/.ssh/authorized_keys ]; then
+    cp /home/${ORIGINAL_USER}/.ssh/authorized_keys /home/${FLUXE_USER}/.ssh/
+  elif [ -f /root/.ssh/authorized_keys ]; then
+    cp /root/.ssh/authorized_keys /home/${FLUXE_USER}/.ssh/
+  fi
+
+  chown -R ${FLUXE_USER}:${FLUXE_USER} /home/${FLUXE_USER}/.ssh
+  chmod 700 /home/${FLUXE_USER}/.ssh
+  chmod 600 /home/${FLUXE_USER}/.ssh/authorized_keys 2>/dev/null || true
+
   echo "  Usuário '${FLUXE_USER}' criado e adicionado ao grupo docker."
 fi
 
 # ─── 6. Docker log rotation ─────────────────────────────────────────────────
-echo "[6/8] Configurando rotação de logs Docker..."
+echo ""
+echo "[6/${TOTAL_STEPS}] Configurando rotação de logs Docker..."
+
 mkdir -p /etc/docker
 cat > /etc/docker/daemon.json << 'DAEMON'
 {
@@ -115,81 +223,93 @@ systemctl restart docker
 echo "  Logs limitados a 10MB x 3 arquivos por container."
 
 # ─── 7. Project directory structure ─────────────────────────────────────────
-echo "[7/8] Criando estrutura de diretórios..."
+echo ""
+echo "[7/${TOTAL_STEPS}] Criando estrutura de diretórios..."
+
 mkdir -p ${PROJECT_DIR}/{backups/{daily,monthly},logs,ssl,envs}
 chown -R ${FLUXE_USER}:${FLUXE_USER} ${PROJECT_DIR}
-cat > ${PROJECT_DIR}/.env.example << 'ENVEX'
-# --- Fluxe B2B Suite — Production Environment ---
-# Copy to .env and fill in real values.
-
-# Domain
-DOMAIN=fluxe.com.br
-GHCR_ORG=your-github-org
-
-# Database
-DB_USER=fluxe
-DB_PASSWORD=CHANGE_ME_STRONG_PASSWORD
-REDIS_PASSWORD=CHANGE_ME_REDIS
-
-# RabbitMQ
-RABBITMQ_USER=fluxe
-RABBITMQ_PASSWORD=CHANGE_ME_RABBIT
-
-# Auth
-JWT_SECRET=CHANGE_ME_MIN_32_CHARS
-JWT_ISSUER=spring-saas-core
-OIDC_ISSUER_URI=https://auth.fluxe.com.br/realms/fluxe
-KEYCLOAK_ADMIN=admin
-KEYCLOAK_ADMIN_PASSWORD=CHANGE_ME_KC
-KEYCLOAK_HOSTNAME=auth.fluxe.com.br
-
-# CORS
-CORS_ALLOWED_ORIGINS=https://shop.fluxe.com.br,https://ops.fluxe.com.br,https://admin.fluxe.com.br
-
-# Image tags
-SAAS_CORE_TAG=latest
-ORDERS_TAG=latest
-PAYMENTS_TAG=latest
-
-# Observability
-GRAFANA_USER=admin
-GRAFANA_PASSWORD=CHANGE_ME_GRAFANA
-SENTRY_DSN_CORE=
-SENTRY_DSN_ORDERS=
-SENTRY_DSN_PAYMENTS=
-
-# Payments
-GATEWAY_PROVIDER=fake
-STRIPE_API_KEY=
-STRIPE_WEBHOOK_SECRET=
-
-# Backup (optional — Backblaze B2 / S3)
-B2_KEY_ID=
-B2_APP_KEY=
-B2_BUCKET=
-ENVEX
 echo "  Diretórios criados em ${PROJECT_DIR}"
 
-# ─── 8. Certbot (for API/Keycloak SSL if not using Cloudflare proxy) ───────
-echo "[8/8] Instalando Certbot..."
+# ─── 8. Configure swap ──────────────────────────────────────────────────────
+echo ""
+echo "[8/${TOTAL_STEPS}] Configurando swap (${SWAP_SIZE_GB}GB)..."
+
+if [ -f /swapfile ]; then
+  echo "  Swap já existe:"
+  swapon --show
+else
+  fallocate -l ${SWAP_SIZE_GB}G /swapfile
+  chmod 600 /swapfile
+  mkswap /swapfile
+  swapon /swapfile
+
+  if ! grep -q '/swapfile' /etc/fstab; then
+    echo '/swapfile none swap sw 0 0' >> /etc/fstab
+  fi
+
+  sysctl vm.swappiness=10
+  sysctl vm.vfs_cache_pressure=50
+  cat >> /etc/sysctl.conf << 'SYSCTL'
+vm.swappiness=10
+vm.vfs_cache_pressure=50
+SYSCTL
+
+  echo "  Swap de ${SWAP_SIZE_GB}GB configurado."
+fi
+
+# ─── 9. Certbot ─────────────────────────────────────────────────────────────
+echo ""
+echo "[9/${TOTAL_STEPS}] Instalando Certbot..."
+
 if ! command -v certbot &>/dev/null; then
-  apt-get install -y -qq certbot
+  if $IS_UBUNTU; then
+    apt-get install -y -qq certbot
+  elif $IS_ORACLE_LINUX; then
+    dnf install -y -q certbot
+  fi
   echo "  Certbot instalado."
-  echo "  Para gerar certificados: certbot certonly --standalone -d api.fluxe.com.br"
 else
   echo "  Certbot já instalado."
 fi
 
 # ─── Done ────────────────────────────────────────────────────────────────────
+IP_ADDR=$(hostname -I | awk '{print $1}')
+
 echo ""
 echo "============================================"
 echo " Setup concluído!"
 echo "============================================"
 echo ""
+echo "Arquitetura: ${ARCH}"
+echo "SO: ${PRETTY_NAME:-unknown}"
+echo "Swap: ${SWAP_SIZE_GB}GB"
+echo ""
+
+if $IS_ARM; then
+  echo "╔══════════════════════════════════════════════════════════════╗"
+  echo "║  ARM64 DETECTADO — Imagens Docker devem ser linux/arm64    ║"
+  echo "║  As imagens do GHCR já são multi-arch (amd64 + arm64).     ║"
+  echo "╚══════════════════════════════════════════════════════════════╝"
+  echo ""
+fi
+
+echo "┌──────────────────────────────────────────────────────────────┐"
+echo "│  ORACLE CLOUD — Configurar VCN Security List:               │"
+echo "│                                                              │"
+echo "│  1. Acesse: cloud.oracle.com → Networking → VCN             │"
+echo "│  2. Selecione sua VCN → Security Lists                      │"
+echo "│  3. Adicione Ingress Rules:                                  │"
+echo "│     • Source: 0.0.0.0/0  Port: 22   (SSH)                   │"
+echo "│     • Source: 0.0.0.0/0  Port: 80   (HTTP)                  │"
+echo "│     • Source: 0.0.0.0/0  Port: 443  (HTTPS)                 │"
+echo "│                                                              │"
+echo "│  Sem essas regras, o tráfego externo NÃO chega à VM!        │"
+echo "└──────────────────────────────────────────────────────────────┘"
+echo ""
 echo "Próximos passos:"
 echo ""
 echo "  1. Fazer login como '${FLUXE_USER}':"
-echo "     ssh ${FLUXE_USER}@$(hostname -I | awk '{print $1}')"
+echo "     ssh ${FLUXE_USER}@${IP_ADDR}"
 echo ""
 echo "  2. Clonar o repositório em ${PROJECT_DIR}:"
 echo "     cd ${PROJECT_DIR}"
@@ -200,16 +320,13 @@ echo "     cp .env.example .env"
 echo "     nano .env   # preencher senhas reais"
 echo ""
 echo "  4. Subir tudo:"
-echo "     docker compose -f docker-compose.prod.yml up -d"
+echo "     ./scripts/deploy.sh"
 echo ""
-echo "  5. (Opcional) Configurar DNS no Cloudflare apontando para $(hostname -I | awk '{print $1}')"
-echo "     api.fluxe.com.br   A  $(hostname -I | awk '{print $1}')  (proxied)"
-echo "     auth.fluxe.com.br  A  $(hostname -I | awk '{print $1}')  (proxied)"
+echo "  5. Configurar DNS no Cloudflare apontando para ${IP_ADDR}:"
+echo "     api.fluxe.com.br   A  ${IP_ADDR}  (proxied)"
+echo "     auth.fluxe.com.br  A  ${IP_ADDR}  (proxied)"
 echo ""
 echo "  6. (Opcional) Configurar backup cron:"
 echo "     crontab -e"
 echo "     0 3 * * * ${PROJECT_DIR}/scripts/backup.sh >> ${PROJECT_DIR}/logs/backup.log 2>&1"
-echo ""
-echo "  7. (Opcional) Configurar health check cron:"
-echo "     */5 * * * * ${PROJECT_DIR}/scripts/health-monitor.sh >> ${PROJECT_DIR}/logs/health.log 2>&1"
 echo ""

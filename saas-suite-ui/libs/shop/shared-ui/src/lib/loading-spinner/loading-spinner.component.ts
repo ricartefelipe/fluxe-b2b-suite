@@ -1,13 +1,13 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'shop-loading-spinner',
   imports: [CommonModule],
   template: `
-    <div class="spinner-container">
-      <div class="spinner"></div>
-      <p>Loading...</p>
+    <div class="spinner-container" role="status" aria-live="polite" [attr.aria-label]="ariaLabel">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>{{ label }}</p>
     </div>
   `,
   styles: [`
@@ -41,4 +41,7 @@ import { CommonModule } from '@angular/common';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoadingSpinnerComponent {}
+export class LoadingSpinnerComponent {
+  @Input() label = 'Loading...';
+  @Input() ariaLabel = 'Carregando conteúdo';
+}

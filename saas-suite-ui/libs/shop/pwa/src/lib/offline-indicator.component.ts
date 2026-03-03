@@ -4,8 +4,10 @@ import {
   DestroyRef,
   inject,
   OnInit,
+  PLATFORM_ID,
   signal,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
@@ -56,11 +58,14 @@ import { MatIcon } from '@angular/material/icon';
 export class OfflineIndicatorComponent implements OnInit {
   readonly offline = signal(false);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   private readonly onOnline = (): void => this.offline.set(false);
   private readonly onOffline = (): void => this.offline.set(true);
 
   ngOnInit(): void {
+    if (!this.isBrowser) return;
+
     this.offline.set(!navigator.onLine);
 
     window.addEventListener('online', this.onOnline);

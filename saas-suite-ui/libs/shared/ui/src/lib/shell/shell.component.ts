@@ -1,4 +1,5 @@
-import { Component, HostListener, Input, OnInit, signal } from '@angular/core';
+import { Component, HostListener, Input, OnInit, signal, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './header.component';
 import { SidebarComponent } from './sidebar.component';
@@ -125,7 +126,10 @@ export class ShellComponent implements OnInit {
     this.sidebarOpen.set(false);
   }
 
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   private checkViewport(): void {
+    if (!this.isBrowser) return;
     const mobile = window.innerWidth < MOBILE_BREAKPOINT;
     this.isMobile.set(mobile);
     if (mobile && this.sidebarOpen()) {

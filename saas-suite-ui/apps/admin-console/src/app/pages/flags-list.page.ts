@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, AfterViewInit, effect } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
@@ -8,16 +8,21 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { EmptyStateComponent } from '@saas-suite/shared/ui';
+import { MatSortModule, MatSort } from '@angular/material/sort';
+import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
+import { EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
 import { FlagsFacade, FeatureFlag } from '@saas-suite/data-access/core';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
+import { I18nService } from '@saas-suite/shared/i18n';
 
 @Component({
   selector: 'app-flags-list',
   standalone: true,
   imports: [
     FormsModule, MatTableModule, MatButtonModule, MatIconModule, MatProgressBarModule,
-    MatFormFieldModule, MatInputModule, MatSlideToggleModule, MatSnackBarModule, EmptyStateComponent,
+    MatFormFieldModule, MatInputModule, MatSlideToggleModule, MatSnackBarModule,
+    MatSortModule, MatPaginatorModule,
+    EmptyStateComponent, TableSkeletonComponent,
   ],
   template: `
     <div class="page-header">
@@ -34,7 +39,7 @@ import { TenantContextStore } from '@saas-suite/domains/tenancy';
         <div class="create-form">
           <mat-form-field appearance="outline">
             <mat-label>Nome</mat-label>
-            <input matInput [(ngModel)]="newName" placeholder="ex: dark_mode">
+            <input matInput [(ngModel)]="newName" [placeholder]="i18n.messages().adminPlaceholders.flagName">
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Descrição</mat-label>
@@ -50,24 +55,24 @@ import { TenantContextStore } from '@saas-suite/domains/tenancy';
         </button>
       }
 
-      @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
-
-      @if (facade.flags().length === 0 && !facade.loading()) {
+      @if (facade.loading()) {
+        <saas-table-skeleton [rowCount]="5" [columns]="4" />
+      } @else if (dataSource.data.length === 0) {
         <saas-empty-state icon="flag" title="Nenhuma flag encontrada para este tenant" />
       } @else {
-        <table mat-table [dataSource]="facade.flags()" class="full-width">
+        <table mat-table [dataSource]="dataSource" matSort class="full-width">
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Nome</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
             <td mat-cell *matCellDef="let f"><code>{{ f.name }}</code></td>
           </ng-container>
           <ng-container matColumnDef="enabled">
-            <th mat-header-cell *matHeaderCellDef>Habilitada</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Habilitada</th>
             <td mat-cell *matCellDef="let f">
               <mat-slide-toggle [checked]="f.enabled" (change)="toggle(f)" />
             </td>
           </ng-container>
           <ng-container matColumnDef="description">
-            <th mat-header-cell *matHeaderCellDef>Descrição</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
             <td mat-cell *matCellDef="let f">{{ f.description || '—' }}</td>
           </ng-container>
           <ng-container matColumnDef="actions">
@@ -79,6 +84,7 @@ import { TenantContextStore } from '@saas-suite/domains/tenancy';
           <tr mat-header-row *matHeaderRowDef="columns"></tr>
           <tr mat-row *matRowDef="let row; columns: columns;"></tr>
         </table>
+        <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons />
       }
     }
   `,
@@ -90,16 +96,32 @@ import { TenantContextStore } from '@saas-suite/domains/tenancy';
     code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
   `],
 })
-export class FlagsListPage implements OnInit {
+export class FlagsListPage implements OnInit, AfterViewInit {
   protected facade = inject(FlagsFacade);
   protected tenantStore = inject(TenantContextStore);
+  protected i18n = inject(I18nService);
   private snackBar = inject(MatSnackBar);
 
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  dataSource = new MatTableDataSource<any>([]);
   columns = ['name', 'enabled', 'description', 'actions'];
   showForm = false;
   newName = '';
   newDesc = '';
   newEnabled = true;
+
+  constructor() {
+    effect(() => {
+      this.dataSource.data = this.facade.flags();
+    });
+  }
+
+  ngAfterViewInit(): void {
+    if (this.sort) this.dataSource.sort = this.sort;
+    if (this.paginator) this.dataSource.paginator = this.paginator;
+  }
 
   async ngOnInit(): Promise<void> {
     const tid = this.tenantStore.activeTenantId();

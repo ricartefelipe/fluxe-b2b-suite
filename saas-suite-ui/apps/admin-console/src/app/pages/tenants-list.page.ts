@@ -1,16 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, AfterViewInit, effect } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatTableModule } from '@angular/material/table';
+import { FormsModule } from '@angular/forms';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
-import { FormsModule } from '@angular/forms';
-import { StatusChipComponent, EmptyStateComponent } from '@saas-suite/shared/ui';
+import { MatSortModule, MatSort } from '@angular/material/sort';
+import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
+import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantsFacade, Tenant, TenantStatus, TenantPlan } from '@saas-suite/data-access/core';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
@@ -20,9 +21,10 @@ import { formatDateTime } from '@saas-suite/shared/util';
   selector: 'app-tenants-list',
   standalone: true,
   imports: [
-    MatTableModule, MatButtonModule, MatIconModule, MatProgressBarModule,
+    MatTableModule, MatButtonModule, MatIconModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatChipsModule,
-    MatDialogModule, FormsModule, StatusChipComponent, EmptyStateComponent,
+    MatDialogModule, FormsModule, MatSortModule, MatPaginatorModule,
+    StatusChipComponent, EmptyStateComponent, TableSkeletonComponent,
   ],
   template: `
     <div class="page-header">
@@ -57,30 +59,35 @@ import { formatDateTime } from '@saas-suite/shared/util';
       </mat-form-field>
     </div>
 
-    @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
-
-    @if (facade.tenants().length === 0 && !facade.loading()) {
-      <saas-empty-state icon="business" [title]="i18n.messages().tenant.noTenantsFound" />
+    @if (facade.loading()) {
+      <saas-table-skeleton [rowCount]="5" [columns]="6" />
+    } @else if (dataSource.data.length === 0) {
+      <saas-empty-state
+        icon="business"
+        [title]="i18n.messages().tenant.noTenantsFound"
+        [actionLabel]="i18n.messages().tenant.newTenant"
+        actionIcon="add"
+        (action)="openCreate()" />
     } @else {
-      <table mat-table [dataSource]="facade.tenants()" class="full-width">
+      <table mat-table [dataSource]="dataSource" matSort class="full-width">
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.name }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.name }}</th>
           <td mat-cell *matCellDef="let t">{{ t.name }}</td>
         </ng-container>
         <ng-container matColumnDef="slug">
-          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().tenant.tenantSlug }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().tenant.tenantSlug }}</th>
           <td mat-cell *matCellDef="let t"><code>{{ t.slug }}</code></td>
         </ng-container>
         <ng-container matColumnDef="plan">
-          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().tenant.tenantPlan }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().tenant.tenantPlan }}</th>
           <td mat-cell *matCellDef="let t">{{ t.plan }}</td>
         </ng-container>
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.status }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.status }}</th>
           <td mat-cell *matCellDef="let t"><saas-status-chip [status]="t.status" /></td>
         </ng-container>
         <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().tenant.createdAt }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().tenant.createdAt }}</th>
           <td mat-cell *matCellDef="let t">{{ fmtDate(t.createdAt) }}</td>
         </ng-container>
         <ng-container matColumnDef="actions">
@@ -93,6 +100,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
         <tr mat-row *matRowDef="let row; columns: columns;" class="clickable-row"></tr>
       </table>
+      <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons />
     }
   `,
   styles: [`
@@ -103,17 +111,32 @@ import { formatDateTime } from '@saas-suite/shared/util';
     .clickable-row:hover { background: rgba(0,0,0,.04); }
   `],
 })
-export class TenantsListPage implements OnInit {
+export class TenantsListPage implements OnInit, AfterViewInit {
   protected facade = inject(TenantsFacade);
   protected i18n = inject(I18nService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private tenantStore = inject(TenantContextStore);
 
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  dataSource = new MatTableDataSource<any>([]);
   columns = ['name', 'slug', 'plan', 'status', 'createdAt', 'actions'];
   filterName?: string;
   filterStatus?: TenantStatus;
   filterPlan?: TenantPlan;
+
+  constructor() {
+    effect(() => {
+      this.dataSource.data = this.facade.tenants();
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
 
   async ngOnInit(): Promise<void> { await this.search(); }
 

@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,13 +8,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DecimalPipe } from '@angular/common';
-import { OrdersFacade, OrderItem } from '@saas-suite/data-access/orders';
+import { OrdersFacade } from '@saas-suite/data-access/orders';
 
 @Component({
   selector: 'app-order-create',
   standalone: true,
   imports: [
-    FormsModule, MatCardModule, MatButtonModule, MatFormFieldModule,
+    ReactiveFormsModule, MatCardModule, MatButtonModule, MatFormFieldModule,
     MatInputModule, MatIconModule, MatSnackBarModule, DecimalPipe,
   ],
   template: `
@@ -25,49 +25,74 @@ import { OrdersFacade, OrderItem } from '@saas-suite/data-access/orders';
 
     <mat-card>
       <mat-card-content>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Cliente ID</mat-label>
-          <input matInput [(ngModel)]="customerId" placeholder="ID do cliente">
-        </mat-form-field>
+        <form [formGroup]="orderForm">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Cliente ID</mat-label>
+            <input matInput formControlName="customerId" placeholder="ID do cliente">
+            @if (orderForm.controls['customerId'].hasError('required') && orderForm.controls['customerId'].touched) {
+              <mat-error>Cliente ID é obrigatório</mat-error>
+            }
+          </mat-form-field>
 
-        <h3>Itens</h3>
-        @for (item of items; track $index) {
-          <div class="item-row">
-            <mat-form-field appearance="outline">
-              <mat-label>SKU</mat-label>
-              <input matInput [(ngModel)]="item.sku">
-            </mat-form-field>
-            <mat-form-field appearance="outline" style="width: 100px">
-              <mat-label>Qtd</mat-label>
-              <input matInput type="number" [(ngModel)]="item.quantity" min="1">
-            </mat-form-field>
-            <mat-form-field appearance="outline" style="width: 120px">
-              <mat-label>Preço Unit.</mat-label>
-              <input matInput type="number" [(ngModel)]="item.unitPrice" min="0" step="0.01">
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Descrição</mat-label>
-              <input matInput [(ngModel)]="item.description">
-            </mat-form-field>
-            <button mat-icon-button color="warn" (click)="removeItem($index)"><mat-icon>delete</mat-icon></button>
+          <mat-form-field appearance="outline" style="width: 140px">
+            <mat-label>Moeda</mat-label>
+            <input matInput formControlName="currency" placeholder="BRL">
+            @if (orderForm.controls['currency'].hasError('required') && orderForm.controls['currency'].touched) {
+              <mat-error>Moeda é obrigatória</mat-error>
+            }
+          </mat-form-field>
+
+          <h3>Itens</h3>
+          @for (item of items.controls; track $index) {
+            <div class="item-row" [formGroupName]="$index">
+              <mat-form-field appearance="outline">
+                <mat-label>SKU</mat-label>
+                <input matInput formControlName="sku">
+                @if (item.get('sku')!.hasError('required') && item.get('sku')!.touched) {
+                  <mat-error>SKU é obrigatório</mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field appearance="outline" style="width: 100px">
+                <mat-label>Qtd</mat-label>
+                <input matInput type="number" formControlName="quantity">
+                @if (item.get('quantity')!.hasError('required') && item.get('quantity')!.touched) {
+                  <mat-error>Obrigatório</mat-error>
+                }
+                @if (item.get('quantity')!.hasError('min')) {
+                  <mat-error>Quantidade mínima é 1</mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field appearance="outline" style="width: 120px">
+                <mat-label>Preço Unit.</mat-label>
+                <input matInput type="number" formControlName="unitPrice">
+                @if (item.get('unitPrice')!.hasError('min')) {
+                  <mat-error>Mínimo 0</mat-error>
+                }
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Descrição</mat-label>
+                <input matInput formControlName="description">
+              </mat-form-field>
+              <button mat-icon-button color="warn" type="button" (click)="removeItem($index)"><mat-icon>delete</mat-icon></button>
+            </div>
+          }
+          <button mat-stroked-button type="button" (click)="addItem()"><mat-icon>add</mat-icon> Adicionar Item</button>
+
+          <div class="total">
+            <strong>Total: {{ orderForm.get('currency')?.value }} {{ calcTotal() | number:'1.2-2' }}</strong>
           </div>
-        }
-        <button mat-stroked-button (click)="addItem()"><mat-icon>add</mat-icon> Adicionar Item</button>
 
-        <div class="total">
-          <strong>Total: BRL {{ calcTotal() | number:'1.2-2' }}</strong>
-        </div>
-
-        <button mat-raised-button color="primary" (click)="submit()" [disabled]="submitting()" class="submit-btn">
-          Criar Pedido
-        </button>
+          <button mat-raised-button color="primary" type="button" (click)="submit()" [disabled]="orderForm.invalid || submitting()" class="submit-btn">
+            Criar Pedido
+          </button>
+        </form>
       </mat-card-content>
     </mat-card>
   `,
   styles: [`
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .full-width { width: 100%; }
-    .item-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+    .item-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; }
     .item-row mat-form-field { flex: 1; }
     .total { margin: 16px 0; font-size: 18px; text-align: right; }
     .submit-btn { margin-top: 8px; }
@@ -77,20 +102,57 @@ export class OrderCreatePage {
   protected router = inject(Router);
   private facade = inject(OrdersFacade);
   private snackBar = inject(MatSnackBar);
+  private fb = inject(FormBuilder);
 
-  customerId = '';
-  items: OrderItem[] = [{ sku: '', quantity: 1, unitPrice: 0 }];
   submitting = signal(false);
 
-  addItem(): void { this.items = [...this.items, { sku: '', quantity: 1, unitPrice: 0 }]; }
-  removeItem(i: number): void { this.items = this.items.filter((_, idx) => idx !== i); }
+  orderForm = this.fb.group({
+    customerId: ['', Validators.required],
+    currency: ['BRL', Validators.required],
+    items: this.fb.array([this.createItemGroup()]),
+  });
 
-  calcTotal(): number { return this.items.reduce((s, i) => s + i.quantity * i.unitPrice, 0); }
+  get items(): FormArray {
+    return this.orderForm.get('items') as FormArray;
+  }
+
+  private createItemGroup() {
+    return this.fb.group({
+      sku: ['', Validators.required],
+      quantity: [1, [Validators.required, Validators.min(1)]],
+      unitPrice: [0, [Validators.required, Validators.min(0)]],
+      description: [''],
+    });
+  }
+
+  addItem(): void { this.items.push(this.createItemGroup()); }
+  removeItem(i: number): void { this.items.removeAt(i); }
+
+  calcTotal(): number {
+    return this.items.controls.reduce((sum, ctrl) => {
+      const qty = ctrl.get('quantity')?.value ?? 0;
+      const price = ctrl.get('unitPrice')?.value ?? 0;
+      return sum + qty * price;
+    }, 0);
+  }
 
   async submit(): Promise<void> {
-    if (!this.customerId || this.items.length === 0) return;
+    if (this.orderForm.invalid) {
+      this.orderForm.markAllAsTouched();
+      return;
+    }
     this.submitting.set(true);
-    const order = await this.facade.createOrder({ customerId: this.customerId, items: this.items, currency: 'BRL' });
+    const val = this.orderForm.getRawValue();
+    const order = await this.facade.createOrder({
+      customerId: val.customerId!,
+      items: val.items.map(i => ({
+        sku: i.sku!,
+        quantity: i.quantity!,
+        unitPrice: i.unitPrice!,
+        description: i.description ?? undefined,
+      })),
+      currency: val.currency!,
+    });
     this.submitting.set(false);
     if (order) {
       this.snackBar.open('Pedido criado com sucesso', 'OK', { duration: 3000 });

@@ -6,7 +6,7 @@ import { catchError, debounceTime, map, switchMap } from 'rxjs/operators';
 import { CoreApiClient, Tenant, AuditLog } from '@saas-suite/data-access/core';
 import { OrdersApiClient, Order, InventoryItem } from '@saas-suite/data-access/orders';
 import { PaymentsApiClient, PaymentIntent } from '@saas-suite/data-access/payments';
-import { ProductsService } from '@union.solutions/api/products';
+import { ProductsService } from '@union.solutions/shop/data';
 import { Product } from '@union.solutions/models';
 
 import { SearchResult, SearchEntityType, SearchConfig } from './search.model';
@@ -17,7 +17,7 @@ export class SearchService {
   private readonly coreApi = inject(CoreApiClient);
   private readonly ordersApi = inject(OrdersApiClient);
   private readonly paymentsApi = inject(PaymentsApiClient);
-  private readonly productsService = new ProductsService();
+  private readonly productsService = inject(ProductsService);
   private readonly config: SearchConfig =
     inject(SEARCH_CONFIG, { optional: true }) ?? DEFAULT_SEARCH_CONFIG;
 
@@ -112,12 +112,12 @@ export class SearchService {
     }
 
     if (enabled.includes('product')) {
-      const productResult = this.productsService.getAllProducts(
-        { searchTerm: query },
-        1,
-        max,
+      searches.push(
+        this.productsService.getProducts({ searchTerm: query }, 1, max).pipe(
+          map(res => res.items.map(p => this.mapProduct(p, q))),
+          catchError(() => of([])),
+        ),
       );
-      searches.push(of(productResult.items.map(p => this.mapProduct(p, q))));
     }
 
     if (enabled.includes('inventory')) {

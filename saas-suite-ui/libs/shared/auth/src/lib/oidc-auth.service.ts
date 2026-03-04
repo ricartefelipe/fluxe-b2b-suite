@@ -1,4 +1,5 @@
-import { Injectable, inject, NgZone, OnDestroy } from '@angular/core';
+import { Injectable, inject, NgZone, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { OAuthService, OAuthErrorEvent } from 'angular-oauth2-oidc';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -15,8 +16,13 @@ export class OidcAuthService implements OnDestroy {
   private readonly config = inject(RuntimeConfigService);
   private readonly tenantCtx = inject(TenantContextService, { optional: true });
   private readonly zone = inject(NgZone);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   private eventsSub: Subscription | null = null;
+
+  private get origin(): string {
+    return this.isBrowser ? window.location.origin : '';
+  }
 
   async configureAndTryLogin(): Promise<boolean> {
     const oidc = this.config.get('oidc');
@@ -28,11 +34,11 @@ export class OidcAuthService implements OnDestroy {
       issuer: oidc.issuer,
       clientId: oidc.clientId,
       scope: oidc.scope ?? 'openid profile email',
-      redirectUri: window.location.origin + '/',
-      postLogoutRedirectUri: window.location.origin + '/login',
+      redirectUri: this.origin + '/',
+      postLogoutRedirectUri: this.origin + '/login',
       responseType: 'code',
       useSilentRefresh: true,
-      silentRefreshRedirectUri: window.location.origin + '/silent-refresh.html',
+      silentRefreshRedirectUri: this.origin + '/silent-refresh.html',
       showDebugInformation: this.config.get('logLevel') === 'debug',
       sessionChecksEnabled: true,
       timeoutFactor: 0.75,
@@ -56,7 +62,7 @@ export class OidcAuthService implements OnDestroy {
   }
 
   logout(): void {
-    const postLogoutUrl = window.location.origin + '/login';
+    const postLogoutUrl = this.origin + '/login';
     this.store.clearSession();
     if (this.tenantCtx) {
       this.tenantCtx.setActiveTenantId(null);

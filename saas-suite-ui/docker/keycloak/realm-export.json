@@ -336,7 +336,7 @@
       "firstName": "Admin",
       "lastName": "Fluxe",
       "attributes": {
-        "tenantId": ["tenant-1"],
+        "tenantId": ["00000000-0000-0000-0000-000000000002"],
         "permissions": [
           "tenants:read", "tenants:write",
           "policies:read", "policies:write",
@@ -344,6 +344,7 @@
           "audit:read",
           "orders:read", "orders:write",
           "inventory:read", "inventory:write",
+          "products:read", "products:write",
           "payments:read", "payments:write",
           "ledger:read"
         ],
@@ -367,12 +368,13 @@
       "firstName": "Operator",
       "lastName": "Fluxe",
       "attributes": {
-        "tenantId": ["tenant-1"],
+        "tenantId": ["00000000-0000-0000-0000-000000000002"],
         "permissions": [
           "orders:read", "orders:write",
-          "inventory:read", "inventory:write"
+          "inventory:read", "inventory:write",
+          "products:read", "products:write"
         ],
-        "plan": ["professional"],
+        "plan": ["pro"],
         "region": ["us-east-1"]
       },
       "credentials": [
@@ -392,10 +394,11 @@
       "firstName": "Viewer",
       "lastName": "Fluxe",
       "attributes": {
-        "tenantId": ["tenant-1"],
+        "tenantId": ["00000000-0000-0000-0000-000000000002"],
         "permissions": [
           "orders:read",
           "inventory:read",
+          "products:read",
           "payments:read",
           "ledger:read"
         ],

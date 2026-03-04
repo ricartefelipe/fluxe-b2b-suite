@@ -1,5 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,13 +14,19 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { StatusChipComponent, ConfirmDialogComponent } from '@saas-suite/shared/ui';
 import { TenantsFacade, Tenant, TenantPlan } from '@saas-suite/data-access/core';
 import { CoreApiClient } from '@saas-suite/data-access/core';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { firstValueFrom } from 'rxjs';
+
+function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
+  if (!ctrl.value) return null;
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(ctrl.value) ? null : { slug: true };
+}
 
 @Component({
   selector: 'app-tenant-detail',
   standalone: true,
   imports: [
-    FormsModule, MatCardModule, MatButtonModule, MatFormFieldModule,
+    ReactiveFormsModule, FormsModule, MatCardModule, MatButtonModule, MatFormFieldModule,
     MatInputModule, MatSelectModule, MatIconModule, MatProgressBarModule,
     MatSnackBarModule, MatDialogModule, StatusChipComponent,
   ],
@@ -33,18 +40,31 @@ import { firstValueFrom } from 'rxjs';
       </div>
       <mat-card>
         <mat-card-content>
-          <div class="form-grid">
+          <form [formGroup]="createForm" class="form-grid">
             <mat-form-field appearance="outline">
               <mat-label>Nome</mat-label>
-              <input matInput [(ngModel)]="createName" placeholder="Ex: Acme Corp">
+              <input matInput formControlName="name" [placeholder]="i18n.messages().adminPlaceholders.tenantName">
+              @if (createForm.controls['name'].hasError('required') && createForm.controls['name'].touched) {
+                <mat-error>Nome é obrigatório</mat-error>
+              }
+              @if (createForm.controls['name'].hasError('minlength')) {
+                <mat-error>Nome deve ter pelo menos 2 caracteres</mat-error>
+              }
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Slug</mat-label>
-              <input matInput [(ngModel)]="createSlug" placeholder="Ex: acme-corp">
+              <input matInput formControlName="slug" [placeholder]="i18n.messages().adminPlaceholders.tenantSlug">
+              <mat-hint>Identificador URL-safe (minúsculas, hífens)</mat-hint>
+              @if (createForm.controls['slug'].hasError('required') && createForm.controls['slug'].touched) {
+                <mat-error>Slug é obrigatório</mat-error>
+              }
+              @if (createForm.controls['slug'].hasError('slug')) {
+                <mat-error>Apenas letras minúsculas, números e hífens</mat-error>
+              }
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Plano</mat-label>
-              <mat-select [(ngModel)]="createPlan">
+              <mat-select formControlName="plan">
                 <mat-option value="starter">Starter</mat-option>
                 <mat-option value="professional">Professional</mat-option>
                 <mat-option value="enterprise">Enterprise</mat-option>
@@ -52,10 +72,10 @@ import { firstValueFrom } from 'rxjs';
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Região</mat-label>
-              <input matInput [(ngModel)]="createRegion" placeholder="us-east-1">
+              <input matInput formControlName="region" [placeholder]="i18n.messages().adminPlaceholders.region">
             </mat-form-field>
-          </div>
-          <button mat-raised-button color="primary" (click)="create()" [disabled]="saving()">
+          </form>
+          <button mat-raised-button color="primary" (click)="create()" [disabled]="createForm.invalid || saving()">
             Criar Tenant
           </button>
         </mat-card-content>
@@ -78,10 +98,16 @@ import { firstValueFrom } from 'rxjs';
 
       <mat-card>
         <mat-card-content>
-          <div class="form-grid">
+          <form [formGroup]="editForm" class="form-grid">
             <mat-form-field appearance="outline">
               <mat-label>Nome</mat-label>
-              <input matInput [(ngModel)]="editName">
+              <input matInput formControlName="name">
+              @if (editForm.controls['name'].hasError('required') && editForm.controls['name'].touched) {
+                <mat-error>Nome é obrigatório</mat-error>
+              }
+              @if (editForm.controls['name'].hasError('minlength')) {
+                <mat-error>Nome deve ter pelo menos 2 caracteres</mat-error>
+              }
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Slug</mat-label>
@@ -89,7 +115,7 @@ import { firstValueFrom } from 'rxjs';
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Plano</mat-label>
-              <mat-select [(ngModel)]="editPlan">
+              <mat-select formControlName="plan">
                 <mat-option value="starter">Starter</mat-option>
                 <mat-option value="professional">Professional</mat-option>
                 <mat-option value="enterprise">Enterprise</mat-option>
@@ -99,8 +125,8 @@ import { firstValueFrom } from 'rxjs';
               <mat-label>Região</mat-label>
               <input matInput [value]="tenant()!.region" disabled>
             </mat-form-field>
-          </div>
-          <button mat-raised-button color="primary" (click)="save()" [disabled]="saving()">
+          </form>
+          <button mat-raised-button color="primary" (click)="save()" [disabled]="editForm.invalid || saving()">
             Salvar Alterações
           </button>
         </mat-card-content>
@@ -121,16 +147,24 @@ export class TenantDetailPage implements OnInit {
   private api = inject(CoreApiClient);
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
+  private fb = inject(FormBuilder);
+  protected i18n = inject(I18nService);
 
   tenant = signal<Tenant | null>(null);
   loading = signal(true);
   saving = signal(false);
-  editName = '';
-  editPlan: TenantPlan = 'starter';
-  createName = '';
-  createSlug = '';
-  createPlan: TenantPlan = 'starter';
-  createRegion = 'us-east-1';
+
+  createForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(2)]],
+    slug: ['', [Validators.required, slugValidator]],
+    plan: ['starter' as TenantPlan, Validators.required],
+    region: ['us-east-1', Validators.required],
+  });
+
+  editForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(2)]],
+    plan: ['starter' as TenantPlan, Validators.required],
+  });
 
   isCreateMode(): boolean {
     return this.route.snapshot.paramMap.get('id') === 'new';
@@ -145,19 +179,23 @@ export class TenantDetailPage implements OnInit {
     try {
       const t = await firstValueFrom(this.api.getTenant(id));
       this.tenant.set(t);
-      this.editName = t.name;
-      this.editPlan = t.plan;
+      this.editForm.patchValue({ name: t.name, plan: t.plan });
     } catch { this.snackBar.open('Tenant não encontrado', 'OK', { duration: 3000 }); }
     finally { this.loading.set(false); }
   }
 
   async create(): Promise<void> {
+    if (this.createForm.invalid) {
+      this.createForm.markAllAsTouched();
+      return;
+    }
     this.saving.set(true);
+    const val = this.createForm.getRawValue();
     const created = await this.facade.createTenant({
-      name: this.createName,
-      slug: this.createSlug,
-      plan: this.createPlan,
-      region: this.createRegion,
+      name: val.name!,
+      slug: val.slug!,
+      plan: val.plan!,
+      region: val.region!,
     });
     if (created) {
       this.snackBar.open('Tenant criado', 'OK', { duration: 2000 });
@@ -168,9 +206,13 @@ export class TenantDetailPage implements OnInit {
 
   async save(): Promise<void> {
     const current = this.tenant();
-    if (!current) return;
+    if (!current || this.editForm.invalid) {
+      this.editForm.markAllAsTouched();
+      return;
+    }
     this.saving.set(true);
-    const t = await this.facade.updateTenant(current.id, { name: this.editName, plan: this.editPlan });
+    const val = this.editForm.getRawValue();
+    const t = await this.facade.updateTenant(current.id, { name: val.name!, plan: val.plan! });
     if (t) { this.tenant.set(t); this.snackBar.open('Tenant atualizado', 'OK', { duration: 2000 }); }
     this.saving.set(false);
   }

@@ -1,6 +1,11 @@
 import { Route } from '@angular/router';
+import { shopAuthGuard } from './guards/shop-auth.guard';
 
 export const appRoutes: Route[] = [
+  {
+    path: 'login',
+    loadComponent: () => import('@saas-suite/shared/auth').then(m => m.LoginPageComponent),
+  },
   {
     path: '',
     redirectTo: 'products',
@@ -25,14 +30,34 @@ export const appRoutes: Route[] = [
   {
     path: 'checkout',
     title: 'Checkout | Fluxe Shop',
+    canActivate: [shopAuthGuard],
     loadComponent: () =>
       import('./checkout/checkout.component').then((m) => m.CheckoutComponent),
   },
   {
     path: 'orders',
-    title: 'My Orders | Fluxe Shop',
+    canActivate: [shopAuthGuard],
+    children: [
+      {
+        path: '',
+        title: 'My Orders | Fluxe Shop',
+        loadComponent: () =>
+          import('./orders/orders.component').then((m) => m.OrdersComponent),
+      },
+      {
+        path: ':id',
+        title: 'Order Detail | Fluxe Shop',
+        loadComponent: () =>
+          import('./orders/order-detail.component').then((m) => m.OrderDetailComponent),
+      },
+    ],
+  },
+  {
+    path: 'profile',
+    title: 'My Profile | Fluxe Shop',
+    canActivate: [shopAuthGuard],
     loadComponent: () =>
-      import('./orders/orders.component').then((m) => m.OrdersComponent),
+      import('./profile/profile.component').then((m) => m.ProfileComponent),
   },
   {
     path: '**',

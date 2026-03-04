@@ -1,14 +1,20 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable, map, catchError, of } from 'rxjs';
-import { Product, ApiResponse, PaginatedResponse, ProductFilter } from '@union.solutions/models';
+import { Product, PaginatedResponse, ProductFilter } from '@union.solutions/models';
+import { RuntimeConfigService } from '@saas-suite/shared/config';
+import { PageResponse, toParams } from '@saas-suite/shared/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'http://localhost:3333/api';
+  private readonly config = inject(RuntimeConfigService);
+
+  private get base(): string {
+    return this.config.get('ordersApiBaseUrl');
+  }
 
   private readonly loadingSignal = signal(false);
   private readonly errorSignal = signal<string | null>(null);
@@ -24,39 +30,31 @@ export class ProductsService {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
 
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('pageSize', pageSize.toString());
-
+    const paramObj: Record<string, unknown> = { page, pageSize };
     if (filter) {
-      if (filter.category) {
-        params = params.set('category', filter.category);
-      }
-      if (filter.minPrice !== undefined) {
-        params = params.set('minPrice', filter.minPrice.toString());
-      }
-      if (filter.maxPrice !== undefined) {
-        params = params.set('maxPrice', filter.maxPrice.toString());
-      }
-      if (filter.inStock !== undefined) {
-        params = params.set('inStock', filter.inStock.toString());
-      }
-      if (filter.searchTerm) {
-        params = params.set('searchTerm', filter.searchTerm);
-      }
+      if (filter.category) paramObj['category'] = filter.category;
+      if (filter.minPrice !== undefined) paramObj['minPrice'] = filter.minPrice;
+      if (filter.maxPrice !== undefined) paramObj['maxPrice'] = filter.maxPrice;
+      if (filter.inStock !== undefined) paramObj['inStock'] = filter.inStock;
+      if (filter.searchTerm) paramObj['searchTerm'] = filter.searchTerm;
+      if (filter.sortBy && filter.sortBy !== 'relevance') paramObj['sortBy'] = filter.sortBy;
+      if (filter.sortOrder) paramObj['sortOrder'] = filter.sortOrder;
     }
 
     return this.http
-      .get<ApiResponse<PaginatedResponse<Product>>>(`${this.apiUrl}/products`, {
-        params,
+      .get<PageResponse<Product>>(`${this.base}/v1/products`, {
+        params: toParams(paramObj),
       })
       .pipe(
-        map((response) => {
+        map((res) => {
           this.loadingSignal.set(false);
-          if (!response.success) {
-            throw new Error(response.error || 'Failed to load products');
-          }
-          return response.data;
+          return {
+            items: res.data,
+            total: res.total,
+            page: res.page,
+            pageSize: res.pageSize,
+            totalPages: Math.ceil(res.total / res.pageSize),
+          };
         }),
         catchError((error) => {
           this.loadingSignal.set(false);
@@ -80,14 +78,11 @@ export class ProductsService {
     this.errorSignal.set(null);
 
     return this.http
-      .get<ApiResponse<Product>>(`${this.apiUrl}/products/${id}`)
+      .get<Product>(`${this.base}/v1/products/${id}`)
       .pipe(
-        map((response) => {
+        map((product) => {
           this.loadingSignal.set(false);
-          if (!response.success) {
-            throw new Error(response.error || 'Failed to load product');
-          }
-          return response.data;
+          return product;
         }),
         catchError((error) => {
           this.loadingSignal.set(false);
@@ -102,14 +97,8 @@ export class ProductsService {
 
   getCategories(): Observable<string[]> {
     return this.http
-      .get<ApiResponse<string[]>>(`${this.apiUrl}/products-metadata/categories`)
+      .get<string[]>(`${this.base}/v1/products/metadata/categories`)
       .pipe(
-        map((response) => {
-          if (!response.success) {
-            throw new Error(response.error || 'Failed to load categories');
-          }
-          return response.data;
-        }),
         catchError((error) => {
           console.error('Error loading categories:', error);
           return of([]);
@@ -119,16 +108,10 @@ export class ProductsService {
 
   getPriceRange(): Observable<{ min: number; max: number }> {
     return this.http
-      .get<ApiResponse<{ min: number; max: number }>>(
-        `${this.apiUrl}/products-metadata/price-range`
+      .get<{ min: number; max: number }>(
+        `${this.base}/v1/products/metadata/price-range`
       )
       .pipe(
-        map((response) => {
-          if (!response.success) {
-            throw new Error(response.error || 'Failed to load price range');
-          }
-          return response.data;
-        }),
         catchError((error) => {
           console.error('Error loading price range:', error);
           return of({ min: 0, max: 1000 });

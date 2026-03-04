@@ -1,4 +1,4 @@
-import { Injectable, NgZone, OnDestroy, inject } from '@angular/core';
+import { Injectable, NgZone, OnDestroy, inject, isDevMode } from '@angular/core';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { AppNotification, NotificationCategory, NotificationType } from './notification.model';
 import { NotificationStore } from './notification.store';
@@ -78,7 +78,7 @@ export class SseService implements OnDestroy {
   private destroyed = false;
 
   connect(): void {
-    if (this.config.get('authMode') === 'dev') {
+    if (this.config.get('authMode') === 'dev' && isDevMode()) {
       this.startMockMode();
       return;
     }

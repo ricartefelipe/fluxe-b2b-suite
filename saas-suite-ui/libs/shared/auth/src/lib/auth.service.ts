@@ -1,4 +1,5 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -58,6 +59,7 @@ export class AuthService {
   private readonly config = inject(RuntimeConfigService);
   private readonly tenantCtx = inject(TenantContextService, { optional: true });
   private readonly oidcAuth = inject(OidcAuthService, { optional: true });
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   async loginWithDevToken(params: DevTokenRequest): Promise<void> {
     let token: string;
@@ -103,7 +105,7 @@ export class AuthService {
     if (session.tenantId && this.tenantCtx) {
       this.tenantCtx.setActiveTenantId(session.tenantId);
     }
-    sessionStorage.setItem('dev_token', token);
+    if (this.isBrowser) sessionStorage.setItem('dev_token', token);
     await this.router.navigate(['/']);
   }
 
@@ -113,16 +115,18 @@ export class AuthService {
       return;
     }
 
-    const token = sessionStorage.getItem('dev_token');
-    if (token) {
-      const session = sessionFromJwt(token);
-      if (Date.now() < session.expiresAt) {
-        this.store.setSession(session);
-        if (session.tenantId && this.tenantCtx) {
-          this.tenantCtx.setActiveTenantId(session.tenantId);
+    if (this.isBrowser) {
+      const token = sessionStorage.getItem('dev_token');
+      if (token) {
+        const session = sessionFromJwt(token);
+        if (Date.now() < session.expiresAt) {
+          this.store.setSession(session);
+          if (session.tenantId && this.tenantCtx) {
+            this.tenantCtx.setActiveTenantId(session.tenantId);
+          }
+        } else {
+          sessionStorage.removeItem('dev_token');
         }
-      } else {
-        sessionStorage.removeItem('dev_token');
       }
     }
   }
@@ -136,7 +140,7 @@ export class AuthService {
     if (this.tenantCtx) {
       this.tenantCtx.setActiveTenantId(null);
     }
-    sessionStorage.removeItem('dev_token');
+    if (this.isBrowser) sessionStorage.removeItem('dev_token');
     await this.router.navigate(['/login']);
   }
 }

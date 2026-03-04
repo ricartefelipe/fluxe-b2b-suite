@@ -1,5 +1,6 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -14,6 +15,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthStore);
   const logger = inject(LoggerService);
   const i18n = inject(I18nService);
+  const isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
@@ -27,7 +29,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       switch (err.status) {
         case 401:
           auth.clearSession();
-          sessionStorage.removeItem('dev_token');
+          if (isBrowser) sessionStorage.removeItem('dev_token');
           router.navigate(['/login']);
           snackBar.open(m.unauthorized, 'OK', { duration: 5000 });
           break;

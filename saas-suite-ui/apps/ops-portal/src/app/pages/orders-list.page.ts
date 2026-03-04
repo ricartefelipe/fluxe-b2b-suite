@@ -1,15 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, AfterViewInit, effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { StatusChipComponent, EmptyStateComponent } from '@saas-suite/shared/ui';
+import { MatSortModule, MatSort } from '@angular/material/sort';
+import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
+import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { OrdersFacade, OrderStatus } from '@saas-suite/data-access/orders';
 import { formatDateTime } from '@saas-suite/shared/util';
@@ -18,8 +19,9 @@ import { formatDateTime } from '@saas-suite/shared/util';
   selector: 'app-orders-list',
   standalone: true,
   imports: [
-    DecimalPipe, FormsModule, MatTableModule, MatButtonModule, MatIconModule, MatProgressBarModule,
-    MatFormFieldModule, MatInputModule, MatSelectModule, StatusChipComponent, EmptyStateComponent,
+    DecimalPipe, FormsModule, MatTableModule, MatButtonModule, MatIconModule,
+    MatFormFieldModule, MatInputModule, MatSelectModule, MatSortModule, MatPaginatorModule,
+    StatusChipComponent, EmptyStateComponent, TableSkeletonComponent,
   ],
   template: `
     <div class="page-header">
@@ -47,30 +49,35 @@ import { formatDateTime } from '@saas-suite/shared/util';
       </mat-form-field>
     </div>
 
-    @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
-
-    @if (facade.orders().length === 0 && !facade.loading()) {
-      <saas-empty-state icon="receipt_long" [title]="i18n.messages().orders.noOrdersFound" />
+    @if (facade.loading()) {
+      <saas-table-skeleton [rowCount]="5" [columns]="6" />
+    } @else if (dataSource.data.length === 0) {
+      <saas-empty-state
+        icon="receipt_long"
+        [title]="i18n.messages().orders.noOrdersFound"
+        [actionLabel]="i18n.messages().orders.createOrder"
+        actionIcon="add"
+        (action)="router.navigate(['/orders/new'])" />
     } @else {
-      <table mat-table [dataSource]="facade.orders()" class="full-width">
+      <table mat-table [dataSource]="dataSource" matSort class="full-width">
         <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.id }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.id }}</th>
           <td mat-cell *matCellDef="let o"><code>{{ o.id.substring(0, 8) }}</code></td>
         </ng-container>
         <ng-container matColumnDef="customerId">
-          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().orders.customer }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().orders.customer }}</th>
           <td mat-cell *matCellDef="let o">{{ o.customerId }}</td>
         </ng-container>
         <ng-container matColumnDef="totalAmount">
-          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().orders.orderTotal }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().orders.orderTotal }}</th>
           <td mat-cell *matCellDef="let o">{{ o.currency }} {{ o.totalAmount | number:'1.2-2' }}</td>
         </ng-container>
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.status }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.status }}</th>
           <td mat-cell *matCellDef="let o"><saas-status-chip [status]="o.status" /></td>
         </ng-container>
         <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.date }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.date }}</th>
           <td mat-cell *matCellDef="let o">{{ fmtDate(o.createdAt) }}</td>
         </ng-container>
         <ng-container matColumnDef="actions">
@@ -82,6 +89,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
         <tr mat-row *matRowDef="let row; columns: columns;"></tr>
       </table>
+      <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons />
     }
   `,
   styles: [`
@@ -90,17 +98,35 @@ import { formatDateTime } from '@saas-suite/shared/util';
     .full-width { width: 100%; }
   `],
 })
-export class OrdersListPage implements OnInit {
+export class OrdersListPage implements OnInit, AfterViewInit {
   protected facade = inject(OrdersFacade);
   protected router = inject(Router);
   protected i18n = inject(I18nService);
+
+  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  dataSource = new MatTableDataSource<any>([]);
   filterStatus?: OrderStatus;
   filterCustomer?: string;
   columns = ['id', 'customerId', 'totalAmount', 'status', 'createdAt', 'actions'];
 
+  constructor() {
+    effect(() => {
+      this.dataSource.data = this.facade.orders();
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
+
   async ngOnInit(): Promise<void> { await this.search(); }
+
   async search(): Promise<void> {
     await this.facade.loadOrders({ status: this.filterStatus, customerId: this.filterCustomer });
   }
+
   fmtDate(d: string): string { return formatDateTime(d); }
 }

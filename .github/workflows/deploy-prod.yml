@@ -1,0 +1,83 @@
+name: Deploy Production
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docker-compose.prod.yml"
+      - "deploy/**"
+      - "scripts/**"
+      - ".github/workflows/deploy-prod.yml"
+  workflow_dispatch:
+    inputs:
+      saas_core_tag:
+        description: "spring-saas-core image tag"
+        default: "latest"
+      orders_tag:
+        description: "node-b2b-orders image tag"
+        default: "latest"
+      payments_tag:
+        description: "py-payments-ledger image tag"
+        default: "latest"
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Sync deployment files to VPS
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key" \
+            docker-compose.prod.yml deploy/ scripts/ \
+            ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:~/fluxe-b2b-suite/
+
+      - name: Deploy on VPS
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'DEPLOY_SCRIPT'
+          set -euo pipefail
+          cd ~/fluxe-b2b-suite
+
+          # Override image tags if provided via workflow_dispatch
+          if [ -n "${{ github.event.inputs.saas_core_tag || '' }}" ]; then
+            export SAAS_CORE_TAG="${{ github.event.inputs.saas_core_tag }}"
+          fi
+          if [ -n "${{ github.event.inputs.orders_tag || '' }}" ]; then
+            export ORDERS_TAG="${{ github.event.inputs.orders_tag }}"
+          fi
+          if [ -n "${{ github.event.inputs.payments_tag || '' }}" ]; then
+            export PAYMENTS_TAG="${{ github.event.inputs.payments_tag }}"
+          fi
+
+          chmod +x scripts/deploy.sh
+          ./scripts/deploy.sh
+          DEPLOY_SCRIPT
+
+      - name: Smoke test via SSH
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'SMOKE'
+          set -e
+          echo "Smoke testing endpoints..."
+          curl -sf http://127.0.0.1:80/health
+          curl -sf http://127.0.0.1:8080/actuator/health/liveness
+          curl -sf http://127.0.0.1:3000/v1/healthz
+          curl -sf http://127.0.0.1:8000/healthz
+          echo "All smoke tests passed."
+          SMOKE
+
+      - name: Cleanup SSH key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

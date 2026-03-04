@@ -2,6 +2,7 @@ export type OrderStatus = 'DRAFT' | 'RESERVED' | 'CONFIRMED' | 'CANCELLED' | 'PA
 
 export interface OrderItem {
   sku: string;
+  description?: string;
   qty: number;
   price: number;
 }

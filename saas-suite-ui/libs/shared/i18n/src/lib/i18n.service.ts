@@ -1,4 +1,5 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, signal, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Locale, Messages } from './i18n.tokens';
 import { PT_BR_MESSAGES } from './pt-br.messages';
 import { EN_US_MESSAGES } from './en-us.messages';
@@ -17,16 +18,18 @@ function isValidLocale(value: string | null): value is Locale {
 
 @Injectable({ providedIn: 'root' })
 export class I18nService {
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly _locale = signal<Locale>(this.resolveInitialLocale());
   readonly locale = this._locale.asReadonly();
   readonly messages = computed<Messages>(() => MESSAGES_MAP[this._locale()]);
 
   setLocale(locale: Locale): void {
     this._locale.set(locale);
-    localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+    if (this.isBrowser) localStorage.setItem(LOCALE_STORAGE_KEY, locale);
   }
 
   private resolveInitialLocale(): Locale {
+    if (!this.isBrowser) return DEFAULT_LOCALE;
     const saved = localStorage.getItem(LOCALE_STORAGE_KEY);
     return isValidLocale(saved) ? saved : DEFAULT_LOCALE;
   }

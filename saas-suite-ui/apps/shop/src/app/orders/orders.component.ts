@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CurrencyPipe, DatePipe, SlicePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,30 +6,29 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { OrdersFacade, Order, OrderStatus } from '@saas-suite/data-access/orders';
 import { TenantContextService } from '@saas-suite/shared/http';
+import { AuthStore } from '@saas-suite/shared/auth';
+import { I18nService } from '@saas-suite/shared/i18n';
 
-const DEMO_TENANTS = [
-  { id: '00000000-0000-0000-0000-000000000001', name: 'Tenant A' },
-  { id: '00000000-0000-0000-0000-000000000002', name: 'Tenant B' },
-];
+type StatusFilter = OrderStatus | 'ALL';
 
-function statusColorClass(status: OrderStatus): string {
-  switch (status) {
-    case 'CONFIRMED':
-    case 'PAID':
-      return 'status-success';
-    case 'CANCELLED':
-      return 'status-error';
-    case 'DRAFT':
-    case 'RESERVED':
-      return 'status-pending';
-  }
-}
+const STATUS_CLASSES: Record<OrderStatus, string> = {
+  CONFIRMED: 'status-success',
+  PAID: 'status-success',
+  CANCELLED: 'status-error',
+  DRAFT: 'status-pending',
+  RESERVED: 'status-pending',
+};
 
 @Component({
   selector: 'app-orders',
@@ -44,78 +43,158 @@ function statusColorClass(status: OrderStatus): string {
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
+    MatInputModule,
     MatSelectModule,
     MatDividerModule,
     MatProgressSpinnerModule,
     MatChipsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatTooltipModule,
+    MatSnackBarModule,
   ],
   template: `
     <div class="orders-container">
       <div class="page-header">
         <div>
-          <h1>My Orders</h1>
-          <p class="subtitle">Track your order history and status</p>
+          <h1>{{ i18n.messages().shop.myOrders }}</h1>
+          <p class="subtitle">
+            {{ i18n.messages().shop.trackOrderHistory }}
+            @if (facade.orders().length > 0) {
+              <span class="order-count">({{ facade.orders().length }})</span>
+            }
+          </p>
         </div>
         <a mat-stroked-button routerLink="/products">
           <mat-icon>storefront</mat-icon>
-          Browse Products
+          {{ i18n.messages().shop.browseProducts }}
         </a>
       </div>
 
+      <!-- Filters Bar -->
       <div class="filters-bar">
-        <mat-form-field appearance="outline" class="tenant-select">
-          <mat-label>Tenant</mat-label>
-          <mat-select [(ngModel)]="selectedTenantId" (ngModelChange)="loadOrders()">
-            @for (t of demoTenants; track t.id) {
-              <mat-option [value]="t.id">{{ t.name }}</mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
+        <div class="status-chips">
+          @for (s of statusOptions; track s) {
+            <button
+              class="status-filter-chip"
+              [class.active]="selectedStatus() === s"
+              (click)="setStatusFilter(s)"
+            >
+              {{ getStatusLabel(s) }}
+            </button>
+          }
+        </div>
+
+        <div class="filters-row">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>{{ i18n.messages().shop.searchByOrderId }}</mat-label>
+            <input matInput [(ngModel)]="searchQuery" (ngModelChange)="applyFilters()" />
+            <mat-icon matPrefix>search</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="date-field">
+            <mat-label>{{ i18n.messages().shop.dateFrom }}</mat-label>
+            <input matInput [matDatepicker]="pickerFrom" [(ngModel)]="dateFrom" (dateChange)="applyFilters()" />
+            <mat-datepicker-toggle matSuffix [for]="pickerFrom" />
+            <mat-datepicker #pickerFrom />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="date-field">
+            <mat-label>{{ i18n.messages().shop.dateTo }}</mat-label>
+            <input matInput [matDatepicker]="pickerTo" [(ngModel)]="dateTo" (dateChange)="applyFilters()" />
+            <mat-datepicker-toggle matSuffix [for]="pickerTo" />
+            <mat-datepicker #pickerTo />
+          </mat-form-field>
+        </div>
       </div>
 
       @if (facade.loading()) {
         <div class="loading-state">
           <mat-spinner diameter="40" />
-          <p>Loading orders...</p>
+          <p>{{ i18n.messages().shop.loadingOrders }}</p>
         </div>
-      } @else if (facade.orders().length === 0) {
+      } @else if (filteredOrders().length === 0) {
         <div class="empty-state">
           <mat-icon class="empty-icon">receipt_long</mat-icon>
-          <h2>No orders yet</h2>
-          <p>Your order history will appear here once you place an order.</p>
-          <a mat-flat-button routerLink="/checkout">
-            <mat-icon>shopping_cart</mat-icon>
-            Go to Checkout
+          <h2>{{ i18n.messages().shop.noOrdersYet }}</h2>
+          <p>{{ i18n.messages().shop.noOrdersMessage }}</p>
+          <a mat-flat-button routerLink="/products">
+            <mat-icon>storefront</mat-icon>
+            {{ i18n.messages().shop.browseProducts }}
           </a>
         </div>
       } @else {
-        <div class="orders-grid">
-          @for (order of facade.orders(); track order.id) {
-            <mat-card appearance="outlined" class="order-card">
-              <mat-card-header>
-                <mat-icon mat-card-avatar>receipt</mat-icon>
-                <mat-card-title>
-                  <code class="order-id">{{ order.id | slice:0:8 }}...</code>
-                </mat-card-title>
-                <mat-card-subtitle>{{ order.createdAt | date:'medium' }}</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <div class="order-details">
-                  <div class="detail-row">
-                    <span class="label">Status</span>
+        <!-- Desktop Table -->
+        <div class="orders-table-wrapper desktop-only">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>{{ i18n.messages().shop.orderId }}</th>
+                <th>{{ i18n.messages().shop.orderDate }}</th>
+                <th>{{ i18n.messages().shop.status }}</th>
+                <th>{{ i18n.messages().shop.items }}</th>
+                <th>{{ i18n.messages().shop.total }}</th>
+                <th>{{ i18n.messages().shop.orderActions }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (order of filteredOrders(); track order.id) {
+                <tr>
+                  <td>
+                    <div class="order-id-cell">
+                      <code class="order-id">{{ order.id | slice:0:8 }}...</code>
+                      <button
+                        mat-icon-button
+                        class="copy-btn"
+                        (click)="copyOrderId(order.id)"
+                        [matTooltip]="i18n.messages().shop.copyOrderId"
+                      >
+                        <mat-icon>content_copy</mat-icon>
+                      </button>
+                    </div>
+                  </td>
+                  <td>{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+                  <td>
                     <span class="status-chip" [class]="getStatusClass(order.status)">
                       {{ order.status }}
                     </span>
-                  </div>
-                  <div class="detail-row">
-                    <span class="label">Items</span>
-                    <span>{{ order.items.length }} item(s)</span>
-                  </div>
-                  <mat-divider />
-                  <div class="detail-row total-row">
-                    <span class="label">Total</span>
-                    <strong>{{ order.totalAmount | currency }}</strong>
-                  </div>
+                  </td>
+                  <td>{{ order.items.length }}</td>
+                  <td class="total-cell">{{ order.totalAmount | currency }}</td>
+                  <td>
+                    <a mat-icon-button [routerLink]="['/orders', order.id]" [matTooltip]="i18n.messages().shop.viewDetails">
+                      <mat-icon>visibility</mat-icon>
+                    </a>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Mobile Cards -->
+        <div class="orders-grid mobile-only">
+          @for (order of filteredOrders(); track order.id) {
+            <mat-card appearance="outlined" class="order-card" [routerLink]="['/orders', order.id]">
+              <mat-card-content>
+                <div class="card-header-row">
+                  <code class="order-id">{{ order.id | slice:0:8 }}...</code>
+                  <span class="status-chip" [class]="getStatusClass(order.status)">
+                    {{ order.status }}
+                  </span>
+                </div>
+                <div class="card-detail-row">
+                  <span class="card-label">{{ i18n.messages().shop.orderDate }}</span>
+                  <span>{{ order.createdAt | date:'dd/MM/yyyy' }}</span>
+                </div>
+                <div class="card-detail-row">
+                  <span class="card-label">{{ i18n.messages().shop.items }}</span>
+                  <span>{{ order.items.length }}</span>
+                </div>
+                <mat-divider />
+                <div class="card-detail-row card-total">
+                  <span class="card-label">{{ i18n.messages().shop.total }}</span>
+                  <strong>{{ order.totalAmount | currency }}</strong>
                 </div>
               </mat-card-content>
             </mat-card>
@@ -126,7 +205,7 @@ function statusColorClass(status: OrderStatus): string {
   `,
   styles: [`
     .orders-container {
-      max-width: 900px;
+      max-width: 1100px;
       margin: 0 auto;
       padding: 32px 24px;
     }
@@ -138,22 +217,47 @@ function statusColorClass(status: OrderStatus): string {
       margin-bottom: 24px;
     }
 
-    .page-header h1 {
-      font-size: 24px;
+    .page-header h1 { font-size: 24px; }
+    .subtitle { color: var(--shop-text-secondary); margin: 4px 0 0; }
+    .order-count { font-weight: 600; }
+
+    .filters-bar { margin-bottom: 24px; }
+
+    .status-chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
     }
 
-    .subtitle {
+    .status-filter-chip {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--shop-border);
+      background: transparent;
       color: var(--shop-text-secondary);
-      margin: 4px 0 0;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
     }
 
-    .filters-bar {
-      margin-bottom: 24px;
+    .status-filter-chip:hover { background: var(--shop-hover); }
+
+    .status-filter-chip.active {
+      background: var(--shop-primary);
+      color: white;
+      border-color: var(--shop-primary);
     }
 
-    .tenant-select {
-      min-width: 220px;
+    .filters-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
     }
+
+    .search-field { flex: 1; min-width: 200px; }
+    .date-field { width: 160px; }
 
     .loading-state {
       display: flex;
@@ -173,34 +277,54 @@ function statusColorClass(status: OrderStatus): string {
       gap: 12px;
     }
 
-    .empty-icon {
-      font-size: 64px;
-      width: 64px;
-      height: 64px;
-      color: #b0bec5;
+    .empty-icon { font-size: 64px; width: 64px; height: 64px; color: #b0bec5; }
+    .empty-state h2 { margin-top: 8px; }
+    .empty-state p { color: var(--shop-text-secondary); margin-bottom: 12px; }
+
+    /* Desktop Table */
+    .orders-table-wrapper {
+      overflow-x: auto;
+      border: 1px solid var(--shop-border);
+      border-radius: 12px;
+      background: var(--shop-surface);
     }
 
-    .empty-state h2 {
-      margin-top: 8px;
+    .orders-table {
+      width: 100%;
+      border-collapse: collapse;
     }
 
-    .empty-state p {
+    .orders-table th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       color: var(--shop-text-secondary);
-      margin-bottom: 12px;
+      border-bottom: 1px solid var(--shop-border);
+      background: var(--shop-code-bg);
     }
 
-    .orders-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 16px;
+    .orders-table td {
+      padding: 12px 16px;
+      font-size: 14px;
+      border-bottom: 1px solid var(--shop-border);
+      color: var(--shop-text);
     }
 
-    .order-card {
-      border-radius: 12px !important;
+    .orders-table tbody tr:last-child td { border-bottom: none; }
+
+    .orders-table tbody tr:hover { background: var(--shop-hover); }
+
+    .order-id-cell {
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
     .order-id {
-      background: #eef2f7;
+      background: var(--shop-code-bg);
       padding: 2px 8px;
       border-radius: 4px;
       font-size: 13px;
@@ -208,26 +332,15 @@ function statusColorClass(status: OrderStatus): string {
       font-family: 'JetBrains Mono', 'Fira Code', monospace;
     }
 
-    .order-details {
-      padding-top: 8px;
+    .copy-btn {
+      width: 24px !important;
+      height: 24px !important;
+      line-height: 24px !important;
     }
 
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 6px 0;
-    }
+    .copy-btn mat-icon { font-size: 14px; width: 14px; height: 14px; }
 
-    .detail-row .label {
-      color: var(--shop-text-secondary);
-      font-size: 13px;
-    }
-
-    .total-row {
-      padding-top: 12px;
-      font-size: 16px;
-    }
+    .total-cell { font-weight: 600; }
 
     .status-chip {
       padding: 3px 10px;
@@ -238,49 +351,127 @@ function statusColorClass(status: OrderStatus): string {
       letter-spacing: 0.5px;
     }
 
-    .status-success {
-      background: #e8f5e9;
-      color: #2e7d32;
+    .status-success { background: var(--shop-success-bg); color: var(--shop-success); }
+    .status-error { background: var(--shop-error-bg); color: var(--shop-error); }
+    .status-pending { background: #fff3e0; color: #e65100; }
+
+    /* Mobile Cards */
+    .orders-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    .status-error {
-      background: #ffebee;
-      color: #c62828;
+    .order-card {
+      cursor: pointer;
+      border-radius: 12px !important;
+      transition: box-shadow 0.2s;
     }
 
-    .status-pending {
-      background: #fff3e0;
-      color: #e65100;
+    .order-card:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
     }
 
-    @media (max-width: 600px) {
-      .page-header {
-        flex-direction: column;
-        gap: 16px;
-      }
-      .orders-grid {
-        grid-template-columns: 1fr;
-      }
+    .card-detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+      font-size: 14px;
+    }
+
+    .card-label { color: var(--shop-text-secondary); font-size: 13px; }
+
+    .card-total { padding-top: 12px; font-size: 16px; }
+
+    .desktop-only { display: block; }
+    .mobile-only { display: none; }
+
+    @media (max-width: 768px) {
+      .desktop-only { display: none; }
+      .mobile-only { display: flex; }
+      .page-header { flex-direction: column; gap: 16px; }
+      .filters-row { flex-direction: column; }
+      .date-field { width: 100%; }
     }
   `],
 })
 export class OrdersComponent implements OnInit {
   protected readonly facade = inject(OrdersFacade);
+  protected readonly i18n = inject(I18nService);
   private readonly tenantCtx = inject(TenantContextService);
+  private readonly authStore = inject(AuthStore);
+  private readonly snackBar = inject(MatSnackBar);
 
-  readonly demoTenants = DEMO_TENANTS;
-  selectedTenantId = DEMO_TENANTS[0].id;
+  readonly statusOptions: StatusFilter[] = ['ALL', 'DRAFT', 'RESERVED', 'CONFIRMED', 'PAID', 'CANCELLED'];
+  readonly selectedStatus = signal<StatusFilter>('ALL');
+  searchQuery = '';
+  dateFrom: Date | null = null;
+  dateTo: Date | null = null;
+
+  readonly filteredOrders = computed(() => {
+    let orders = this.facade.orders();
+    const status = this.selectedStatus();
+    if (status !== 'ALL') {
+      orders = orders.filter(o => o.status === status);
+    }
+    if (this.searchQuery.trim()) {
+      const q = this.searchQuery.trim().toLowerCase();
+      orders = orders.filter(o => o.id.toLowerCase().includes(q));
+    }
+    if (this.dateFrom) {
+      const from = this.dateFrom.getTime();
+      orders = orders.filter(o => new Date(o.createdAt).getTime() >= from);
+    }
+    if (this.dateTo) {
+      const to = this.dateTo.getTime() + 86400000;
+      orders = orders.filter(o => new Date(o.createdAt).getTime() <= to);
+    }
+    return orders;
+  });
 
   ngOnInit(): void {
     this.loadOrders();
   }
 
   loadOrders(): void {
-    this.tenantCtx.setActiveTenantId(this.selectedTenantId);
+    const tenantId = this.tenantCtx.getActiveTenantId();
+    if (tenantId) {
+      this.tenantCtx.setActiveTenantId(tenantId);
+    }
     this.facade.loadOrders({});
   }
 
+  setStatusFilter(status: StatusFilter): void {
+    this.selectedStatus.set(status);
+  }
+
+  applyFilters(): void {
+    this.selectedStatus.update(s => s);
+  }
+
+  getStatusLabel(status: StatusFilter): string {
+    if (status === 'ALL') return this.i18n.messages().shop.allStatuses;
+    const map: Record<OrderStatus, string> = {
+      DRAFT: this.i18n.messages().orders.draft,
+      RESERVED: this.i18n.messages().orders.reserved,
+      CONFIRMED: this.i18n.messages().orders.confirmed,
+      PAID: this.i18n.messages().orders.paid,
+      CANCELLED: this.i18n.messages().orders.cancelled,
+    };
+    return map[status];
+  }
+
   getStatusClass(status: OrderStatus): string {
-    return statusColorClass(status);
+    return STATUS_CLASSES[status];
+  }
+
+  copyOrderId(id: string): void {
+    navigator.clipboard.writeText(id);
+    this.snackBar.open(this.i18n.messages().shop.copiedToClipboard, '', { duration: 2000 });
   }
 }

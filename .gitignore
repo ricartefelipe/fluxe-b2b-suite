@@ -38,6 +38,11 @@ pnpm-debug.log*
 terraform.tfvars
 *.auto.tfvars
 
+# Old build artifacts (Docker-created, may have root ownership)
+dist.old/
+**/dist.old/
+**/cache.old/
+
 # Temporary
 tmp/
 temp/

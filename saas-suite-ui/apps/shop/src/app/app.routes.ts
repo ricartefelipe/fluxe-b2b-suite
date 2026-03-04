@@ -53,6 +53,13 @@ export const appRoutes: Route[] = [
     ],
   },
   {
+    path: 'profile',
+    title: 'My Profile | Fluxe Shop',
+    canActivate: [shopAuthGuard],
+    loadComponent: () =>
+      import('./profile/profile.component').then((m) => m.ProfileComponent),
+  },
+  {
     path: '**',
     redirectTo: 'products',
   },

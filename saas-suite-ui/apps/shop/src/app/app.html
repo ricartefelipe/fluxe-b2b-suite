@@ -79,11 +79,37 @@
           }
         </div>
 
-        <!-- User avatar -->
+        <!-- User avatar / login -->
         @if (auth.isAuthenticated()) {
-          <button class="user-avatar" aria-label="User menu">
-            <span>{{ userInitial }}</span>
-          </button>
+          <div class="user-menu-wrapper">
+            <button class="user-avatar" (click)="toggleUserMenu()" [attr.aria-expanded]="userMenuOpen()" aria-label="User menu">
+              <span>{{ userInitial }}</span>
+            </button>
+            @if (userMenuOpen()) {
+              <div class="user-menu-overlay" (click)="closeUserMenu()"></div>
+              <div class="user-menu-dropdown">
+                <div class="user-menu-header">
+                  <strong>{{ userName }}</strong>
+                  <span>{{ auth.session()?.email }}</span>
+                </div>
+                <div class="user-menu-divider"></div>
+                <a class="user-menu-item" routerLink="/profile" (click)="closeUserMenu()">
+                  <mat-icon>person</mat-icon> Meu Perfil
+                </a>
+                <a class="user-menu-item" routerLink="/orders" (click)="closeUserMenu()">
+                  <mat-icon>receipt_long</mat-icon> Meus Pedidos
+                </a>
+                <div class="user-menu-divider"></div>
+                <button class="user-menu-item logout" (click)="doLogout()">
+                  <mat-icon>logout</mat-icon> Sair
+                </button>
+              </div>
+            }
+          </div>
+        } @else {
+          <a routerLink="/login" class="login-btn-header">
+            <mat-icon>login</mat-icon> Entrar
+          </a>
         }
       </div>
     </div>

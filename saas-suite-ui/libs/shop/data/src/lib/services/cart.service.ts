@@ -69,10 +69,9 @@ export class CartService {
 
   toOrderItems(): OrderItem[] {
     return this._items().map((i) => ({
-      sku: i.product.id,
-      quantity: i.quantity,
-      unitPrice: i.product.price,
-      description: i.product.name,
+      sku: i.product.sku ?? i.product.id,
+      qty: i.quantity,
+      price: Number(i.product.price),
     }));
   }
 

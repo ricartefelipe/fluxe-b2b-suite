@@ -844,4 +844,113 @@
   .mobile-search-bar {
     padding: 0 16px 12px;
   }
+
+  .login-btn-header {
+    font-size: 12px !important;
+    padding: 6px 12px !important;
+  }
+}
+
+/* User menu dropdown */
+.user-menu-wrapper {
+  position: relative;
+}
+.user-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+}
+.user-menu-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  width: 260px;
+  background: var(--card-bg, #fff);
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+  border: 1px solid var(--shop-border, #e2e8f0);
+  z-index: 1000;
+  overflow: hidden;
+  animation: menuFadeIn 0.15s ease-out;
+}
+@keyframes menuFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.user-menu-header {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.user-menu-header strong {
+  font-size: 14px;
+  color: var(--shop-text, #1a2332);
+}
+.user-menu-header span {
+  font-size: 12px;
+  color: #64748b;
+}
+.user-menu-divider {
+  height: 1px;
+  background: var(--shop-border, #e2e8f0);
+}
+.user-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  font-size: 14px;
+  color: var(--shop-text, #334155);
+  text-decoration: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+.user-menu-item:hover {
+  background: var(--shop-hover, #f1f5f9);
+}
+.user-menu-item mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #64748b;
+}
+.user-menu-item.logout {
+  color: #b91c1c;
+}
+.user-menu-item.logout mat-icon {
+  color: #b91c1c;
+}
+
+/* Login button in header */
+.login-btn-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #1565c0, #0d47a1);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: box-shadow 0.2s, transform 0.15s;
+  box-shadow: 0 2px 8px rgba(21, 101, 192, 0.3);
+  white-space: nowrap;
+}
+.login-btn-header:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(21, 101, 192, 0.4);
+  text-decoration: none;
+  color: #fff;
+}
+.login-btn-header mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }

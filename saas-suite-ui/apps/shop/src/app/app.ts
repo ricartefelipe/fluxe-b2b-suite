@@ -17,7 +17,7 @@ import { CartService } from '@union.solutions/shop/data';
 import { ThemeToggleComponent, LanguageSwitcherComponent } from '@saas-suite/shared/ui';
 import { OfflineIndicatorComponent, InstallPromptComponent } from '@union.solutions/shop/pwa';
 import { NotificationStore } from '@saas-suite/shared/notifications';
-import { AuthStore } from '@saas-suite/shared/auth';
+import { AuthStore, AuthService } from '@saas-suite/shared/auth';
 import { I18nService } from '@saas-suite/shared/i18n';
 
 @Component({
@@ -48,9 +48,12 @@ export class App implements OnInit {
   private readonly titleService = inject(Title);
   private readonly platformId = inject(PLATFORM_ID);
 
+  private readonly authService = inject(AuthService);
+
   protected readonly minicartOpen = signal(false);
   protected readonly mobileMenuOpen = signal(false);
   protected readonly mobileSearchOpen = signal(false);
+  protected readonly userMenuOpen = signal(false);
 
   protected get userName(): string {
     const session = this.auth.session();
@@ -122,9 +125,23 @@ export class App implements OnInit {
     this.router.navigate(['/checkout']);
   }
 
+  toggleUserMenu(): void {
+    this.userMenuOpen.update(v => !v);
+  }
+
+  closeUserMenu(): void {
+    this.userMenuOpen.set(false);
+  }
+
+  async doLogout(): Promise<void> {
+    this.closeUserMenu();
+    await this.authService.logout();
+  }
+
   @HostListener('document:keydown.escape')
   onEscape(): void {
     this.closeMinicart();
+    this.closeUserMenu();
     this.mobileMenuOpen.set(false);
     this.mobileSearchOpen.set(false);
   }

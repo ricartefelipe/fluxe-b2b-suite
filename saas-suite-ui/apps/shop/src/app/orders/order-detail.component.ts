@@ -93,9 +93,9 @@ const STATUS_CLASSES: Record<OrderStatus, string> = {
                       <span class="detail-item-name">{{ item.description || item.sku }}</span>
                       <span class="detail-item-sku">SKU: {{ item.sku }}</span>
                     </div>
-                    <div class="detail-item-qty">× {{ item.quantity }}</div>
-                    <div class="detail-item-price">{{ item.unitPrice | currency }}</div>
-                    <div class="detail-item-total">{{ item.unitPrice * item.quantity | currency }}</div>
+                    <div class="detail-item-qty">× {{ item.qty }}</div>
+                    <div class="detail-item-price">{{ item.price | currency }}</div>
+                    <div class="detail-item-total">{{ item.price * item.qty | currency }}</div>
                   </div>
                 }
               </div>

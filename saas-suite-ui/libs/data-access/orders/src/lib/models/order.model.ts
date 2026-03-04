@@ -2,9 +2,8 @@ export type OrderStatus = 'DRAFT' | 'RESERVED' | 'CONFIRMED' | 'CANCELLED' | 'PA
 
 export interface OrderItem {
   sku: string;
-  quantity: number;
-  unitPrice: number;
-  description?: string;
+  qty: number;
+  price: number;
 }
 
 export interface Order {
@@ -23,7 +22,6 @@ export interface Order {
 export interface CreateOrderRequest {
   customerId: string;
   items: OrderItem[];
-  currency?: string;
 }
 
 export interface OrderListParams {

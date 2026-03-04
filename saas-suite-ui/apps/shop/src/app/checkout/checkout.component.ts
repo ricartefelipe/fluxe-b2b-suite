@@ -815,7 +815,6 @@ export class CheckoutComponent {
       const order = await this.ordersFacade.createOrder({
         customerId: this.customerId,
         items: this.cart.toOrderItems(),
-        currency: this.currency,
       });
 
       if (!order) {

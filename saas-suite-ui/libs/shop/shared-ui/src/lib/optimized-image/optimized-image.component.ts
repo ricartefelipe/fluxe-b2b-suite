@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   input,
   signal,
+  computed,
 } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 
@@ -11,29 +12,35 @@ import { NgOptimizedImage } from '@angular/common';
   standalone: true,
   imports: [NgOptimizedImage],
   template: `
-    <div class="image-container" [class.loaded]="!loading()" [class.error]="error()">
-      <img
-        [ngSrc]="src()"
-        [width]="width()"
-        [height]="height()"
-        [alt]="alt()"
-        [priority]="priority()"
-        [placeholder]="placeholder()"
-        (load)="onLoad()"
-        (error)="onError()"
-      />
-      @if (loading()) {
+    <div class="image-container" [class.loaded]="!loading()" [class.error]="error() || !hasSrc()">
+      @if (hasSrc()) {
+        <img
+          [ngSrc]="src()"
+          [width]="width()"
+          [height]="height()"
+          [alt]="alt()"
+          [priority]="priority()"
+          [placeholder]="placeholder()"
+          (load)="onLoad()"
+          (error)="onError()"
+        />
+      }
+      @if (loading() && hasSrc()) {
         <div
           class="image-placeholder"
           [style.aspect-ratio]="width() + '/' + height()"
         ></div>
       }
-      @if (error()) {
+      @if (error() || !hasSrc()) {
         <div
           class="image-fallback"
           [style.aspect-ratio]="width() + '/' + height()"
         >
-          <span>Image unavailable</span>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
         </div>
       }
     </div>
@@ -96,6 +103,7 @@ export class OptimizedImageComponent {
   readonly priority = input<boolean>(false);
   readonly placeholder = input<string | boolean>(true);
 
+  readonly hasSrc = computed(() => !!this.src()?.trim());
   readonly loading = signal(true);
   readonly error = signal(false);
 

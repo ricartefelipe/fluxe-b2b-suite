@@ -8,7 +8,7 @@ export const shopAuthGuard: CanActivateFn = () => {
 
   if (auth.isAuthenticated()) return true;
 
-  return router.createUrlTree(['/products'], {
+  return router.createUrlTree(['/login'], {
     queryParams: { returnUrl: router.getCurrentNavigation()?.extractedUrl.toString() },
   });
 };

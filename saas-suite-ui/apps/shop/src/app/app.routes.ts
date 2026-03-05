@@ -14,6 +14,7 @@ export const appRoutes: Route[] = [
   {
     path: 'products',
     title: 'Products | Fluxe Shop',
+    canActivate: [shopAuthGuard],
     data: { preload: true },
     loadChildren: () =>
       import('@union.solutions/shop/feature-products').then(m => m.featureProductsRoutes),
@@ -21,6 +22,7 @@ export const appRoutes: Route[] = [
   {
     path: 'product',
     title: 'Product Details | Fluxe Shop',
+    canActivate: [shopAuthGuard],
     data: { preload: true },
     loadChildren: () =>
       import('@union.solutions/shop/feature-product-detail').then(

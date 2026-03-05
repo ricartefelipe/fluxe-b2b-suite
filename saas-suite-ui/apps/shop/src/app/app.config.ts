@@ -17,7 +17,6 @@ import {
   provideClientHydration,
   withEventReplay,
 } from '@angular/platform-browser';
-import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideServiceWorker } from '@angular/service-worker';
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { appRoutes } from './app.routes';
@@ -44,7 +43,6 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
       }),
     ),
-    provideHttpClient(withFetch()),
     provideRuntimeConfig(),
     provideHttpLayer(),
     provideAuth(),

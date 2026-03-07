@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
+import { APP_INITIALIZER, EnvironmentProviders, isDevMode, makeEnvironmentProviders } from '@angular/core';
 import { AuthService } from './auth.service';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { OidcAuthService } from './oidc-auth.service';
@@ -21,6 +21,16 @@ async function authInitializer(
   oidcAuth: OidcAuthService
 ): Promise<void> {
   await config.load();
+
+  if (config.get('authMode') === 'dev' && !isDevMode()) {
+    console.error(
+      '[Auth] SECURITY: authMode is "dev" but the app is running in production mode. ' +
+      'Falling back to OIDC. Set authMode to "oidc" in config.json for production deployments.'
+    );
+    await oidcAuth.configureAndTryLogin();
+    return;
+  }
+
   if (config.get('authMode') === 'oidc') {
     await oidcAuth.configureAndTryLogin();
   } else {

@@ -1,6 +1,6 @@
 {
   "name": "fluxe-b2b-suite",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Fluxe B2B Suite — plataforma B2B multi-tenant (shop, ops-portal, admin-console)",
   "scripts": {

@@ -39,6 +39,14 @@ jobs:
         run: pnpm install --frozen-lockfile
         working-directory: saas-suite-ui
 
+      - name: Lint
+        run: pnpm nx run-many -t lint --projects=ops-portal,admin-console,shop
+        working-directory: saas-suite-ui
+
+      - name: Test
+        run: pnpm nx run-many -t test --projects=ops-portal,admin-console,shop
+        working-directory: saas-suite-ui
+
       - run: pnpm nx build ops-portal --configuration=production --base-href=/ops-portal/
         working-directory: saas-suite-ui
       - run: pnpm nx build admin-console --configuration=production --base-href=/admin-console/

@@ -113,7 +113,13 @@ FAILED=""
 
 echo -e "${BOLD}── [1/3] spring-saas-core ──${NC}"
 if [ -d "$WKS/spring-saas-core" ]; then
-  ( cd "$WKS/spring-saas-core" && docker compose up -d --build ) || { fail "Erro ao subir Spring"; FAILED="$FAILED spring"; }
+  CORE_DIR="$WKS/spring-saas-core"
+  if ( cd "$CORE_DIR" && mvn -q -DskipTests package -B ) 2>/dev/null; then
+    info "JAR buildado no host; usando imagem com app.local.Dockerfile"
+    ( cd "$CORE_DIR" && docker compose -f docker-compose.yml -f docker-compose.local.yml up -d --build ) || { fail "Erro ao subir Spring"; FAILED="$FAILED spring"; }
+  else
+    ( cd "$CORE_DIR" && docker compose up -d --build ) || { fail "Erro ao subir Spring"; FAILED="$FAILED spring"; }
+  fi
   wait_health "Spring API" "http://localhost:8080/actuator/health/liveness" 120 || FAILED="$FAILED spring"
 else
   warn "Pasta spring-saas-core não encontrada — pulando"
@@ -136,8 +142,9 @@ echo -e "${BOLD}── [3/3] py-payments-ledger ──${NC}"
 if [ -d "$WKS/py-payments-ledger" ]; then
   ( cd "$WKS/py-payments-ledger" && RABBITMQ_URL="$RABBITMQ_SUITE_URL" docker compose up -d --build ) || { fail "Erro ao subir Python"; FAILED="$FAILED python"; }
   wait_health "Python API" "http://localhost:8000/healthz" 90 || FAILED="$FAILED python"
-  info "Rodando migrações..."
-  ( cd "$WKS/py-payments-ledger" && docker compose exec -T api alembic upgrade head 2>/dev/null ) || true
+  info "Rodando migrações e seed..."
+  ( cd "$WKS/py-payments-ledger" && docker compose exec -T api env PYTHONPATH=/app alembic upgrade head 2>/dev/null ) || true
+  ( cd "$WKS/py-payments-ledger" && docker compose exec -T api env PYTHONPATH=/app python -m src.infrastructure.db.seed 2>/dev/null ) || true
 else
   warn "Pasta py-payments-ledger não encontrada — pulando"
 fi

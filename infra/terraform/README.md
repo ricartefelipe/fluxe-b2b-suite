@@ -58,4 +58,4 @@ Após `terraform apply`:
 2. **ECS:** Crie task definitions e services que usem as subnets privadas, security group ECS, e as variáveis de ambiente (RDS, Redis, RabbitMQ) a partir dos outputs/Secrets Manager.
 3. **Frontend:** Faça upload do build (ex.: `nx build ops-portal`) para o bucket S3 e invalide o CloudFront se necessário.
 
-Ordem e variáveis de ambiente: [documento-implantacao.md](../../docs/documento-implantacao.md) e [LACUNAS-CLOUD-IAC.md](../../docs/LACUNAS-CLOUD-IAC.md).
+Ordem e variáveis de ambiente: ver [docs/README.md](../../docs/README.md) (índice e documentos planejados) e [GUIA-DEPLOY-PASSO-A-PASSO.md](../../docs/GUIA-DEPLOY-PASSO-A-PASSO.md).

@@ -147,11 +147,10 @@ export class OrderCreatePage {
       customerId: val.customerId!,
       items: val.items.map(i => ({
         sku: i.sku!,
-        quantity: i.quantity!,
-        unitPrice: i.unitPrice!,
+        qty: i.quantity!,
+        price: i.unitPrice!,
         description: i.description ?? undefined,
       })),
-      currency: val.currency!,
     });
     this.submitting.set(false);
     if (order) {

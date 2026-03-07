@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, isDevMode } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { DevLoginComponent } from './dev-auth/dev-login.component';
@@ -44,6 +44,12 @@ export class LoginPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.authMode = this.config.get('authMode');
+
+    if (this.authMode === 'dev' && !isDevMode()) {
+      console.error('[Auth] Dev auth disabled in production mode — forcing OIDC redirect.');
+      this.authMode = 'oidc';
+    }
+
     if (this.authMode === 'oidc' && this.oidcAuth) {
       this.oidcAuth.initLoginFlow();
     }

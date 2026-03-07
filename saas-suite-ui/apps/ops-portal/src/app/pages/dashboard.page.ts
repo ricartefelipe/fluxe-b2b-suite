@@ -77,7 +77,7 @@ const BAR_MAX_HEIGHT = 170;
 
       <!-- Charts Row -->
       <div class="charts-row">
-        <!-- TODO: Replace with ngx-charts or chart.js when dependency is added -->
+      <!-- Charts: SVG por opção (sem dependência de lib de gráficos). -->
         <!-- Revenue Bar Chart -->
         <mat-card class="chart-card">
           <mat-card-header>
@@ -124,7 +124,6 @@ const BAR_MAX_HEIGHT = 170;
           </mat-card-content>
         </mat-card>
 
-        <!-- TODO: Replace with ngx-charts or chart.js when dependency is added -->
         <!-- Orders by Status Donut -->
         <mat-card class="chart-card">
           <mat-card-header>

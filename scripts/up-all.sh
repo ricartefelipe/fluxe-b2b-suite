@@ -142,8 +142,9 @@ echo -e "${BOLD}── [3/3] py-payments-ledger ──${NC}"
 if [ -d "$WKS/py-payments-ledger" ]; then
   ( cd "$WKS/py-payments-ledger" && RABBITMQ_URL="$RABBITMQ_SUITE_URL" docker compose up -d --build ) || { fail "Erro ao subir Python"; FAILED="$FAILED python"; }
   wait_health "Python API" "http://localhost:8000/healthz" 90 || FAILED="$FAILED python"
-  info "Rodando migrações..."
-  ( cd "$WKS/py-payments-ledger" && docker compose exec -T api alembic upgrade head 2>/dev/null ) || true
+  info "Rodando migrações e seed..."
+  ( cd "$WKS/py-payments-ledger" && docker compose exec -T api env PYTHONPATH=/app alembic upgrade head 2>/dev/null ) || true
+  ( cd "$WKS/py-payments-ledger" && docker compose exec -T api env PYTHONPATH=/app python -m src.infrastructure.db.seed 2>/dev/null ) || true
 else
   warn "Pasta py-payments-ledger não encontrada — pulando"
 fi

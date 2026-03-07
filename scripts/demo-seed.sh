@@ -27,11 +27,8 @@ echo ""
 
 # ── Verificar health ──
 echo -e "${BOLD}Verificando serviços...${NC}"
-for svc in "$CORE/actuator/health/liveness:spring-saas-core" \
-           "$ORDERS/v1/healthz:node-b2b-orders" \
-           "$PAYMENTS/healthz:py-payments-ledger"; do
-  url="${svc%%:*}"
-  name="${svc##*:}"
+check_health() {
+  local name="$1" url="$2"
   if curl -sf --max-time 5 "$url" >/dev/null 2>&1; then
     ok "$name OK"
   else
@@ -39,33 +36,43 @@ for svc in "$CORE/actuator/health/liveness:spring-saas-core" \
     echo "  Suba o ambiente primeiro: ./scripts/up-all.sh --no-front"
     exit 1
   fi
-done
+}
+check_health "spring-saas-core"    "$CORE/actuator/health/liveness"
+check_health "node-b2b-orders"     "$ORDERS/v1/healthz"
+check_health "py-payments-ledger"  "$PAYMENTS/healthz"
 echo ""
 
-# ── Token do spring-saas-core (global, aceito por todos) ──
-echo -e "${BOLD}[1/6] Gerando token de operação...${NC}"
-TOKEN=$(curl -sf -X POST "$CORE/v1/dev/token" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "sub": "ops@demo.example.com",
-    "tid": "00000000-0000-0000-0000-000000000002",
-    "roles": ["ops"],
-    "perms": ["orders:write","orders:read","inventory:read","inventory:write","products:read","products:write","payments:write","payments:read","ledger:read"],
-    "plan": "pro",
-    "region": "region-a"
-  }' | jq -r '.access_token')
+# ── Tokens de autenticação ──
+echo -e "${BOLD}[1/6] Gerando tokens de operação...${NC}"
+JSON="Content-Type: application/json"
+TENANT="X-Tenant-Id: tenant_demo"
 
-if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
-  fail "Não foi possível gerar token. Verifique o spring-saas-core."
+ORDERS_TOKEN=$(curl -sf -X POST "$ORDERS/v1/auth/token" \
+  -H "$JSON" \
+  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"tenant_demo"}' \
+  | jq -r '.access_token')
+
+if [ -z "$ORDERS_TOKEN" ] || [ "$ORDERS_TOKEN" = "null" ]; then
+  fail "Não foi possível gerar token do node-b2b-orders."
   exit 1
 fi
-ok "Token gerado"
+ok "Token node-b2b-orders OK"
+
+PAY_TOKEN=$(curl -sf -X POST "$PAYMENTS/v1/auth/token" \
+  -H "$JSON" \
+  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"tenant_demo"}' \
+  | jq -r '.access_token')
+
+if [ -z "$PAY_TOKEN" ] || [ "$PAY_TOKEN" = "null" ]; then
+  fail "Não foi possível gerar token do py-payments-ledger."
+  exit 1
+fi
+ok "Token py-payments-ledger OK"
 echo ""
 
 # ── Headers reutilizáveis ──
-AUTH="Authorization: Bearer $TOKEN"
-TENANT="X-Tenant-Id: tenant_demo"
-JSON="Content-Type: application/json"
+AUTH="Authorization: Bearer $ORDERS_TOKEN"
+PAY_AUTH="Authorization: Bearer $PAY_TOKEN"
 
 # ── Ajustar inventário dos produtos do catálogo ──
 echo -e "${BOLD}[2/6] Ajustando inventário do catálogo...${NC}"
@@ -79,9 +86,11 @@ ADJUSTED=0
 for entry in "${SKUS[@]}"; do
   sku="${entry%%:*}"
   qty="${entry##*:}"
-  resp=$(curl -sf -X POST "$ORDERS/v1/inventory/adjust" \
+  idem=$(uuidgen)
+  resp=$(curl -sf -X POST "$ORDERS/v1/inventory/adjustments" \
     -H "$AUTH" -H "$TENANT" -H "$JSON" \
-    -d "{\"sku\":\"$sku\",\"delta\":$qty,\"reason\":\"demo-seed initial stock\"}" 2>/dev/null) && ((ADJUSTED++)) || true
+    -H "Idempotency-Key: $idem" \
+    -d "{\"sku\":\"$sku\",\"type\":\"IN\",\"qty\":$qty,\"reason\":\"demo-seed initial stock\"}" 2>/dev/null) && ((ADJUSTED++)) || true
 done
 ok "Inventário ajustado para $ADJUSTED SKUs"
 echo ""
@@ -102,7 +111,7 @@ create_order() {
     local oid status
     oid=$(echo "$resp" | jq -r '.id')
     status=$(echo "$resp" | jq -r '.status')
-    info "$desc → $oid ($status)"
+    info "$desc → $oid ($status)" >&2
     echo "$oid"
   fi
 }
@@ -131,7 +140,7 @@ echo ""
 
 # ── Aguardar worker reservar (CREATED → RESERVED) ──
 echo -e "${BOLD}[4/6] Aguardando worker reservar inventário...${NC}"
-sleep 5
+sleep 8
 
 CONFIRMED=0
 for oid in $ORDER1 $ORDER2 $ORDER3; do
@@ -147,17 +156,7 @@ echo ""
 
 # ── Criar payment intents ──
 echo -e "${BOLD}[5/6] Criando payment intents...${NC}"
-
-PAY_TOKEN=$(curl -sf -X POST "$PAYMENTS/v1/auth/token" \
-  -H "$JSON" \
-  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"tenant_demo"}' \
-  | jq -r '.access_token' 2>/dev/null)
-
-if [ -z "$PAY_TOKEN" ] || [ "$PAY_TOKEN" = "null" ]; then
-  fail "Não foi possível gerar token de pagamento"
-else
-  PAY_AUTH="Authorization: Bearer $PAY_TOKEN"
-
+{
   create_payment() {
     local amount="$1" desc="$2" ref="$3"
     local idem
@@ -166,12 +165,12 @@ else
     resp=$(curl -sf -X POST "$PAYMENTS/v1/payment-intents" \
       -H "$PAY_AUTH" -H "$TENANT" -H "$JSON" \
       -H "Idempotency-Key: $idem" \
-      -d "{\"amount\":$amount,\"currency\":\"BRL\",\"description\":\"$desc\",\"reference\":\"$ref\"}" 2>/dev/null)
+      -d "{\"amount\":$amount,\"currency\":\"BRL\",\"description\":\"$desc\",\"customer_ref\":\"order:$ref\"}" 2>/dev/null)
     if [ -n "$resp" ]; then
       local pid status
       pid=$(echo "$resp" | jq -r '.id')
       status=$(echo "$resp" | jq -r '.status')
-      info "$desc → R\$ $amount ($status)"
+      info "$desc → R\$ $amount ($status)" >&2
       echo "$pid"
     fi
   }
@@ -184,10 +183,11 @@ else
   for pid in $PI1 $PI2; do
     [ -z "$pid" ] && continue
     curl -sf -X POST "$PAYMENTS/v1/payment-intents/$pid/confirm" \
-      -H "$PAY_AUTH" -H "$TENANT" >/dev/null 2>&1 && ((SETTLED++)) || true
+      -H "$PAY_AUTH" -H "$TENANT" \
+      -H "Idempotency-Key: $(uuidgen)" >/dev/null 2>&1 && ((SETTLED++)) || true
   done
   ok "$SETTLED pagamentos confirmados (worker fará settle automático)"
-fi
+}
 echo ""
 
 # ── Aguardar settlement ──

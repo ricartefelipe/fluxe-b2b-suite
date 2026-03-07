@@ -122,6 +122,14 @@ Para subir **toda a suíte** (backends via Docker + frontend), use o script na r
 
 Requisito: pastas `spring-saas-core`, `node-b2b-orders` e `py-payments-ledger` no mesmo nível que `fluxe-b2b-suite` (ex.: `Documentos/wks/`). Ver [docs/README.md](docs/README.md) e [docs/GUIA-DEPLOY-PASSO-A-PASSO.md](docs/GUIA-DEPLOY-PASSO-A-PASSO.md).
 
+### Rede Docker compartilhada
+
+Todos os 4 projetos da plataforma usam a rede externa `fluxe_shared` para comunicação inter-serviço via Docker. O script `./scripts/up-all.sh` cria a rede automaticamente. Se subir backends individualmente, crie antes:
+
+```bash
+docker network create fluxe_shared
+```
+
 ---
 
 ## URLs após subir
@@ -180,6 +188,8 @@ Edite `apps/<app>/public/assets/config.json` (ops-portal e admin-console):
 
 - **Dev Auth:** Apenas quando `authMode === 'dev'`. Gera JWT local para demos.
 - **Produção:** Use `authMode: 'oidc'` e configure issuer/clientId/scope. Dev Auth não deve estar acessível em produção.
+
+> **Proteção automática:** Se o Angular estiver em production mode (`ng build` padrão) e `config.json` ainda tiver `authMode: "dev"`, o app força fallback para OIDC e emite um erro no console. Isso evita exposição acidental do Dev Auth em produção. Sempre configure `authMode: "oidc"` no `config.json` de produção.
 
 ---
 

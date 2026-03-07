@@ -15,23 +15,22 @@
 
 ---
 
-## Documentos planejados
+## Roadmap de documentação
 
-| Documento | Descrição (planejado) |
-|-----------|------------------------|
-| E2E-RUN.md | Subir os 4 repos integrados (envs, JWT, RabbitMQ) e sugestões de hospedagem |
-| ESTADO-ENTREGA.md | Estado da entrega: pronto para venda vs em progresso |
-| regras-de-negocio.md | Regras de negócio: auth, pedidos, pagamentos, inventário, core, frontend |
-| DAS.md | Documento de Arquitetura de Software |
-| C4-suite.md | Diagramas C4 da suite e fluxo Orders ↔ Payments |
-| historias-de-usuario.md | Histórias de usuário (Ops, Admin, Shop, Auth) |
-| documento-implantacao.md | Ordem de deploy, variáveis por serviço, health checks, rollback |
-| ci-cd-e-deploy.md | CI (GitHub Actions) por repo; CD/deploy |
-| PROMPT-EVOLUCAO.md | **Existe em spring-saas-core** (`docs/PROMPT-EVOLUCAO.md`) |
-| PROMPT-CONCLUSAO-VISTORIA.md | Critérios de qualidade e etapas finais para estado vendável |
-| GUIA-EXECUCAO-PROMPTS-EVOLUCAO.md | Como executar os 4 prompts e checklist |
-| ETAPAS-EXECUTADAS.md | Resumo do que foi rodado (Core, Orders, Payments, Suite) |
-| PUBLICAR-PASSO-A-PASSO.md | Publicar frontend (GitHub Pages) ou aplicação completa (Railway) |
+Documentos futuros planejados (ainda não criados):
+
+- **E2E-RUN.md** — Subir os 4 repos integrados (envs, JWT, RabbitMQ) e sugestões de hospedagem
+- **ESTADO-ENTREGA.md** — Estado da entrega: pronto para venda vs em progresso
+- **regras-de-negocio.md** — Regras de negócio: auth, pedidos, pagamentos, inventário, core, frontend
+- **DAS.md** — Documento de Arquitetura de Software
+- **C4-suite.md** — Diagramas C4 da suite e fluxo Orders ↔ Payments
+- **historias-de-usuario.md** — Histórias de usuário (Ops, Admin, Shop, Auth)
+- **documento-implantacao.md** — Ordem de deploy, variáveis por serviço, health checks, rollback
+- **ci-cd-e-deploy.md** — CI (GitHub Actions) por repo; CD/deploy
+- **PROMPT-CONCLUSAO-VISTORIA.md** — Critérios de qualidade e etapas finais para estado vendável
+- **PUBLICAR-PASSO-A-PASSO.md** — Publicar frontend (GitHub Pages) ou aplicação completa (Railway)
+
+> **Nota:** `PROMPT-EVOLUCAO.md` existe em `spring-saas-core/docs/PROMPT-EVOLUCAO.md`.
 
 ---
 

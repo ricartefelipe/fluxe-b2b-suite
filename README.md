@@ -163,24 +163,36 @@ docker network create fluxe_shared
 
 ## Configuração e URLs dos backends
 
-Edite `apps/<app>/public/assets/config.json` (ops-portal e admin-console):
+Em **modo dev** (`nx serve`), o front usa **URLs relativas** (`/api/core`, `/api/orders`, `/api/payments`) e um **proxy** no dev server encaminha para os backends (8080, 3000, 8000). Não é necessário CORS: as requisições saem para o mesmo host do front e o proxy redireciona.
+
+Arquivos de config:
+- `apps/ops-portal/public/assets/config.json`
+- `apps/admin-console/public/assets/config.json`
+- `apps/shop/public/assets/config.json`
+
+Exemplo (já configurado para dev com proxy):
 
 ```json
 {
-  "coreApiBaseUrl": "http://localhost:8080",
-  "ordersApiBaseUrl": "http://localhost:3000",
-  "paymentsApiBaseUrl": "http://localhost:8000",
+  "coreApiBaseUrl": "/api/core",
+  "ordersApiBaseUrl": "/api/orders",
+  "paymentsApiBaseUrl": "/api/payments",
   "authMode": "dev",
-  "oidc": {
-    "issuer": "https://auth.exemplo.com",
-    "clientId": "fluxe-b2b",
-    "scope": "openid profile email"
-  }
+  "logLevel": "debug"
 }
 ```
 
-- **authMode:** `dev` = login local com perfis; `oidc` = OAuth2/OIDC real.
-- Desenvolvimento sem backends: use `authMode: "dev"`; a UI funciona, chamadas HTTP falham.
+- **authMode:** `dev` = login local (Core `/v1/dev/token`); `oidc` = OAuth2/OIDC.
+- Para **produção** (build + deploy), use `scripts/inject-frontend-config.sh` com `CORE_API_URL`, `ORDERS_API_URL`, `PAYMENTS_API_URL`; o script grava URLs absolutas no `config.json` do build.
+
+### Como verificar se o front fala com os backends
+
+1. Suba **Core (8080)** e **Orders (3000)** antes do front.
+2. Suba o front: `pnpm run dev` ou `pnpm nx serve ops-portal`.
+3. Abra o app (ex.: http://localhost:4200), abra **DevTools → Aba Network**.
+4. Faça login (modo dev): deve aparecer `POST .../api/core/v1/dev/token` com status 200 e, em seguida, chamadas para `/api/orders/...` ou `/api/core/...`.
+5. Se aparecerem requisições para `http://localhost:8080` ou `http://localhost:3000` **diretamente** (e derem CORS ou falha), o proxy não está ativo: confira se está usando `nx serve` (e não abrindo o build estático) e se `proxy.conf.json` está referenciado no `project.json` do app.
+6. Se `/assets/config.json` retornar 404, o app usa o fallback (também com `/api/...`), então o proxy ainda deve funcionar.
 
 ---
 

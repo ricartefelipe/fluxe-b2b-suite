@@ -16,9 +16,9 @@ export interface AppConfig {
 }
 
 export const DEFAULT_CONFIG: AppConfig = {
-  coreApiBaseUrl: 'http://localhost:8080',
-  ordersApiBaseUrl: 'http://localhost:3000',
-  paymentsApiBaseUrl: 'http://localhost:8000',
+  coreApiBaseUrl: '/api/core',
+  ordersApiBaseUrl: '/api/orders',
+  paymentsApiBaseUrl: '/api/payments',
   authMode: 'dev',
   logLevel: 'debug',
   version: '0.0.0',

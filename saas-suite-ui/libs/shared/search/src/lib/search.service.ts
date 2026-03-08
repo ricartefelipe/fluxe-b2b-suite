@@ -168,7 +168,7 @@ export class SearchService {
     return (
       payment.id.toLowerCase().includes(query) ||
       payment.status.toLowerCase().includes(query) ||
-      payment.orderId.toLowerCase().includes(query) ||
+      payment.customer_ref.toLowerCase().includes(query) ||
       payment.currency.toLowerCase().includes(query)
     );
   }

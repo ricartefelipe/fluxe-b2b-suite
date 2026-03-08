@@ -1,29 +1,25 @@
-export type PaymentStatus = 'PENDING' | 'CONFIRMED' | 'FAILED' | 'CANCELLED';
+export type PaymentStatus = 'PENDING' | 'AUTHORIZED' | 'CONFIRMED' | 'SETTLED' | 'FAILED' | 'CANCELLED';
 
 export interface PaymentIntent {
   id: string;
-  tenantId: string;
-  orderId: string;
-  customerId: string;
-  amount: number;
+  amount: string;
   currency: string;
   status: PaymentStatus;
-  correlationId?: string;
-  createdAt: string;
-  updatedAt: string;
+  customer_ref: string;
+  gateway_ref?: string | null;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface CreatePaymentIntentRequest {
-  orderId: string;
-  customerId: string;
   amount: number;
   currency: string;
+  customer_ref: string;
 }
 
 export interface PaymentListParams {
   status?: PaymentStatus;
-  orderId?: string;
-  customerId?: string;
+  customer_ref?: string;
   page?: number;
   pageSize?: number;
 }

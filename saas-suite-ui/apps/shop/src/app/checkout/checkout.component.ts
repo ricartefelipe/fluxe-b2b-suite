@@ -823,10 +823,9 @@ export class CheckoutComponent {
       }
 
       const paymentReq: CreatePaymentIntentRequest = {
-        orderId: order.id,
-        customerId: this.customerId,
         amount: order.totalAmount,
         currency: order.currency,
+        customer_ref: this.customerId,
       };
       const payment = await this.paymentsFacade.createPayment(paymentReq);
 

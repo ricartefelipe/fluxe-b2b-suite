@@ -25,18 +25,19 @@ interface DevProfile {
 const DEV_PROFILES: DevProfile[] = [
   {
     label: 'Super Admin',
-    sub: 'admin@saas.local',
-    email: 'admin@saas.local',
-    tid: 'tenant_demo',
+    sub: 'admin@system.local',
+    email: 'admin@system.local',
+    tid: '*',
     roles: ['admin'],
     perms: [
       'tenants:read', 'tenants:write', 'policies:read', 'policies:write',
-      'flags:read', 'flags:write', 'audit:read', 'orders:read', 'orders:write',
-      'inventory:read', 'inventory:write', 'payments:read', 'payments:write',
-      'ledger:read', 'products:read', 'products:write', 'profile:read',
+      'flags:read', 'flags:write', 'audit:read', 'analytics:read', 'admin:write',
+      'orders:read', 'orders:write', 'inventory:read', 'inventory:write',
+      'payments:read', 'payments:write', 'ledger:read',
+      'products:read', 'products:write', 'profile:read',
     ],
     plan: 'enterprise',
-    region: 'region-a',
+    region: 'global',
     icon: 'shield',
     color: '#1565c0',
   },
@@ -48,7 +49,8 @@ const DEV_PROFILES: DevProfile[] = [
     roles: ['ops'],
     perms: [
       'orders:read', 'orders:write', 'inventory:read', 'inventory:write',
-      'products:read', 'products:write', 'profile:read',
+      'products:read', 'products:write', 'payments:read', 'payments:write',
+      'ledger:read', 'profile:read',
     ],
     plan: 'pro',
     region: 'region-a',
@@ -118,7 +120,7 @@ const DEV_PROFILES: DevProfile[] = [
             <div class="preview">
               <div class="preview-row">
                 <span class="preview-label">Tenant ID</span>
-                <code>{{ selectedProfile.tid.substring(0, 18) }}...</code>
+                <code>{{ selectedProfile.tid.length > 18 ? selectedProfile.tid.substring(0, 18) + '...' : selectedProfile.tid }}</code>
               </div>
               <div class="preview-row">
                 <span class="preview-label">Plano</span>

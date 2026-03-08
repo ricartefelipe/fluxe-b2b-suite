@@ -1,6 +1,7 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { UpperCasePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -34,7 +35,7 @@ interface Insight {
   selector: 'app-ai-page',
   standalone: true,
   imports: [
-    FormsModule, MatButtonModule, MatCardModule, MatIconModule,
+    FormsModule, UpperCasePipe, MatButtonModule, MatCardModule, MatIconModule,
     MatInputModule, MatFormFieldModule, MatProgressSpinnerModule,
     MatChipsModule, MatDividerModule,
   ],

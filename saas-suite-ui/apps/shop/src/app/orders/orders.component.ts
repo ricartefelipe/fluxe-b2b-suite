@@ -15,7 +15,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { OrdersFacade, Order, OrderStatus } from '@saas-suite/data-access/orders';
+import { OrdersFacade, OrderStatus } from '@saas-suite/data-access/orders';
 import { TenantContextService } from '@saas-suite/shared/http';
 import { AuthStore } from '@saas-suite/shared/auth';
 import { I18nService } from '@saas-suite/shared/i18n';

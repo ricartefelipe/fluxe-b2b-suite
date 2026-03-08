@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthStore, AuthService } from '@saas-suite/shared/auth';
-import { I18nService } from '@saas-suite/shared/i18n';
 
 @Component({
   selector: 'app-profile',

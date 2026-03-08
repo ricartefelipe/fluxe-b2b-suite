@@ -38,8 +38,8 @@ import { formatDateTime } from '@saas-suite/shared/util';
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Order ID</mat-label>
-        <input matInput [(ngModel)]="filterOrder" (ngModelChange)="search()">
+        <mat-label>Cliente</mat-label>
+        <input matInput [(ngModel)]="filterCustomer" (ngModelChange)="search()">
       </mat-form-field>
     </div>
 
@@ -53,9 +53,9 @@ import { formatDateTime } from '@saas-suite/shared/util';
           <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
           <td mat-cell *matCellDef="let p"><code>{{ p.id.substring(0, 8) }}</code></td>
         </ng-container>
-        <ng-container matColumnDef="orderId">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Pedido</th>
-          <td mat-cell *matCellDef="let p"><code>{{ p.orderId.substring(0, 8) }}</code></td>
+        <ng-container matColumnDef="customerRef">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
+          <td mat-cell *matCellDef="let p"><code>{{ p.customer_ref }}</code></td>
         </ng-container>
         <ng-container matColumnDef="amount">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
@@ -65,9 +65,9 @@ import { formatDateTime } from '@saas-suite/shared/util';
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
           <td mat-cell *matCellDef="let p"><saas-status-chip [status]="p.status" /></td>
         </ng-container>
-        <ng-container matColumnDef="createdAt">
+        <ng-container matColumnDef="created_at">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
-          <td mat-cell *matCellDef="let p">{{ fmtDate(p.createdAt) }}</td>
+          <td mat-cell *matCellDef="let p">{{ fmtDate(p.created_at) }}</td>
         </ng-container>
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef></th>
@@ -98,8 +98,8 @@ export class PaymentsListPage implements OnInit, AfterViewInit {
 
   dataSource = new MatTableDataSource<any>([]);
   filterStatus?: PaymentStatus;
-  filterOrder?: string;
-  columns = ['id', 'orderId', 'amount', 'status', 'createdAt', 'actions'];
+  filterCustomer?: string;
+  columns = ['id', 'customerRef', 'amount', 'status', 'created_at', 'actions'];
 
   constructor() {
     effect(() => {
@@ -115,7 +115,7 @@ export class PaymentsListPage implements OnInit, AfterViewInit {
   async ngOnInit(): Promise<void> { await this.search(); }
 
   async search(): Promise<void> {
-    await this.facade.loadPayments({ status: this.filterStatus, orderId: this.filterOrder });
+    await this.facade.loadPayments({ status: this.filterStatus, customer_ref: this.filterCustomer });
   }
 
   async confirmPayment(id: string): Promise<void> {

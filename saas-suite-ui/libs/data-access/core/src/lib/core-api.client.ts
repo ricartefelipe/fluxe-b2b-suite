@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { PageResponse, toParams } from '@saas-suite/shared/http';
 import {
@@ -10,6 +10,14 @@ import {
   AuditLog, AuditListParams,
 } from './models';
 
+function normalizePage<T>(raw: Record<string, unknown>): PageResponse<T> {
+  const data = (raw['data'] ?? raw['items'] ?? raw['content'] ?? []) as T[];
+  const total = (raw['total'] ?? raw['totalElements'] ?? (data as T[]).length) as number;
+  const page = (raw['page'] ?? raw['number'] ?? 0) as number;
+  const pageSize = (raw['pageSize'] ?? raw['size'] ?? (data as T[]).length) as number;
+  return { data, total, page, pageSize };
+}
+
 @Injectable({ providedIn: 'root' })
 export class CoreApiClient {
   private http = inject(HttpClient);
@@ -18,7 +26,8 @@ export class CoreApiClient {
   private get base(): string { return this.config.get('coreApiBaseUrl'); }
 
   listTenants(p?: TenantListParams): Observable<PageResponse<Tenant>> {
-    return this.http.get<PageResponse<Tenant>>(`${this.base}/v1/tenants`, { params: toParams(p as Record<string, unknown>) });
+    return this.http.get<Record<string, unknown>>(`${this.base}/v1/tenants`, { params: toParams(p as Record<string, unknown>) })
+      .pipe(map(r => normalizePage<Tenant>(r)));
   }
   getTenant(id: string): Observable<Tenant> {
     return this.http.get<Tenant>(`${this.base}/v1/tenants/${id}`);
@@ -34,7 +43,8 @@ export class CoreApiClient {
   }
 
   listPolicies(p?: PolicyListParams): Observable<PageResponse<Policy>> {
-    return this.http.get<PageResponse<Policy>>(`${this.base}/v1/policies`, { params: toParams(p as Record<string, unknown>) });
+    return this.http.get<Record<string, unknown>>(`${this.base}/v1/policies`, { params: toParams(p as Record<string, unknown>) })
+      .pipe(map(r => normalizePage<Policy>(r)));
   }
   getPolicy(id: string): Observable<Policy> {
     return this.http.get<Policy>(`${this.base}/v1/policies/${id}`);
@@ -63,6 +73,7 @@ export class CoreApiClient {
   }
 
   listAuditLogs(p?: AuditListParams): Observable<PageResponse<AuditLog>> {
-    return this.http.get<PageResponse<AuditLog>>(`${this.base}/v1/audit`, { params: toParams(p as Record<string, unknown>) });
+    return this.http.get<Record<string, unknown>>(`${this.base}/v1/audit`, { params: toParams(p as Record<string, unknown>) })
+      .pipe(map(r => normalizePage<AuditLog>(r)));
   }
 }

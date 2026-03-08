@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [MatIconModule],
   template: `
     <span
-      [class]="'chip chip-' + status.toLowerCase()"
+      [class]="'chip chip-' + (status || '').toLowerCase()"
       role="status"
       [attr.aria-label]="'Status: ' + displayLabel()">
       <mat-icon class="chip-icon" aria-hidden="true">{{ statusIcon() }}</mat-icon>
@@ -68,11 +68,11 @@ export class StatusChipComponent {
   displayLabel = computed(() => this.label ?? this.formatStatus(this.status));
 
   statusIcon = computed(() => {
-    const key = this.status.toLowerCase();
+    const key = (this.status || '').toLowerCase();
     return StatusChipComponent.ICON_MAP[key] ?? 'info';
   });
 
   private formatStatus(s: string): string {
-    return s.replace(/_/g, ' ');
+    return (s || '').replace(/_/g, ' ');
   }
 }

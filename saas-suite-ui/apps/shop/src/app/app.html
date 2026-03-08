@@ -86,7 +86,14 @@
               <span>{{ userInitial }}</span>
             </button>
             @if (userMenuOpen()) {
-              <div class="user-menu-overlay" (click)="closeUserMenu()"></div>
+              <div
+                class="user-menu-overlay"
+                role="button"
+                tabindex="0"
+                (click)="closeUserMenu()"
+                (keydown.enter)="closeUserMenu()"
+                (keydown.space.prevent)="closeUserMenu()"
+              ></div>
               <div class="user-menu-dropdown">
                 <div class="user-menu-header">
                   <strong>{{ userName }}</strong>
@@ -123,7 +130,6 @@
             type="text"
             class="search-input"
             [placeholder]="i18n.messages().shop.searchPlaceholder"
-            autofocus
           />
           <button class="search-close-btn" (click)="toggleMobileSearch()">
             <mat-icon>close</mat-icon>
@@ -153,7 +159,14 @@
 
   <!-- Minicart dropdown -->
   @if (minicartOpen()) {
-    <div class="minicart-overlay" (click)="closeMinicart()"></div>
+    <div
+      class="minicart-overlay"
+      role="button"
+      tabindex="0"
+      (click)="closeMinicart()"
+      (keydown.enter)="closeMinicart()"
+      (keydown.space.prevent)="closeMinicart()"
+    ></div>
     <div class="minicart-dropdown" #minicartPanel role="dialog" aria-label="Cart">
       <div class="minicart-header">
         <h3>{{ i18n.messages().checkout.cart }} ({{ cart.totalItems() }})</h3>

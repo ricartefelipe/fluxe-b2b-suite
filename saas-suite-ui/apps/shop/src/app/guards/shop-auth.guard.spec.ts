@@ -45,7 +45,7 @@ describe('shopAuthGuard', () => {
     expect(mockRouter.createUrlTree).not.toHaveBeenCalled();
   });
 
-  it('should redirect to /products when user is not authenticated', () => {
+  it('should redirect to /login when user is not authenticated', () => {
     mockAuthStore.isAuthenticated.mockReturnValue(false);
 
     const result = TestBed.runInInjectionContext(() =>
@@ -54,7 +54,7 @@ describe('shopAuthGuard', () => {
 
     expect(result).toBe(mockUrlTree);
     expect(mockRouter.createUrlTree).toHaveBeenCalledWith(
-      ['/products'],
+      ['/login'],
       expect.objectContaining({
         queryParams: expect.objectContaining({ returnUrl: '/checkout' }),
       })
@@ -72,7 +72,7 @@ describe('shopAuthGuard', () => {
     );
 
     expect(mockRouter.createUrlTree).toHaveBeenCalledWith(
-      ['/products'],
+      ['/login'],
       expect.objectContaining({
         queryParams: { returnUrl: '/orders' },
       })
@@ -89,7 +89,7 @@ describe('shopAuthGuard', () => {
 
     expect(result).toBe(mockUrlTree);
     expect(mockRouter.createUrlTree).toHaveBeenCalledWith(
-      ['/products'],
+      ['/login'],
       expect.objectContaining({
         queryParams: { returnUrl: undefined },
       })

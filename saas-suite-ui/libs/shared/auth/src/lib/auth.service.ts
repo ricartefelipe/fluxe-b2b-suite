@@ -2,7 +2,7 @@ import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, timeout, catchError, of } from 'rxjs';
 import { AuthStore } from './auth.store';
 import { sessionFromJwt } from './models/auth-session.model';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
@@ -10,6 +10,8 @@ import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { TenantContextService } from '@saas-suite/shared/http';
 import { OidcAuthService } from './oidc-auth.service';
 import { SKIP_AUTH, SKIP_TENANT_HEADER } from '@saas-suite/shared/util';
+
+const DEV_TOKEN_TIMEOUT_MS = 3_000;
 
 interface DevTokenRequest {
   sub: string;
@@ -65,37 +67,16 @@ export class AuthService {
     let token: string;
 
     if (this.config.get('authMode') === 'dev') {
-      const coreUrl = this.config.get('coreApiBaseUrl');
-      if (coreUrl) {
-        try {
-          const ctx = new HttpContext()
-            .set(SKIP_AUTH, true)
-            .set(SKIP_TENANT_HEADER, true);
-          const body = {
-            sub: params.sub,
-            tid: params.tid ?? '*',
-            roles: params.roles ?? [],
-            perms: params.perms ?? [],
-            plan: params.plan ?? 'starter',
-            region: params.region ?? 'us-east-1',
-          };
-          const resp = await firstValueFrom(
-            this.http.post<TokenResponse>(`${coreUrl}/v1/dev/token`, body, { context: ctx })
-          );
-          token = resp.access_token;
-        } catch {
-          token = createLocalDevJwt(params);
-        }
-      } else {
-        token = createLocalDevJwt(params);
-      }
+      token = await this.tryBackendDevToken(params);
     } else {
       const baseUrl = this.config.get('coreApiBaseUrl');
       const ctx = new HttpContext()
         .set(SKIP_AUTH, true)
         .set(SKIP_TENANT_HEADER, true);
       const resp = await firstValueFrom(
-        this.http.post<TokenResponse>(`${baseUrl}/v1/dev/token`, params, { context: ctx })
+        this.http.post<TokenResponse>(`${baseUrl}/v1/dev/token`, params, {
+          context: ctx,
+        }).pipe(timeout(DEV_TOKEN_TIMEOUT_MS))
       );
       token = resp.access_token;
     }
@@ -107,6 +88,34 @@ export class AuthService {
     }
     if (this.isBrowser) sessionStorage.setItem('dev_token', token);
     await this.router.navigate(['/']);
+  }
+
+  private async tryBackendDevToken(params: DevTokenRequest): Promise<string> {
+    const coreUrl = this.config.get('coreApiBaseUrl');
+    if (!coreUrl) {
+      return createLocalDevJwt(params);
+    }
+
+    const ctx = new HttpContext()
+      .set(SKIP_AUTH, true)
+      .set(SKIP_TENANT_HEADER, true);
+    const body = {
+      sub: params.sub,
+      tid: params.tid ?? '*',
+      roles: params.roles ?? [],
+      perms: params.perms ?? [],
+      plan: params.plan ?? 'starter',
+      region: params.region ?? 'us-east-1',
+    };
+
+    const resp = await firstValueFrom(
+      this.http.post<TokenResponse>(`${coreUrl}/v1/dev/token`, body, { context: ctx }).pipe(
+        timeout(DEV_TOKEN_TIMEOUT_MS),
+        catchError(() => of(null)),
+      )
+    );
+
+    return resp?.access_token ?? createLocalDevJwt(params);
   }
 
   async restoreSession(): Promise<void> {

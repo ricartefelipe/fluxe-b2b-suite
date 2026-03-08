@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Router, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthStore } from '@saas-suite/shared/auth';
 import { shopAuthGuard } from './shop-auth.guard';
 import { describe, it, beforeEach, expect, vi } from 'vitest';
@@ -37,7 +37,9 @@ describe('shopAuthGuard', () => {
   it('should allow access when user is authenticated', () => {
     mockAuthStore.isAuthenticated.mockReturnValue(true);
 
-    const result = TestBed.runInInjectionContext(() => shopAuthGuard({} as any, {} as any));
+    const result = TestBed.runInInjectionContext(() =>
+      shopAuthGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+    );
 
     expect(result).toBe(true);
     expect(mockRouter.createUrlTree).not.toHaveBeenCalled();
@@ -46,7 +48,9 @@ describe('shopAuthGuard', () => {
   it('should redirect to /products when user is not authenticated', () => {
     mockAuthStore.isAuthenticated.mockReturnValue(false);
 
-    const result = TestBed.runInInjectionContext(() => shopAuthGuard({} as any, {} as any));
+    const result = TestBed.runInInjectionContext(() =>
+      shopAuthGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+    );
 
     expect(result).toBe(mockUrlTree);
     expect(mockRouter.createUrlTree).toHaveBeenCalledWith(
@@ -63,7 +67,9 @@ describe('shopAuthGuard', () => {
       extractedUrl: { toString: () => '/orders' },
     });
 
-    TestBed.runInInjectionContext(() => shopAuthGuard({} as any, {} as any));
+    TestBed.runInInjectionContext(() =>
+      shopAuthGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+    );
 
     expect(mockRouter.createUrlTree).toHaveBeenCalledWith(
       ['/products'],
@@ -77,7 +83,9 @@ describe('shopAuthGuard', () => {
     mockAuthStore.isAuthenticated.mockReturnValue(false);
     mockRouter.getCurrentNavigation.mockReturnValue(null);
 
-    const result = TestBed.runInInjectionContext(() => shopAuthGuard({} as any, {} as any));
+    const result = TestBed.runInInjectionContext(() =>
+      shopAuthGuard({} as ActivatedRouteSnapshot, {} as RouterStateSnapshot)
+    );
 
     expect(result).toBe(mockUrlTree);
     expect(mockRouter.createUrlTree).toHaveBeenCalledWith(

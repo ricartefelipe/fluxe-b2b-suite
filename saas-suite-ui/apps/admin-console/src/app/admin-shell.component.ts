@@ -8,6 +8,7 @@ const ADMIN_NAV: NavItem[] = [
   { label: 'Policies', route: '/policies', icon: 'policy', permission: 'policies:read' },
   { label: 'Feature Flags', route: '/flags', icon: 'flag', permission: 'flags:read' },
   { label: 'Audit Log', route: '/audit', icon: 'history', permission: 'audit:read' },
+  { label: 'Assistente IA', route: '/ai', icon: 'smart_toy', permission: 'analytics:read' },
 ];
 
 @Component({

@@ -48,20 +48,21 @@ inject_config() {
     return 1
   fi
 
-  cat > "${output_dir}/config.json" << EOF
+  local auth_mode="${AUTH_MODE:-oidc}"
+
+  cat > "${output_dir}/assets/config.json" << EOF
 {
   "coreApiBaseUrl": "${CORE_API_URL}",
   "ordersApiBaseUrl": "${ORDERS_API_URL}",
   "paymentsApiBaseUrl": "${PAYMENTS_API_URL}",
-  "keycloakUrl": "${KEYCLOAK_URL}"
-}
-EOF
-
-  cat > "${output_dir}/config.keycloak.json" << EOF
-{
-  "url": "${KEYCLOAK_URL}",
-  "realm": "${KEYCLOAK_REALM}",
-  "clientId": "${client_id}"
+  "authMode": "${auth_mode}",
+  "oidc": {
+    "issuer": "${KEYCLOAK_URL}/realms/${KEYCLOAK_REALM}",
+    "clientId": "${client_id}",
+    "scope": "openid profile email"
+  },
+  "logLevel": "info",
+  "version": "${APP_VERSION:-1.0.0}"
 }
 EOF
 

@@ -54,12 +54,16 @@
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",
+      "options": {
+        "proxyConfig": "apps/admin-console/proxy.conf.json"
+      },
       "configurations": {
         "production": {
           "buildTarget": "admin-console:build:production"
         },
         "development": {
-          "buildTarget": "admin-console:build:development"
+          "buildTarget": "admin-console:build:development",
+          "proxyConfig": "apps/admin-console/proxy.conf.json"
         }
       },
       "defaultConfiguration": "development"

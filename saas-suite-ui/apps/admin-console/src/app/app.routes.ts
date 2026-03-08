@@ -38,6 +38,11 @@ export const appRoutes: Route[] = [
         data: { permissions: ['audit:read'] },
       },
       {
+        path: 'ai',
+        loadComponent: () => import('./pages/ai.page').then(m => m.AiPage),
+        data: { permissions: ['analytics:read'] },
+      },
+      {
         path: 'onboarding',
         loadComponent: () => import('./pages/tenant-onboarding.page').then(m => m.TenantOnboardingPage),
         data: { permissions: ['tenants:write'] },

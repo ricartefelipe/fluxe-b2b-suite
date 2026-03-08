@@ -1,20 +1,9 @@
-# Deploy frontend to GitHub Pages (ops-portal, admin-console, shop em subpaths).
-# Habilitar em Settings > Pages > Source: GitHub Actions.
-name: Deploy
-
+name: CI
 on:
   push:
+    branches: [main, master, develop]
+  pull_request:
     branches: [main, master]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
 
 jobs:
   build:
@@ -37,54 +26,18 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-        working-directory: saas-suite-ui
 
       - name: Lint
         run: pnpm nx run-many -t lint --projects=ops-portal,admin-console,shop
-        working-directory: saas-suite-ui
 
       - name: Test
         run: pnpm nx run-many -t test --projects=ops-portal,admin-console,shop
-        working-directory: saas-suite-ui
 
-      - run: pnpm nx build ops-portal --configuration=production --base-href=/ops-portal/
-        working-directory: saas-suite-ui
-      - run: pnpm nx build admin-console --configuration=production --base-href=/admin-console/
-        working-directory: saas-suite-ui
-      - run: pnpm nx build shop --configuration=production --base-href=/shop/
-        working-directory: saas-suite-ui
+      - name: Build ops-portal
+        run: pnpm nx build ops-portal --configuration=production
 
-      - name: Prepare site for Pages
-        run: |
-          mkdir -p site/ops-portal site/admin-console site/shop
-          cp -r dist/apps/ops-portal/browser/* site/ops-portal/
-          cp -r dist/apps/admin-console/browser/* site/admin-console/
-          cp -r dist/apps/shop/browser/* site/shop/
-          cat > site/index.html << 'EOF'
-          <!DOCTYPE html>
-          <html><head><meta charset="utf-8"><title>Fluxe B2B Suite</title></head>
-          <body>
-            <h1>Fluxe B2B Suite</h1>
-            <ul>
-              <li><a href="/ops-portal/">Ops Portal</a></li>
-              <li><a href="/admin-console/">Admin Console</a></li>
-              <li><a href="/shop/">Shop</a></li>
-            </ul>
-          </body></html>
-          EOF
+      - name: Build admin-console
+        run: pnpm nx build admin-console --configuration=production
 
-      - name: Upload artifact for Pages
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: saas-suite-ui/site
-
-  deploy:
-    needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deploy
-        uses: actions/deploy-pages@v4
+      - name: Build shop
+        run: pnpm nx build shop --configuration=production

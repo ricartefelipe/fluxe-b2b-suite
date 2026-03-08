@@ -101,7 +101,7 @@ export class OptimizedImageComponent {
   readonly width = input<number>(400);
   readonly height = input<number>(300);
   readonly priority = input<boolean>(false);
-  readonly placeholder = input<string | boolean>(true);
+  readonly placeholder = input<string | boolean>(false);
 
   readonly hasSrc = computed(() => !!this.src()?.trim());
   readonly loading = signal(true);

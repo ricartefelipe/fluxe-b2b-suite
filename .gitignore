@@ -52,3 +52,7 @@ temp/
 test-results/
 playwright-report/
 playwright/.cache/
+
+# Local dev environment
+.local-logs/
+.local-pids

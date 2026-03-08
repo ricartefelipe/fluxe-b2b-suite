@@ -54,12 +54,16 @@
     "serve": {
       "continuous": true,
       "executor": "@angular/build:dev-server",
+      "options": {
+        "proxyConfig": "apps/ops-portal/proxy.conf.json"
+      },
       "configurations": {
         "production": {
           "buildTarget": "ops-portal:build:production"
         },
         "development": {
-          "buildTarget": "ops-portal:build:development"
+          "buildTarget": "ops-portal:build:development",
+          "proxyConfig": "apps/ops-portal/proxy.conf.json"
         }
       },
       "defaultConfiguration": "development"

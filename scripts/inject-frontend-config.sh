@@ -50,9 +50,9 @@ inject_config() {
 
   cat > "${output_dir}/config.json" << EOF
 {
-  "coreApiUrl": "${CORE_API_URL}",
-  "ordersApiUrl": "${ORDERS_API_URL}",
-  "paymentsApiUrl": "${PAYMENTS_API_URL}",
+  "coreApiBaseUrl": "${CORE_API_URL}",
+  "ordersApiBaseUrl": "${ORDERS_API_URL}",
+  "paymentsApiBaseUrl": "${PAYMENTS_API_URL}",
   "keycloakUrl": "${KEYCLOAK_URL}"
 }
 EOF

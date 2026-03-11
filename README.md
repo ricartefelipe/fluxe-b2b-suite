@@ -1,8 +1,11 @@
 # Fluxe B2B Suite
 
-[![Angular](https://img.shields.io/badge/Angular-21-DD0031.svg)](https://angular.io/)
-[![Nx](https://img.shields.io/badge/Nx-22.5-143055.svg)](https://nx.dev/)
+[![CI](https://github.com/ricartefelipe/fluxe-b2b-suite/actions/workflows/deploy.yml/badge.svg)](https://github.com/ricartefelipe/fluxe-b2b-suite/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Angular](https://img.shields.io/badge/Angular-21-DD0031?logo=angular&logoColor=white)](https://angular.dev/)
+[![Nx](https://img.shields.io/badge/Nx-22.5-143055?logo=nx&logoColor=white)](https://nx.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-9-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
 
 Plataforma B2B **multi-tenant** para e-commerce, operações e gestão administrativa. Suíte completa em **Angular** (Nx monorepo) com integração a backends **Spring** (core), **Node** (pedidos) e **Python** (pagamentos).
 

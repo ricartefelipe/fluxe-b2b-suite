@@ -1,0 +1,246 @@
+<shop-offline-indicator />
+
+<header class="shop-header" role="banner">
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-inner">
+      <span class="topbar-company">Fluxe B2B Suite</span>
+      <div class="topbar-right">
+        @if (auth.isAuthenticated() && userName) {
+          <span class="topbar-greeting">{{ i18n.messages().shop.greeting }}, <strong>{{ userName }}</strong></span>
+        }
+        <saas-language-switcher />
+        <ui-theme-toggle />
+      </div>
+    </div>
+  </div>
+
+  <!-- Main header -->
+  <div class="main-header">
+    <div class="main-header-inner">
+      <!-- Mobile hamburger -->
+      <button
+        class="mobile-menu-btn"
+        (click)="toggleMobileMenu()"
+        [attr.aria-expanded]="mobileMenuOpen()"
+        aria-label="Menu"
+      >
+        <mat-icon>{{ mobileMenuOpen() ? 'close' : 'menu' }}</mat-icon>
+      </button>
+
+      <!-- Logo -->
+      <a routerLink="/" class="logo" aria-label="Home">
+        <div class="logo-mark">F</div>
+        <div class="logo-text">
+          <span class="logo-name">Fluxe</span>
+          <span class="logo-tag">B2B Shop</span>
+        </div>
+      </a>
+
+      <!-- Search bar (desktop) -->
+      <div class="search-bar-wrapper">
+        <div class="search-bar">
+          <mat-icon class="search-icon">search</mat-icon>
+          <input
+            type="text"
+            class="search-input"
+            [placeholder]="i18n.messages().shop.searchPlaceholder"
+            (focus)="$event.target"
+          />
+          <kbd class="search-shortcut">⌘K</kbd>
+        </div>
+      </div>
+
+      <!-- Header actions -->
+      <div class="header-actions">
+        <!-- Mobile search -->
+        <button class="action-btn mobile-search-btn" (click)="toggleMobileSearch()" aria-label="Search">
+          <mat-icon>search</mat-icon>
+        </button>
+
+        <!-- Notifications -->
+        <button class="action-btn notification-btn" routerLink="/orders" aria-label="Notifications">
+          <mat-icon>notifications_none</mat-icon>
+          @if (notifications.unreadCount() > 0) {
+            <span class="action-badge">{{ notifications.unreadCount() > 9 ? '9+' : notifications.unreadCount() }}</span>
+          }
+        </button>
+
+        <!-- Cart -->
+        <div class="cart-trigger-wrapper">
+          <button class="action-btn cart-trigger" (click)="toggleMinicart()" [attr.aria-expanded]="minicartOpen()">
+            <mat-icon>shopping_cart</mat-icon>
+            @if (cart.totalItems() > 0) {
+              <span class="action-badge cart-badge">{{ cart.totalItems() > 99 ? '99+' : cart.totalItems() }}</span>
+            }
+          </button>
+          @if (cart.totalAmount() > 0) {
+            <span class="cart-total-label">{{ cart.totalAmount() | currency:'BRL':'symbol':'1.2-2' }}</span>
+          }
+        </div>
+
+        <!-- User avatar -->
+        <div class="user-menu-wrapper">
+          <button class="user-avatar" (click)="toggleUserMenu()" [attr.aria-expanded]="userMenuOpen()" aria-label="User menu">
+            <span>{{ userInitial }}</span>
+          </button>
+          @if (userMenuOpen()) {
+            <div
+              class="user-menu-overlay"
+              role="button"
+              tabindex="0"
+              (click)="closeUserMenu()"
+              (keydown.enter)="closeUserMenu()"
+              (keydown.space.prevent)="closeUserMenu()"
+            ></div>
+            <div class="user-menu-dropdown">
+              <div class="user-menu-header">
+                <strong>{{ userName }}</strong>
+                <span>{{ auth.session()?.email }}</span>
+              </div>
+              <div class="user-menu-divider"></div>
+              <a class="user-menu-item" routerLink="/profile" (click)="closeUserMenu()">
+                <mat-icon>person</mat-icon> Meu Perfil
+              </a>
+              <a class="user-menu-item" routerLink="/orders" (click)="closeUserMenu()">
+                <mat-icon>receipt_long</mat-icon> Meus Pedidos
+              </a>
+              <div class="user-menu-divider"></div>
+              <button class="user-menu-item logout" (click)="doLogout()">
+                <mat-icon>logout</mat-icon> Sair
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile search (expanded) -->
+    @if (mobileSearchOpen()) {
+      <div class="mobile-search-bar">
+        <div class="search-bar">
+          <mat-icon class="search-icon">search</mat-icon>
+          <input
+            type="text"
+            class="search-input"
+            [placeholder]="i18n.messages().shop.searchPlaceholder"
+          />
+          <button class="search-close-btn" (click)="toggleMobileSearch()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Navigation bar -->
+  <nav class="nav-bar" role="navigation" [attr.aria-label]="i18n.messages().accessibility.mainNavigation">
+    <div class="nav-bar-inner" [class.nav-mobile-open]="mobileMenuOpen()">
+      <a routerLink="/products" routerLinkActive="nav-active" class="nav-link" (click)="mobileMenuOpen.set(false)">
+        <mat-icon class="nav-link-icon">storefront</mat-icon>
+        {{ i18n.messages().shop.allProducts }}
+      </a>
+      <a routerLink="/orders" routerLinkActive="nav-active" class="nav-link" (click)="mobileMenuOpen.set(false)">
+        <mat-icon class="nav-link-icon">receipt_long</mat-icon>
+        {{ i18n.messages().shop.myOrders }}
+      </a>
+      <a routerLink="/checkout" routerLinkActive="nav-active" class="nav-link" (click)="mobileMenuOpen.set(false)">
+        <mat-icon class="nav-link-icon">shopping_cart_checkout</mat-icon>
+        {{ i18n.messages().checkout.cart }}
+      </a>
+    </div>
+  </nav>
+
+  <!-- Minicart dropdown -->
+  @if (minicartOpen()) {
+    <div
+      class="minicart-overlay"
+      role="button"
+      tabindex="0"
+      (click)="closeMinicart()"
+      (keydown.enter)="closeMinicart()"
+      (keydown.space.prevent)="closeMinicart()"
+    ></div>
+    <div class="minicart-dropdown" #minicartPanel role="dialog" aria-label="Cart">
+      <div class="minicart-header">
+        <h3>{{ i18n.messages().checkout.cart }} ({{ cart.totalItems() }})</h3>
+        <button class="minicart-close" (click)="closeMinicart()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      @if (cart.items().length === 0) {
+        <div class="minicart-empty">
+          <mat-icon class="minicart-empty-icon">shopping_cart</mat-icon>
+          <p class="minicart-empty-title">{{ i18n.messages().shop.minicartEmpty }}</p>
+          <p class="minicart-empty-hint">{{ i18n.messages().shop.minicartEmptyHint }}</p>
+          <button class="minicart-browse-btn" (click)="closeMinicart()" routerLink="/products">
+            {{ i18n.messages().shop.browseProducts }}
+          </button>
+        </div>
+      } @else {
+        <div class="minicart-items">
+          @for (item of cart.items(); track item.product.id) {
+            <div class="minicart-item">
+              <div class="minicart-item-thumb">
+                @if (item.product.imageUrl) {
+                  <img [src]="item.product.imageUrl" [alt]="item.product.name" loading="lazy" />
+                } @else {
+                  <mat-icon>inventory_2</mat-icon>
+                }
+              </div>
+              <div class="minicart-item-info">
+                <span class="minicart-item-name">{{ item.product.name }}</span>
+                <span class="minicart-item-price">{{ item.product.price | currency:'BRL':'symbol':'1.2-2' }}</span>
+              </div>
+              <div class="minicart-item-qty">
+                <button class="qty-btn" (click)="decrementQty(item)" [disabled]="item.quantity <= 1">
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <span class="qty-value">{{ item.quantity }}</span>
+                <button class="qty-btn" (click)="incrementQty(item)">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+              <button
+                class="minicart-item-remove"
+                (click)="cart.removeItem(item.product.id)"
+                [attr.aria-label]="i18n.messages().shop.removeItem"
+              >
+                <mat-icon>delete_outline</mat-icon>
+              </button>
+            </div>
+          }
+        </div>
+
+        <div class="minicart-footer">
+          <div class="minicart-subtotal">
+            <span>{{ i18n.messages().shop.subtotal }}</span>
+            <strong>{{ cart.totalAmount() | currency:'BRL':'symbol':'1.2-2' }}</strong>
+          </div>
+          <div class="minicart-actions">
+            <button class="minicart-btn-outline" (click)="goToCart()">
+              {{ i18n.messages().shop.viewCart }}
+            </button>
+            <button class="minicart-btn-primary" (click)="goToCheckout()">
+              {{ i18n.messages().shop.placeOrder }}
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</header>
+
+<main id="main-content" class="app-main" role="main">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="app-footer" role="contentinfo">
+  <div class="footer-inner">
+    <p>&copy; 2026 Fluxe B2B Suite</p>
+    <p>Multi-tenant B2B Platform</p>
+  </div>
+</footer>
+
+<shop-install-prompt />

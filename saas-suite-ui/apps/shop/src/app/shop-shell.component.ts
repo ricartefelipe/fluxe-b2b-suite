@@ -18,7 +18,7 @@ import { AuthStore, AuthService } from '@saas-suite/shared/auth';
 import { I18nService } from '@saas-suite/shared/i18n';
 
 @Component({
-  selector: 'shop-shell',
+  selector: 'app-shop-shell',
   standalone: true,
   imports: [
     RouterModule,

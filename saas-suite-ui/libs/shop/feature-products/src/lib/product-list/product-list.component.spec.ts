@@ -134,7 +134,7 @@ describe('ProductListComponent', () => {
   it('should navigate to product detail when product is selected', () => {
     const product = mockProducts[0];
     component.onProductSelect(product);
-    expect(mockRouter.navigate).toHaveBeenCalledWith(['/products', product.id]);
+    expect(mockRouter.navigate).toHaveBeenCalledWith(['/product', product.id]);
   });
 
   it('should debounce search input by 300ms', fakeAsync(() => {

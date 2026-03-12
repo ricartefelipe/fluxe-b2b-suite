@@ -975,7 +975,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   onProductSelect(product: Product): void {
-    this.router.navigate(['/products', product.id]);
+    this.router.navigate(['/product', product.id]);
   }
 
   onAddToCart(product: Product): void {

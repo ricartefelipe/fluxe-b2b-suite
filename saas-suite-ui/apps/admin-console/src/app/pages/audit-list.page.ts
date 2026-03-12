@@ -24,19 +24,19 @@ import { I18nService } from '@saas-suite/shared/i18n';
   ],
   template: `
     <div class="page-header">
-      <h1>Audit Log</h1>
-      <button mat-stroked-button (click)="search()"><mat-icon>refresh</mat-icon> Atualizar</button>
+      <h1>{{ i18n.messages().admin.auditLogTitle }}</h1>
+      <button mat-stroked-button (click)="search()"><mat-icon>refresh</mat-icon> {{ i18n.messages().ledger.refresh }}</button>
     </div>
 
     <div class="filters">
       <mat-form-field appearance="outline">
-        <mat-label>Ação</mat-label>
+        <mat-label>{{ i18n.messages().admin.action }}</mat-label>
         <input matInput [(ngModel)]="filters.action" [placeholder]="i18n.messages().adminPlaceholders.auditAction">
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Outcome</mat-label>
+        <mat-label>{{ i18n.messages().admin.outcome }}</mat-label>
         <mat-select [(ngModel)]="filters.outcome">
-          <mat-option [value]="undefined">Todos</mat-option>
+          <mat-option [value]="undefined">{{ i18n.messages().common.all }}</mat-option>
           <mat-option value="SUCCESS">SUCCESS</mat-option>
           <mat-option value="DENIED">DENIED</mat-option>
           <mat-option value="ERROR">ERROR</mat-option>
@@ -46,33 +46,33 @@ import { I18nService } from '@saas-suite/shared/i18n';
         <mat-label>Correlation ID</mat-label>
         <input matInput [(ngModel)]="filters.correlationId" [placeholder]="i18n.messages().adminPlaceholders.correlationId">
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="search()">Filtrar</button>
+      <button mat-raised-button color="primary" (click)="search()">{{ i18n.messages().common.filter }}</button>
     </div>
 
     @if (facade.loading()) {
       <saas-table-skeleton [rowCount]="5" [columns]="6" />
     } @else if (dataSource.data.length === 0) {
-      <saas-empty-state icon="history" title="Nenhum registro de auditoria" />
+      <saas-empty-state icon="history" [title]="i18n.messages().admin.noAuditRecords" />
     } @else {
       <table mat-table [dataSource]="dataSource" matSort class="full-width">
         <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.date }}</th>
           <td mat-cell *matCellDef="let a">{{ fmtDate(a.createdAt) }}</td>
         </ng-container>
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Ação</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.action }}</th>
           <td mat-cell *matCellDef="let a"><code>{{ a.action }}</code></td>
         </ng-container>
         <ng-container matColumnDef="outcome">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Resultado</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.result }}</th>
           <td mat-cell *matCellDef="let a"><saas-status-chip [status]="a.outcome" /></td>
         </ng-container>
         <ng-container matColumnDef="userId">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Usuário</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.user }}</th>
           <td mat-cell *matCellDef="let a">{{ a.userId || '—' }}</td>
         </ng-container>
         <ng-container matColumnDef="resourceType">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Recurso</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.resource }}</th>
           <td mat-cell *matCellDef="let a">{{ a.resourceType || '—' }}</td>
         </ng-container>
         <ng-container matColumnDef="correlationId">

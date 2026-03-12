@@ -11,6 +11,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
+import { I18nService } from '@saas-suite/shared/i18n';
 
 interface AiResponse {
   engine: string;
@@ -45,9 +46,9 @@ interface Insight {
         <div>
           <h1>
             <mat-icon class="title-icon">smart_toy</mat-icon>
-            Assistente IA
+            {{ i18n.messages().admin.aiTitle }}
           </h1>
-          <p class="subtitle">Análise inteligente de governança, auditoria e segurança</p>
+          <p class="subtitle">{{ i18n.messages().admin.aiSubtitle }}</p>
         </div>
         <div class="engine-badge" [class.llm]="status()?.engine === 'llm'">
           <mat-icon>{{ status()?.engine === 'llm' ? 'psychology' : 'rule' }}</mat-icon>
@@ -61,8 +62,8 @@ interface Insight {
       <mat-card class="chat-card">
         <mat-card-header>
           <mat-icon mat-card-avatar>chat</mat-icon>
-          <mat-card-title>Chat com IA</mat-card-title>
-          <mat-card-subtitle>Pergunte sobre governança, auditoria e segurança</mat-card-subtitle>
+          <mat-card-title>{{ i18n.messages().admin.chatWithAi }}</mat-card-title>
+          <mat-card-subtitle>{{ i18n.messages().admin.chatSubtitle }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           <div class="chat-messages">
@@ -83,7 +84,7 @@ interface Insight {
             <mat-form-field appearance="outline" class="full-width">
               <input matInput
                 [(ngModel)]="chatMessage"
-                placeholder="Ex: Quais anomalias foram detectadas hoje?"
+                [placeholder]="i18n.messages().admin.chatPlaceholder"
                 (keyup.enter)="sendChat()" />
             </mat-form-field>
             <button mat-fab color="primary" (click)="sendChat()" [disabled]="chatLoading() || !chatMessage">
@@ -97,22 +98,22 @@ interface Insight {
       <div class="actions-column">
         <mat-card class="action-card" (click)="analyzeAudit()">
           <mat-icon class="action-icon" style="color: #e65100">security</mat-icon>
-          <h3>Analisar Auditoria</h3>
-          <p>Análise de segurança dos últimos logs de auditoria</p>
+          <h3>{{ i18n.messages().admin.analyzeAudit }}</h3>
+          <p>{{ i18n.messages().admin.analyzeAuditDesc }}</p>
           @if (auditLoading()) { <mat-spinner diameter="24" /> }
         </mat-card>
 
         <mat-card class="action-card" (click)="getRecommendations()">
           <mat-icon class="action-icon" style="color: #1565c0">lightbulb</mat-icon>
-          <h3>Recomendações</h3>
-          <p>Sugestões de governança baseadas no estado atual</p>
+          <h3>{{ i18n.messages().admin.recommendations }}</h3>
+          <p>{{ i18n.messages().admin.recommendationsDesc }}</p>
           @if (recsLoading()) { <mat-spinner diameter="24" /> }
         </mat-card>
 
         <mat-card class="action-card" (click)="getInsights()">
           <mat-icon class="action-icon" style="color: #2e7d32">insights</mat-icon>
-          <h3>Insights</h3>
-          <p>Indicadores de saúde e oportunidades do sistema</p>
+          <h3>{{ i18n.messages().admin.insights }}</h3>
+          <p>{{ i18n.messages().admin.insightsDesc }}</p>
           @if (insightsLoading()) { <mat-spinner diameter="24" /> }
         </mat-card>
       </div>
@@ -219,6 +220,7 @@ interface Insight {
 export class AiPage implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly config = inject(RuntimeConfigService);
+  protected readonly i18n = inject(I18nService);
 
   status = signal<AiStatus | null>(null);
   chatHistory = signal<{ role: string; text: string }[]>([]);
@@ -256,7 +258,7 @@ export class AiPage implements OnInit {
         this.chatLoading.set(false);
       },
       error: () => {
-        this.chatHistory.update(h => [...h, { role: 'ai', text: 'Erro ao consultar a IA. Verifique se o backend está rodando.' }]);
+        this.chatHistory.update(h => [...h, { role: 'ai', text: this.i18n.messages().admin.aiError }]);
         this.chatLoading.set(false);
       },
     });
@@ -267,7 +269,7 @@ export class AiPage implements OnInit {
     this.http.post<AiResponse>(`${this.baseUrl}/v1/ai/analyze-audit?hoursBack=24`, {}).subscribe({
       next: resp => {
         this.analysisResult.set(resp);
-        this.resultTitle.set('Análise de Auditoria');
+        this.resultTitle.set(this.i18n.messages().admin.auditAnalysisTitle);
         this.resultIcon.set('security');
         this.auditLoading.set(false);
       },
@@ -280,7 +282,7 @@ export class AiPage implements OnInit {
     this.http.post<AiResponse>(`${this.baseUrl}/v1/ai/recommendations`, {}).subscribe({
       next: resp => {
         this.analysisResult.set(resp);
-        this.resultTitle.set('Recomendações de Governança');
+        this.resultTitle.set(this.i18n.messages().admin.governanceRecsTitle);
         this.resultIcon.set('lightbulb');
         this.recsLoading.set(false);
       },

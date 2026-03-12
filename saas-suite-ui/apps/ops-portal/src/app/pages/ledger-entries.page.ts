@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { LedgerFacade } from '@saas-suite/data-access/payments';
 import { formatDateTime } from '@saas-suite/shared/util';
 
@@ -22,46 +23,46 @@ import { formatDateTime } from '@saas-suite/shared/util';
   ],
   template: `
     <div class="page-header">
-      <h1>Ledger — Lançamentos</h1>
-      <button mat-stroked-button (click)="search()"><mat-icon>refresh</mat-icon> Atualizar</button>
+      <h1>{{ i18n.messages().ledger.entriesTitle }}</h1>
+      <button mat-stroked-button (click)="search()"><mat-icon>refresh</mat-icon> {{ i18n.messages().ledger.refresh }}</button>
     </div>
 
     <div class="filters">
       <mat-form-field appearance="outline">
-        <mat-label>De</mat-label>
+        <mat-label>{{ i18n.messages().ledger.from }}</mat-label>
         <input matInput type="date" [(ngModel)]="from">
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Até</mat-label>
+        <mat-label>{{ i18n.messages().ledger.to }}</mat-label>
         <input matInput type="date" [(ngModel)]="to">
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="search()">Filtrar</button>
+      <button mat-raised-button color="primary" (click)="search()">{{ i18n.messages().common.filter }}</button>
     </div>
 
     @if (facade.loading()) {
       <saas-table-skeleton [rowCount]="5" [columns]="5" />
     } @else if (dataSource.data.length === 0) {
-      <saas-empty-state icon="account_balance" title="Nenhum lançamento encontrado" />
+      <saas-empty-state icon="account_balance" [title]="i18n.messages().ledger.noEntriesFound" />
     } @else {
       <table mat-table [dataSource]="dataSource" matSort class="full-width">
         <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.date }}</th>
           <td mat-cell *matCellDef="let e">{{ fmtDate(e.createdAt) }}</td>
         </ng-container>
         <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Tipo</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.type }}</th>
           <td mat-cell *matCellDef="let e"><saas-status-chip [status]="e.type" /></td>
         </ng-container>
         <ng-container matColumnDef="amount">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.amount }}</th>
           <td mat-cell *matCellDef="let e">{{ e.currency }} {{ e.amount | number:'1.2-2' }}</td>
         </ng-container>
         <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.description }}</th>
           <td mat-cell *matCellDef="let e">{{ e.description || '—' }}</td>
         </ng-container>
         <ng-container matColumnDef="referenceId">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Referência</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().ledger.reference }}</th>
           <td mat-cell *matCellDef="let e"><code>{{ e.referenceId?.substring(0, 8) || '—' }}</code></td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
@@ -78,6 +79,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
 })
 export class LedgerEntriesPage implements OnInit, AfterViewInit {
   protected facade = inject(LedgerFacade);
+  protected i18n = inject(I18nService);
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;

@@ -100,6 +100,27 @@ export interface Messages {
     cancelled: string;
     paid: string;
     noOrdersFound: string;
+    information: string;
+    currency: string;
+    unitPrice: string;
+    subtotal: string;
+    items: string;
+    createdAt: string;
+    updatedAt: string;
+    confirmOrderTitle: string;
+    confirmOrderMessage: string;
+    orderConfirmed: string;
+    cancelOrderTitle: string;
+    cancelOrderMessage: string;
+    orderCancelled: string;
+    orderCreatedSuccess: string;
+    customerIdRequired: string;
+    currencyRequired: string;
+    addItem: string;
+    skuRequired: string;
+    quantityRequired: string;
+    quantityMin: string;
+    priceMin: string;
   };
   inventory: {
     adjustments: string;
@@ -107,6 +128,15 @@ export interface Messages {
     sku: string;
     quantity: string;
     reason: string;
+    newAdjustment: string;
+    createAdjustmentTitle: string;
+    typeIn: string;
+    typeOut: string;
+    typeAdjustment: string;
+    noAdjustmentsFound: string;
+    adjustmentCreated: string;
+    productSkuPlaceholder: string;
+    reasonPlaceholder: string;
   };
   payments: {
     paymentList: string;
@@ -117,6 +147,10 @@ export interface Messages {
     failed: string;
     amount: string;
     currency: string;
+    noPaymentsFound: string;
+    paymentConfirmed: string;
+    cancelled: string;
+    customer: string;
   };
   ledger: {
     entries: string;
@@ -124,6 +158,17 @@ export interface Messages {
     debit: string;
     credit: string;
     balance: string;
+    entriesTitle: string;
+    balancesTitle: string;
+    refresh: string;
+    from: string;
+    to: string;
+    noEntriesFound: string;
+    noBalancesFound: string;
+    updated: string;
+    credits: string;
+    debits: string;
+    reference: string;
   };
   checkout: {
     cart: string;
@@ -147,6 +192,12 @@ export interface Messages {
     inventoryAlerts: string;
     revenueOverTime: string;
     ordersByStatus: string;
+    revenueLast7Days: string;
+    ordersLabel: string;
+    lowStock: string;
+    noLowStock: string;
+    recentAdjustments: string;
+    availableQty: string;
   };
   onboarding: {
     title: string;
@@ -334,6 +385,81 @@ export interface Messages {
     permissionCode: string;
     auditAction: string;
     correlationId: string;
+  };
+  opsNav: {
+    appTitle: string;
+    dashboard: string;
+    orders: string;
+    newOrder: string;
+    inventory: string;
+    payments: string;
+    ledger: string;
+    balances: string;
+  };
+  adminNav: {
+    appTitle: string;
+    tenants: string;
+    newTenant: string;
+    policies: string;
+    featureFlags: string;
+    auditLog: string;
+    aiAssistant: string;
+  };
+  admin: {
+    policiesTitle: string;
+    newPolicy: string;
+    cancelAction: string;
+    permissionCode: string;
+    permissionCodeRequired: string;
+    invalidPermissionFormat: string;
+    effect: string;
+    enabled: string;
+    active: string;
+    noPoliciesFound: string;
+    createPolicy: string;
+    policyCreated: string;
+    removePolicyTitle: string;
+    removePolicyMessage: string;
+    featureFlagsTitle: string;
+    selectTenantForFlags: string;
+    newFlag: string;
+    flagCreated: string;
+    noFlagsFound: string;
+    auditLogTitle: string;
+    action: string;
+    outcome: string;
+    user: string;
+    resource: string;
+    noAuditRecords: string;
+    result: string;
+    aiTitle: string;
+    aiSubtitle: string;
+    chatWithAi: string;
+    chatSubtitle: string;
+    chatPlaceholder: string;
+    analyzeAudit: string;
+    analyzeAuditDesc: string;
+    auditAnalysisTitle: string;
+    recommendations: string;
+    recommendationsDesc: string;
+    governanceRecsTitle: string;
+    insights: string;
+    insightsDesc: string;
+    aiError: string;
+    suspend: string;
+    activate: string;
+    saveChanges: string;
+    tenantNotFound: string;
+    tenantCreated: string;
+    tenantUpdated: string;
+    suspendTenantTitle: string;
+    suspendTenantMessage: string;
+    newTenantTitle: string;
+    nameRequired: string;
+    nameMinLength: string;
+    slugRequired: string;
+    slugFormat: string;
+    slugHint: string;
   };
 }
 

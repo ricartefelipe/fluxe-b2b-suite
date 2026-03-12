@@ -7,7 +7,9 @@ import {
 } from '@angular/platform-browser/testing';
 import { getTestBed } from '@angular/core/testing';
 
-getTestBed().initTestEnvironment(
-  BrowserTestingModule,
-  platformBrowserTesting()
-);
+const testBed = getTestBed();
+try {
+  testBed.initTestEnvironment(BrowserTestingModule, platformBrowserTesting());
+} catch {
+  // already initialized (e.g. by another test-setup)
+}

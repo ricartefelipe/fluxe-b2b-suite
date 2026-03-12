@@ -1,0 +1,102 @@
+groups:
+  - name: business-alerts
+    interval: 60s
+    rules:
+      - alert: OrderProcessingDelay
+        expr: |
+          (time() - b2b_orders_oldest_created_timestamp_seconds) > 1800
+          and b2b_orders_pending_count > 0
+        for: 5m
+        labels:
+          severity: warning
+          team: orders
+        annotations:
+          summary: "Orders stuck in CREATED state"
+          description: "There are {{ $value }} orders that have been in CREATED status for more than 30 minutes."
+
+      - alert: PaymentFailureSpike
+        expr: |
+          (
+            sum(rate(b2b_payments_total{status="failed"}[15m]))
+            /
+            sum(rate(b2b_payments_total[15m]))
+          ) > 0.10
+        for: 5m
+        labels:
+          severity: critical
+          team: payments
+        annotations:
+          summary: "Payment failure rate above 10%"
+          description: "Payment failure rate is {{ $value | humanizePercentage }} over the last 15 minutes."
+
+      - alert: InventoryStockout
+        expr: b2b_inventory_available_qty == 0
+        for: 0m
+        labels:
+          severity: warning
+          team: orders
+        annotations:
+          summary: "SKU {{ $labels.sku }} is out of stock"
+          description: "Product {{ $labels.sku }} (tenant {{ $labels.tenant_id }}) has zero available quantity."
+
+      - alert: AuditLogGrowthAnomaly
+        expr: |
+          rate(b2b_audit_entries_total[5m])
+          > 3 * avg_over_time(rate(b2b_audit_entries_total[5m])[1h:5m])
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+        annotations:
+          summary: "Audit log growth anomaly detected"
+          description: "Audit log entry rate is 3x above normal (current: {{ $value | humanize }}/s)."
+
+      - alert: OutboxBacklog
+        expr: b2b_outbox_pending_events > 100
+        for: 5m
+        labels:
+          severity: warning
+          team: platform
+        annotations:
+          summary: "Outbox event backlog is high"
+          description: "There are {{ $value }} pending outbox events, which exceeds the threshold of 100."
+
+      - alert: CircuitBreakerOpen
+        expr: b2b_circuit_breaker_state{state="open"} == 1
+        for: 0m
+        labels:
+          severity: critical
+          team: payments
+        annotations:
+          summary: "Circuit breaker OPEN for {{ $labels.name }}"
+          description: "Circuit breaker {{ $labels.name }} on {{ $labels.job }} is in OPEN state."
+
+      - alert: WebhookDeliveryFailure
+        expr: |
+          (
+            sum by (job) (rate(b2b_webhook_deliveries_total{status="failed"}[15m]))
+            /
+            sum by (job) (rate(b2b_webhook_deliveries_total[15m]))
+          ) > 0.20
+        for: 10m
+        labels:
+          severity: warning
+          team: platform
+        annotations:
+          summary: "Webhook delivery failure rate above 20%"
+          description: "Webhook delivery failure rate on {{ $labels.job }} is {{ $value | humanizePercentage }}."
+
+      - alert: DisputeRateHigh
+        expr: |
+          (
+            sum(increase(b2b_disputes_total[24h]))
+            /
+            sum(increase(b2b_payments_total{status="succeeded"}[24h]))
+          ) > 0.02
+        for: 0m
+        labels:
+          severity: critical
+          team: payments
+        annotations:
+          summary: "Dispute rate above 2% in the last 24h"
+          description: "Dispute rate is {{ $value | humanizePercentage }}, which may trigger payment processor penalties."

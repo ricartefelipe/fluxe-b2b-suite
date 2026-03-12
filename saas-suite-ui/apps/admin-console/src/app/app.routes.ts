@@ -7,6 +7,10 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('@saas-suite/shared/auth').then(m => m.LoginPageComponent),
   },
   {
+    path: 'signup',
+    loadComponent: () => import('@saas-suite/shared/auth').then(m => m.SignupPageComponent),
+  },
+  {
     path: '',
     loadComponent: () => import('./admin-shell.component').then(m => m.AdminShellComponent),
     canActivate: [authGuard],

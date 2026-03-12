@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { authGuard } from '@saas-suite/shared/auth';
+import { authGuard, permissionGuard } from '@saas-suite/shared/auth';
 
 export const appRoutes: Route[] = [
   {
@@ -15,46 +15,55 @@ export const appRoutes: Route[] = [
       {
         path: 'dashboard',
         loadComponent: () => import('./pages/dashboard.page').then(m => m.DashboardPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['orders:read'] },
       },
       {
         path: 'orders',
         loadComponent: () => import('./pages/orders-list.page').then(m => m.OrdersListPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['orders:read'] },
       },
       {
         path: 'orders/new',
         loadComponent: () => import('./pages/order-create.page').then(m => m.OrderCreatePage),
+        canActivate: [permissionGuard],
         data: { permissions: ['orders:write'] },
       },
       {
         path: 'orders/:id',
         loadComponent: () => import('./pages/order-detail.page').then(m => m.OrderDetailPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['orders:read'] },
       },
       {
         path: 'inventory/adjustments',
         loadComponent: () => import('./pages/adjustments-list.page').then(m => m.AdjustmentsListPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['inventory:read'] },
       },
       {
         path: 'inventory/adjustments/new',
         loadComponent: () => import('./pages/adjustment-create.page').then(m => m.AdjustmentCreatePage),
+        canActivate: [permissionGuard],
         data: { permissions: ['inventory:write'] },
       },
       {
         path: 'payments',
         loadComponent: () => import('./pages/payments-list.page').then(m => m.PaymentsListPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['payments:read'] },
       },
       {
         path: 'ledger/entries',
         loadComponent: () => import('./pages/ledger-entries.page').then(m => m.LedgerEntriesPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['ledger:read'] },
       },
       {
         path: 'ledger/balances',
         loadComponent: () => import('./pages/ledger-balances.page').then(m => m.LedgerBalancesPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['ledger:read'] },
       },
       {

@@ -19,7 +19,35 @@ env:
   PNPM_VERSION: '9'
 
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: saas-suite-ui
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+          cache-dependency-path: saas-suite-ui/pnpm-lock.yaml
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        run: pnpm nx run-many -t lint --projects=ops-portal,admin-console,shop
+
+      - name: Test
+        run: pnpm nx run-many -t test --projects=ops-portal,admin-console,shop
+
   build-and-deploy:
+    needs: test
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -51,12 +79,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
-      - name: Lint ${{ matrix.app.name }}
-        run: pnpm nx lint ${{ matrix.app.name }}
-
-      - name: Test ${{ matrix.app.name }}
-        run: pnpm nx test ${{ matrix.app.name }}
 
       - name: Build ${{ matrix.app.name }}
         run: pnpm nx build ${{ matrix.app.name }} --configuration=production

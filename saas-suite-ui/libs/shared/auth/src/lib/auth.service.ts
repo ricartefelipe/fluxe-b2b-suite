@@ -118,6 +118,30 @@ export class AuthService {
     return resp?.access_token ?? createLocalDevJwt(params);
   }
 
+  async loginWithCredentials(email: string, password: string): Promise<void> {
+    const baseUrl = this.config.get('coreApiBaseUrl');
+    const ctx = new HttpContext()
+      .set(SKIP_AUTH, true)
+      .set(SKIP_TENANT_HEADER, true);
+
+    const resp = await firstValueFrom(
+      this.http.post<TokenResponse & { user?: Record<string, unknown> }>(
+        `${baseUrl}/v1/auth/login`,
+        { email, password },
+        { context: ctx },
+      ).pipe(timeout(DEV_TOKEN_TIMEOUT_MS))
+    );
+
+    const token = resp.access_token;
+    const session = sessionFromJwt(token);
+    this.store.setSession(session);
+    if (session.tenantId && this.tenantCtx) {
+      this.tenantCtx.setActiveTenantId(session.tenantId);
+    }
+    if (this.isBrowser) sessionStorage.setItem('dev_token', token);
+    await this.router.navigate(['/']);
+  }
+
   async restoreSession(): Promise<void> {
     if (this.config.get('authMode') === 'oidc' && this.oidcAuth) {
       await this.oidcAuth.configureAndTryLogin();

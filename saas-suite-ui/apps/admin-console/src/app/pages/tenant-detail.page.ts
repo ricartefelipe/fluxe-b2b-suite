@@ -35,48 +35,48 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
 
     @if (isCreateMode()) {
       <div class="page-header">
-        <h1>Novo Tenant</h1>
-        <button mat-stroked-button (click)="goBack()"><mat-icon>arrow_back</mat-icon> Voltar</button>
+        <h1>{{ i18n.messages().admin.newTenantTitle }}</h1>
+        <button mat-stroked-button (click)="goBack()"><mat-icon>arrow_back</mat-icon> {{ i18n.messages().common.back }}</button>
       </div>
       <mat-card>
         <mat-card-content>
           <form [formGroup]="createForm" class="form-grid">
             <mat-form-field appearance="outline">
-              <mat-label>Nome</mat-label>
+              <mat-label>{{ i18n.messages().common.name }}</mat-label>
               <input matInput formControlName="name" [placeholder]="i18n.messages().adminPlaceholders.tenantName">
               @if (createForm.controls['name'].hasError('required') && createForm.controls['name'].touched) {
-                <mat-error>Nome é obrigatório</mat-error>
+                <mat-error>{{ i18n.messages().admin.nameRequired }}</mat-error>
               }
               @if (createForm.controls['name'].hasError('minlength')) {
-                <mat-error>Nome deve ter pelo menos 2 caracteres</mat-error>
+                <mat-error>{{ i18n.messages().admin.nameMinLength }}</mat-error>
               }
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>Slug</mat-label>
+              <mat-label>{{ i18n.messages().tenant.tenantSlug }}</mat-label>
               <input matInput formControlName="slug" [placeholder]="i18n.messages().adminPlaceholders.tenantSlug">
-              <mat-hint>Identificador URL-safe (minúsculas, hífens)</mat-hint>
+              <mat-hint>{{ i18n.messages().admin.slugHint }}</mat-hint>
               @if (createForm.controls['slug'].hasError('required') && createForm.controls['slug'].touched) {
-                <mat-error>Slug é obrigatório</mat-error>
+                <mat-error>{{ i18n.messages().admin.slugRequired }}</mat-error>
               }
               @if (createForm.controls['slug'].hasError('slug')) {
-                <mat-error>Apenas letras minúsculas, números e hífens</mat-error>
+                <mat-error>{{ i18n.messages().admin.slugFormat }}</mat-error>
               }
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>Plano</mat-label>
+              <mat-label>{{ i18n.messages().tenant.tenantPlan }}</mat-label>
               <mat-select formControlName="plan">
-                <mat-option value="starter">Starter</mat-option>
-                <mat-option value="professional">Professional</mat-option>
-                <mat-option value="enterprise">Enterprise</mat-option>
+                <mat-option value="starter">{{ i18n.messages().tenant.planStarter }}</mat-option>
+                <mat-option value="professional">{{ i18n.messages().tenant.planProfessional }}</mat-option>
+                <mat-option value="enterprise">{{ i18n.messages().tenant.planEnterprise }}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>Região</mat-label>
+              <mat-label>{{ i18n.messages().tenant.tenantRegion }}</mat-label>
               <input matInput formControlName="region" [placeholder]="i18n.messages().adminPlaceholders.region">
             </mat-form-field>
           </form>
           <button mat-raised-button color="primary" (click)="create()" [disabled]="createForm.invalid || saving()">
-            Criar Tenant
+            {{ i18n.messages().tenant.createTenant }}
           </button>
         </mat-card-content>
       </mat-card>
@@ -87,11 +87,11 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
           <saas-status-chip [status]="tenant()!.status" />
         </div>
         <div class="actions">
-          <button mat-stroked-button (click)="goBack()"><mat-icon>arrow_back</mat-icon> Voltar</button>
+          <button mat-stroked-button (click)="goBack()"><mat-icon>arrow_back</mat-icon> {{ i18n.messages().common.back }}</button>
           @if (tenant()!.status === 'ACTIVE') {
-            <button mat-raised-button color="warn" (click)="suspend()">Suspender</button>
+            <button mat-raised-button color="warn" (click)="suspend()">{{ i18n.messages().admin.suspend }}</button>
           } @else if (tenant()!.status === 'SUSPENDED') {
-            <button mat-raised-button color="primary" (click)="activate()">Ativar</button>
+            <button mat-raised-button color="primary" (click)="activate()">{{ i18n.messages().admin.activate }}</button>
           }
         </div>
       </div>
@@ -100,34 +100,34 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
         <mat-card-content>
           <form [formGroup]="editForm" class="form-grid">
             <mat-form-field appearance="outline">
-              <mat-label>Nome</mat-label>
+              <mat-label>{{ i18n.messages().common.name }}</mat-label>
               <input matInput formControlName="name">
               @if (editForm.controls['name'].hasError('required') && editForm.controls['name'].touched) {
-                <mat-error>Nome é obrigatório</mat-error>
+                <mat-error>{{ i18n.messages().admin.nameRequired }}</mat-error>
               }
               @if (editForm.controls['name'].hasError('minlength')) {
-                <mat-error>Nome deve ter pelo menos 2 caracteres</mat-error>
+                <mat-error>{{ i18n.messages().admin.nameMinLength }}</mat-error>
               }
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>Slug</mat-label>
+              <mat-label>{{ i18n.messages().tenant.tenantSlug }}</mat-label>
               <input matInput [value]="tenant()!.slug" disabled>
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>Plano</mat-label>
+              <mat-label>{{ i18n.messages().tenant.tenantPlan }}</mat-label>
               <mat-select formControlName="plan">
-                <mat-option value="starter">Starter</mat-option>
-                <mat-option value="professional">Professional</mat-option>
-                <mat-option value="enterprise">Enterprise</mat-option>
+                <mat-option value="starter">{{ i18n.messages().tenant.planStarter }}</mat-option>
+                <mat-option value="professional">{{ i18n.messages().tenant.planProfessional }}</mat-option>
+                <mat-option value="enterprise">{{ i18n.messages().tenant.planEnterprise }}</mat-option>
               </mat-select>
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>Região</mat-label>
+              <mat-label>{{ i18n.messages().tenant.tenantRegion }}</mat-label>
               <input matInput [value]="tenant()!.region" disabled>
             </mat-form-field>
           </form>
           <button mat-raised-button color="primary" (click)="save()" [disabled]="editForm.invalid || saving()">
-            Salvar Alterações
+            {{ i18n.messages().admin.saveChanges }}
           </button>
         </mat-card-content>
       </mat-card>
@@ -180,7 +180,7 @@ export class TenantDetailPage implements OnInit {
       const t = await firstValueFrom(this.api.getTenant(id));
       this.tenant.set(t);
       this.editForm.patchValue({ name: t.name, plan: t.plan });
-    } catch { this.snackBar.open('Tenant não encontrado', 'OK', { duration: 3000 }); }
+    } catch { this.snackBar.open(this.i18n.messages().admin.tenantNotFound, 'OK', { duration: 3000 }); }
     finally { this.loading.set(false); }
   }
 
@@ -198,7 +198,7 @@ export class TenantDetailPage implements OnInit {
       region: val.region!,
     });
     if (created) {
-      this.snackBar.open('Tenant criado', 'OK', { duration: 2000 });
+      this.snackBar.open(this.i18n.messages().admin.tenantCreated, 'OK', { duration: 2000 });
       this.router.navigate(['/tenants', created.id]);
     }
     this.saving.set(false);
@@ -213,14 +213,14 @@ export class TenantDetailPage implements OnInit {
     this.saving.set(true);
     const val = this.editForm.getRawValue();
     const t = await this.facade.updateTenant(current.id, { name: val.name!, plan: val.plan! });
-    if (t) { this.tenant.set(t); this.snackBar.open('Tenant atualizado', 'OK', { duration: 2000 }); }
+    if (t) { this.tenant.set(t); this.snackBar.open(this.i18n.messages().admin.tenantUpdated, 'OK', { duration: 2000 }); }
     this.saving.set(false);
   }
 
   async suspend(): Promise<void> {
     const current = this.tenant();
     if (!current) return;
-    const ref = this.dialog.open(ConfirmDialogComponent, { data: { title: 'Suspender tenant?', message: 'Esta ação suspenderá o acesso do tenant.', danger: true } });
+    const ref = this.dialog.open(ConfirmDialogComponent, { data: { title: this.i18n.messages().admin.suspendTenantTitle, message: this.i18n.messages().admin.suspendTenantMessage, danger: true } });
     const confirmed = await firstValueFrom(ref.afterClosed());
     if (!confirmed) return;
     const t = await this.facade.updateTenant(current.id, { status: 'SUSPENDED' });

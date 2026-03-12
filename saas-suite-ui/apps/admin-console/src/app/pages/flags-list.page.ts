@@ -26,53 +26,53 @@ import { I18nService } from '@saas-suite/shared/i18n';
   ],
   template: `
     <div class="page-header">
-      <h1>Feature Flags</h1>
+      <h1>{{ i18n.messages().admin.featureFlagsTitle }}</h1>
       @if (tenantStore.activeTenantId()) {
         <span class="tenant-badge">Tenant: {{ tenantStore.activeTenant()?.name }}</span>
       }
     </div>
 
     @if (!tenantStore.activeTenantId()) {
-      <saas-empty-state icon="flag" title="Selecione um tenant no header para gerenciar flags" />
+      <saas-empty-state icon="flag" [title]="i18n.messages().admin.selectTenantForFlags" />
     } @else {
       @if (showForm) {
         <div class="create-form">
           <mat-form-field appearance="outline">
-            <mat-label>Nome</mat-label>
+            <mat-label>{{ i18n.messages().common.name }}</mat-label>
             <input matInput [(ngModel)]="newName" [placeholder]="i18n.messages().adminPlaceholders.flagName">
           </mat-form-field>
           <mat-form-field appearance="outline">
-            <mat-label>Descrição</mat-label>
+            <mat-label>{{ i18n.messages().common.description }}</mat-label>
             <input matInput [(ngModel)]="newDesc">
           </mat-form-field>
-          <mat-slide-toggle [(ngModel)]="newEnabled">Habilitada</mat-slide-toggle>
-          <button mat-raised-button color="primary" (click)="create()">Criar</button>
-          <button mat-stroked-button (click)="showForm = false">Cancelar</button>
+          <mat-slide-toggle [(ngModel)]="newEnabled">{{ i18n.messages().admin.enabled }}</mat-slide-toggle>
+          <button mat-raised-button color="primary" (click)="create()">{{ i18n.messages().common.create }}</button>
+          <button mat-stroked-button (click)="showForm = false">{{ i18n.messages().common.cancel }}</button>
         </div>
       } @else {
         <button mat-raised-button color="primary" (click)="showForm = true" style="margin-bottom: 16px">
-          <mat-icon>add</mat-icon> Nova Flag
+          <mat-icon>add</mat-icon> {{ i18n.messages().admin.newFlag }}
         </button>
       }
 
       @if (facade.loading()) {
         <saas-table-skeleton [rowCount]="5" [columns]="4" />
       } @else if (dataSource.data.length === 0) {
-        <saas-empty-state icon="flag" title="Nenhuma flag encontrada para este tenant" />
+        <saas-empty-state icon="flag" [title]="i18n.messages().admin.noFlagsFound" />
       } @else {
         <table mat-table [dataSource]="dataSource" matSort class="full-width">
           <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.name }}</th>
             <td mat-cell *matCellDef="let f"><code>{{ f.name }}</code></td>
           </ng-container>
           <ng-container matColumnDef="enabled">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Habilitada</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.enabled }}</th>
             <td mat-cell *matCellDef="let f">
               <mat-slide-toggle [checked]="f.enabled" (change)="toggle(f)" />
             </td>
           </ng-container>
           <ng-container matColumnDef="description">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.description }}</th>
             <td mat-cell *matCellDef="let f">{{ f.description || '—' }}</td>
           </ng-container>
           <ng-container matColumnDef="actions">
@@ -135,7 +135,7 @@ export class FlagsListPage implements OnInit, AfterViewInit {
     this.showForm = false;
     this.newName = '';
     this.newDesc = '';
-    this.snackBar.open('Flag criada', 'OK', { duration: 2000 });
+    this.snackBar.open(this.i18n.messages().admin.flagCreated, 'OK', { duration: 2000 });
   }
 
   async toggle(f: FeatureFlag): Promise<void> {

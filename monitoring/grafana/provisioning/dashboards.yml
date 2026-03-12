@@ -1,0 +1,11 @@
+apiVersion: 1
+providers:
+  - name: 'B2B Suite'
+    folder: 'B2B Suite'
+    type: file
+    disableDeletion: false
+    editable: true
+    updateIntervalSeconds: 30
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: false

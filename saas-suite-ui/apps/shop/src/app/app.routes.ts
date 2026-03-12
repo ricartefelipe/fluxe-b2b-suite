@@ -8,61 +8,59 @@ export const appRoutes: Route[] = [
   },
   {
     path: '',
-    redirectTo: 'products',
-    pathMatch: 'full',
-  },
-  {
-    path: 'products',
-    title: 'Products | Fluxe Shop',
-    canActivate: [shopAuthGuard],
-    data: { preload: true },
-    loadChildren: () =>
-      import('@union.solutions/shop/feature-products').then(m => m.featureProductsRoutes),
-  },
-  {
-    path: 'product',
-    title: 'Product Details | Fluxe Shop',
-    canActivate: [shopAuthGuard],
-    data: { preload: true },
-    loadChildren: () =>
-      import('@union.solutions/shop/feature-product-detail').then(
-        m => m.featureProductDetailRoutes
-      ),
-  },
-  {
-    path: 'checkout',
-    title: 'Checkout | Fluxe Shop',
-    canActivate: [shopAuthGuard],
-    loadComponent: () =>
-      import('./checkout/checkout.component').then((m) => m.CheckoutComponent),
-  },
-  {
-    path: 'orders',
+    loadComponent: () => import('./shop-shell.component').then(m => m.ShopShellComponent),
     canActivate: [shopAuthGuard],
     children: [
+      { path: '', redirectTo: 'products', pathMatch: 'full' },
       {
-        path: '',
-        title: 'My Orders | Fluxe Shop',
-        loadComponent: () =>
-          import('./orders/orders.component').then((m) => m.OrdersComponent),
+        path: 'products',
+        title: 'Products | Fluxe Shop',
+        data: { preload: true },
+        loadChildren: () =>
+          import('@union.solutions/shop/feature-products').then(m => m.featureProductsRoutes),
       },
       {
-        path: ':id',
-        title: 'Order Detail | Fluxe Shop',
+        path: 'product',
+        title: 'Product Details | Fluxe Shop',
+        data: { preload: true },
+        loadChildren: () =>
+          import('@union.solutions/shop/feature-product-detail').then(
+            m => m.featureProductDetailRoutes
+          ),
+      },
+      {
+        path: 'checkout',
+        title: 'Checkout | Fluxe Shop',
         loadComponent: () =>
-          import('./orders/order-detail.component').then((m) => m.OrderDetailComponent),
+          import('./checkout/checkout.component').then((m) => m.CheckoutComponent),
+      },
+      {
+        path: 'orders',
+        children: [
+          {
+            path: '',
+            title: 'My Orders | Fluxe Shop',
+            loadComponent: () =>
+              import('./orders/orders.component').then((m) => m.OrdersComponent),
+          },
+          {
+            path: ':id',
+            title: 'Order Detail | Fluxe Shop',
+            loadComponent: () =>
+              import('./orders/order-detail.component').then((m) => m.OrderDetailComponent),
+          },
+        ],
+      },
+      {
+        path: 'profile',
+        title: 'My Profile | Fluxe Shop',
+        loadComponent: () =>
+          import('./profile/profile.component').then((m) => m.ProfileComponent),
       },
     ],
   },
   {
-    path: 'profile',
-    title: 'My Profile | Fluxe Shop',
-    canActivate: [shopAuthGuard],
-    loadComponent: () =>
-      import('./profile/profile.component').then((m) => m.ProfileComponent),
-  },
-  {
     path: '**',
-    redirectTo: 'products',
+    redirectTo: '',
   },
 ];

@@ -8,8 +8,6 @@ import {
 import { getTestBed } from '@angular/core/testing';
 
 const testBed = getTestBed();
-try {
+if (!(testBed as any).platform) {
   testBed.initTestEnvironment(BrowserTestingModule, platformBrowserTesting());
-} catch {
-  // already initialized (e.g. by another test-setup)
 }

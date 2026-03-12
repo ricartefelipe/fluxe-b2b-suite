@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
 import { AuthService } from '../auth.service';
 
 interface DevProfile {
@@ -79,7 +80,7 @@ const DEV_PROFILES: DevProfile[] = [
   standalone: true,
   imports: [
     FormsModule, MatButtonModule, MatCardModule, MatFormFieldModule,
-    MatInputModule, MatSelectModule, MatProgressSpinnerModule, MatIconModule,
+    MatInputModule, MatSelectModule, MatProgressSpinnerModule, MatIconModule, MatTabsModule,
   ],
   template: `
     <div class="login-page">
@@ -94,61 +95,115 @@ const DEV_PROFILES: DevProfile[] = [
       </div>
       <div class="login-right">
         <div class="login-form">
-          <h2>Acesso Desenvolvimento</h2>
-          <p class="subtitle">Selecione um perfil para continuar</p>
+          <h2>Login</h2>
+          <p class="subtitle">Entre com suas credenciais ou selecione um perfil rápido</p>
 
-          <div class="profiles">
-            @for (p of profiles; track p.label) {
-              <button class="profile-card"
-                [class.selected]="selectedProfile === p"
-                (click)="selectedProfile = p">
-                <div class="profile-icon" [style.background]="p.color">
-                  <mat-icon>{{ p.icon }}</mat-icon>
+          <mat-tab-group class="login-tabs" [(selectedIndex)]="activeTab" animationDuration="200ms">
+
+            <mat-tab label="Credenciais">
+              <div class="tab-content">
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Email</mat-label>
+                  <input matInput type="email" [(ngModel)]="email"
+                    placeholder="admin&#64;system.local" autocomplete="username">
+                  <mat-icon matPrefix>email</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Senha</mat-label>
+                  <input matInput [type]="showPassword() ? 'text' : 'password'"
+                    [(ngModel)]="password" placeholder="••••••••" autocomplete="current-password"
+                    (keyup.enter)="loginWithCredentials()">
+                  <mat-icon matPrefix>lock</mat-icon>
+                  <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())">
+                    <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                  </button>
+                </mat-form-field>
+
+                <div class="credentials-hint">
+                  <mat-icon>info_outline</mat-icon>
+                  <span>Usuários de teste: <code>admin&#64;system.local</code>,
+                    <code>ops&#64;saas.local</code>, <code>viewer&#64;saas.local</code>
+                    — Senha: <code>Test1234!</code></span>
                 </div>
-                <div class="profile-info">
-                  <span class="profile-name">{{ p.label }}</span>
-                  <span class="profile-email">{{ p.email }}</span>
-                </div>
-                @if (selectedProfile === p) {
-                  <mat-icon class="check-icon">check_circle</mat-icon>
+
+                @if (error()) {
+                  <div class="error-msg">
+                    <mat-icon>error_outline</mat-icon>
+                    {{ error() }}
+                  </div>
                 }
-              </button>
-            }
-          </div>
 
-          @if (selectedProfile) {
-            <div class="preview">
-              <div class="preview-row">
-                <span class="preview-label">Tenant ID</span>
-                <code>{{ selectedProfile.tid.length > 18 ? selectedProfile.tid.substring(0, 18) + '...' : selectedProfile.tid }}</code>
+                <button class="login-btn"
+                  [disabled]="!email || !password || loading()"
+                  (click)="loginWithCredentials()">
+                  @if (loading()) {
+                    <mat-spinner diameter="20" />
+                  } @else {
+                    Entrar
+                  }
+                </button>
               </div>
-              <div class="preview-row">
-                <span class="preview-label">Plano</span>
-                <span class="plan-badge">{{ selectedProfile.plan }}</span>
-              </div>
-              <div class="preview-row">
-                <span class="preview-label">Permissões</span>
-                <span class="perm-count">{{ selectedProfile.perms.length }} permissões</span>
-              </div>
-            </div>
-          }
+            </mat-tab>
 
-          @if (error()) {
-            <div class="error-msg">
-              <mat-icon>error_outline</mat-icon>
-              {{ error() }}
-            </div>
-          }
+            <mat-tab label="Perfis Rápidos">
+              <div class="tab-content">
+                <div class="profiles">
+                  @for (p of profiles; track p.sub) {
+                    <button class="profile-card"
+                      [class.selected]="selectedProfile() === p"
+                      (click)="selectProfile(p)">
+                      <div class="profile-icon" [style.background]="p.color">
+                        <mat-icon>{{ p.icon }}</mat-icon>
+                      </div>
+                      <div class="profile-info">
+                        <span class="profile-name">{{ p.label }}</span>
+                        <span class="profile-email">{{ p.email }}</span>
+                      </div>
+                      @if (selectedProfile() === p) {
+                        <mat-icon class="check-icon">check_circle</mat-icon>
+                      }
+                    </button>
+                  }
+                </div>
 
-          <button class="login-btn"
-            [disabled]="!selectedProfile || loading()"
-            (click)="login()">
-            @if (loading()) {
-              <mat-spinner diameter="20" />
-            } @else {
-              Entrar
-            }
-          </button>
+                @if (selectedProfile(); as sp) {
+                  <div class="preview">
+                    <div class="preview-row">
+                      <span class="preview-label">Tenant ID</span>
+                      <code>{{ sp.tid.length > 18 ? sp.tid.substring(0, 18) + '...' : sp.tid }}</code>
+                    </div>
+                    <div class="preview-row">
+                      <span class="preview-label">Plano</span>
+                      <span class="plan-badge">{{ sp.plan }}</span>
+                    </div>
+                    <div class="preview-row">
+                      <span class="preview-label">Permissões</span>
+                      <span class="perm-count">{{ sp.perms.length }} permissões</span>
+                    </div>
+                  </div>
+                }
+
+                @if (error()) {
+                  <div class="error-msg">
+                    <mat-icon>error_outline</mat-icon>
+                    {{ error() }}
+                  </div>
+                }
+
+                <button class="login-btn"
+                  [disabled]="!selectedProfile() || loading()"
+                  (click)="loginWithProfile()">
+                  @if (loading()) {
+                    <mat-spinner diameter="20" />
+                  } @else {
+                    Entrar
+                  }
+                </button>
+              </div>
+            </mat-tab>
+
+          </mat-tab-group>
         </div>
       </div>
     </div>
@@ -218,7 +273,34 @@ const DEV_PROFILES: DevProfile[] = [
     }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     .login-form h2 { font-size: 24px; font-weight: 700; color: #1a2332; margin: 0 0 6px; letter-spacing: -0.02em; }
-    .subtitle { color: #64748b; font-size: 14px; margin: 0 0 28px; }
+    .subtitle { color: #64748b; font-size: 14px; margin: 0 0 20px; }
+
+    .login-tabs { margin-bottom: 0; }
+    .tab-content { padding-top: 20px; }
+    .full-width { width: 100%; }
+
+    .credentials-hint {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.5;
+    }
+    .credentials-hint mat-icon { font-size: 16px; width: 16px; height: 16px; flex-shrink: 0; color: #0284c7; margin-top: 1px; }
+    .credentials-hint code {
+      background: #e0f2fe;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #0369a1;
+      white-space: nowrap;
+    }
 
     .profiles {
       display: flex;
@@ -352,19 +434,43 @@ export class DevLoginComponent {
   private authService = inject(AuthService);
 
   profiles = DEV_PROFILES;
-  selectedProfile: DevProfile | null = null;
+  selectedProfile = signal<DevProfile | null>(null);
   loading = signal(false);
   error = signal<string | null>(null);
+  showPassword = signal(false);
+  activeTab = 0;
+  email = '';
+  password = '';
 
-  async login(): Promise<void> {
-    if (!this.selectedProfile) return;
+  selectProfile(profile: DevProfile): void {
+    this.selectedProfile.set(profile);
+  }
+
+  async loginWithProfile(): Promise<void> {
+    const profile = this.selectedProfile();
+    if (!profile) return;
     this.loading.set(true);
     this.error.set(null);
     try {
-      await this.authService.loginWithDevToken(this.selectedProfile);
+      await this.authService.loginWithDevToken(profile);
     } catch (e: unknown) {
       this.error.set(
         e instanceof Error ? e.message : 'Falha ao obter token. Verifique o backend.',
+      );
+    } finally {
+      this.loading.set(false);
+    }
+  }
+
+  async loginWithCredentials(): Promise<void> {
+    if (!this.email || !this.password) return;
+    this.loading.set(true);
+    this.error.set(null);
+    try {
+      await this.authService.loginWithCredentials(this.email, this.password);
+    } catch (e: unknown) {
+      this.error.set(
+        e instanceof Error ? e.message : 'Email ou senha inválidos.',
       );
     } finally {
       this.loading.set(false);

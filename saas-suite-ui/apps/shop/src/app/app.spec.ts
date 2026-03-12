@@ -52,7 +52,14 @@ describe('App', () => {
           useValue: { session: signal(null), isAuthenticated: signal(false) },
         },
         { provide: AuthService, useValue: { logout: () => Promise.resolve() } },
-        { provide: I18nService, useValue: { messages: signal(stubMessages) } },
+        {
+          provide: I18nService,
+          useValue: {
+            messages: signal(stubMessages),
+            locale: signal('pt-BR'),
+            setLocale: (_l: string) => { /* stub */ },
+          },
+        },
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();

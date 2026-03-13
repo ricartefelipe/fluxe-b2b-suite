@@ -80,7 +80,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
         </ng-container>
         <ng-container matColumnDef="plan">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().tenant.tenantPlan }}</th>
-          <td mat-cell *matCellDef="let t">{{ t.plan }}</td>
+          <td mat-cell *matCellDef="let t">{{ translatePlan(t.plan) }}</td>
         </ng-container>
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.status }}</th>
@@ -157,6 +157,8 @@ export class TenantsListPage implements OnInit, AfterViewInit {
   }
 
   fmtDate(d: string): string { return formatDateTime(d); }
+
+  translatePlan(plan: string): string { return this.i18n.messages().statuses[plan] ?? plan; }
 
   openCreate(): void { this.router.navigate(['/tenants', 'new']); }
 }

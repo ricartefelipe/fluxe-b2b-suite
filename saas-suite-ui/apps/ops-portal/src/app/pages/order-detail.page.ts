@@ -50,7 +50,7 @@ import { firstValueFrom } from 'rxjs';
             <p><strong>{{ i18n.messages().orders.createdAt }}:</strong> {{ fmtDate(order.createdAt) }}</p>
             <p><strong>{{ i18n.messages().orders.updatedAt }}:</strong> {{ fmtDate(order.updatedAt) }}</p>
             @if (order.correlationId) {
-              <p><strong>Correlation ID:</strong> <code>{{ order.correlationId }}</code></p>
+              <p><strong>{{ i18n.messages().errorPage.correlationIdLabel }}:</strong> <code>{{ order.correlationId }}</code></p>
             }
           </mat-card-content>
         </mat-card>

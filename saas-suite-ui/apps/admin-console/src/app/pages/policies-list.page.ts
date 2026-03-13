@@ -49,8 +49,8 @@ import { firstValueFrom } from 'rxjs';
         <mat-form-field appearance="outline">
           <mat-label>{{ i18n.messages().admin.effect }}</mat-label>
           <mat-select formControlName="effect">
-            <mat-option value="ALLOW">ALLOW</mat-option>
-            <mat-option value="DENY">DENY</mat-option>
+            <mat-option value="ALLOW">{{ i18n.messages().statuses['ALLOW'] }}</mat-option>
+            <mat-option value="DENY">{{ i18n.messages().statuses['DENY'] }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline">
@@ -80,7 +80,7 @@ import { firstValueFrom } from 'rxjs';
         <ng-container matColumnDef="effect">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.effect }}</th>
           <td mat-cell *matCellDef="let p">
-            <span [class]="p.effect === 'ALLOW' ? 'chip-allow' : 'chip-deny'">{{ p.effect }}</span>
+            <span [class]="p.effect === 'ALLOW' ? 'chip-allow' : 'chip-deny'">{{ translateEffect(p.effect) }}</span>
           </td>
         </ng-container>
         <ng-container matColumnDef="enabled">
@@ -170,4 +170,6 @@ export class PoliciesListPage implements OnInit, AfterViewInit {
     const confirmed = await firstValueFrom(ref.afterClosed());
     if (confirmed) await this.facade.deletePolicy(p.id);
   }
+
+  translateEffect(effect: string): string { return this.i18n.messages().statuses[effect] ?? effect; }
 }

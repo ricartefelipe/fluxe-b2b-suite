@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AuthService } from '../auth.service';
+import { RuntimeConfigService } from '@saas-suite/shared/config';
 
 interface DevProfile {
   label: string;
@@ -79,7 +81,7 @@ const DEV_PROFILES: DevProfile[] = [
   selector: 'lib-dev-login',
   standalone: true,
   imports: [
-    FormsModule, MatButtonModule, MatCardModule, MatFormFieldModule,
+    NgTemplateOutlet, FormsModule, MatButtonModule, MatCardModule, MatFormFieldModule,
     MatInputModule, MatSelectModule, MatProgressSpinnerModule, MatIconModule, MatTabsModule,
   ],
   template: `
@@ -98,112 +100,124 @@ const DEV_PROFILES: DevProfile[] = [
           <h2>Login</h2>
           <p class="subtitle">Entre com suas credenciais ou selecione um perfil rápido</p>
 
-          <mat-tab-group class="login-tabs" [(selectedIndex)]="activeTab" animationDuration="200ms">
+          @if (isDevMode) {
+            <mat-tab-group class="login-tabs" [(selectedIndex)]="activeTab" animationDuration="200ms">
 
-            <mat-tab label="Credenciais">
-              <div class="tab-content">
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Email</mat-label>
-                  <input matInput type="email" [(ngModel)]="email"
-                    placeholder="admin&#64;system.local" autocomplete="username">
-                  <mat-icon matPrefix>email</mat-icon>
-                </mat-form-field>
+              <mat-tab label="Credenciais">
+                <div class="tab-content">
+                  <ng-container *ngTemplateOutlet="credentialsForm" />
+                </div>
+              </mat-tab>
 
-                <mat-form-field appearance="outline" class="full-width">
-                  <mat-label>Senha</mat-label>
-                  <input matInput [type]="showPassword() ? 'text' : 'password'"
-                    [(ngModel)]="password" placeholder="••••••••" autocomplete="current-password"
-                    (keyup.enter)="loginWithCredentials()">
-                  <mat-icon matPrefix>lock</mat-icon>
-                  <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())">
-                    <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+              <mat-tab label="Perfis Rápidos">
+                <div class="tab-content">
+                  <div class="profiles">
+                    @for (p of profiles; track p.sub) {
+                      <button class="profile-card"
+                        [class.selected]="selectedProfile() === p"
+                        (click)="selectProfile(p)">
+                        <div class="profile-icon" [style.background]="p.color">
+                          <mat-icon>{{ p.icon }}</mat-icon>
+                        </div>
+                        <div class="profile-info">
+                          <span class="profile-name">{{ p.label }}</span>
+                          <span class="profile-email">{{ p.email }}</span>
+                        </div>
+                        @if (selectedProfile() === p) {
+                          <mat-icon class="check-icon">check_circle</mat-icon>
+                        }
+                      </button>
+                    }
+                  </div>
+
+                  @if (selectedProfile(); as sp) {
+                    <div class="preview">
+                      <div class="preview-row">
+                        <span class="preview-label">Tenant ID</span>
+                        <code>{{ sp.tid.length > 18 ? sp.tid.substring(0, 18) + '...' : sp.tid }}</code>
+                      </div>
+                      <div class="preview-row">
+                        <span class="preview-label">Plano</span>
+                        <span class="plan-badge">{{ sp.plan }}</span>
+                      </div>
+                      <div class="preview-row">
+                        <span class="preview-label">Permissões</span>
+                        <span class="perm-count">{{ sp.perms.length }} permissões</span>
+                      </div>
+                    </div>
+                  }
+
+                  @if (error()) {
+                    <div class="error-msg">
+                      <mat-icon>error_outline</mat-icon>
+                      {{ error() }}
+                    </div>
+                  }
+
+                  <button class="login-btn"
+                    [disabled]="!selectedProfile() || loading()"
+                    (click)="loginWithProfile()">
+                    @if (loading()) {
+                      <mat-spinner diameter="20" />
+                    } @else {
+                      Entrar
+                    }
                   </button>
-                </mat-form-field>
-
-                <div class="credentials-hint">
-                  <mat-icon>info_outline</mat-icon>
-                  <span>Usuários de teste: <code>admin&#64;system.local</code>,
-                    <code>ops&#64;saas.local</code>, <code>viewer&#64;saas.local</code>
-                    — Senha: <code>Test1234!</code></span>
                 </div>
+              </mat-tab>
 
-                @if (error()) {
-                  <div class="error-msg">
-                    <mat-icon>error_outline</mat-icon>
-                    {{ error() }}
-                  </div>
-                }
+            </mat-tab-group>
+          } @else {
+            <div class="credentials-only">
+              <ng-container *ngTemplateOutlet="credentialsForm" />
+            </div>
+          }
 
-                <button class="login-btn"
-                  [disabled]="!email || !password || loading()"
-                  (click)="loginWithCredentials()">
-                  @if (loading()) {
-                    <mat-spinner diameter="20" />
-                  } @else {
-                    Entrar
-                  }
-                </button>
+          <ng-template #credentialsForm>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Email</mat-label>
+              <input matInput type="email" [(ngModel)]="email"
+                placeholder="usuario&#64;empresa.com" autocomplete="username">
+              <mat-icon matPrefix>email</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Senha</mat-label>
+              <input matInput [type]="showPassword() ? 'text' : 'password'"
+                [(ngModel)]="password" placeholder="••••••••" autocomplete="current-password"
+                (keyup.enter)="loginWithCredentials()">
+              <mat-icon matPrefix>lock</mat-icon>
+              <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())">
+                <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+            </mat-form-field>
+
+            @if (isDevMode) {
+              <div class="credentials-hint">
+                <mat-icon>info_outline</mat-icon>
+                <span>Usuários de teste: <code>admin&#64;system.local</code>,
+                  <code>ops&#64;saas.local</code>, <code>viewer&#64;saas.local</code>
+                  — Senha: <code>Test1234!</code></span>
               </div>
-            </mat-tab>
+            }
 
-            <mat-tab label="Perfis Rápidos">
-              <div class="tab-content">
-                <div class="profiles">
-                  @for (p of profiles; track p.sub) {
-                    <button class="profile-card"
-                      [class.selected]="selectedProfile() === p"
-                      (click)="selectProfile(p)">
-                      <div class="profile-icon" [style.background]="p.color">
-                        <mat-icon>{{ p.icon }}</mat-icon>
-                      </div>
-                      <div class="profile-info">
-                        <span class="profile-name">{{ p.label }}</span>
-                        <span class="profile-email">{{ p.email }}</span>
-                      </div>
-                      @if (selectedProfile() === p) {
-                        <mat-icon class="check-icon">check_circle</mat-icon>
-                      }
-                    </button>
-                  }
-                </div>
-
-                @if (selectedProfile(); as sp) {
-                  <div class="preview">
-                    <div class="preview-row">
-                      <span class="preview-label">Tenant ID</span>
-                      <code>{{ sp.tid.length > 18 ? sp.tid.substring(0, 18) + '...' : sp.tid }}</code>
-                    </div>
-                    <div class="preview-row">
-                      <span class="preview-label">Plano</span>
-                      <span class="plan-badge">{{ sp.plan }}</span>
-                    </div>
-                    <div class="preview-row">
-                      <span class="preview-label">Permissões</span>
-                      <span class="perm-count">{{ sp.perms.length }} permissões</span>
-                    </div>
-                  </div>
-                }
-
-                @if (error()) {
-                  <div class="error-msg">
-                    <mat-icon>error_outline</mat-icon>
-                    {{ error() }}
-                  </div>
-                }
-
-                <button class="login-btn"
-                  [disabled]="!selectedProfile() || loading()"
-                  (click)="loginWithProfile()">
-                  @if (loading()) {
-                    <mat-spinner diameter="20" />
-                  } @else {
-                    Entrar
-                  }
-                </button>
+            @if (error()) {
+              <div class="error-msg">
+                <mat-icon>error_outline</mat-icon>
+                {{ error() }}
               </div>
-            </mat-tab>
+            }
 
-          </mat-tab-group>
+            <button class="login-btn"
+              [disabled]="!email || !password || loading()"
+              (click)="loginWithCredentials()">
+              @if (loading()) {
+                <mat-spinner diameter="20" />
+              } @else {
+                Entrar
+              }
+            </button>
+          </ng-template>
         </div>
       </div>
     </div>
@@ -423,6 +437,8 @@ const DEV_PROFILES: DevProfile[] = [
     }
     .login-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
+    .credentials-only { padding-top: 4px; }
+
     @media (max-width: 768px) {
       .login-page { flex-direction: column; }
       .login-left { flex: 0 0 auto; padding: 32px; }
@@ -432,7 +448,9 @@ const DEV_PROFILES: DevProfile[] = [
 })
 export class DevLoginComponent {
   private authService = inject(AuthService);
+  private config = inject(RuntimeConfigService);
 
+  isDevMode = this.config.get('authMode') === 'dev';
   profiles = DEV_PROFILES;
   selectedProfile = signal<DevProfile | null>(null);
   loading = signal(false);

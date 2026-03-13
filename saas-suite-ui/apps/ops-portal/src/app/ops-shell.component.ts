@@ -1,26 +1,32 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, computed, OnInit } from '@angular/core';
 import { ShellComponent, NavItem } from '@saas-suite/shared/ui';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
-
-const OPS_NAV: NavItem[] = [
-  { label: 'Dashboard', route: '/dashboard', icon: 'dashboard', permission: 'orders:read' },
-  { label: 'Pedidos', route: '/orders', icon: 'receipt_long', permission: 'orders:read' },
-  { label: 'Novo Pedido', route: '/orders/new', icon: 'add_shopping_cart', permission: 'orders:write' },
-  { label: 'Inventário', route: '/inventory/adjustments', icon: 'inventory_2', permission: 'inventory:read' },
-  { label: 'Pagamentos', route: '/payments', icon: 'payments', permission: 'payments:read' },
-  { label: 'Ledger', route: '/ledger/entries', icon: 'account_balance', permission: 'ledger:read' },
-  { label: 'Balanços', route: '/ledger/balances', icon: 'balance', permission: 'ledger:read' },
-];
 
 @Component({
   selector: 'app-ops-shell',
   standalone: true,
   imports: [ShellComponent],
-  template: `<saas-shell [navItems]="navItems" appTitle="Ops Portal" />`,
+  template: `<saas-shell [navItems]="navItems()" [appTitle]="appTitle()" />`,
 })
 export class OpsShellComponent implements OnInit {
-  navItems = OPS_NAV;
+  private i18n = inject(I18nService);
   private tenantStore = inject(TenantContextStore);
+
+  readonly appTitle = computed(() => this.i18n.messages().opsNav.appTitle);
+
+  readonly navItems = computed<NavItem[]>(() => {
+    const m = this.i18n.messages().opsNav;
+    return [
+      { label: m.dashboard, route: '/dashboard', icon: 'dashboard', permission: 'orders:read' },
+      { label: m.orders, route: '/orders', icon: 'receipt_long', permission: 'orders:read' },
+      { label: m.newOrder, route: '/orders/new', icon: 'add_shopping_cart', permission: 'orders:write' },
+      { label: m.inventory, route: '/inventory/adjustments', icon: 'inventory_2', permission: 'inventory:read' },
+      { label: m.payments, route: '/payments', icon: 'payments', permission: 'payments:read' },
+      { label: m.ledger, route: '/ledger/entries', icon: 'account_balance', permission: 'ledger:read' },
+      { label: m.balances, route: '/ledger/balances', icon: 'balance', permission: 'ledger:read' },
+    ];
+  });
 
   async ngOnInit(): Promise<void> {
     await this.tenantStore.loadTenants();

@@ -14,6 +14,11 @@ const browserDistFolder = resolve(serverDistFolder, '../browser');
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
+app.get('/assets/config.json', (_req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.sendFile(resolve(browserDistFolder, 'assets/config.json'));
+});
+
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',

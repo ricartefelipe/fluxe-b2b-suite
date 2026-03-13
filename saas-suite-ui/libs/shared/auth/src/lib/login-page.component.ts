@@ -9,7 +9,7 @@ import { OidcAuthService } from './oidc-auth.service';
   standalone: true,
   imports: [DevLoginComponent, MatProgressSpinnerModule],
   template: `
-    @if (authMode === 'dev') {
+    @if (showLoginForm) {
       <lib-dev-login />
     } @else {
       <div class="oidc-loading">
@@ -40,17 +40,14 @@ export class LoginPageComponent implements OnInit {
   private readonly config = inject(RuntimeConfigService);
   private readonly oidcAuth = inject(OidcAuthService, { optional: true });
 
-  authMode: 'dev' | 'oidc' = 'dev';
+  showLoginForm = true;
 
   ngOnInit(): void {
-    this.authMode = this.config.get('authMode');
+    const mode = this.config.get('authMode') as string;
 
-    if (this.authMode === 'dev' && !isDevMode()) {
-      console.error('[Auth] Dev auth disabled in production mode — forcing OIDC redirect.');
-      this.authMode = 'oidc';
-    }
+    this.showLoginForm = mode === 'dev' || mode === 'hs256';
 
-    if (this.authMode === 'oidc' && this.oidcAuth) {
+    if (!this.showLoginForm && this.oidcAuth) {
       this.oidcAuth.initLoginFlow();
     }
   }

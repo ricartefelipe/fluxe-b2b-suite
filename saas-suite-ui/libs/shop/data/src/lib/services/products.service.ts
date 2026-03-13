@@ -48,12 +48,16 @@ export class ProductsService {
       .pipe(
         map((res) => {
           this.loadingSignal.set(false);
+          const items = res.data ?? [];
+          const total = res.total ?? items.length;
+          const pg = res.page ?? page;
+          const ps = res.pageSize ?? pageSize;
           return {
-            items: res.data,
-            total: res.total,
-            page: res.page,
-            pageSize: res.pageSize,
-            totalPages: Math.ceil(res.total / res.pageSize),
+            items,
+            total,
+            page: pg,
+            pageSize: ps,
+            totalPages: ps > 0 ? Math.ceil(total / ps) : 1,
           };
         }),
         catchError((error) => {

@@ -373,7 +373,10 @@ export interface Messages {
     orderNotFound: string;
     cart: string;
     description: string;
+    b2bShop: string;
+    multiTenantB2BPlatform: string;
   };
+  statuses: Record<string, string>;
   adminPlaceholders: {
     tenantName: string;
     tenantSlug: string;

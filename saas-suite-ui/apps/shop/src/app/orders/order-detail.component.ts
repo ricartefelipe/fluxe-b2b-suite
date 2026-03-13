@@ -66,7 +66,7 @@ const STATUS_CLASSES: Record<OrderStatus, string> = {
           </div>
           <div class="order-header-right">
             <span class="status-chip large" [class]="getStatusClass(order.status)">
-              {{ order.status }}
+              {{ i18n.messages().statuses[order.status] ?? order.status }}
             </span>
             <button
               mat-icon-button

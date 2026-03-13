@@ -53,6 +53,12 @@ export const appRoutes: Route[] = [
         data: { permissions: ['analytics:read'] },
       },
       {
+        path: 'users',
+        loadComponent: () => import('./pages/users-list.page').then(m => m.UsersListPage),
+        canActivate: [permissionGuard],
+        data: { permissions: ['admin:write'] },
+      },
+      {
         path: 'onboarding',
         loadComponent: () => import('./pages/tenant-onboarding.page').then(m => m.TenantOnboardingPage),
         canActivate: [permissionGuard],

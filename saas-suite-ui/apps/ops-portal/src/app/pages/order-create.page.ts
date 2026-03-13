@@ -44,6 +44,7 @@ import { OrdersFacade } from '@saas-suite/data-access/orders';
           </mat-form-field>
 
           <h3>{{ i18n.messages().orders.items }}</h3>
+          <div formArrayName="items">
           @for (item of items.controls; track $index) {
             <div class="item-row" [formGroupName]="$index">
               <mat-form-field appearance="outline">
@@ -77,6 +78,7 @@ import { OrdersFacade } from '@saas-suite/data-access/orders';
               <button mat-icon-button color="warn" type="button" (click)="removeItem($index)"><mat-icon>delete</mat-icon></button>
             </div>
           }
+          </div>
           <button mat-stroked-button type="button" (click)="addItem()"><mat-icon>add</mat-icon> {{ i18n.messages().orders.addItem }}</button>
 
           <div class="total">

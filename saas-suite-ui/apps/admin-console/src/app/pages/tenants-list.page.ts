@@ -130,12 +130,16 @@ export class TenantsListPage implements OnInit, AfterViewInit {
   constructor() {
     effect(() => {
       this.dataSource.data = this.facade.tenants();
+      queueMicrotask(() => {
+        if (this.sort) this.dataSource.sort = this.sort;
+        if (this.paginator) this.dataSource.paginator = this.paginator;
+      });
     });
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    if (this.sort) this.dataSource.sort = this.sort;
+    if (this.paginator) this.dataSource.paginator = this.paginator;
   }
 
   async ngOnInit(): Promise<void> { await this.search(); }

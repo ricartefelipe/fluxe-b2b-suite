@@ -22,6 +22,7 @@ export class AdminShellComponent implements OnInit {
       { label: m.newTenant, route: '/onboarding', icon: 'add_business', permission: 'tenants:write' },
       { label: m.policies, route: '/policies', icon: 'policy', permission: 'policies:read' },
       { label: m.featureFlags, route: '/flags', icon: 'flag', permission: 'flags:read' },
+      { label: m.users, route: '/users', icon: 'people', permission: 'admin:write' },
       { label: m.auditLog, route: '/audit', icon: 'history', permission: 'audit:read' },
       { label: m.aiAssistant, route: '/ai', icon: 'smart_toy', permission: 'analytics:read' },
     ];

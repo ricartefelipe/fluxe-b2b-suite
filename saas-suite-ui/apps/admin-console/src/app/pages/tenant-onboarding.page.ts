@@ -18,42 +18,10 @@ import { TenantOnboardingStore, OrgInfo, OnboardingConfig } from '@saas-suite/do
 import { TenantPlan } from '@saas-suite/data-access/core';
 import { I18nService } from '@saas-suite/shared/i18n';
 
-interface PlanOption {
-  key: TenantPlan;
-  name: string;
-  price: string;
-  recommended: boolean;
-  features: string[];
-}
-
-const PLANS: PlanOption[] = [
-  {
-    key: 'starter',
-    name: 'Starter',
-    price: '$49/mo',
-    recommended: false,
-    features: ['5 users', '100 orders/mo', 'Basic support', 'Standard dashboard'],
-  },
-  {
-    key: 'professional',
-    name: 'Professional',
-    price: '$149/mo',
-    recommended: true,
-    features: ['25 users', '1,000 orders/mo', 'Priority support', 'Analytics & insights', 'API access'],
-  },
-  {
-    key: 'enterprise',
-    name: 'Enterprise',
-    price: 'Custom',
-    recommended: false,
-    features: ['Unlimited users', 'Unlimited orders', '24/7 dedicated support', 'Custom integrations', 'SLA guarantee', 'SSO & SCIM'],
-  },
-];
-
 const REGIONS = [
-  { value: 'us-east-1', label: 'US East (N. Virginia)' },
-  { value: 'eu-west-1', label: 'EU West (Ireland)' },
-  { value: 'ap-southeast-1', label: 'Asia Pacific (Singapore)' },
+  { value: 'sa-east-1', label: 'América do Sul (São Paulo)' },
+  { value: 'us-east-1', label: 'América do Norte (Virgínia)' },
+  { value: 'eu-west-1', label: 'Europa (Irlanda)' },
 ];
 
 function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
@@ -84,44 +52,43 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
     <div class="onboarding-container">
       <header class="onboarding-header">
         <mat-icon class="header-icon">rocket_launch</mat-icon>
-        <h1>Create New Tenant</h1>
-        <p>Set up a new organization in just a few steps</p>
+        <h1>{{ ob.title }}</h1>
+        <p>{{ ob.subtitle }}</p>
       </header>
 
       <mat-stepper linear #stepper class="onboarding-stepper" (selectionChange)="onStepChange($event)">
 
-        <!-- Step 1: Organization Info -->
-        <mat-step [stepControl]="orgForm" label="Organization">
+        <mat-step [stepControl]="orgForm" [label]="ob.orgInfo">
           <div class="step-content">
-            <h2 class="step-title">Organization Information</h2>
-            <p class="step-subtitle">Tell us about the new tenant</p>
+            <h2 class="step-title">{{ ob.orgInfoTitle }}</h2>
+            <p class="step-subtitle">{{ ob.orgInfoSubtitle }}</p>
 
             <form [formGroup]="orgForm" class="org-form">
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Organization Name</mat-label>
+                <mat-label>{{ ob.orgName }}</mat-label>
                 <input matInput formControlName="name" [placeholder]="i18n.messages().adminPlaceholders.orgName" (input)="onNameChange()">
                 @if (orgForm.controls['name'].hasError('required') && orgForm.controls['name'].touched) {
-                  <mat-error>Name is required</mat-error>
+                  <mat-error>{{ ob.nameRequired }}</mat-error>
                 }
                 @if (orgForm.controls['name'].hasError('minlength')) {
-                  <mat-error>Name must be at least 3 characters</mat-error>
+                  <mat-error>{{ ob.nameMinLength }}</mat-error>
                 }
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Slug</mat-label>
+                <mat-label>{{ ob.slug }}</mat-label>
                 <input matInput formControlName="slug" [placeholder]="i18n.messages().adminPlaceholders.orgSlug">
-                <mat-hint>URL-safe identifier (lowercase, hyphens only)</mat-hint>
+                <mat-hint>{{ ob.slugHint }}</mat-hint>
                 @if (orgForm.controls['slug'].hasError('required') && orgForm.controls['slug'].touched) {
-                  <mat-error>Slug is required</mat-error>
+                  <mat-error>{{ ob.slugRequired }}</mat-error>
                 }
                 @if (orgForm.controls['slug'].hasError('slug')) {
-                  <mat-error>Must be lowercase letters, numbers, and hyphens only</mat-error>
+                  <mat-error>{{ ob.slugFormat }}</mat-error>
                 }
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="full-width">
-                <mat-label>Region</mat-label>
+                <mat-label>{{ ob.region }}</mat-label>
                 <mat-select formControlName="region">
                   @for (r of regions; track r.value) {
                     <mat-option [value]="r.value">{{ r.label }}</mat-option>
@@ -132,21 +99,20 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
 
             <div class="step-actions">
               <button mat-flat-button color="primary" matStepperNext [disabled]="orgForm.invalid">
-                Continue
+                {{ ob.continue }}
                 <mat-icon iconPositionEnd>arrow_forward</mat-icon>
               </button>
             </div>
           </div>
         </mat-step>
 
-        <!-- Step 2: Plan Selection -->
-        <mat-step [completed]="selectedPlan() !== null" label="Plan">
+        <mat-step [completed]="selectedPlan() !== null" [label]="ob.planSelection">
           <div class="step-content">
-            <h2 class="step-title">Choose a Plan</h2>
-            <p class="step-subtitle">Select the plan that best fits your needs</p>
+            <h2 class="step-title">{{ ob.choosePlan }}</h2>
+            <p class="step-subtitle">{{ ob.choosePlanSubtitle }}</p>
 
             <div class="plans-grid">
-              @for (plan of plans; track plan.key) {
+              @for (plan of planOptions(); track plan.key) {
                 <mat-card
                   class="plan-card"
                   [class.plan-selected]="selectedPlan() === plan.key"
@@ -157,7 +123,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
                   (keydown.space)="selectPlan(plan.key)">
 
                   @if (plan.recommended) {
-                    <div class="recommended-badge">Recommended</div>
+                    <div class="recommended-badge">{{ ob.recommended }}</div>
                   }
 
                   <mat-card-header>
@@ -179,7 +145,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
                   <mat-card-actions align="end">
                     <button mat-stroked-button
                       [color]="selectedPlan() === plan.key ? 'primary' : undefined">
-                      {{ selectedPlan() === plan.key ? 'Selected' : 'Select' }}
+                      {{ selectedPlan() === plan.key ? ob.selected : ob.select }}
                     </button>
                   </mat-card-actions>
                 </mat-card>
@@ -189,28 +155,27 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
             <div class="step-actions">
               <button mat-button matStepperPrevious>
                 <mat-icon>arrow_back</mat-icon>
-                Back
+                {{ ob.back }}
               </button>
               <button mat-flat-button color="primary" matStepperNext [disabled]="!selectedPlan()">
-                Continue
+                {{ ob.continue }}
                 <mat-icon iconPositionEnd>arrow_forward</mat-icon>
               </button>
             </div>
           </div>
         </mat-step>
 
-        <!-- Step 3: Configuration -->
-        <mat-step [stepControl]="configForm" label="Configuration">
+        <mat-step [stepControl]="configForm" [label]="ob.configuration">
           <div class="step-content">
-            <h2 class="step-title">Initial Configuration</h2>
-            <p class="step-subtitle">Set up feature flags and admin access</p>
+            <h2 class="step-title">{{ ob.initialConfig }}</h2>
+            <p class="step-subtitle">{{ ob.initialConfigSubtitle }}</p>
 
             <form [formGroup]="configForm">
               <mat-card class="config-section">
                 <mat-card-header>
                   <mat-icon mat-card-avatar>toggle_on</mat-icon>
-                  <mat-card-title>Feature Flags</mat-card-title>
-                  <mat-card-subtitle>Enable features for this tenant</mat-card-subtitle>
+                  <mat-card-title>{{ ob.featureFlags }}</mat-card-title>
+                  <mat-card-subtitle>{{ ob.featureFlagsSubtitle }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
                   <div class="flags-list">
@@ -234,18 +199,18 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
               <mat-card class="config-section">
                 <mat-card-header>
                   <mat-icon mat-card-avatar>admin_panel_settings</mat-icon>
-                  <mat-card-title>Admin User</mat-card-title>
-                  <mat-card-subtitle>Invite the first administrator</mat-card-subtitle>
+                  <mat-card-title>{{ ob.adminUser }}</mat-card-title>
+                  <mat-card-subtitle>{{ ob.adminUserSubtitle }}</mat-card-subtitle>
                 </mat-card-header>
                 <mat-card-content>
                   <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Admin Email</mat-label>
+                    <mat-label>{{ ob.adminEmail }}</mat-label>
                     <input matInput formControlName="adminEmail" [placeholder]="i18n.messages().adminPlaceholders.adminEmail" type="email">
                     @if (configForm.controls['adminEmail'].hasError('required') && configForm.controls['adminEmail'].touched) {
-                      <mat-error>Admin email is required</mat-error>
+                      <mat-error>{{ ob.adminEmailRequired }}</mat-error>
                     }
                     @if (configForm.controls['adminEmail'].hasError('email')) {
-                      <mat-error>Enter a valid email address</mat-error>
+                      <mat-error>{{ ob.adminEmailInvalid }}</mat-error>
                     }
                   </mat-form-field>
                 </mat-card-content>
@@ -255,41 +220,40 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
             <div class="step-actions">
               <button mat-button matStepperPrevious>
                 <mat-icon>arrow_back</mat-icon>
-                Back
+                {{ ob.back }}
               </button>
               <button mat-flat-button color="primary" matStepperNext [disabled]="configForm.invalid">
-                Review
+                {{ ob.review }}
                 <mat-icon iconPositionEnd>arrow_forward</mat-icon>
               </button>
             </div>
           </div>
         </mat-step>
 
-        <!-- Step 4: Review & Create -->
-        <mat-step label="Review" [editable]="!store.submitting()">
+        <mat-step [label]="ob.review" [editable]="!store.submitting()">
           <div class="step-content">
-            <h2 class="step-title">Review & Create</h2>
-            <p class="step-subtitle">Confirm your setup before creating the tenant</p>
+            <h2 class="step-title">{{ ob.reviewAndCreate }}</h2>
+            <p class="step-subtitle">{{ ob.reviewSubtitle }}</p>
 
             <div class="review-cards">
               <mat-card class="review-card">
                 <mat-card-header>
                   <mat-icon mat-card-avatar>business</mat-icon>
-                  <mat-card-title>Organization</mat-card-title>
+                  <mat-card-title>{{ ob.organization }}</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
                   <div class="review-row">
-                    <span class="review-label">Name</span>
+                    <span class="review-label">{{ ob.name }}</span>
                     <span class="review-value">{{ store.orgInfo().name }}</span>
                   </div>
                   <mat-divider />
                   <div class="review-row">
-                    <span class="review-label">Slug</span>
+                    <span class="review-label">{{ ob.slug }}</span>
                     <span class="review-value mono">{{ store.orgInfo().slug }}</span>
                   </div>
                   <mat-divider />
                   <div class="review-row">
-                    <span class="review-label">Region</span>
+                    <span class="review-label">{{ ob.region }}</span>
                     <span class="review-value">{{ regionLabel(store.orgInfo().region) }}</span>
                   </div>
                 </mat-card-content>
@@ -298,11 +262,11 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
               <mat-card class="review-card">
                 <mat-card-header>
                   <mat-icon mat-card-avatar>payments</mat-icon>
-                  <mat-card-title>Plan</mat-card-title>
+                  <mat-card-title>{{ ob.plan }}</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
                   <div class="review-row">
-                    <span class="review-label">Selected Plan</span>
+                    <span class="review-label">{{ ob.selectedPlan }}</span>
                     <mat-chip-set>
                       <mat-chip highlighted>{{ planLabel(store.plan()) }}</mat-chip>
                     </mat-chip-set>
@@ -313,16 +277,16 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
               <mat-card class="review-card">
                 <mat-card-header>
                   <mat-icon mat-card-avatar>settings</mat-icon>
-                  <mat-card-title>Configuration</mat-card-title>
+                  <mat-card-title>{{ ob.configTitle }}</mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
                   <div class="review-row">
-                    <span class="review-label">Admin Email</span>
+                    <span class="review-label">{{ ob.adminEmail }}</span>
                     <span class="review-value">{{ store.config().adminEmail }}</span>
                   </div>
                   <mat-divider />
                   <div class="review-row">
-                    <span class="review-label">Feature Flags</span>
+                    <span class="review-label">{{ ob.flagsLabel }}</span>
                     <div class="review-flags">
                       @for (flag of enabledFlags(); track flag.name) {
                         <mat-chip-set>
@@ -330,7 +294,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
                         </mat-chip-set>
                       }
                       @if (enabledFlags().length === 0) {
-                        <span class="review-value muted">None enabled</span>
+                        <span class="review-value muted">{{ ob.noneEnabled }}</span>
                       }
                     </div>
                   </div>
@@ -340,7 +304,7 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
 
             @if (store.submitting()) {
               <mat-progress-bar mode="determinate" [value]="store.progress()" class="creation-progress" />
-              <p class="progress-text">Creating tenant... {{ store.progress() }}%</p>
+              <p class="progress-text">{{ ob.creatingTenant.replace('{progress}', '' + store.progress()) }}</p>
             }
 
             @if (store.error()) {
@@ -353,17 +317,17 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
             <div class="step-actions">
               <button mat-button matStepperPrevious [disabled]="store.submitting()">
                 <mat-icon>arrow_back</mat-icon>
-                Back
+                {{ ob.back }}
               </button>
               <button mat-flat-button color="primary"
                 [disabled]="store.submitting()"
                 (click)="onSubmit(stepper)">
                 @if (store.submitting()) {
-                  Creating...
+                  {{ ob.creating }}
                 } @else {
                   <ng-container>
                     <mat-icon>check</mat-icon>
-                    Create Tenant
+                    {{ ob.createTenantBtn }}
                   </ng-container>
                 }
               </button>
@@ -371,32 +335,31 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
           </div>
         </mat-step>
 
-        <!-- Step 5: Success -->
-        <mat-step label="Done" [editable]="false">
+        <mat-step [label]="ob.done" [editable]="false">
           <div class="step-content success-content">
             <div class="success-icon-wrapper">
               <mat-icon class="success-icon">check_circle</mat-icon>
             </div>
-            <h2 class="success-title">Tenant Created Successfully!</h2>
-            <p class="success-subtitle">Your new tenant is ready to go</p>
+            <h2 class="success-title">{{ ob.tenantCreated }}</h2>
+            <p class="success-subtitle">{{ ob.tenantReady }}</p>
 
             @if (store.createdTenant(); as tenant) {
               <mat-card class="success-details">
                 <mat-card-content>
                   <div class="review-row">
-                    <span class="review-label">Tenant ID</span>
+                    <span class="review-label">{{ ob.tenantId }}</span>
                     <span class="review-value mono">{{ tenant.id }}</span>
                   </div>
                   <mat-divider />
                   <div class="review-row">
-                    <span class="review-label">Name</span>
+                    <span class="review-label">{{ ob.name }}</span>
                     <span class="review-value">{{ tenant.name }}</span>
                   </div>
                   <mat-divider />
                   <div class="review-row">
-                    <span class="review-label">Status</span>
+                    <span class="review-label">{{ ob.status }}</span>
                     <mat-chip-set>
-                      <mat-chip highlighted>{{ tenant.status }}</mat-chip>
+                      <mat-chip highlighted>{{ i18n.messages().statuses[tenant.status] ?? tenant.status }}</mat-chip>
                     </mat-chip-set>
                   </div>
                 </mat-card-content>
@@ -406,11 +369,11 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
             <div class="success-actions">
               <button mat-flat-button color="primary" (click)="goToTenant()">
                 <mat-icon>open_in_new</mat-icon>
-                Go to Tenant
+                {{ ob.goToTenant }}
               </button>
               <button mat-stroked-button (click)="createAnother(stepper)">
                 <mat-icon>add</mat-icon>
-                Create Another
+                {{ ob.createAnother }}
               </button>
             </div>
           </div>
@@ -700,9 +663,55 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private router = inject(Router);
 
-  readonly plans = PLANS;
+  get ob() { return this.i18n.messages().onboarding; }
+
   readonly regions = REGIONS;
   readonly selectedPlan = signal<TenantPlan | null>('professional');
+
+  readonly planOptions = computed(() => {
+    const m = this.i18n.messages().onboarding;
+    return [
+      {
+        key: 'starter' as TenantPlan,
+        name: 'Starter',
+        price: 'R$ 249' + m.perMonth,
+        recommended: false,
+        features: [
+          m.users.replace('{n}', '5'),
+          m.ordersPerMonth.replace('{n}', '100'),
+          m.basicSupport,
+          m.standardDashboard,
+        ],
+      },
+      {
+        key: 'professional' as TenantPlan,
+        name: 'Professional',
+        price: 'R$ 749' + m.perMonth,
+        recommended: true,
+        features: [
+          m.users.replace('{n}', '25'),
+          m.ordersPerMonth.replace('{n}', '1.000'),
+          m.prioritySupport,
+          m.analyticsInsights,
+          m.apiAccess,
+        ],
+      },
+      {
+        key: 'enterprise' as TenantPlan,
+        name: 'Enterprise',
+        price: m.custom,
+        recommended: false,
+        features: [
+          m.unlimitedUsers,
+          m.unlimitedOrders,
+          m.dedicatedSupport,
+          m.customIntegrations,
+          m.slaGuarantee,
+          m.ssoScim,
+        ],
+      },
+    ];
+  });
 
   readonly enabledFlags = computed(() =>
     this.store.config().flags.filter(f => f.enabled)
@@ -711,7 +720,7 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
   readonly orgForm: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
     slug: ['', [Validators.required, slugValidator]],
-    region: ['us-east-1', Validators.required],
+    region: ['sa-east-1', Validators.required],
   });
 
   readonly configForm: FormGroup = this.fb.group({
@@ -791,7 +800,7 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
 
   createAnother(stepper: { reset: () => void }): void {
     this.store.reset();
-    this.orgForm.reset({ name: '', slug: '', region: 'us-east-1' });
+    this.orgForm.reset({ name: '', slug: '', region: 'sa-east-1' });
     this.configForm.reset({ adminEmail: '' });
     this.selectedPlan.set('professional');
     stepper.reset();
@@ -802,6 +811,6 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
   }
 
   planLabel(key: TenantPlan): string {
-    return PLANS.find(p => p.key === key)?.name ?? key;
+    return this.planOptions().find(p => p.key === key)?.name ?? key;
   }
 }

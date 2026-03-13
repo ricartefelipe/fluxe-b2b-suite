@@ -7,7 +7,8 @@ import {
 } from '@angular/platform-browser/testing';
 import { getTestBed } from '@angular/core/testing';
 
-getTestBed().initTestEnvironment(
-  BrowserTestingModule,
-  platformBrowserTesting()
-);
+const testBed = getTestBed();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+if (!(testBed as any).platform) {
+  testBed.initTestEnvironment(BrowserTestingModule, platformBrowserTesting());
+}

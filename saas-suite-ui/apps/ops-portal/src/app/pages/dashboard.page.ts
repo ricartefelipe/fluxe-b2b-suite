@@ -8,6 +8,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { StatusChipComponent } from '@saas-suite/shared/ui';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { DashboardStore } from '@saas-suite/domains/ops';
 import { formatDateTime } from '@saas-suite/shared/util';
 
@@ -30,7 +31,7 @@ const BAR_MAX_HEIGHT = 170;
         <mat-progress-bar mode="indeterminate" />
       }
 
-      <h1 class="page-title">Dashboard</h1>
+      <h1 class="page-title">{{ i18n.messages().dashboard.title }}</h1>
 
       <!-- KPI Cards -->
       <div class="kpi-row">
@@ -39,7 +40,7 @@ const BAR_MAX_HEIGHT = 170;
             <div class="kpi-icon kpi-icon--blue"><mat-icon>receipt_long</mat-icon></div>
             <div class="kpi-data">
               <span class="kpi-value">{{ store.totalOrders() }}</span>
-              <span class="kpi-label">Total Pedidos</span>
+              <span class="kpi-label">{{ i18n.messages().dashboard.totalOrders }}</span>
             </div>
           </mat-card-content>
         </mat-card>
@@ -49,7 +50,7 @@ const BAR_MAX_HEIGHT = 170;
             <div class="kpi-icon kpi-icon--green"><mat-icon>trending_up</mat-icon></div>
             <div class="kpi-data">
               <span class="kpi-value">{{ store.totalRevenue() | currency:store.currency():'symbol':'1.2-2' }}</span>
-              <span class="kpi-label">Receita Total</span>
+              <span class="kpi-label">{{ i18n.messages().dashboard.totalRevenue }}</span>
             </div>
           </mat-card-content>
         </mat-card>
@@ -59,7 +60,7 @@ const BAR_MAX_HEIGHT = 170;
             <div class="kpi-icon kpi-icon--amber"><mat-icon>inventory_2</mat-icon></div>
             <div class="kpi-data">
               <span class="kpi-value">{{ store.activeInventoryItems() }}</span>
-              <span class="kpi-label">Itens Ativos</span>
+              <span class="kpi-label">{{ i18n.messages().dashboard.activeInventory }}</span>
             </div>
           </mat-card-content>
         </mat-card>
@@ -69,7 +70,7 @@ const BAR_MAX_HEIGHT = 170;
             <div class="kpi-icon kpi-icon--orange"><mat-icon>payments</mat-icon></div>
             <div class="kpi-data">
               <span class="kpi-value">{{ store.pendingPayments() }}</span>
-              <span class="kpi-label">Pagamentos Pendentes</span>
+              <span class="kpi-label">{{ i18n.messages().dashboard.pendingPayments }}</span>
             </div>
           </mat-card-content>
         </mat-card>
@@ -81,7 +82,7 @@ const BAR_MAX_HEIGHT = 170;
         <!-- Revenue Bar Chart -->
         <mat-card class="chart-card">
           <mat-card-header>
-            <mat-card-title>Receita — Últimos 7 dias</mat-card-title>
+            <mat-card-title>{{ i18n.messages().dashboard.revenueLast7Days }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <svg viewBox="-5 0 495 230" class="bar-chart" overflow="visible" role="img" aria-label="Gráfico de receita dos últimos 7 dias">
@@ -127,7 +128,7 @@ const BAR_MAX_HEIGHT = 170;
         <!-- Orders by Status Donut -->
         <mat-card class="chart-card">
           <mat-card-header>
-            <mat-card-title>Pedidos por Status</mat-card-title>
+            <mat-card-title>{{ i18n.messages().dashboard.ordersByStatus }}</mat-card-title>
           </mat-card-header>
           <mat-card-content class="donut-layout">
             <svg viewBox="0 0 200 200" class="donut-chart" role="img" aria-label="Gráfico de pedidos por status">
@@ -141,7 +142,7 @@ const BAR_MAX_HEIGHT = 170;
                       stroke-width="28"
                       [attr.stroke-dasharray]="seg.dashArray"
                       [attr.stroke-dashoffset]="seg.dashOffset"
-                      [matTooltip]="seg.status + ': ' + seg.count + ' (' + seg.pct + '%)'"
+                      [matTooltip]="translateStatus(seg.status) + ': ' + seg.count + ' (' + seg.pct + '%)'"
                       class="donut-segment"
                       [style.animation-delay]="i * 120 + 'ms'"
                     />
@@ -149,13 +150,13 @@ const BAR_MAX_HEIGHT = 170;
                 }
               </g>
               <text x="100" y="96" text-anchor="middle" class="donut-total">{{ store.totalOrders() }}</text>
-              <text x="100" y="114" text-anchor="middle" class="donut-total-label">pedidos</text>
+              <text x="100" y="114" text-anchor="middle" class="donut-total-label">{{ i18n.messages().dashboard.ordersLabel }}</text>
             </svg>
             <div class="legend">
               @for (seg of donutSegments(); track seg.status) {
                 <div class="legend-item">
                   <span class="legend-dot" [style.background]="seg.color"></span>
-                  <span class="legend-status">{{ seg.status }}</span>
+                  <span class="legend-status">{{ translateStatus(seg.status) }}</span>
                   <span class="legend-count">{{ seg.count }} ({{ seg.pct }}%)</span>
                 </div>
               }
@@ -169,38 +170,38 @@ const BAR_MAX_HEIGHT = 170;
         <!-- Recent Orders Table -->
         <mat-card class="table-card">
           <mat-card-header>
-            <mat-card-title>Pedidos Recentes</mat-card-title>
+            <mat-card-title>{{ i18n.messages().dashboard.recentOrders }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             @if (store.recentOrders().length > 0) {
               <table mat-table [dataSource]="store.recentOrders()" class="full-width">
                 <ng-container matColumnDef="id">
-                  <th mat-header-cell *matHeaderCellDef>ID</th>
+                  <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.id }}</th>
                   <td mat-cell *matCellDef="let o">
                     <a [routerLink]="['/orders', o.id]" class="order-link">{{ o.id | slice:0:8 }}…</a>
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="customerId">
-                  <th mat-header-cell *matHeaderCellDef>Cliente</th>
+                  <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().orders.customer }}</th>
                   <td mat-cell *matCellDef="let o">{{ o.customerId | slice:0:8 }}</td>
                 </ng-container>
                 <ng-container matColumnDef="status">
-                  <th mat-header-cell *matHeaderCellDef>Status</th>
+                  <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.status }}</th>
                   <td mat-cell *matCellDef="let o"><saas-status-chip [status]="o.status" /></td>
                 </ng-container>
                 <ng-container matColumnDef="totalAmount">
-                  <th mat-header-cell *matHeaderCellDef>Valor</th>
+                  <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.amount }}</th>
                   <td mat-cell *matCellDef="let o">{{ o.totalAmount | currency:o.currency:'symbol':'1.2-2' }}</td>
                 </ng-container>
                 <ng-container matColumnDef="createdAt">
-                  <th mat-header-cell *matHeaderCellDef>Data</th>
+                  <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.date }}</th>
                   <td mat-cell *matCellDef="let o">{{ fmtDate(o.createdAt) }}</td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="orderColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: orderColumns;"></tr>
               </table>
             } @else {
-              <p class="empty-hint">Nenhum pedido encontrado.</p>
+              <p class="empty-hint">{{ i18n.messages().orders.noOrdersFound }}</p>
             }
           </mat-card-content>
         </mat-card>
@@ -208,26 +209,26 @@ const BAR_MAX_HEIGHT = 170;
         <!-- Inventory Alerts -->
         <mat-card class="alerts-card">
           <mat-card-header>
-            <mat-card-title>Alertas de Inventário</mat-card-title>
+            <mat-card-title>{{ i18n.messages().dashboard.inventoryAlerts }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             @if (store.lowStockItems().length > 0) {
-              <h3 class="section-subtitle">Estoque Baixo</h3>
+              <h3 class="section-subtitle">{{ i18n.messages().dashboard.lowStock }}</h3>
               <mat-list>
                 @for (item of store.lowStockItems(); track item.sku) {
                   <mat-list-item>
                     <mat-icon matListItemIcon class="warning-icon">warning</mat-icon>
                     <span matListItemTitle>{{ item.sku }}</span>
-                    <span matListItemLine>Disponível: {{ item.availableQuantity }} un.</span>
+                    <span matListItemLine>{{ i18n.messages().dashboard.availableQty }}: {{ item.availableQuantity }}</span>
                   </mat-list-item>
                 }
               </mat-list>
             } @else {
-              <p class="empty-hint">Nenhum item com estoque baixo.</p>
+              <p class="empty-hint">{{ i18n.messages().dashboard.noLowStock }}</p>
             }
 
             @if (store.recentAdjustments().length > 0) {
-              <h3 class="section-subtitle">Ajustes Recentes</h3>
+              <h3 class="section-subtitle">{{ i18n.messages().dashboard.recentAdjustments }}</h3>
               <mat-list>
                 @for (adj of store.recentAdjustments(); track adj.id) {
                   <mat-list-item>
@@ -238,7 +239,7 @@ const BAR_MAX_HEIGHT = 170;
                         @default { swap_horiz }
                       }
                     </mat-icon>
-                    <span matListItemTitle>{{ adj.sku }} — {{ adj.type }} {{ adj.quantity }}</span>
+                    <span matListItemTitle>{{ adj.sku }} — {{ translateStatus(adj.type) }} {{ adj.quantity }}</span>
                     <span matListItemLine>{{ adj.reason }} · {{ fmtDate(adj.createdAt) }}</span>
                   </mat-list-item>
                 }
@@ -533,6 +534,7 @@ const BAR_MAX_HEIGHT = 170;
 })
 export class DashboardPage implements OnInit {
   protected store = inject(DashboardStore);
+  protected i18n = inject(I18nService);
 
   orderColumns = ['id', 'customerId', 'status', 'totalAmount', 'createdAt'];
 
@@ -584,5 +586,9 @@ export class DashboardPage implements OnInit {
 
   fmtDate(d: string): string {
     return formatDateTime(d);
+  }
+
+  translateStatus(s: string): string {
+    return this.i18n.messages().statuses[s] ?? s;
   }
 }

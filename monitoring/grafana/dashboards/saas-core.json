@@ -1,0 +1,256 @@
+{
+  "uid": "b2b-saas-core",
+  "title": "B2B Suite — SaaS Core",
+  "description": "Control plane metrics: tenants, subscriptions, ABAC, audit, JWT, outbox, webhooks",
+  "tags": ["b2b-suite", "saas-core"],
+  "timezone": "browser",
+  "editable": true,
+  "graphTooltip": 1,
+  "refresh": "30s",
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "tenant_id",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+        "query": "label_values(b2b_tenants_active, tenant_id)",
+        "includeAll": true,
+        "allValue": ".*",
+        "current": { "text": "All", "value": "$__all" },
+        "refresh": 2
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Active Tenants",
+      "type": "stat",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "blue", "value": null }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "sum(b2b_tenants_active)",
+          "legendFormat": "Active tenants",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Subscription Distribution by Plan",
+      "type": "piechart",
+      "gridPos": { "h": 8, "w": 10, "x": 6, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "legend": { "displayMode": "table", "placement": "right", "values": ["value", "percent"] },
+        "pieType": "donut"
+      },
+      "targets": [
+        {
+          "expr": "sum by (plan) (b2b_subscriptions_by_plan)",
+          "legendFormat": "{{ plan }}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "ABAC Deny Rate",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 8, "x": 16, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 20 },
+          "unit": "percentunit",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 0.05 },
+              { "color": "red", "value": 0.15 }
+            ]
+          },
+          "color": { "mode": "continuous-reds" }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(b2b_abac_decisions_total{decision=\"deny\", tenant_id=~\"$tenant_id\"}[5m])) / sum(rate(b2b_abac_decisions_total{tenant_id=~\"$tenant_id\"}[5m]))",
+          "legendFormat": "Deny rate",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "ABAC Denials by Resource",
+      "type": "bargauge",
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 4 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "orange", "value": null }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "orientation": "horizontal",
+        "displayMode": "gradient"
+      },
+      "targets": [
+        {
+          "expr": "topk(10, sum by (resource) (increase(b2b_abac_decisions_total{decision=\"deny\", tenant_id=~\"$tenant_id\"}[1h])))",
+          "legendFormat": "{{ resource }}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Audit Log Entries per Minute",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 15 },
+          "unit": "opm",
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "sum by (action) (rate(b2b_audit_entries_total{tenant_id=~\"$tenant_id\"}[5m])) * 60",
+          "legendFormat": "{{ action }}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "JWT Token Issuance Rate",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 8 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 15 },
+          "unit": "opm"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(b2b_jwt_issued_total[5m])) * 60",
+          "legendFormat": "Tokens / min",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(rate(b2b_jwt_validation_errors_total[5m])) * 60",
+          "legendFormat": "Validation errors / min",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Outbox Event Backlog",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 15 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 20 },
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 50 },
+              { "color": "red", "value": 100 }
+            ]
+          },
+          "color": { "mode": "continuous-reds" }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "b2b_outbox_pending_events",
+          "legendFormat": "Pending events",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Webhook Delivery Success Rate",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 15 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 15 },
+          "unit": "percentunit",
+          "min": 0,
+          "max": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "red", "value": null },
+              { "color": "yellow", "value": 0.80 },
+              { "color": "green", "value": 0.95 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(b2b_webhook_deliveries_total{status=\"success\"}[5m])) / sum(rate(b2b_webhook_deliveries_total[5m]))",
+          "legendFormat": "Success rate",
+          "refId": "A"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 39,
+  "version": 1
+}

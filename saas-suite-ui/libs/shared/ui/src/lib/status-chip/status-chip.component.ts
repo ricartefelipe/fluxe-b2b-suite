@@ -1,5 +1,6 @@
-import { Component, Input, computed, signal } from '@angular/core';
+import { Component, Input, inject, computed } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MESSAGES } from '@saas-suite/shared/i18n';
 
 @Component({
   selector: 'saas-status-chip',
@@ -56,6 +57,8 @@ export class StatusChipComponent {
   @Input() status = '';
   @Input() label?: string;
 
+  private readonly msg = inject(MESSAGES);
+
   private static readonly ICON_MAP: Record<string, string> = {
     active: 'check_circle', paid: 'check_circle', confirmed: 'check_circle',
     success: 'check_circle', allow: 'check_circle', in: 'check_circle', credit: 'check_circle',
@@ -65,14 +68,15 @@ export class StatusChipComponent {
     draft: 'edit_note', adjustment: 'tune',
   };
 
-  displayLabel = computed(() => this.label ?? this.formatStatus(this.status));
+  displayLabel = computed(() => this.label ?? this.translateStatus(this.status));
 
   statusIcon = computed(() => {
     const key = (this.status || '').toLowerCase();
     return StatusChipComponent.ICON_MAP[key] ?? 'info';
   });
 
-  private formatStatus(s: string): string {
-    return (s || '').replace(/_/g, ' ');
+  private translateStatus(s: string): string {
+    if (!s) return '';
+    return this.msg.statuses[s] ?? this.msg.statuses[s.toUpperCase()] ?? s.replace(/_/g, ' ');
   }
 }

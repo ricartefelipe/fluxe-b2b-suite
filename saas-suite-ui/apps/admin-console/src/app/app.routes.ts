@@ -1,10 +1,14 @@
 import { Route } from '@angular/router';
-import { authGuard } from '@saas-suite/shared/auth';
+import { authGuard, permissionGuard } from '@saas-suite/shared/auth';
 
 export const appRoutes: Route[] = [
   {
     path: 'login',
     loadComponent: () => import('@saas-suite/shared/auth').then(m => m.LoginPageComponent),
+  },
+  {
+    path: 'signup',
+    loadComponent: () => import('@saas-suite/shared/auth').then(m => m.SignupPageComponent),
   },
   {
     path: '',
@@ -15,36 +19,49 @@ export const appRoutes: Route[] = [
       {
         path: 'tenants',
         loadComponent: () => import('./pages/tenants-list.page').then(m => m.TenantsListPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['tenants:read'] },
       },
       {
         path: 'tenants/:id',
         loadComponent: () => import('./pages/tenant-detail.page').then(m => m.TenantDetailPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['tenants:read'] },
       },
       {
         path: 'policies',
         loadComponent: () => import('./pages/policies-list.page').then(m => m.PoliciesListPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['policies:read'] },
       },
       {
         path: 'flags',
         loadComponent: () => import('./pages/flags-list.page').then(m => m.FlagsListPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['flags:read'] },
       },
       {
         path: 'audit',
         loadComponent: () => import('./pages/audit-list.page').then(m => m.AuditListPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['audit:read'] },
       },
       {
         path: 'ai',
         loadComponent: () => import('./pages/ai.page').then(m => m.AiPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['analytics:read'] },
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./pages/users-list.page').then(m => m.UsersListPage),
+        canActivate: [permissionGuard],
+        data: { permissions: ['admin:write'] },
       },
       {
         path: 'onboarding',
         loadComponent: () => import('./pages/tenant-onboarding.page').then(m => m.TenantOnboardingPage),
+        canActivate: [permissionGuard],
         data: { permissions: ['tenants:write'] },
       },
       {

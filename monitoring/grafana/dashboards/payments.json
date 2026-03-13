@@ -1,0 +1,305 @@
+{
+  "uid": "b2b-payments",
+  "title": "B2B Suite — Payments",
+  "description": "Payments ledger metrics: intents, success/failure, revenue, gateways, circuit breakers",
+  "tags": ["b2b-suite", "payments"],
+  "timezone": "browser",
+  "editable": true,
+  "graphTooltip": 1,
+  "refresh": "30s",
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "templating": {
+    "list": [
+      {
+        "name": "tenant_id",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+        "query": "label_values(b2b_payments_total, tenant_id)",
+        "includeAll": true,
+        "allValue": ".*",
+        "current": { "text": "All", "value": "$__all" },
+        "refresh": 2
+      },
+      {
+        "name": "provider",
+        "type": "query",
+        "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+        "query": "label_values(b2b_gateway_request_duration_seconds_count, provider)",
+        "includeAll": true,
+        "allValue": ".*",
+        "current": { "text": "All", "value": "$__all" },
+        "refresh": 2
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Payment Intent Creation Rate",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 15, "gradientMode": "scheme" },
+          "unit": "opm",
+          "color": { "mode": "palette-classic" }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(b2b_payment_intents_created_total{tenant_id=~\"$tenant_id\"}[5m])) * 60",
+          "legendFormat": "Intents / min",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Payment Success / Failure Rate",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 20 },
+          "unit": "percentunit"
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "Success" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "green", "mode": "fixed" } }]
+          },
+          {
+            "matcher": { "id": "byName", "options": "Failure" },
+            "properties": [{ "id": "color", "value": { "fixedColor": "red", "mode": "fixed" } }]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(b2b_payments_total{status=\"succeeded\", tenant_id=~\"$tenant_id\"}[5m])) / sum(rate(b2b_payments_total{tenant_id=~\"$tenant_id\"}[5m]))",
+          "legendFormat": "Success",
+          "refId": "A"
+        },
+        {
+          "expr": "sum(rate(b2b_payments_total{status=\"failed\", tenant_id=~\"$tenant_id\"}[5m])) / sum(rate(b2b_payments_total{tenant_id=~\"$tenant_id\"}[5m]))",
+          "legendFormat": "Failure",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Revenue per Hour",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 12, "x": 0, "y": 7 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "bars", "fillOpacity": 50, "gradientMode": "scheme" },
+          "unit": "currencyBRL",
+          "color": { "mode": "continuous-greens" }
+        },
+        "overrides": []
+      },
+      "options": {
+        "tooltip": { "mode": "single" }
+      },
+      "targets": [
+        {
+          "expr": "sum(increase(b2b_payments_revenue_total{tenant_id=~\"$tenant_id\"}[1h]))",
+          "legendFormat": "Revenue / hour",
+          "refId": "A"
+        }
+      ],
+      "interval": "1h"
+    },
+    {
+      "id": 4,
+      "title": "Revenue per Day",
+      "type": "stat",
+      "gridPos": { "h": 7, "w": 12, "x": 12, "y": 7 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "currencyBRL",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "blue", "value": null }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "colorMode": "value",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "expr": "sum(increase(b2b_payments_revenue_total{tenant_id=~\"$tenant_id\"}[24h]))",
+          "legendFormat": "Revenue (24h)",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Gateway Response Time per Provider",
+      "type": "timeseries",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 14 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 10 },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, sum by (provider, le) (rate(b2b_gateway_request_duration_seconds_bucket{provider=~\"$provider\"}[5m])))",
+          "legendFormat": "{{ provider }} P95",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.50, sum by (provider, le) (rate(b2b_gateway_request_duration_seconds_bucket{provider=~\"$provider\"}[5m])))",
+          "legendFormat": "{{ provider }} P50",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Circuit Breaker Status",
+      "type": "state-timeline",
+      "gridPos": { "h": 5, "w": 12, "x": 12, "y": 14 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": { "text": "CLOSED", "color": "green" },
+                "1": { "text": "HALF_OPEN", "color": "yellow" },
+                "2": { "text": "OPEN", "color": "red" }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "mergeValues": true,
+        "showValue": "auto",
+        "alignValue": "center"
+      },
+      "targets": [
+        {
+          "expr": "b2b_circuit_breaker_state_ordinal",
+          "legendFormat": "{{ name }}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Split Payment Volume",
+      "type": "timeseries",
+      "gridPos": { "h": 7, "w": 8, "x": 0, "y": 22 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "custom": { "drawStyle": "line", "lineInterpolation": "smooth", "fillOpacity": 10 },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(b2b_split_payments_total{tenant_id=~\"$tenant_id\"}[5m])) * 60",
+          "legendFormat": "Splits / min",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Dispute Rate (24h Rolling)",
+      "type": "gauge",
+      "gridPos": { "h": 7, "w": 8, "x": 8, "y": 22 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "min": 0,
+          "max": 0.1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 0.01 },
+              { "color": "red", "value": 0.02 }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": { "calcs": ["lastNotNull"] },
+        "showThresholdLabels": true
+      },
+      "targets": [
+        {
+          "expr": "sum(increase(b2b_disputes_total{tenant_id=~\"$tenant_id\"}[24h])) / sum(increase(b2b_payments_total{status=\"succeeded\", tenant_id=~\"$tenant_id\"}[24h]))",
+          "legendFormat": "Dispute rate",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Payout Processing Status",
+      "type": "state-timeline",
+      "gridPos": { "h": 7, "w": 8, "x": 16, "y": 22 },
+      "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": { "text": "IDLE", "color": "transparent" },
+                "1": { "text": "PROCESSING", "color": "blue" },
+                "2": { "text": "COMPLETED", "color": "green" },
+                "3": { "text": "FAILED", "color": "red" }
+              }
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "options": {
+        "mergeValues": true,
+        "showValue": "auto"
+      },
+      "targets": [
+        {
+          "expr": "b2b_payout_status{tenant_id=~\"$tenant_id\"}",
+          "legendFormat": "{{ payout_id }}",
+          "refId": "A"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 39,
+  "version": 1
+}

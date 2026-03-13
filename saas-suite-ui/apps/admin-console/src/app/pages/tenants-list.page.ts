@@ -80,7 +80,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
         </ng-container>
         <ng-container matColumnDef="plan">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().tenant.tenantPlan }}</th>
-          <td mat-cell *matCellDef="let t">{{ t.plan }}</td>
+          <td mat-cell *matCellDef="let t">{{ translatePlan(t.plan) }}</td>
         </ng-container>
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.status }}</th>
@@ -130,12 +130,16 @@ export class TenantsListPage implements OnInit, AfterViewInit {
   constructor() {
     effect(() => {
       this.dataSource.data = this.facade.tenants();
+      queueMicrotask(() => {
+        if (this.sort) this.dataSource.sort = this.sort;
+        if (this.paginator) this.dataSource.paginator = this.paginator;
+      });
     });
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    if (this.sort) this.dataSource.sort = this.sort;
+    if (this.paginator) this.dataSource.paginator = this.paginator;
   }
 
   async ngOnInit(): Promise<void> { await this.search(); }
@@ -153,6 +157,8 @@ export class TenantsListPage implements OnInit, AfterViewInit {
   }
 
   fmtDate(d: string): string { return formatDateTime(d); }
+
+  translatePlan(plan: string): string { return this.i18n.messages().statuses[plan] ?? plan; }
 
   openCreate(): void { this.router.navigate(['/tenants', 'new']); }
 }

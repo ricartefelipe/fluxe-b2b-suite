@@ -124,7 +124,7 @@ export class DashboardStore {
       ]);
       this._orders.set(ordersRes.data);
       this._payments.set(paymentsRes.data);
-      this._inventoryItems.set(inventory);
+      this._inventoryItems.set(Array.isArray(inventory) ? inventory : (inventory as any)?.data ?? []);
       this._adjustments.set(adjustmentsRes.data);
     } catch (e) {
       this.logger.error('DashboardStore.loadAll failed', e);

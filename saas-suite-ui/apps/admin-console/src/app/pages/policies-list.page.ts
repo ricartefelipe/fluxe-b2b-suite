@@ -28,37 +28,37 @@ import { firstValueFrom } from 'rxjs';
   ],
   template: `
     <div class="page-header">
-      <h1>Policies (ABAC/RBAC)</h1>
+      <h1>{{ i18n.messages().admin.policiesTitle }}</h1>
       <button mat-raised-button color="primary" (click)="showForm = !showForm">
-        <mat-icon>{{ showForm ? 'close' : 'add' }}</mat-icon> {{ showForm ? 'Cancelar' : 'Nova Policy' }}
+        <mat-icon>{{ showForm ? 'close' : 'add' }}</mat-icon> {{ showForm ? i18n.messages().common.cancel : i18n.messages().admin.newPolicy }}
       </button>
     </div>
 
     @if (showForm) {
       <form [formGroup]="policyForm" class="create-form" (ngSubmit)="create()">
         <mat-form-field appearance="outline">
-          <mat-label>Permission Code</mat-label>
+          <mat-label>{{ i18n.messages().admin.permissionCode }}</mat-label>
           <input matInput formControlName="permissionCode" [placeholder]="i18n.messages().adminPlaceholders.permissionCode">
           @if (policyForm.controls['permissionCode'].hasError('required') && policyForm.controls['permissionCode'].touched) {
-            <mat-error>Permission code é obrigatório</mat-error>
+            <mat-error>{{ i18n.messages().admin.permissionCodeRequired }}</mat-error>
           }
           @if (policyForm.controls['permissionCode'].hasError('pattern')) {
-            <mat-error>Formato inválido (ex: resource:action)</mat-error>
+            <mat-error>{{ i18n.messages().admin.invalidPermissionFormat }}</mat-error>
           }
         </mat-form-field>
         <mat-form-field appearance="outline">
-          <mat-label>Efeito</mat-label>
+          <mat-label>{{ i18n.messages().admin.effect }}</mat-label>
           <mat-select formControlName="effect">
-            <mat-option value="ALLOW">ALLOW</mat-option>
-            <mat-option value="DENY">DENY</mat-option>
+            <mat-option value="ALLOW">{{ i18n.messages().statuses['ALLOW'] }}</mat-option>
+            <mat-option value="DENY">{{ i18n.messages().statuses['DENY'] }}</mat-option>
           </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline">
-          <mat-label>Descrição</mat-label>
+          <mat-label>{{ i18n.messages().common.description }}</mat-label>
           <input matInput formControlName="description">
         </mat-form-field>
-        <mat-slide-toggle formControlName="enabled">Habilitada</mat-slide-toggle>
-        <button mat-raised-button color="primary" type="submit" [disabled]="policyForm.invalid">Criar</button>
+        <mat-slide-toggle formControlName="enabled">{{ i18n.messages().admin.enabled }}</mat-slide-toggle>
+        <button mat-raised-button color="primary" type="submit" [disabled]="policyForm.invalid">{{ i18n.messages().common.create }}</button>
       </form>
     }
 
@@ -67,28 +67,28 @@ import { firstValueFrom } from 'rxjs';
     } @else if (dataSource.data.length === 0) {
       <saas-empty-state
         icon="policy"
-        title="Nenhuma política encontrada"
-        actionLabel="Criar Política"
+        [title]="i18n.messages().admin.noPoliciesFound"
+        [actionLabel]="i18n.messages().admin.createPolicy"
         actionIcon="add"
         (action)="showForm = true" />
     } @else {
       <table mat-table [dataSource]="dataSource" matSort class="full-width">
         <ng-container matColumnDef="permissionCode">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Permission Code</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.permissionCode }}</th>
           <td mat-cell *matCellDef="let p"><code>{{ p.permissionCode }}</code></td>
         </ng-container>
         <ng-container matColumnDef="effect">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Efeito</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.effect }}</th>
           <td mat-cell *matCellDef="let p">
-            <span [class]="p.effect === 'ALLOW' ? 'chip-allow' : 'chip-deny'">{{ p.effect }}</span>
+            <span [class]="p.effect === 'ALLOW' ? 'chip-allow' : 'chip-deny'">{{ translateEffect(p.effect) }}</span>
           </td>
         </ng-container>
         <ng-container matColumnDef="enabled">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Ativa</th>
-          <td mat-cell *matCellDef="let p">{{ p.enabled ? 'Sim' : 'Não' }}</td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.active }}</th>
+          <td mat-cell *matCellDef="let p">{{ p.enabled ? i18n.messages().common.yes : i18n.messages().common.no }}</td>
         </ng-container>
         <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.description }}</th>
           <td mat-cell *matCellDef="let p">{{ p.description || '—' }}</td>
         </ng-container>
         <ng-container matColumnDef="actions">
@@ -161,13 +161,15 @@ export class PoliciesListPage implements OnInit, AfterViewInit {
     if (p) {
       this.showForm = false;
       this.policyForm.reset({ permissionCode: '', effect: 'ALLOW', description: '', enabled: true });
-      this.snackBar.open('Policy criada', 'OK', { duration: 2000 });
+      this.snackBar.open(this.i18n.messages().admin.policyCreated, 'OK', { duration: 2000 });
     }
   }
 
   async remove(p: Policy): Promise<void> {
-    const ref = this.dialog.open(ConfirmDialogComponent, { data: { title: 'Remover policy?', message: `Deseja remover "${p.permissionCode}"?`, danger: true } });
+    const ref = this.dialog.open(ConfirmDialogComponent, { data: { title: this.i18n.messages().admin.removePolicyTitle, message: this.i18n.messages().admin.removePolicyMessage.replace('{code}', p.permissionCode), danger: true } });
     const confirmed = await firstValueFrom(ref.afterClosed());
     if (confirmed) await this.facade.deletePolicy(p.id);
   }
+
+  translateEffect(effect: string): string { return this.i18n.messages().statuses[effect] ?? effect; }
 }

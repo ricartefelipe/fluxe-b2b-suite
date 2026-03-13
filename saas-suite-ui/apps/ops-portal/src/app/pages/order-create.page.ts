@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DecimalPipe } from '@angular/common';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { OrdersFacade } from '@saas-suite/data-access/orders';
 
 @Component({
@@ -19,71 +20,73 @@ import { OrdersFacade } from '@saas-suite/data-access/orders';
   ],
   template: `
     <div class="page-header">
-      <h1>Novo Pedido</h1>
-      <button mat-stroked-button (click)="router.navigate(['/orders'])"><mat-icon>arrow_back</mat-icon> Voltar</button>
+      <h1>{{ i18n.messages().orders.createOrder }}</h1>
+      <button mat-stroked-button (click)="router.navigate(['/orders'])"><mat-icon>arrow_back</mat-icon> {{ i18n.messages().common.back }}</button>
     </div>
 
     <mat-card>
       <mat-card-content>
         <form [formGroup]="orderForm">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Cliente ID</mat-label>
-            <input matInput formControlName="customerId" placeholder="ID do cliente">
+            <mat-label>{{ i18n.messages().orders.customerId }}</mat-label>
+            <input matInput formControlName="customerId">
             @if (orderForm.controls['customerId'].hasError('required') && orderForm.controls['customerId'].touched) {
-              <mat-error>Cliente ID é obrigatório</mat-error>
+              <mat-error>{{ i18n.messages().orders.customerIdRequired }}</mat-error>
             }
           </mat-form-field>
 
           <mat-form-field appearance="outline" style="width: 140px">
-            <mat-label>Moeda</mat-label>
+            <mat-label>{{ i18n.messages().orders.currency }}</mat-label>
             <input matInput formControlName="currency" placeholder="BRL">
             @if (orderForm.controls['currency'].hasError('required') && orderForm.controls['currency'].touched) {
-              <mat-error>Moeda é obrigatória</mat-error>
+              <mat-error>{{ i18n.messages().orders.currencyRequired }}</mat-error>
             }
           </mat-form-field>
 
-          <h3>Itens</h3>
+          <h3>{{ i18n.messages().orders.items }}</h3>
+          <div formArrayName="items">
           @for (item of items.controls; track $index) {
             <div class="item-row" [formGroupName]="$index">
               <mat-form-field appearance="outline">
-                <mat-label>SKU</mat-label>
+                <mat-label>{{ i18n.messages().inventory.sku }}</mat-label>
                 <input matInput formControlName="sku">
                 @if (item.get('sku')!.hasError('required') && item.get('sku')!.touched) {
-                  <mat-error>SKU é obrigatório</mat-error>
+                  <mat-error>{{ i18n.messages().orders.skuRequired }}</mat-error>
                 }
               </mat-form-field>
               <mat-form-field appearance="outline" style="width: 100px">
-                <mat-label>Qtd</mat-label>
+                <mat-label>{{ i18n.messages().inventory.quantity }}</mat-label>
                 <input matInput type="number" formControlName="quantity">
                 @if (item.get('quantity')!.hasError('required') && item.get('quantity')!.touched) {
-                  <mat-error>Obrigatório</mat-error>
+                  <mat-error>{{ i18n.messages().orders.quantityRequired }}</mat-error>
                 }
                 @if (item.get('quantity')!.hasError('min')) {
-                  <mat-error>Quantidade mínima é 1</mat-error>
+                  <mat-error>{{ i18n.messages().orders.quantityMin }}</mat-error>
                 }
               </mat-form-field>
               <mat-form-field appearance="outline" style="width: 120px">
-                <mat-label>Preço Unit.</mat-label>
+                <mat-label>{{ i18n.messages().orders.unitPrice }}</mat-label>
                 <input matInput type="number" formControlName="unitPrice">
                 @if (item.get('unitPrice')!.hasError('min')) {
-                  <mat-error>Mínimo 0</mat-error>
+                  <mat-error>{{ i18n.messages().orders.priceMin }}</mat-error>
                 }
               </mat-form-field>
               <mat-form-field appearance="outline">
-                <mat-label>Descrição</mat-label>
+                <mat-label>{{ i18n.messages().common.description }}</mat-label>
                 <input matInput formControlName="description">
               </mat-form-field>
               <button mat-icon-button color="warn" type="button" (click)="removeItem($index)"><mat-icon>delete</mat-icon></button>
             </div>
           }
-          <button mat-stroked-button type="button" (click)="addItem()"><mat-icon>add</mat-icon> Adicionar Item</button>
+          </div>
+          <button mat-stroked-button type="button" (click)="addItem()"><mat-icon>add</mat-icon> {{ i18n.messages().orders.addItem }}</button>
 
           <div class="total">
-            <strong>Total: {{ orderForm.get('currency')?.value }} {{ calcTotal() | number:'1.2-2' }}</strong>
+            <strong>{{ i18n.messages().common.total }}: {{ orderForm.get('currency')?.value }} {{ calcTotal() | number:'1.2-2' }}</strong>
           </div>
 
           <button mat-raised-button color="primary" type="button" (click)="submit()" [disabled]="orderForm.invalid || submitting()" class="submit-btn">
-            Criar Pedido
+            {{ i18n.messages().orders.createOrder }}
           </button>
         </form>
       </mat-card-content>
@@ -100,6 +103,7 @@ import { OrdersFacade } from '@saas-suite/data-access/orders';
 })
 export class OrderCreatePage {
   protected router = inject(Router);
+  protected i18n = inject(I18nService);
   private facade = inject(OrdersFacade);
   private snackBar = inject(MatSnackBar);
   private fb = inject(FormBuilder);
@@ -154,7 +158,7 @@ export class OrderCreatePage {
     });
     this.submitting.set(false);
     if (order) {
-      this.snackBar.open('Pedido criado com sucesso', 'OK', { duration: 3000 });
+      this.snackBar.open(this.i18n.messages().orders.orderCreatedSuccess, 'OK', { duration: 3000 });
       this.router.navigate(['/orders', order.id]);
     }
   }

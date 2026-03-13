@@ -10,6 +10,9 @@ RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 WORKDIR /app
 
 COPY --from=build /app/dist/apps/shop ./dist/apps/shop
+COPY apps/shop/config.template.json ./config.template.json
+COPY apps/shop/entrypoint.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
 
 RUN chown -R appuser:appgroup /app
 USER appuser
@@ -20,4 +23,4 @@ ENV PORT=4000 NODE_ENV=production
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD wget -qO- http://localhost:4000/ || exit 1
 
-CMD ["node", "dist/apps/shop/server/server.mjs"]
+CMD ["./entrypoint.sh"]

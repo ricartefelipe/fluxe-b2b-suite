@@ -2,7 +2,7 @@ export interface AppConfig {
   coreApiBaseUrl: string;
   ordersApiBaseUrl: string;
   paymentsApiBaseUrl: string;
-  authMode: 'oidc' | 'dev';
+  authMode: 'oidc' | 'dev' | 'hs256';
   oidc?: {
     issuer: string;
     clientId: string;

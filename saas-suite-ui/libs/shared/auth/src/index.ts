@@ -7,3 +7,4 @@ export * from './lib/guards/permission.guard';
 export * from './lib/dev-auth/dev-login.component';
 export * from './lib/login-page.component';
 export * from './lib/oidc-auth.service';
+export * from './lib/signup/signup-page.component';

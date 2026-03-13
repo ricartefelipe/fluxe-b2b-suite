@@ -5,6 +5,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { EmptyStateComponent } from '@saas-suite/shared/ui';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { LedgerFacade } from '@saas-suite/data-access/payments';
 import { formatDateTime } from '@saas-suite/shared/util';
 
@@ -14,33 +15,33 @@ import { formatDateTime } from '@saas-suite/shared/util';
   imports: [DecimalPipe, MatCardModule, MatProgressBarModule, MatButtonModule, MatIconModule, EmptyStateComponent],
   template: `
     <div class="page-header">
-      <h1>Ledger — Balanços</h1>
-      <button mat-stroked-button (click)="refresh()"><mat-icon>refresh</mat-icon> Atualizar</button>
+      <h1>{{ i18n.messages().ledger.balancesTitle }}</h1>
+      <button mat-stroked-button (click)="refresh()"><mat-icon>refresh</mat-icon> {{ i18n.messages().ledger.refresh }}</button>
     </div>
 
     @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
 
     @if (facade.balances().length === 0 && !facade.loading()) {
-      <saas-empty-state icon="balance" title="Nenhum balanço disponível" />
+      <saas-empty-state icon="balance" [title]="i18n.messages().ledger.noBalancesFound" />
     } @else {
       <div class="balances-grid">
         @for (b of facade.balances(); track b.currency) {
           <mat-card>
             <mat-card-header>
               <mat-card-title>{{ b.currency }}</mat-card-title>
-              <mat-card-subtitle>Atualizado: {{ fmtDate(b.asOf) }}</mat-card-subtitle>
+              <mat-card-subtitle>{{ i18n.messages().ledger.updated }}: {{ fmtDate(b.asOf) }}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
               <div class="balance-row">
-                <span class="label">Créditos:</span>
+                <span class="label">{{ i18n.messages().ledger.credits }}:</span>
                 <span class="credit">+{{ b.totalCredits | number:'1.2-2' }}</span>
               </div>
               <div class="balance-row">
-                <span class="label">Débitos:</span>
+                <span class="label">{{ i18n.messages().ledger.debits }}:</span>
                 <span class="debit">-{{ b.totalDebits | number:'1.2-2' }}</span>
               </div>
               <div class="balance-row total">
-                <span class="label">Saldo:</span>
+                <span class="label">{{ i18n.messages().ledger.balance }}:</span>
                 <span [class]="b.balance >= 0 ? 'credit' : 'debit'">{{ b.balance | number:'1.2-2' }}</span>
               </div>
             </mat-card-content>
@@ -61,6 +62,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
 })
 export class LedgerBalancesPage implements OnInit {
   protected facade = inject(LedgerFacade);
+  protected i18n = inject(I18nService);
   columns = ['currency', 'totalCredits', 'totalDebits', 'balance', 'asOf'];
 
   async ngOnInit(): Promise<void> { await this.facade.loadBalances(); }

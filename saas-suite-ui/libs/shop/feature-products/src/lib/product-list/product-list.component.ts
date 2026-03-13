@@ -78,10 +78,23 @@ interface SortOption {
             <input
               type="text"
               class="search-input"
+              [class.has-value]="searchTerm"
               [placeholder]="msg.shop.searchProducts"
               [(ngModel)]="searchTerm"
               (ngModelChange)="searchSubject.next($event)"
             />
+            @if (searchTerm) {
+              <button
+                class="search-clear-btn"
+                (click)="clearSearch()"
+                [attr.aria-label]="msg.common.close"
+                type="button"
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            }
           </div>
         </div>
 
@@ -407,6 +420,10 @@ interface SortOption {
       transition: border-color var(--transition-speed) ease;
     }
 
+    .search-input.has-value {
+      padding-right: 36px;
+    }
+
     .search-input:focus {
       outline: none;
       border-color: var(--shop-primary);
@@ -414,6 +431,32 @@ interface SortOption {
 
     .search-input::placeholder {
       color: var(--shop-text-secondary);
+    }
+
+    .search-clear-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: var(--shop-border);
+      color: var(--shop-text-secondary);
+      cursor: pointer;
+      transition:
+        background var(--transition-speed) ease,
+        color var(--transition-speed) ease;
+    }
+
+    .search-clear-btn:hover {
+      background: var(--shop-error);
+      color: #fff;
     }
 
     /* Filter groups */
@@ -932,7 +975,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   onProductSelect(product: Product): void {
-    this.router.navigate(['/products', product.id]);
+    this.router.navigate(['/product', product.id]);
   }
 
   onAddToCart(product: Product): void {

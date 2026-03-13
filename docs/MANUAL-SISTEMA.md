@@ -594,6 +594,7 @@ Console de administração e governança. Páginas:
 | `/tenants` | tenants:read | Lista de tenants |
 | `/tenants/:id` | tenants:read | Detalhe do tenant (policies, flags) |
 | `/onboarding` | tenants:write | Wizard de onboarding de novo tenant |
+| `/users` | admin:write | Gerenciamento de usuários (convidar, editar perfis/status, remover) |
 | `/policies` | policies:read | Lista de políticas ABAC |
 | `/flags` | flags:read | Lista de feature flags |
 | `/audit` | audit:read | Log de auditoria com filtros |
@@ -774,7 +775,28 @@ A autorização funciona em camadas:
 2. Evento `tenant.created` publicado
 3. py-payments-ledger consome e cria tenant local + contas contábeis padrão
 4. Admin configura políticas ABAC e feature flags
-5. Cria usuários e atribui roles
+5. Cria usuários e atribui roles via Admin Console (`/users`) ou API (`POST /v1/users/invite`)
+
+### 8.2 Gerenciamento de Usuários
+
+O Admin Console oferece uma tela dedicada em `/users` (permissão `admin:write`) para gerenciar os usuários do tenant:
+
+| Ação | Endpoint | Descrição |
+|------|----------|-----------|
+| Listar | `GET /v1/users` | Lista todos os usuários do tenant autenticado |
+| Convidar | `POST /v1/users/invite` | Cria novo usuário com nome, email e perfis (admin, ops, viewer, member) |
+| Editar | `PATCH /v1/users/{id}` | Altera nome, perfis e/ou status (PENDING, ACTIVE, SUSPENDED, DELETED) |
+| Remover | `DELETE /v1/users/{id}` | Soft-delete do usuário |
+| Detalhe | `GET /v1/users/{id}` | Dados completos de um usuário |
+
+**Perfis disponíveis:**
+
+| Perfil | Permissões |
+|--------|------------|
+| `admin` | Acesso total: tenants, policies, flags, audit, analytics, orders, inventory, payments, products |
+| `ops` | Operacional: orders, inventory, products, payments, ledger |
+| `viewer` | Somente leitura: orders, inventory, payments, ledger, products |
+| `member` | Básico: products (leitura), orders (leitura), profile |
 
 ---
 

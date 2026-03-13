@@ -466,6 +466,7 @@ export interface Messages {
     newTenant: string;
     policies: string;
     featureFlags: string;
+    users: string;
     auditLog: string;
     aiAssistant: string;
   };

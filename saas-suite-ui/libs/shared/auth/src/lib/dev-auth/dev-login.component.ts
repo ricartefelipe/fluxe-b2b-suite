@@ -91,20 +91,36 @@ const DEV_PROFILES: DevProfile[] = [
           <div class="brand-logo">
             <mat-icon>hub</mat-icon>
           </div>
-          <h1>Fluxe B2B Suite</h1>
+          <h1 class="brand-title">Fluxe B2B Suite</h1>
           <p class="brand-tagline">Plataforma inteligente para operações B2B</p>
+          <div class="brand-divider"></div>
           <div class="brand-features">
             <div class="feature-item">
-              <mat-icon>verified_user</mat-icon>
-              <span>Multi-tenant seguro</span>
+              <div class="feature-icon-wrap">
+                <mat-icon>verified_user</mat-icon>
+              </div>
+              <div class="feature-text">
+                <span class="feature-title">Multi-tenant seguro</span>
+                <span class="feature-desc">Isolamento completo de dados por tenant</span>
+              </div>
             </div>
             <div class="feature-item">
-              <mat-icon>insights</mat-icon>
-              <span>Governança centralizada</span>
+              <div class="feature-icon-wrap">
+                <mat-icon>insights</mat-icon>
+              </div>
+              <div class="feature-text">
+                <span class="feature-title">Governança ABAC</span>
+                <span class="feature-desc">Controle granular de permissões</span>
+              </div>
             </div>
             <div class="feature-item">
-              <mat-icon>speed</mat-icon>
-              <span>Operações em tempo real</span>
+              <div class="feature-icon-wrap">
+                <mat-icon>speed</mat-icon>
+              </div>
+              <div class="feature-text">
+                <span class="feature-title">Tempo real</span>
+                <span class="feature-desc">Auditoria e eventos instantâneos</span>
+              </div>
             </div>
           </div>
         </div>
@@ -112,8 +128,8 @@ const DEV_PROFILES: DevProfile[] = [
       <div class="login-right">
         <div class="login-card">
           <div class="login-card-header">
-            <h2>Bem-vindo</h2>
-            <p class="subtitle">{{ isDevMode ? 'Entre com suas credenciais ou selecione um perfil rápido' : 'Entre com suas credenciais para continuar' }}</p>
+            <h2>Bem-vindo de volta</h2>
+            <p class="subtitle">{{ isDevMode ? 'Entre com suas credenciais ou selecione um perfil rápido' : 'Acesse sua conta para continuar' }}</p>
           </div>
 
           @if (isDevMode) {
@@ -231,7 +247,7 @@ const DEV_PROFILES: DevProfile[] = [
               @if (loading()) {
                 <mat-spinner diameter="20" />
               } @else {
-                <mat-icon>login</mat-icon> Entrar
+                <mat-icon>login</mat-icon> Acessar
               }
             </button>
           </ng-template>
@@ -250,15 +266,16 @@ const DEV_PROFILES: DevProfile[] = [
       display: flex;
       height: 100%;
       min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     .login-left {
-      flex: 0 0 460px;
-      background: linear-gradient(160deg, #061224 0%, #0d2847 35%, #143a6b 70%, #1a4a8a 100%);
+      flex: 0 0 480px;
+      background: linear-gradient(170deg, #050e1f 0%, #0b2040 40%, #133666 80%, #1a4a8a 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 56px;
+      padding: 60px 48px;
       position: relative;
       overflow: hidden;
     }
@@ -267,77 +284,108 @@ const DEV_PROFILES: DevProfile[] = [
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 60% 40% at 20% 80%, rgba(21, 101, 192, 0.2) 0%, transparent 50%),
-        radial-gradient(ellipse 50% 30% at 80% 20%, rgba(66, 165, 245, 0.12) 0%, transparent 50%);
+        radial-gradient(circle 400px at 10% 90%, rgba(25, 118, 210, 0.18) 0%, transparent 60%),
+        radial-gradient(circle 300px at 90% 10%, rgba(66, 165, 245, 0.1) 0%, transparent 50%);
       pointer-events: none;
     }
     .login-left::after {
       content: '';
       position: absolute;
-      top: -30%;
-      right: -20%;
-      width: 500px;
-      height: 500px;
+      top: -20%;
+      right: -30%;
+      width: 600px;
+      height: 600px;
       border-radius: 50%;
-      border: 1px solid rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.03);
       pointer-events: none;
     }
 
     .brand {
-      text-align: center;
       color: #fff;
       position: relative;
       z-index: 1;
+      width: 100%;
+      max-width: 340px;
     }
     .brand-logo {
-      width: 80px;
-      height: 80px;
-      border-radius: 22px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
+      width: 72px;
+      height: 72px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(66, 165, 245, 0.25) 0%, rgba(21, 101, 192, 0.35) 100%);
       backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.12);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 28px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+      margin: 0 0 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
     }
-    .brand-logo mat-icon { font-size: 40px; width: 40px; height: 40px; color: #fff; }
-    .brand h1 {
-      font-size: 28px;
+    .brand-logo mat-icon { font-size: 36px; width: 36px; height: 36px; color: #fff; }
+
+    .brand-title {
+      font-size: 30px;
       font-weight: 800;
-      margin: 0 0 8px;
+      margin: 0 0 10px;
       letter-spacing: -0.03em;
-      background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      color: #ffffff;
     }
     .brand-tagline {
-      font-size: 14px;
-      color: rgba(255,255,255,0.55);
-      margin: 0 0 40px;
+      font-size: 15px;
+      color: rgba(255,255,255,0.6);
+      margin: 0;
       font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .brand-divider {
+      width: 40px;
+      height: 3px;
+      background: linear-gradient(90deg, #42a5f5, rgba(66,165,245,0.2));
+      border-radius: 2px;
+      margin: 32px 0;
     }
 
     .brand-features {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      text-align: left;
+      gap: 20px;
     }
     .feature-item {
       display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.7);
-      font-weight: 500;
+      align-items: flex-start;
+      gap: 14px;
     }
-    .feature-item mat-icon {
+    .feature-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .feature-icon-wrap mat-icon {
       font-size: 18px;
       width: 18px;
       height: 18px;
-      color: #42a5f5;
+      color: #64b5f6;
+    }
+    .feature-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .feature-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+    }
+    .feature-desc {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      line-height: 1.4;
     }
 
     .login-right {
@@ -345,8 +393,9 @@ const DEV_PROFILES: DevProfile[] = [
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(160deg, #f1f5f9 0%, #e2e8f0 100%);
+      background: #f5f7fa;
       padding: 48px;
+      position: relative;
     }
 
     .login-card {
@@ -354,32 +403,34 @@ const DEV_PROFILES: DevProfile[] = [
       max-width: 420px;
       background: #fff;
       border-radius: 20px;
-      padding: 40px 36px 28px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
-      animation: fadeSlideIn 0.5s ease-out;
+      padding: 44px 40px 32px;
+      box-shadow:
+        0 1px 3px rgba(0,0,0,0.04),
+        0 8px 32px rgba(0,0,0,0.06);
+      animation: fadeSlideIn 0.45s ease-out;
     }
     @keyframes fadeSlideIn {
-      from { opacity: 0; transform: translateY(12px); }
+      from { opacity: 0; transform: translateY(16px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .login-card-header { margin-bottom: 28px; }
+    .login-card-header { margin-bottom: 32px; }
     .login-card-header h2 {
-      font-size: 26px;
+      font-size: 28px;
       font-weight: 800;
       color: #0f172a;
-      margin: 0 0 6px;
+      margin: 0 0 8px;
       letter-spacing: -0.03em;
     }
-    .subtitle { color: #64748b; font-size: 14px; margin: 0; line-height: 1.5; }
+    .subtitle { color: #64748b; font-size: 14px; margin: 0; line-height: 1.6; }
 
     .login-tabs { margin-bottom: 0; }
     .tab-content { padding-top: 20px; }
     .full-width { width: 100%; }
 
     .field-icon {
-      color: #334155 !important;
-      opacity: 0.85;
+      color: #1e293b !important;
+      opacity: 0.8;
     }
     .toggle-password mat-icon { color: #475569; }
 
@@ -504,7 +555,7 @@ const DEV_PROFILES: DevProfile[] = [
 
     .login-btn {
       width: 100%;
-      padding: 14px 20px;
+      padding: 15px 20px;
       border: none;
       border-radius: 12px;
       background: linear-gradient(180deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
@@ -512,40 +563,50 @@ const DEV_PROFILES: DevProfile[] = [
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+      transition: transform 0.15s, box-shadow 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       font-family: inherit;
-      box-shadow: 0 4px 14px rgba(21, 101, 192, 0.3);
+      box-shadow: 0 4px 16px rgba(21, 101, 192, 0.3);
       letter-spacing: 0.02em;
     }
     .login-btn mat-icon { font-size: 20px; width: 20px; height: 20px; }
     .login-btn:hover:not(:disabled) {
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(21, 101, 192, 0.4);
+      box-shadow: 0 6px 24px rgba(21, 101, 192, 0.4);
     }
     .login-btn:active:not(:disabled) { transform: translateY(0); }
-    .login-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+    .login-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
     .credentials-only { padding-top: 4px; }
 
     .login-footer {
       text-align: center;
-      margin-top: 28px;
+      margin-top: 32px;
       padding-top: 20px;
       border-top: 1px solid #f1f5f9;
       font-size: 12px;
       color: #94a3b8;
+      letter-spacing: 0.01em;
     }
 
+    @media (max-width: 900px) {
+      .login-left { flex: 0 0 380px; padding: 40px 32px; }
+      .brand-title { font-size: 24px; }
+      .feature-desc { display: none; }
+    }
     @media (max-width: 768px) {
       .login-page { flex-direction: column; }
-      .login-left { flex: 0 0 auto; padding: 36px 24px; }
-      .login-left .brand-features { display: none; }
+      .login-left { flex: 0 0 auto; padding: 32px 24px; }
+      .login-left .brand-features, .login-left .brand-divider { display: none; }
+      .brand { text-align: center; }
+      .brand-logo { margin: 0 auto 20px; }
+      .brand-tagline { margin-bottom: 0; }
       .login-right { padding: 24px 16px; }
-      .login-card { padding: 28px 20px 20px; border-radius: 16px; }
+      .login-card { padding: 28px 24px 20px; border-radius: 16px; }
+      .login-card-header h2 { font-size: 22px; }
     }
   `],
 })

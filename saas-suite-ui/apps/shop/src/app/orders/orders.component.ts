@@ -156,7 +156,7 @@ const STATUS_CLASSES: Record<OrderStatus, string> = {
                   <td>{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
                   <td>
                     <span class="status-chip" [class]="getStatusClass(order.status)">
-                      {{ order.status }}
+                      {{ i18n.messages().statuses[order.status] ?? order.status }}
                     </span>
                   </td>
                   <td>{{ order.items.length }}</td>
@@ -180,7 +180,7 @@ const STATUS_CLASSES: Record<OrderStatus, string> = {
                 <div class="card-header-row">
                   <code class="order-id">{{ order.id | slice:0:8 }}...</code>
                   <span class="status-chip" [class]="getStatusClass(order.status)">
-                    {{ order.status }}
+                    {{ i18n.messages().statuses[order.status] ?? order.status }}
                   </span>
                 </div>
                 <div class="card-detail-row">

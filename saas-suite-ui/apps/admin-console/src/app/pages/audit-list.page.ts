@@ -37,9 +37,9 @@ import { I18nService } from '@saas-suite/shared/i18n';
         <mat-label>{{ i18n.messages().admin.outcome }}</mat-label>
         <mat-select [(ngModel)]="filters.outcome">
           <mat-option [value]="undefined">{{ i18n.messages().common.all }}</mat-option>
-          <mat-option value="SUCCESS">SUCCESS</mat-option>
-          <mat-option value="DENIED">DENIED</mat-option>
-          <mat-option value="ERROR">ERROR</mat-option>
+          <mat-option value="SUCCESS">{{ i18n.messages().statuses['SUCCESS'] }}</mat-option>
+          <mat-option value="DENIED">{{ i18n.messages().statuses['DENIED'] }}</mat-option>
+          <mat-option value="ERROR">{{ i18n.messages().statuses['ERROR'] }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline">

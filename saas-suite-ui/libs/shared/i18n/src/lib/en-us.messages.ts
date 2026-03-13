@@ -494,6 +494,7 @@ export const EN_US_MESSAGES: Messages = {
     newTenant: 'New Tenant',
     policies: 'Policies',
     featureFlags: 'Feature Flags',
+    users: 'Users',
     auditLog: 'Audit Log',
     aiAssistant: 'AI Assistant',
   },

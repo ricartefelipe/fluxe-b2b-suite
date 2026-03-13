@@ -89,16 +89,32 @@ const DEV_PROFILES: DevProfile[] = [
       <div class="login-left">
         <div class="brand">
           <div class="brand-logo">
-            <mat-icon>dashboard</mat-icon>
+            <mat-icon>hub</mat-icon>
           </div>
           <h1>Fluxe B2B Suite</h1>
-          <p>Plataforma B2B multi-tenant — Demo</p>
+          <p class="brand-tagline">Plataforma inteligente para operações B2B</p>
+          <div class="brand-features">
+            <div class="feature-item">
+              <mat-icon>verified_user</mat-icon>
+              <span>Multi-tenant seguro</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon>insights</mat-icon>
+              <span>Governança centralizada</span>
+            </div>
+            <div class="feature-item">
+              <mat-icon>speed</mat-icon>
+              <span>Operações em tempo real</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="login-right">
-        <div class="login-form">
-          <h2>Login</h2>
-          <p class="subtitle">Entre com suas credenciais ou selecione um perfil rápido</p>
+        <div class="login-card">
+          <div class="login-card-header">
+            <h2>Bem-vindo</h2>
+            <p class="subtitle">{{ isDevMode ? 'Entre com suas credenciais ou selecione um perfil rápido' : 'Entre com suas credenciais para continuar' }}</p>
+          </div>
 
           @if (isDevMode) {
             <mat-tab-group class="login-tabs" [(selectedIndex)]="activeTab" animationDuration="200ms">
@@ -160,7 +176,7 @@ const DEV_PROFILES: DevProfile[] = [
                     @if (loading()) {
                       <mat-spinner diameter="20" />
                     } @else {
-                      Entrar
+                      <mat-icon>login</mat-icon> Entrar
                     }
                   </button>
                 </div>
@@ -178,7 +194,7 @@ const DEV_PROFILES: DevProfile[] = [
               <mat-label>Email</mat-label>
               <input matInput type="email" [(ngModel)]="email"
                 placeholder="usuario&#64;empresa.com" autocomplete="username">
-              <mat-icon matPrefix>email</mat-icon>
+              <mat-icon matPrefix class="field-icon">email</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
@@ -186,8 +202,9 @@ const DEV_PROFILES: DevProfile[] = [
               <input matInput [type]="showPassword() ? 'text' : 'password'"
                 [(ngModel)]="password" placeholder="••••••••" autocomplete="current-password"
                 (keyup.enter)="loginWithCredentials()">
-              <mat-icon matPrefix>lock</mat-icon>
-              <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())">
+              <mat-icon matPrefix class="field-icon">lock</mat-icon>
+              <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())"
+                class="toggle-password">
                 <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
               </button>
             </mat-form-field>
@@ -214,10 +231,14 @@ const DEV_PROFILES: DevProfile[] = [
               @if (loading()) {
                 <mat-spinner diameter="20" />
               } @else {
-                Entrar
+                <mat-icon>login</mat-icon> Entrar
               }
             </button>
           </ng-template>
+
+          <div class="login-footer">
+            <span>Fluxe B2B Suite &copy; {{ currentYear }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -232,12 +253,12 @@ const DEV_PROFILES: DevProfile[] = [
     }
 
     .login-left {
-      flex: 0 0 440px;
-      background: linear-gradient(160deg, #0a1628 0%, #132f4c 40%, #1a3a5c 100%);
+      flex: 0 0 460px;
+      background: linear-gradient(160deg, #061224 0%, #0d2847 35%, #143a6b 70%, #1a4a8a 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 48px;
+      padding: 56px;
       position: relative;
       overflow: hidden;
     }
@@ -245,7 +266,20 @@ const DEV_PROFILES: DevProfile[] = [
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 80% 50% at 50% 120%, rgba(21, 101, 192, 0.15) 0%, transparent 60%);
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 80%, rgba(21, 101, 192, 0.2) 0%, transparent 50%),
+        radial-gradient(ellipse 50% 30% at 80% 20%, rgba(66, 165, 245, 0.12) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .login-left::after {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -20%;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.04);
       pointer-events: none;
     }
 
@@ -256,42 +290,98 @@ const DEV_PROFILES: DevProfile[] = [
       z-index: 1;
     }
     .brand-logo {
-      width: 72px;
-      height: 72px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.12);
-      backdrop-filter: blur(8px);
+      width: 80px;
+      height: 80px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 24px;
-      box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+      margin: 0 auto 28px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
     }
-    .brand-logo mat-icon { font-size: 36px; width: 36px; height: 36px; color: #fff; }
-    .brand h1 { font-size: 26px; font-weight: 700; margin: 0 0 8px; letter-spacing: -0.02em; }
-    .brand p { font-size: 14px; color: rgba(255,255,255,0.7); margin: 0; font-weight: 400; }
+    .brand-logo mat-icon { font-size: 40px; width: 40px; height: 40px; color: #fff; }
+    .brand h1 {
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0 0 8px;
+      letter-spacing: -0.03em;
+      background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .brand-tagline {
+      font-size: 14px;
+      color: rgba(255,255,255,0.55);
+      margin: 0 0 40px;
+      font-weight: 400;
+    }
+
+    .brand-features {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+    }
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      font-weight: 500;
+    }
+    .feature-item mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+      color: #42a5f5;
+    }
 
     .login-right {
       flex: 1;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(180deg, #f0f4f8 0%, #e8eef4 100%);
+      background: linear-gradient(160deg, #f1f5f9 0%, #e2e8f0 100%);
       padding: 48px;
     }
 
-    .login-form {
+    .login-card {
       width: 100%;
-      max-width: 400px;
-      animation: fadeIn 0.4s ease-out;
+      max-width: 420px;
+      background: #fff;
+      border-radius: 20px;
+      padding: 40px 36px 28px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+      animation: fadeSlideIn 0.5s ease-out;
     }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .login-form h2 { font-size: 24px; font-weight: 700; color: #1a2332; margin: 0 0 6px; letter-spacing: -0.02em; }
-    .subtitle { color: #64748b; font-size: 14px; margin: 0 0 20px; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-card-header { margin-bottom: 28px; }
+    .login-card-header h2 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 6px;
+      letter-spacing: -0.03em;
+    }
+    .subtitle { color: #64748b; font-size: 14px; margin: 0; line-height: 1.5; }
 
     .login-tabs { margin-bottom: 0; }
     .tab-content { padding-top: 20px; }
     .full-width { width: 100%; }
+
+    .field-icon {
+      color: #334155 !important;
+      opacity: 0.85;
+    }
+    .toggle-password mat-icon { color: #475569; }
 
     .credentials-hint {
       display: flex;
@@ -364,12 +454,11 @@ const DEV_PROFILES: DevProfile[] = [
     .check-icon { color: #1565c0; flex-shrink: 0; }
 
     .preview {
-      background: #fff;
+      background: #f8fafc;
       border-radius: 12px;
       padding: 14px 18px;
       margin-bottom: 24px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
     .preview-row {
       display: flex;
@@ -381,7 +470,7 @@ const DEV_PROFILES: DevProfile[] = [
     .preview-label { font-size: 12px; color: #64748b; font-weight: 500; }
     .preview code {
       font-size: 11px;
-      background: #f1f5f9;
+      background: #e2e8f0;
       padding: 4px 10px;
       border-radius: 6px;
       color: #1565c0;
@@ -418,31 +507,45 @@ const DEV_PROFILES: DevProfile[] = [
       padding: 14px 20px;
       border: none;
       border-radius: 12px;
-      background: linear-gradient(180deg, #1565c0 0%, #0d47a1 100%);
+      background: linear-gradient(180deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
       color: #fff;
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.2s;
+      transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       font-family: inherit;
-      box-shadow: 0 2px 8px rgba(21, 101, 192, 0.35);
+      box-shadow: 0 4px 14px rgba(21, 101, 192, 0.3);
+      letter-spacing: 0.02em;
     }
+    .login-btn mat-icon { font-size: 20px; width: 20px; height: 20px; }
     .login-btn:hover:not(:disabled) {
       transform: translateY(-1px);
-      box-shadow: 0 4px 14px rgba(21, 101, 192, 0.4);
+      box-shadow: 0 6px 20px rgba(21, 101, 192, 0.4);
     }
-    .login-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .login-btn:active:not(:disabled) { transform: translateY(0); }
+    .login-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 
     .credentials-only { padding-top: 4px; }
 
+    .login-footer {
+      text-align: center;
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid #f1f5f9;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
     @media (max-width: 768px) {
       .login-page { flex-direction: column; }
-      .login-left { flex: 0 0 auto; padding: 32px; }
-      .login-right { padding: 24px; }
+      .login-left { flex: 0 0 auto; padding: 36px 24px; }
+      .login-left .brand-features { display: none; }
+      .login-right { padding: 24px 16px; }
+      .login-card { padding: 28px 20px 20px; border-radius: 16px; }
     }
   `],
 })
@@ -451,6 +554,7 @@ export class DevLoginComponent {
   private config = inject(RuntimeConfigService);
 
   isDevMode = this.config.get('authMode') === 'dev';
+  currentYear = new Date().getFullYear();
   profiles = DEV_PROFILES;
   selectedProfile = signal<DevProfile | null>(null);
   loading = signal(false);

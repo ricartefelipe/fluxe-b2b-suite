@@ -142,7 +142,7 @@ const BAR_MAX_HEIGHT = 170;
                       stroke-width="28"
                       [attr.stroke-dasharray]="seg.dashArray"
                       [attr.stroke-dashoffset]="seg.dashOffset"
-                      [matTooltip]="seg.status + ': ' + seg.count + ' (' + seg.pct + '%)'"
+                      [matTooltip]="translateStatus(seg.status) + ': ' + seg.count + ' (' + seg.pct + '%)'"
                       class="donut-segment"
                       [style.animation-delay]="i * 120 + 'ms'"
                     />
@@ -156,7 +156,7 @@ const BAR_MAX_HEIGHT = 170;
               @for (seg of donutSegments(); track seg.status) {
                 <div class="legend-item">
                   <span class="legend-dot" [style.background]="seg.color"></span>
-                  <span class="legend-status">{{ seg.status }}</span>
+                  <span class="legend-status">{{ translateStatus(seg.status) }}</span>
                   <span class="legend-count">{{ seg.count }} ({{ seg.pct }}%)</span>
                 </div>
               }
@@ -239,7 +239,7 @@ const BAR_MAX_HEIGHT = 170;
                         @default { swap_horiz }
                       }
                     </mat-icon>
-                    <span matListItemTitle>{{ adj.sku }} — {{ adj.type }} {{ adj.quantity }}</span>
+                    <span matListItemTitle>{{ adj.sku }} — {{ translateStatus(adj.type) }} {{ adj.quantity }}</span>
                     <span matListItemLine>{{ adj.reason }} · {{ fmtDate(adj.createdAt) }}</span>
                   </mat-list-item>
                 }
@@ -586,5 +586,9 @@ export class DashboardPage implements OnInit {
 
   fmtDate(d: string): string {
     return formatDateTime(d);
+  }
+
+  translateStatus(s: string): string {
+    return this.i18n.messages().statuses[s] ?? s;
   }
 }

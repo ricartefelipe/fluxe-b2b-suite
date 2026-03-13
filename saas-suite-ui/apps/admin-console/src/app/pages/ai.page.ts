@@ -19,6 +19,12 @@ interface AiResponse {
   context: Record<string, unknown>;
 }
 
+interface ChatResponse {
+  answer: string;
+  intent: string;
+  suggestions: string[];
+}
+
 interface AiStatus {
   engine: string;
   provider: string;
@@ -252,9 +258,13 @@ export class AiPage implements OnInit {
     this.chatHistory.update(h => [...h, { role: 'user', text: msg }]);
     this.chatLoading.set(true);
 
-    this.http.post<AiResponse>(`${this.baseUrl}/v1/ai/chat`, { message: msg }).subscribe({
+    this.http.post<ChatResponse>(`${this.baseUrl}/v1/ai/chat`, { message: msg }).subscribe({
       next: resp => {
-        this.chatHistory.update(h => [...h, { role: 'ai', text: resp.content }]);
+        this.chatHistory.update(h => [...h, { role: 'ai', text: resp.answer }]);
+        if (resp.suggestions?.length) {
+          const hints = resp.suggestions.map(s => `💡 ${s}`).join('\n');
+          this.chatHistory.update(h => [...h, { role: 'ai', text: hints }]);
+        }
         this.chatLoading.set(false);
       },
       error: () => {

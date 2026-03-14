@@ -1,6 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,11 +16,6 @@ import { TenantsFacade, Tenant, TenantPlan } from '@saas-suite/data-access/core'
 import { CoreApiClient } from '@saas-suite/data-access/core';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { firstValueFrom } from 'rxjs';
-
-function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
-  if (!ctrl.value) return null;
-  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(ctrl.value) ? null : { slug: true };
-}
 
 @Component({
   selector: 'app-tenant-detail',
@@ -49,17 +44,6 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
               }
               @if (createForm.controls['name'].hasError('minlength')) {
                 <mat-error>{{ i18n.messages().admin.nameMinLength }}</mat-error>
-              }
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>{{ i18n.messages().tenant.tenantSlug }}</mat-label>
-              <input matInput formControlName="slug" [placeholder]="i18n.messages().adminPlaceholders.tenantSlug">
-              <mat-hint>{{ i18n.messages().admin.slugHint }}</mat-hint>
-              @if (createForm.controls['slug'].hasError('required') && createForm.controls['slug'].touched) {
-                <mat-error>{{ i18n.messages().admin.slugRequired }}</mat-error>
-              }
-              @if (createForm.controls['slug'].hasError('slug')) {
-                <mat-error>{{ i18n.messages().admin.slugFormat }}</mat-error>
               }
             </mat-form-field>
             <mat-form-field appearance="outline">
@@ -110,10 +94,6 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
               }
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>{{ i18n.messages().tenant.tenantSlug }}</mat-label>
-              <input matInput [value]="tenant()!.slug" disabled>
-            </mat-form-field>
-            <mat-form-field appearance="outline">
               <mat-label>{{ i18n.messages().tenant.tenantPlan }}</mat-label>
               <mat-select formControlName="plan">
                 <mat-option value="starter">{{ i18n.messages().tenant.planStarter }}</mat-option>
@@ -156,7 +136,6 @@ export class TenantDetailPage implements OnInit {
 
   createForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
-    slug: ['', [Validators.required, slugValidator]],
     plan: ['starter' as TenantPlan, Validators.required],
     region: ['us-east-1', Validators.required],
   });
@@ -193,7 +172,6 @@ export class TenantDetailPage implements OnInit {
     const val = this.createForm.getRawValue();
     const created = await this.facade.createTenant({
       name: val.name!,
-      slug: val.slug!,
       plan: val.plan!,
       region: val.region!,
     });

@@ -100,14 +100,14 @@
               </div>
               <div class="user-menu-divider"></div>
               <a class="user-menu-item" routerLink="/profile" (click)="closeUserMenu()">
-                <mat-icon>person</mat-icon> Meu Perfil
+                <mat-icon>person</mat-icon> {{ i18n.messages().shop.myProfile }}
               </a>
               <a class="user-menu-item" routerLink="/orders" (click)="closeUserMenu()">
-                <mat-icon>receipt_long</mat-icon> Meus Pedidos
+                <mat-icon>receipt_long</mat-icon> {{ i18n.messages().shop.myOrders }}
               </a>
               <div class="user-menu-divider"></div>
               <button class="user-menu-item logout" (click)="doLogout()">
-                <mat-icon>logout</mat-icon> Sair
+                <mat-icon>logout</mat-icon> {{ i18n.messages().shop.logout }}
               </button>
             </div>
           }

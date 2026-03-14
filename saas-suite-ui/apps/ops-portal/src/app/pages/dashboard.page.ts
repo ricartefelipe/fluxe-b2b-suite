@@ -191,7 +191,7 @@ const BAR_MAX_HEIGHT = 170;
                 </ng-container>
                 <ng-container matColumnDef="totalAmount">
                   <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.amount }}</th>
-                  <td mat-cell *matCellDef="let o">{{ o.totalAmount | currency:o.currency:'symbol':'1.2-2' }}</td>
+                  <td mat-cell *matCellDef="let o">{{ o.totalAmount | currency:(o.currency || 'BRL'):'symbol':'1.2-2' }}</td>
                 </ng-container>
                 <ng-container matColumnDef="createdAt">
                   <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.date }}</th>
@@ -219,7 +219,7 @@ const BAR_MAX_HEIGHT = 170;
                   <mat-list-item>
                     <mat-icon matListItemIcon class="warning-icon">warning</mat-icon>
                     <span matListItemTitle>{{ item.sku }}</span>
-                    <span matListItemLine>{{ i18n.messages().dashboard.availableQty }}: {{ item.availableQuantity }}</span>
+                    <span matListItemLine>{{ i18n.messages().dashboard.availableQty }}: {{ item.availableQty }}</span>
                   </mat-list-item>
                 }
               </mat-list>
@@ -239,7 +239,7 @@ const BAR_MAX_HEIGHT = 170;
                         @default { swap_horiz }
                       }
                     </mat-icon>
-                    <span matListItemTitle>{{ adj.sku }} — {{ translateStatus(adj.type) }} {{ adj.quantity }}</span>
+                    <span matListItemTitle>{{ adj.sku }} — {{ translateStatus(adj.type) }} {{ adj.qty }}</span>
                     <span matListItemLine>{{ adj.reason }} · {{ fmtDate(adj.createdAt) }}</span>
                   </mat-list-item>
                 }

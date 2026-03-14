@@ -30,14 +30,23 @@ export class ProductsService {
     this.loadingSignal.set(true);
     this.errorSignal.set(null);
 
-    const paramObj: Record<string, unknown> = { page, pageSize };
+    const sortFieldMap: Record<string, string> = {
+      price: 'price',
+      name: 'name',
+      relevance: 'createdAt',
+      rating: 'createdAt',
+    };
+
+    const paramObj: Record<string, unknown> = { limit: pageSize };
     if (filter) {
       if (filter.category) paramObj['category'] = filter.category;
       if (filter.minPrice !== undefined) paramObj['minPrice'] = filter.minPrice;
       if (filter.maxPrice !== undefined) paramObj['maxPrice'] = filter.maxPrice;
       if (filter.inStock !== undefined) paramObj['inStock'] = filter.inStock;
       if (filter.searchTerm) paramObj['searchTerm'] = filter.searchTerm;
-      if (filter.sortBy && filter.sortBy !== 'relevance') paramObj['sortBy'] = filter.sortBy;
+      if (filter.sortBy && filter.sortBy !== 'relevance') {
+        paramObj['sortBy'] = sortFieldMap[filter.sortBy] ?? filter.sortBy;
+      }
       if (filter.sortOrder) paramObj['sortOrder'] = filter.sortOrder;
     }
 

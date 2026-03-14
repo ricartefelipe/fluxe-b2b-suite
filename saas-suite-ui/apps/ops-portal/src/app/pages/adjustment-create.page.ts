@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -57,6 +57,7 @@ import { InventoryFacade, AdjustmentType } from '@saas-suite/data-access/orders'
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
     .full-span { grid-column: 1 / -1; }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdjustmentCreatePage {
   protected router = inject(Router);

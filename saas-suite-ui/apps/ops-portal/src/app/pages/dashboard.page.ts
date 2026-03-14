@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, computed } from '@angular/core';
+import { Component, inject, OnInit, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CurrencyPipe, SlicePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
@@ -531,6 +531,7 @@ const BAR_MAX_HEIGHT = 170;
       .donut-layout { flex-direction: column; }
     }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardPage implements OnInit {
   protected store = inject(DashboardStore);

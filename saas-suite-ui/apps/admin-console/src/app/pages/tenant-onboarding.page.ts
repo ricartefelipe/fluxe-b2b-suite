@@ -647,6 +647,8 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
   readonly regions = REGIONS;
   readonly selectedPlan = signal<TenantPlan | null>('pro');
 
+  // TODO: Replace hardcoded plans with dynamic data from CoreApiClient.listPlans()
+  // when the billing API is available. Map PlanDefinition to the plan card format below.
   readonly planOptions = computed(() => {
     const m = this.i18n.messages().onboarding;
     return [

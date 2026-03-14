@@ -1,10 +1,9 @@
-export type TenantStatus = 'ACTIVE' | 'SUSPENDED' | 'PENDING';
-export type TenantPlan = 'starter' | 'professional' | 'enterprise';
+export type TenantStatus = 'ACTIVE' | 'SUSPENDED' | 'DELETED';
+export type TenantPlan = 'starter' | 'pro' | 'enterprise';
 
 export interface Tenant {
   id: string;
   name: string;
-  slug: string;
   plan: TenantPlan;
   region: string;
   status: TenantStatus;
@@ -14,7 +13,6 @@ export interface Tenant {
 
 export interface CreateTenantRequest {
   name: string;
-  slug: string;
   plan: TenantPlan;
   region: string;
 }
@@ -30,6 +28,6 @@ export interface TenantListParams {
   plan?: TenantPlan;
   region?: string;
   name?: string;
-  page?: number;
-  pageSize?: number;
+  cursor?: string;
+  limit?: number;
 }

@@ -22,7 +22,7 @@ export class InventoryFacade {
     this._loading.set(true);
     try {
       const r = await firstValueFrom(this.api.listAdjustments(params));
-      this._adjustments.set(r.data); this._total.set(r.total);
+      this._adjustments.set(r.data); this._total.set(r.data.length);
     } catch (e) { this.logger.error('loadAdjustments failed', e); }
     finally { this._loading.set(false); }
   }

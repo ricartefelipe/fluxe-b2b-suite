@@ -55,7 +55,7 @@ import { firstValueFrom } from 'rxjs';
         </mat-form-field>
         <mat-form-field appearance="outline">
           <mat-label>{{ i18n.messages().common.description }}</mat-label>
-          <input matInput formControlName="description">
+          <input matInput formControlName="notes">
         </mat-form-field>
         <mat-slide-toggle formControlName="enabled">{{ i18n.messages().admin.enabled }}</mat-slide-toggle>
         <button mat-raised-button color="primary" type="submit" [disabled]="policyForm.invalid">{{ i18n.messages().common.create }}</button>
@@ -87,9 +87,9 @@ import { firstValueFrom } from 'rxjs';
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.active }}</th>
           <td mat-cell *matCellDef="let p">{{ p.enabled ? i18n.messages().common.yes : i18n.messages().common.no }}</td>
         </ng-container>
-        <ng-container matColumnDef="description">
+        <ng-container matColumnDef="notes">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.description }}</th>
-          <td mat-cell *matCellDef="let p">{{ p.description || '—' }}</td>
+          <td mat-cell *matCellDef="let p">{{ p.notes || '—' }}</td>
         </ng-container>
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef></th>
@@ -122,13 +122,13 @@ export class PoliciesListPage implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   dataSource = new MatTableDataSource<any>([]);
-  columns = ['permissionCode', 'effect', 'enabled', 'description', 'actions'];
+  columns = ['permissionCode', 'effect', 'enabled', 'notes', 'actions'];
   showForm = false;
 
   policyForm = this.fb.group({
     permissionCode: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9_:.*-]+$/)]],
     effect: ['ALLOW' as 'ALLOW' | 'DENY', Validators.required],
-    description: [''],
+    notes: [''],
     enabled: [true],
   });
 
@@ -154,13 +154,13 @@ export class PoliciesListPage implements OnInit, AfterViewInit {
     const req: CreatePolicyRequest & { enabled: boolean } = {
       permissionCode: val.permissionCode!,
       effect: val.effect!,
-      description: val.description ?? undefined,
+      notes: val.notes ?? undefined,
       enabled: val.enabled!,
     };
     const p = await this.facade.createPolicy(req);
     if (p) {
       this.showForm = false;
-      this.policyForm.reset({ permissionCode: '', effect: 'ALLOW', description: '', enabled: true });
+      this.policyForm.reset({ permissionCode: '', effect: 'ALLOW', notes: '', enabled: true });
       this.snackBar.open(this.i18n.messages().admin.policyCreated, 'OK', { duration: 2000 });
     }
   }

@@ -5,10 +5,10 @@ export interface Policy {
   permissionCode: string;
   effect: PolicyEffect;
   tenantId?: string;
-  allowedPlans?: string[];
-  allowedRegions?: string[];
+  allowedPlans?: string;
+  allowedRegions?: string;
   enabled: boolean;
-  description?: string;
+  notes?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -17,16 +17,16 @@ export interface CreatePolicyRequest {
   permissionCode: string;
   effect: PolicyEffect;
   tenantId?: string;
-  allowedPlans?: string[];
-  allowedRegions?: string[];
+  allowedPlans?: string;
+  allowedRegions?: string;
   enabled?: boolean;
-  description?: string;
+  notes?: string;
 }
 
 export interface PolicyListParams {
   permissionCode?: string;
   effect?: PolicyEffect;
   enabled?: boolean;
-  page?: number;
-  pageSize?: number;
+  cursor?: string;
+  limit?: number;
 }

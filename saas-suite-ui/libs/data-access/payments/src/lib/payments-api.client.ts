@@ -5,7 +5,7 @@ import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { IDEMPOTENCY_KEY } from '@saas-suite/shared/util';
 import { PageResponse, toParams } from '@saas-suite/shared/http';
 import { PaymentIntent, CreatePaymentIntentRequest, PaymentListParams } from './models/payment.model';
-import { LedgerEntry, LedgerBalance, LedgerParams } from './models/ledger.model';
+import { LedgerJournalEntry, LedgerBalance, LedgerParams } from './models/ledger.model';
 
 @Injectable({ providedIn: 'root' })
 export class PaymentsApiClient {
@@ -30,8 +30,8 @@ export class PaymentsApiClient {
       context: new HttpContext().set(IDEMPOTENCY_KEY, idempotencyKey),
     });
   }
-  listLedgerEntries(p?: LedgerParams): Observable<PageResponse<LedgerEntry>> {
-    return this.http.get<PageResponse<LedgerEntry>>(`${this.base}/v1/ledger/entries`, { params: toParams(p as Record<string, unknown>) });
+  listLedgerEntries(p?: LedgerParams): Observable<LedgerJournalEntry[]> {
+    return this.http.get<LedgerJournalEntry[]>(`${this.base}/v1/ledger/entries`, { params: toParams(p as Record<string, unknown>) });
   }
   getLedgerBalances(p?: LedgerParams): Observable<LedgerBalance[]> {
     return this.http.get<LedgerBalance[]>(`${this.base}/v1/ledger/balances`, { params: toParams(p as Record<string, unknown>) });

@@ -1,14 +1,27 @@
-export type EntryType = 'CREDIT' | 'DEBIT';
+export type EntrySide = 'CREDIT' | 'DEBIT';
 
-export interface LedgerEntry {
+export interface LedgerLine {
+  side: EntrySide;
+  account: string;
+  amount: string;
+  currency: string;
+}
+
+export interface LedgerJournalEntry {
   id: string;
-  tenantId: string;
-  type: EntryType;
+  payment_intent_id: string;
+  posted_at: string;
+  lines: LedgerLine[];
+}
+
+export interface LedgerEntryRow {
+  id: string;
+  postedAt: string;
+  side: EntrySide;
+  account: string;
   amount: number;
   currency: string;
-  description?: string;
-  referenceId?: string;
-  createdAt: string;
+  paymentIntentId: string;
 }
 
 export interface LedgerBalance {

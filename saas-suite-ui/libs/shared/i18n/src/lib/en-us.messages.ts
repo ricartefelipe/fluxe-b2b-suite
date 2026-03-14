@@ -10,6 +10,7 @@ export const EN_US_MESSAGES: Messages = {
     noData: 'No data found',
     search: 'Search',
     filter: 'Filter',
+    clear: 'Clear',
     create: 'Create',
     edit: 'Edit',
     back: 'Back',
@@ -169,6 +170,7 @@ export const EN_US_MESSAGES: Messages = {
     credits: 'Credits',
     debits: 'Debits',
     reference: 'Reference',
+    account: 'Account',
   },
   checkout: {
     cart: 'Cart',

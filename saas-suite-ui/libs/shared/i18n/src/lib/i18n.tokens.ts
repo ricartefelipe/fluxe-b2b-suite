@@ -10,6 +10,7 @@ export interface Messages {
     noData: string;
     search: string;
     filter: string;
+    clear: string;
     create: string;
     edit: string;
     back: string;
@@ -169,6 +170,7 @@ export interface Messages {
     credits: string;
     debits: string;
     reference: string;
+    account: string;
   };
   checkout: {
     cart: string;

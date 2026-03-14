@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -95,6 +95,7 @@ import { firstValueFrom } from 'rxjs';
     .full-width { width: 100%; }
     @media (max-width: 768px) { .details-grid { grid-template-columns: 1fr; } }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrderDetailPage implements OnInit {
   protected facade = inject(OrdersFacade);

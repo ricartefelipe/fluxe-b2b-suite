@@ -70,7 +70,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
         </ng-container>
         <ng-container matColumnDef="totalAmount">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().orders.orderTotal }}</th>
-          <td mat-cell *matCellDef="let o">{{ o.currency }} {{ o.totalAmount | number:'1.2-2' }}</td>
+          <td mat-cell *matCellDef="let o">{{ o.currency || 'BRL' }} {{ o.totalAmount | number:'1.2-2' }}</td>
         </ng-container>
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.status }}</th>
@@ -125,7 +125,7 @@ export class OrdersListPage implements OnInit, AfterViewInit {
   async ngOnInit(): Promise<void> { await this.search(); }
 
   async search(): Promise<void> {
-    await this.facade.loadOrders({ status: this.filterStatus, customerId: this.filterCustomer });
+    await this.facade.loadOrders({ status: this.filterStatus, q: this.filterCustomer });
   }
 
   fmtDate(d: string): string { return formatDateTime(d); }

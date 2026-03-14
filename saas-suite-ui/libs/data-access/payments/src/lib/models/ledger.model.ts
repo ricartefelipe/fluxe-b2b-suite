@@ -36,6 +36,6 @@ export interface LedgerParams {
   from?: string;
   to?: string;
   currency?: string;
-  page?: number;
-  pageSize?: number;
+  limit?: number;
+  offset?: number;
 }

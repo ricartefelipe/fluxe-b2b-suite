@@ -15,31 +15,8 @@ import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { formatDateTime } from '@saas-suite/shared/util';
-
-const UM = {
-  title: 'Usuários',
-  invite: 'Convidar Usuário',
-  search: 'Buscar por nome ou email',
-  name: 'Nome',
-  email: 'Email',
-  roles: 'Perfis',
-  status: 'Status',
-  createdAt: 'Criado em',
-  actions: 'Ações',
-  all: 'Todos',
-  save: 'Salvar',
-  cancel: 'Cancelar',
-  inviteTitle: 'Convidar Usuário',
-  editTitle: 'Editar Usuário',
-  noUsers: 'Nenhum usuário encontrado',
-  noUsersDesc: 'Convide o primeiro usuário para este tenant',
-  confirmDelete: 'Tem certeza que deseja remover este usuário?',
-  deleteSuccess: 'Usuário removido',
-  inviteSuccess: 'Convite enviado',
-  updateSuccess: 'Usuário atualizado',
-  error: 'Erro ao processar solicitação',
-};
 
 const AVAILABLE_ROLES = [
   { value: 'admin', label: 'Admin' },
@@ -72,22 +49,22 @@ interface UserDto {
     MatSelectModule, MatButtonModule, MatIconModule, MatDialogModule,
   ],
   template: `
-    <h2 mat-dialog-title>{{ data?.user ? UM.editTitle : UM.inviteTitle }}</h2>
+    <h2 mat-dialog-title>{{ data?.user ? i18n.messages().admin.editUser : i18n.messages().admin.inviteUser }}</h2>
     <mat-dialog-content class="dialog-content">
       <mat-form-field appearance="outline" class="full-field">
-        <mat-label>{{ UM.name }}</mat-label>
+        <mat-label>{{ i18n.messages().common.name }}</mat-label>
         <input matInput [(ngModel)]="form.name" required>
       </mat-form-field>
 
       @if (!data?.user) {
         <mat-form-field appearance="outline" class="full-field">
-          <mat-label>{{ UM.email }}</mat-label>
+          <mat-label>{{ i18n.messages().common.email }}</mat-label>
           <input matInput [(ngModel)]="form.email" type="email" required>
         </mat-form-field>
       }
 
       <mat-form-field appearance="outline" class="full-field">
-        <mat-label>{{ UM.roles }}</mat-label>
+        <mat-label>{{ i18n.messages().shop.rolesAndPermissions }}</mat-label>
         <mat-select [(ngModel)]="form.roles" multiple required>
           @for (r of roles; track r.value) {
             <mat-option [value]="r.value">{{ r.label }}</mat-option>
@@ -97,19 +74,19 @@ interface UserDto {
 
       @if (data?.user) {
         <mat-form-field appearance="outline" class="full-field">
-          <mat-label>{{ UM.status }}</mat-label>
+          <mat-label>{{ i18n.messages().common.status }}</mat-label>
           <mat-select [(ngModel)]="form.status">
             @for (s of statuses; track s) {
-              <mat-option [value]="s">{{ s }}</mat-option>
+              <mat-option [value]="s">{{ i18n.messages().statuses[s] ?? s }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
       }
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>{{ UM.cancel }}</button>
+      <button mat-button mat-dialog-close>{{ i18n.messages().common.cancel }}</button>
       <button mat-flat-button color="primary" [disabled]="!isValid()" (click)="submit()">
-        {{ UM.save }}
+        {{ i18n.messages().common.save }}
       </button>
     </mat-dialog-actions>
   `,
@@ -119,7 +96,7 @@ interface UserDto {
   `],
 })
 export class InviteUserDialog {
-  protected readonly UM = UM;
+  protected readonly i18n = inject(I18nService);
   protected readonly roles = AVAILABLE_ROLES;
   protected readonly statuses = USER_STATUSES;
 
@@ -159,24 +136,24 @@ export class InviteUserDialog {
   ],
   template: `
     <div class="page-header">
-      <h1>{{ UM.title }}</h1>
+      <h1>{{ i18n.messages().admin.usersTitle }}</h1>
       <button mat-raised-button color="primary" (click)="openInvite()">
-        <mat-icon>person_add</mat-icon> {{ UM.invite }}
+        <mat-icon>person_add</mat-icon> {{ i18n.messages().admin.inviteUser }}
       </button>
     </div>
 
     <div class="filters">
       <mat-form-field appearance="outline">
-        <mat-label>{{ UM.search }}</mat-label>
+        <mat-label>{{ i18n.messages().admin.searchByNameOrEmail }}</mat-label>
         <input matInput [(ngModel)]="filterText" (ngModelChange)="applyFilter()" placeholder="...">
         <mat-icon matPrefix>search</mat-icon>
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>{{ UM.status }}</mat-label>
+        <mat-label>{{ i18n.messages().common.status }}</mat-label>
         <mat-select [(ngModel)]="filterStatus" (ngModelChange)="applyFilter()">
-          <mat-option [value]="''">{{ UM.all }}</mat-option>
+          <mat-option [value]="''">{{ i18n.messages().common.all }}</mat-option>
           @for (s of statuses; track s) {
-            <mat-option [value]="s">{{ s }}</mat-option>
+            <mat-option [value]="s">{{ i18n.messages().statuses[s] ?? s }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
@@ -187,25 +164,25 @@ export class InviteUserDialog {
     } @else if (dataSource.data.length === 0) {
       <saas-empty-state
         icon="people"
-        [title]="UM.noUsers"
-        [subtitle]="UM.noUsersDesc"
-        [actionLabel]="UM.invite"
+        [title]="i18n.messages().admin.noUsersFound"
+        [subtitle]="i18n.messages().admin.noUsersFoundDesc"
+        [actionLabel]="i18n.messages().admin.inviteUser"
         actionIcon="person_add"
         (action)="openInvite()" />
     } @else {
       <table mat-table [dataSource]="dataSource" matSort class="full-width">
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ UM.name }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.name }}</th>
           <td mat-cell *matCellDef="let u">{{ u.name }}</td>
         </ng-container>
 
         <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ UM.email }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.email }}</th>
           <td mat-cell *matCellDef="let u">{{ u.email }}</td>
         </ng-container>
 
         <ng-container matColumnDef="roles">
-          <th mat-header-cell *matHeaderCellDef>{{ UM.roles }}</th>
+          <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().shop.rolesAndPermissions }}</th>
           <td mat-cell *matCellDef="let u">
             <mat-chip-set>
               @for (role of u.roles; track role) {
@@ -216,22 +193,22 @@ export class InviteUserDialog {
         </ng-container>
 
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ UM.status }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.status }}</th>
           <td mat-cell *matCellDef="let u"><saas-status-chip [status]="u.status" /></td>
         </ng-container>
 
         <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ UM.createdAt }}</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().tenant.createdAt }}</th>
           <td mat-cell *matCellDef="let u">{{ fmtDate(u.createdAt) }}</td>
         </ng-container>
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let u">
-            <button mat-icon-button color="primary" (click)="openEdit(u)" aria-label="Editar">
+            <button mat-icon-button color="primary" (click)="openEdit(u)" [attr.aria-label]="i18n.messages().common.edit">
               <mat-icon>edit</mat-icon>
             </button>
-            <button mat-icon-button color="warn" (click)="deleteUser(u)" aria-label="Remover">
+            <button mat-icon-button color="warn" (click)="deleteUser(u)" [attr.aria-label]="i18n.messages().common.delete">
               <mat-icon>delete</mat-icon>
             </button>
           </td>
@@ -273,7 +250,7 @@ export class InviteUserDialog {
   `],
 })
 export class UsersListPage implements OnInit, AfterViewInit {
-  protected readonly UM = UM;
+  protected readonly i18n = inject(I18nService);
   protected readonly statuses = USER_STATUSES;
 
   private http = inject(HttpClient);
@@ -322,7 +299,7 @@ export class UsersListPage implements OnInit, AfterViewInit {
         if (this.paginator) this.dataSource.paginator = this.paginator;
       });
     } catch {
-      this.snack.open(UM.error, '', { duration: 3000 });
+      this.snack.open(this.i18n.messages().admin.userError, '', { duration: 3000 });
     } finally {
       this.loading.set(false);
     }
@@ -347,10 +324,10 @@ export class UsersListPage implements OnInit, AfterViewInit {
             roles: result.roles,
           }),
         );
-        this.snack.open(UM.inviteSuccess, '', { duration: 3000 });
+        this.snack.open(this.i18n.messages().admin.inviteSent, '', { duration: 3000 });
         await this.loadUsers();
       } catch {
-        this.snack.open(UM.error, '', { duration: 3000 });
+        this.snack.open(this.i18n.messages().admin.userError, '', { duration: 3000 });
       }
     });
   }
@@ -370,22 +347,22 @@ export class UsersListPage implements OnInit, AfterViewInit {
             status: result.status,
           }),
         );
-        this.snack.open(UM.updateSuccess, '', { duration: 3000 });
+        this.snack.open(this.i18n.messages().admin.userUpdated, '', { duration: 3000 });
         await this.loadUsers();
       } catch {
-        this.snack.open(UM.error, '', { duration: 3000 });
+        this.snack.open(this.i18n.messages().admin.userError, '', { duration: 3000 });
       }
     });
   }
 
   async deleteUser(user: UserDto): Promise<void> {
-    if (!confirm(UM.confirmDelete)) return;
+    if (!confirm(this.i18n.messages().admin.confirmDeleteUser)) return;
     try {
       await firstValueFrom(this.http.delete(`${this.baseUrl}/${user.id}`));
-      this.snack.open(UM.deleteSuccess, '', { duration: 3000 });
+      this.snack.open(this.i18n.messages().admin.userDeleted, '', { duration: 3000 });
       await this.loadUsers();
     } catch {
-      this.snack.open(UM.error, '', { duration: 3000 });
+      this.snack.open(this.i18n.messages().admin.userError, '', { duration: 3000 });
     }
   }
 

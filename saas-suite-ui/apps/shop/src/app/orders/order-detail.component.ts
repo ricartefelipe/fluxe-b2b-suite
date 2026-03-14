@@ -93,12 +93,12 @@ const STATUS_CLASSES: Record<OrderStatus, string> = {
                 @for (item of order.items; track $index) {
                   <div class="detail-item">
                     <div class="detail-item-info">
-                      <span class="detail-item-name">{{ item.description || item.sku }}</span>
+                      <span class="detail-item-name">{{ item.sku }}</span>
                       <span class="detail-item-sku">SKU: {{ item.sku }}</span>
                     </div>
                     <div class="detail-item-qty">× {{ item.qty }}</div>
-                    <div class="detail-item-price">{{ item.price | currency:order.currency:'symbol':'1.2-2' }}</div>
-                    <div class="detail-item-total">{{ item.price * item.qty | currency:order.currency:'symbol':'1.2-2' }}</div>
+                    <div class="detail-item-price">{{ item.price | currency:(order.currency || 'BRL'):'symbol':'1.2-2' }}</div>
+                    <div class="detail-item-total">{{ item.price * item.qty | currency:(order.currency || 'BRL'):'symbol':'1.2-2' }}</div>
                   </div>
                 }
               </div>
@@ -108,7 +108,7 @@ const STATUS_CLASSES: Record<OrderStatus, string> = {
               <div class="totals-section">
                 <div class="total-line">
                   <span>{{ i18n.messages().shop.subtotal }}</span>
-                  <span>{{ order.totalAmount | currency:order.currency:'symbol':'1.2-2' }}</span>
+                  <span>{{ order.totalAmount | currency:(order.currency || 'BRL'):'symbol':'1.2-2' }}</span>
                 </div>
                 <div class="total-line">
                   <span>{{ i18n.messages().shop.shipping }}</span>
@@ -117,7 +117,7 @@ const STATUS_CLASSES: Record<OrderStatus, string> = {
                 <mat-divider />
                 <div class="total-line grand-total">
                   <strong>{{ i18n.messages().shop.total }}</strong>
-                  <strong>{{ order.totalAmount | currency:order.currency:'symbol':'1.2-2' }}</strong>
+                  <strong>{{ order.totalAmount | currency:(order.currency || 'BRL'):'symbol':'1.2-2' }}</strong>
                 </div>
               </div>
             </mat-card-content>

@@ -11,7 +11,6 @@ import {
 
 export interface OrgInfo {
   name: string;
-  slug: string;
   region: string;
 }
 
@@ -40,8 +39,8 @@ const DEFAULT_FLAGS: FlagConfig[] = [
 export class TenantOnboardingStore {
   private api = inject(CoreApiClient);
 
-  readonly orgInfo = signal<OrgInfo>({ name: '', slug: '', region: 'us-east-1' });
-  readonly plan = signal<TenantPlan>('professional');
+  readonly orgInfo = signal<OrgInfo>({ name: '', region: 'us-east-1' });
+  readonly plan = signal<TenantPlan>('pro');
   readonly config = signal<OnboardingConfig>({ flags: DEFAULT_FLAGS, adminEmail: '' });
   readonly createdTenant = signal<Tenant | null>(null);
   readonly submitting = signal(false);
@@ -82,7 +81,6 @@ export class TenantOnboardingStore {
     try {
       const req: CreateTenantRequest = {
         name: this.orgInfo().name,
-        slug: this.orgInfo().slug,
         plan: this.plan(),
         region: this.orgInfo().region,
       };
@@ -97,7 +95,6 @@ export class TenantOnboardingStore {
           const flagReq: CreateFlagRequest = {
             name: f.name,
             enabled: f.enabled,
-            description: f.description,
           };
           return this.api.createFlag(tenant.id, flagReq);
         });
@@ -110,7 +107,7 @@ export class TenantOnboardingStore {
         effect: 'ALLOW',
         tenantId: tenant.id,
         enabled: true,
-        description: `Default admin policy for ${tenant.name}`,
+        notes: `Default admin policy for ${tenant.name}`,
       };
       await lastValueFrom(this.api.createPolicy(policyReq));
       this.progress.set(100);
@@ -124,8 +121,8 @@ export class TenantOnboardingStore {
   }
 
   reset(): void {
-    this.orgInfo.set({ name: '', slug: '', region: 'us-east-1' });
-    this.plan.set('professional');
+    this.orgInfo.set({ name: '', region: 'us-east-1' });
+    this.plan.set('pro');
     this.config.set({ flags: [...DEFAULT_FLAGS], adminEmail: '' });
     this.createdTenant.set(null);
     this.submitting.set(false);

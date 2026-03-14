@@ -14,7 +14,7 @@ export class TenantContextStore {
   readonly loading = this.tenantsFacade.loading;
 
   async loadTenants(): Promise<void> {
-    await this.tenantsFacade.loadTenants({ pageSize: 100 });
+    await this.tenantsFacade.loadTenants({ limit: 100 });
   }
 
   selectTenant(tenant: Tenant): void {

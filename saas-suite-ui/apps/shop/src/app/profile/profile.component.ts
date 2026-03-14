@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthStore, AuthService } from '@saas-suite/shared/auth';
+import { I18nService } from '@saas-suite/shared/i18n';
 
 @Component({
   selector: 'app-profile',
@@ -23,7 +24,7 @@ import { AuthStore, AuthService } from '@saas-suite/shared/auth';
 
       <div class="profile-grid">
         <section class="profile-card">
-          <h2><mat-icon>person</mat-icon> Dados da Conta</h2>
+          <h2><mat-icon>person</mat-icon> {{ i18n.messages().shop.accountData }}</h2>
           <div class="info-row">
             <span class="label">Email</span>
             <span class="value">{{ session()?.email ?? '—' }}</span>
@@ -39,7 +40,7 @@ import { AuthStore, AuthService } from '@saas-suite/shared/auth';
         </section>
 
         <section class="profile-card">
-          <h2><mat-icon>verified_user</mat-icon> Plano & Região</h2>
+          <h2><mat-icon>verified_user</mat-icon> {{ i18n.messages().shop.planAndRegion }}</h2>
           <div class="info-row">
             <span class="label">Plano</span>
             <span class="badge plan">{{ session()?.plan ?? '—' }}</span>
@@ -51,7 +52,7 @@ import { AuthStore, AuthService } from '@saas-suite/shared/auth';
         </section>
 
         <section class="profile-card full-width">
-          <h2><mat-icon>admin_panel_settings</mat-icon> Roles & Permissões</h2>
+          <h2><mat-icon>admin_panel_settings</mat-icon> {{ i18n.messages().shop.rolesAndPermissions }}</h2>
           <div class="info-row">
             <span class="label">Roles</span>
             <div class="chips">
@@ -59,7 +60,7 @@ import { AuthStore, AuthService } from '@saas-suite/shared/auth';
                 <span class="chip role">{{ role }}</span>
               }
               @if ((session()?.roles ?? []).length === 0) {
-                <span class="chip empty">Nenhuma</span>
+                <span class="chip empty">{{ i18n.messages().shop.none }}</span>
               }
             </div>
           </div>
@@ -70,7 +71,7 @@ import { AuthStore, AuthService } from '@saas-suite/shared/auth';
                 <span class="chip perm">{{ perm }}</span>
               }
               @if ((session()?.permissions ?? []).length === 0) {
-                <span class="chip empty">Nenhuma</span>
+                <span class="chip empty">{{ i18n.messages().shop.none }}</span>
               }
             </div>
           </div>
@@ -79,10 +80,10 @@ import { AuthStore, AuthService } from '@saas-suite/shared/auth';
 
       <div class="profile-actions">
         <button class="btn-outline" (click)="goToOrders()">
-          <mat-icon>receipt_long</mat-icon> Meus Pedidos
+          <mat-icon>receipt_long</mat-icon> {{ i18n.messages().shop.myOrders }}
         </button>
         <button class="btn-danger" (click)="logout()">
-          <mat-icon>logout</mat-icon> Sair
+          <mat-icon>logout</mat-icon> {{ i18n.messages().shop.logout }}
         </button>
       </div>
     </div>
@@ -286,6 +287,7 @@ export class ProfileComponent {
   private readonly authStore = inject(AuthStore);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  protected readonly i18n = inject(I18nService);
 
   readonly session = this.authStore.session;
 

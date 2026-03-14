@@ -45,8 +45,8 @@ import { firstValueFrom } from 'rxjs';
           <mat-card-header><mat-card-title>{{ i18n.messages().orders.information }}</mat-card-title></mat-card-header>
           <mat-card-content>
             <p><strong>{{ i18n.messages().orders.customer }}:</strong> {{ order.customerId }}</p>
-            <p><strong>{{ i18n.messages().orders.currency }}:</strong> {{ order.currency }}</p>
-            <p><strong>{{ i18n.messages().common.total }}:</strong> {{ order.currency }} {{ order.totalAmount | number:'1.2-2' }}</p>
+            <p><strong>{{ i18n.messages().orders.currency }}:</strong> {{ order.currency || 'BRL' }}</p>
+            <p><strong>{{ i18n.messages().common.total }}:</strong> {{ order.currency || 'BRL' }} {{ order.totalAmount | number:'1.2-2' }}</p>
             <p><strong>{{ i18n.messages().orders.createdAt }}:</strong> {{ fmtDate(order.createdAt) }}</p>
             <p><strong>{{ i18n.messages().orders.updatedAt }}:</strong> {{ fmtDate(order.updatedAt) }}</p>
             @if (order.correlationId) {
@@ -67,17 +67,17 @@ import { firstValueFrom } from 'rxjs';
                 <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().common.description }}</th>
                 <td mat-cell *matCellDef="let i">{{ i.description || '—' }}</td>
               </ng-container>
-              <ng-container matColumnDef="quantity">
+              <ng-container matColumnDef="qty">
                 <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().inventory.quantity }}</th>
-                <td mat-cell *matCellDef="let i">{{ i.quantity }}</td>
+                <td mat-cell *matCellDef="let i">{{ i.qty }}</td>
               </ng-container>
-              <ng-container matColumnDef="unitPrice">
+              <ng-container matColumnDef="price">
                 <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().orders.unitPrice }}</th>
-                <td mat-cell *matCellDef="let i">{{ i.unitPrice | number:'1.2-2' }}</td>
+                <td mat-cell *matCellDef="let i">{{ i.price | number:'1.2-2' }}</td>
               </ng-container>
               <ng-container matColumnDef="subtotal">
                 <th mat-header-cell *matHeaderCellDef>{{ i18n.messages().orders.subtotal }}</th>
-                <td mat-cell *matCellDef="let i">{{ i.quantity * i.unitPrice | number:'1.2-2' }}</td>
+                <td mat-cell *matCellDef="let i">{{ i.qty * i.price | number:'1.2-2' }}</td>
               </ng-container>
               <tr mat-header-row *matHeaderRowDef="itemCols"></tr>
               <tr mat-row *matRowDef="let row; columns: itemCols;"></tr>
@@ -104,7 +104,7 @@ export class OrderDetailPage implements OnInit {
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
 
-  itemCols = ['sku', 'description', 'quantity', 'unitPrice', 'subtotal'];
+  itemCols = ['sku', 'description', 'qty', 'price', 'subtotal'];
 
   async ngOnInit(): Promise<void> {
     const id = this.route.snapshot.paramMap.get('id');

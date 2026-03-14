@@ -24,7 +24,7 @@ export class OrdersFacade {
     this._loading.set(true);
     try {
       const r = await firstValueFrom(this.api.listOrders(params));
-      this._orders.set(r.data); this._total.set(r.total);
+      this._orders.set(r.data); this._total.set(r.data.length);
     } catch (e) { this.logger.error('loadOrders failed', e); }
     finally { this._loading.set(false); }
   }

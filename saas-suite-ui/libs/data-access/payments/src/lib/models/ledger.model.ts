@@ -12,12 +12,11 @@ export interface LedgerEntry {
 }
 
 export interface LedgerBalance {
-  tenantId: string;
+  account: string;
   currency: string;
-  totalCredits: number;
-  totalDebits: number;
-  balance: number;
-  asOf: string;
+  debits_total: string;
+  credits_total: string;
+  balance: string;
 }
 
 export interface LedgerParams {

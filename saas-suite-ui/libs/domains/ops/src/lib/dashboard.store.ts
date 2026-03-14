@@ -118,21 +118,39 @@ export class DashboardStore {
 
   async loadAll(): Promise<void> {
     this._loading.set(true);
-    try {
-      const [ordersRes, paymentsRes, inventory, adjustmentsRes] = await Promise.all([
-        firstValueFrom(this.ordersApi.listOrders({ limit: 100 })),
-        firstValueFrom(this.paymentsApi.listPayments({ limit: 100 })),
-        firstValueFrom(this.ordersApi.listInventory()),
-        firstValueFrom(this.ordersApi.listAdjustments({ limit: 50 })),
-      ]);
-      this._orders.set(ordersRes.data);
-      this._payments.set(paymentsRes.data);
-      this._inventoryItems.set(inventory.data ?? []);
-      this._adjustments.set(adjustmentsRes.data);
-    } catch (e) {
-      this.logger.error('DashboardStore.loadAll failed', e);
-    } finally {
-      this._loading.set(false);
+    const results = await Promise.allSettled([
+      firstValueFrom(this.ordersApi.listOrders({ limit: 100 })),
+      firstValueFrom(this.paymentsApi.listPayments({ limit: 100 })),
+      firstValueFrom(this.ordersApi.listInventory()),
+      firstValueFrom(this.ordersApi.listAdjustments({ limit: 50 })),
+    ]);
+
+    if (results[0].status === 'fulfilled') {
+      this._orders.set(results[0].value.data);
+    } else {
+      this.logger.error('loadOrders failed', results[0].reason);
     }
+
+    if (results[1].status === 'fulfilled') {
+      const raw = results[1].value;
+      this._payments.set(Array.isArray(raw) ? raw : (raw.data ?? []));
+    } else {
+      this.logger.error('loadPayments failed', results[1].reason);
+    }
+
+    if (results[2].status === 'fulfilled') {
+      const inv = results[2].value;
+      this._inventoryItems.set(inv.data ?? []);
+    } else {
+      this.logger.error('loadInventory failed', results[2].reason);
+    }
+
+    if (results[3].status === 'fulfilled') {
+      this._adjustments.set(results[3].value.data);
+    } else {
+      this.logger.error('loadAdjustments failed', results[3].reason);
+    }
+
+    this._loading.set(false);
   }
 }

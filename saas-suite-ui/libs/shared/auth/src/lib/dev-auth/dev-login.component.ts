@@ -9,8 +9,10 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
+import { I18nService } from '@saas-suite/shared/i18n';
 
 interface DevProfile {
   label: string;
@@ -81,7 +83,7 @@ const DEV_PROFILES: DevProfile[] = [
   selector: 'lib-dev-login',
   standalone: true,
   imports: [
-    NgTemplateOutlet, FormsModule, MatButtonModule, MatCardModule, MatFormFieldModule,
+    NgTemplateOutlet, FormsModule, RouterLink, MatButtonModule, MatCardModule, MatFormFieldModule,
     MatInputModule, MatSelectModule, MatProgressSpinnerModule, MatIconModule, MatTabsModule,
   ],
   template: `
@@ -251,6 +253,11 @@ const DEV_PROFILES: DevProfile[] = [
               }
             </button>
           </ng-template>
+
+          <p class="signup-link">
+            {{ i18n.messages().auth.noAccount }}
+            <a routerLink="/signup">{{ i18n.messages().auth.signupLink }}</a>
+          </p>
 
           <div class="login-footer">
             <span>Fluxe B2B Suite &copy; {{ currentYear }}</span>
@@ -582,6 +589,21 @@ const DEV_PROFILES: DevProfile[] = [
 
     .credentials-only { padding-top: 4px; }
 
+    .signup-link {
+      text-align: center;
+      margin: 20px 0 0;
+      font-size: 14px;
+      color: #64748b;
+    }
+    .signup-link a {
+      color: #1565c0;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
+
     .login-footer {
       text-align: center;
       margin-top: 32px;
@@ -613,6 +635,7 @@ const DEV_PROFILES: DevProfile[] = [
 export class DevLoginComponent {
   private authService = inject(AuthService);
   private config = inject(RuntimeConfigService);
+  protected i18n = inject(I18nService);
 
   isDevMode = this.config.get('authMode') === 'dev';
   currentYear = new Date().getFullYear();

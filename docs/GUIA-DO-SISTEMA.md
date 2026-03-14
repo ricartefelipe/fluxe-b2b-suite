@@ -82,6 +82,14 @@ Cada organização é um **tenant** com plano (starter, pro, enterprise), regiã
 | **Usuários** | Lista de usuários: nome, e-mail, roles, status. Convidar, editar, remover. Totalmente internacionalizado. | Gerencie o acesso dos usuários ao sistema. |
 | **Log de Auditoria** | Tabela de eventos: data, ação, status HTTP (derivado em SUCCESS/DENIED/ERROR), ator, recurso, correlation ID. | Investigue ações sensíveis. Filtre por ação ou ator. |
 | **Assistente IA** | **Chat**: perguntas sobre governança e segurança. **Análise de Auditoria**: análise de segurança dos logs. **Recomendações**: sugestões de governança. **Insights**: indicadores de saúde do sistema. | Use o chat para perguntas. Clique nos cards para análises automáticas. |
+| **Faturamento** | Status da assinatura atual, planos disponíveis (Starter, Pro, Enterprise), botão "Gerenciar Faturamento" (portal Stripe), troca de plano. | Visualize sua assinatura. Clique "Gerenciar Faturamento" para atualizar cartão ou cancelar via portal Stripe. |
+
+### 2.4 Landing Page e Cadastro
+
+| Página | Descrição | Como acessar |
+|--------|-----------|--------------|
+| **Landing** | Hero, 4 features (pedidos, ledger, governança, multi-tenant), 3 planos com pricing, tech stack. | Shop: `/welcome` |
+| **Criar conta** | Self-service: novo tenant cria organização e admin em um passo. Campos: empresa, plano, nome, e-mail, senha. | Link "Criar conta" na tela de login ou `/signup` |
 
 ---
 
@@ -137,14 +145,25 @@ Cada organização é um **tenant** com plano (starter, pro, enterprise), regiã
 - Balanços por conta contábil (CASH, REVENUE, REFUND_EXPENSE) e moeda
 - Suporte a gateways: Stripe, PagSeguro, MercadoPago
 
-### 4.5 Governança e Compliance
+### 4.5 Billing e Assinaturas
+- **Stripe Billing** integrado: criação de Customer e Subscription no Stripe ao ativar assinatura
+- **Portal Stripe**: endpoint `/v1/billing/portal-session` redireciona ao portal de faturamento (cartão, cancelamento)
+- **Planos**: Starter (grátis), Pro (R$ 249/mês), Enterprise (sob consulta)
+- **Config**: `app.billing.provider=stripe`, `STRIPE_BILLING_SECRET_KEY`
+
+### 4.6 Email Transacional
+- **Fluxos com email**: reset de senha, convite de usuário, boas-vindas (signup)
+- **Provider**: Resend (api.resend.com) ou Log (dev, apenas log)
+- **Config**: `app.email.provider=resend`, `RESEND_API_KEY`, `FRONTEND_URL` (para links nos emails)
+
+### 4.7 Governança e Compliance
 - Políticas ABAC editáveis em tempo real
 - Feature flags por tenant com rollout percentual
 - Log de auditoria completo com 50+ tipos de ação
 - Exportação de audit log (CSV)
 - Correlation ID para rastreamento end-to-end
 
-### 4.6 Assistente IA
+### 4.8 Assistente IA
 - Chat conversacional sobre governança e segurança
 - Análise automática de logs de auditoria
 - Recomendações de governança baseadas no estado atual

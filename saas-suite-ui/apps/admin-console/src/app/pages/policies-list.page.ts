@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, AfterViewInit, effect } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, AfterViewInit, effect, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -110,6 +110,7 @@ import { firstValueFrom } from 'rxjs';
     .chip-allow { background: var(--app-chip-allow-bg); color: var(--app-chip-allow-text); padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
     .chip-deny { background: var(--app-chip-deny-bg); color: var(--app-chip-deny-text); padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PoliciesListPage implements OnInit, AfterViewInit {
   protected facade = inject(PoliciesFacade);

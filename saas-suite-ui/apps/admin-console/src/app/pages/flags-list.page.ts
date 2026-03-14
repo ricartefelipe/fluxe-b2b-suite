@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, AfterViewInit, effect, untracked } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, AfterViewInit, effect, untracked, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -91,6 +91,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
     .full-width { width: 100%; }
     code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlagsListPage implements OnInit, AfterViewInit {
   protected facade = inject(FlagsFacade);

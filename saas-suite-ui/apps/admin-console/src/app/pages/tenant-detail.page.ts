@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -119,6 +119,7 @@ import { firstValueFrom } from 'rxjs';
     .actions { display: flex; gap: 8px; }
     .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TenantDetailPage implements OnInit {
   private route = inject(ActivatedRoute);

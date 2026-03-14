@@ -69,7 +69,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
           </ng-container>
           <ng-container matColumnDef="rolloutPercent">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.rollout }}</th>
-            <td mat-cell *matCellDef="let f">{{ f.rolloutPercent != null ? f.rolloutPercent + '%' : '—' }}</td>
+            <td mat-cell *matCellDef="let f">{{ f.rolloutPercent !== null && f.rolloutPercent !== undefined ? f.rolloutPercent + '%' : '—' }}</td>
           </ng-container>
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef></th>

@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { EmptyStateComponent } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { LedgerFacade } from '@saas-suite/data-access/payments';
-import { formatDateTime } from '@saas-suite/shared/util';
 
 @Component({
   selector: 'app-ledger-balances',
@@ -25,24 +24,24 @@ import { formatDateTime } from '@saas-suite/shared/util';
       <saas-empty-state icon="balance" [title]="i18n.messages().ledger.noBalancesFound" />
     } @else {
       <div class="balances-grid">
-        @for (b of facade.balances(); track b.currency) {
+        @for (b of facade.balances(); track b.account + b.currency) {
           <mat-card>
             <mat-card-header>
-              <mat-card-title>{{ b.currency }}</mat-card-title>
-              <mat-card-subtitle>{{ i18n.messages().ledger.updated }}: {{ fmtDate(b.asOf) }}</mat-card-subtitle>
+              <mat-card-title>{{ b.account }}</mat-card-title>
+              <mat-card-subtitle>{{ b.currency }}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
               <div class="balance-row">
                 <span class="label">{{ i18n.messages().ledger.credits }}:</span>
-                <span class="credit">+{{ b.totalCredits | number:'1.2-2' }}</span>
+                <span class="credit">+{{ +b.credits_total | number:'1.2-2' }}</span>
               </div>
               <div class="balance-row">
                 <span class="label">{{ i18n.messages().ledger.debits }}:</span>
-                <span class="debit">-{{ b.totalDebits | number:'1.2-2' }}</span>
+                <span class="debit">{{ +b.debits_total | number:'1.2-2' }}</span>
               </div>
               <div class="balance-row total">
                 <span class="label">{{ i18n.messages().ledger.balance }}:</span>
-                <span [class]="b.balance >= 0 ? 'credit' : 'debit'">{{ b.balance | number:'1.2-2' }}</span>
+                <span [class]="+b.balance >= 0 ? 'credit' : 'debit'">{{ +b.balance | number:'1.2-2' }}</span>
               </div>
             </mat-card-content>
           </mat-card>
@@ -63,9 +62,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
 export class LedgerBalancesPage implements OnInit {
   protected facade = inject(LedgerFacade);
   protected i18n = inject(I18nService);
-  columns = ['currency', 'totalCredits', 'totalDebits', 'balance', 'asOf'];
 
   async ngOnInit(): Promise<void> { await this.facade.loadBalances(); }
   async refresh(): Promise<void> { await this.facade.loadBalances(); }
-  fmtDate(d: string): string { return formatDateTime(d); }
 }

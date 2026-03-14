@@ -1,8 +1,5 @@
 import { HttpParams } from '@angular/common/http';
 
-/**
- * Contrato único de resposta paginada para listagens das APIs (core, orders, payments).
- */
 export interface PageResponse<T> {
   data: T[];
   total: number;
@@ -10,9 +7,16 @@ export interface PageResponse<T> {
   pageSize: number;
 }
 
-/**
- * Converte um objeto de parâmetros de listagem em HttpParams, omitindo null/undefined e string vazia.
- */
+export interface CursorResponse<T> {
+  data: T[];
+  nextCursor: string | null;
+  hasMore: boolean;
+}
+
+export function cursorToPage<T>(r: CursorResponse<T>): PageResponse<T> {
+  return { data: r.data, total: r.data.length, page: 0, pageSize: r.data.length };
+}
+
 export function toParams(obj?: Record<string, unknown>): HttpParams {
   let params = new HttpParams();
   if (!obj) return params;

@@ -78,6 +78,7 @@ export interface Messages {
     statusActive: string;
     statusSuspended: string;
     statusPending: string;
+    statusDeleted: string;
     planStarter: string;
     planProfessional: string;
     planEnterprise: string;
@@ -438,6 +439,12 @@ export interface Messages {
     description: string;
     b2bShop: string;
     multiTenantB2BPlatform: string;
+    myProfile: string;
+    logout: string;
+    accountData: string;
+    planAndRegion: string;
+    rolesAndPermissions: string;
+    none: string;
   };
   statuses: Record<string, string>;
   adminPlaceholders: {
@@ -513,6 +520,8 @@ export interface Messages {
     insights: string;
     insightsDesc: string;
     aiError: string;
+    actor: string;
+    rollout: string;
     suspend: string;
     activate: string;
     saveChanges: string;
@@ -527,6 +536,17 @@ export interface Messages {
     slugRequired: string;
     slugFormat: string;
     slugHint: string;
+    usersTitle: string;
+    inviteUser: string;
+    searchByNameOrEmail: string;
+    editUser: string;
+    noUsersFound: string;
+    noUsersFoundDesc: string;
+    confirmDeleteUser: string;
+    userDeleted: string;
+    inviteSent: string;
+    userUpdated: string;
+    userError: string;
   };
 }
 

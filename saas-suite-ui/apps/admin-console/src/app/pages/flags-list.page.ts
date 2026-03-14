@@ -41,10 +41,6 @@ import { I18nService } from '@saas-suite/shared/i18n';
             <mat-label>{{ i18n.messages().common.name }}</mat-label>
             <input matInput [(ngModel)]="newName" [placeholder]="i18n.messages().adminPlaceholders.flagName">
           </mat-form-field>
-          <mat-form-field appearance="outline">
-            <mat-label>{{ i18n.messages().common.description }}</mat-label>
-            <input matInput [(ngModel)]="newDesc">
-          </mat-form-field>
           <mat-slide-toggle [(ngModel)]="newEnabled">{{ i18n.messages().admin.enabled }}</mat-slide-toggle>
           <button mat-raised-button color="primary" (click)="create()">{{ i18n.messages().common.create }}</button>
           <button mat-stroked-button (click)="showForm = false">{{ i18n.messages().common.cancel }}</button>
@@ -71,9 +67,9 @@ import { I18nService } from '@saas-suite/shared/i18n';
               <mat-slide-toggle [checked]="f.enabled" (change)="toggle(f)" />
             </td>
           </ng-container>
-          <ng-container matColumnDef="description">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.description }}</th>
-            <td mat-cell *matCellDef="let f">{{ f.description || '—' }}</td>
+          <ng-container matColumnDef="rolloutPercent">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.rollout }}</th>
+            <td mat-cell *matCellDef="let f">{{ f.rolloutPercent != null ? f.rolloutPercent + '%' : '—' }}</td>
           </ng-container>
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef></th>
@@ -106,10 +102,9 @@ export class FlagsListPage implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   dataSource = new MatTableDataSource<any>([]);
-  columns = ['name', 'enabled', 'description', 'actions'];
+  columns = ['name', 'enabled', 'rolloutPercent', 'actions'];
   showForm = false;
   newName = '';
-  newDesc = '';
   newEnabled = true;
 
   constructor() {
@@ -137,10 +132,9 @@ export class FlagsListPage implements OnInit, AfterViewInit {
   async create(): Promise<void> {
     const tid = this.tenantStore.activeTenantId();
     if (!tid) return;
-    await this.facade.createFlag(tid, { name: this.newName, enabled: this.newEnabled, description: this.newDesc });
+    await this.facade.createFlag(tid, { name: this.newName, enabled: this.newEnabled });
     this.showForm = false;
     this.newName = '';
-    this.newDesc = '';
     this.snackBar.open(this.i18n.messages().admin.flagCreated, 'OK', { duration: 2000 });
   }
 

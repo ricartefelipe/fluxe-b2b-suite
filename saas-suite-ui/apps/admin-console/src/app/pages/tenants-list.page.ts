@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, AfterViewInit, effect } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, AfterViewInit, effect, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -106,6 +106,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
     .full-width { width: 100%; }
     .clickable-row:hover { background: rgba(0,0,0,.04); }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TenantsListPage implements OnInit, AfterViewInit {
   protected facade = inject(TenantsFacade);

@@ -1,7 +1,8 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, OnInit, ChangeDetectionStrategy, SecurityContext } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { UpperCasePipe } from '@angular/common';
+import { DomSanitizer } from '@angular/platform-browser';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -76,7 +77,7 @@ interface Insight {
             @for (msg of chatHistory(); track $index) {
               <div class="chat-msg" [class.user]="msg.role === 'user'" [class.ai]="msg.role === 'ai'">
                 <mat-icon>{{ msg.role === 'user' ? 'person' : 'smart_toy' }}</mat-icon>
-                <div class="msg-content" [innerHTML]="msg.text"></div>
+                <div class="msg-content" [innerHTML]="sanitize(msg.text)"></div>
               </div>
             }
             @if (chatLoading()) {
@@ -134,7 +135,7 @@ interface Insight {
           <mat-card-subtitle>Motor: {{ analysisResult()?.engine }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-          <div class="result-content" [innerHTML]="analysisResult()?.content"></div>
+          <div class="result-content" [innerHTML]="sanitize(analysisResult()?.content || '')"></div>
         </mat-card-content>
       </mat-card>
     }
@@ -222,10 +223,12 @@ interface Insight {
 
     @media (max-width: 900px) { .ai-grid { grid-template-columns: 1fr; } }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AiPage implements OnInit {
   private readonly http = inject(HttpClient);
   private readonly config = inject(RuntimeConfigService);
+  private readonly sanitizer = inject(DomSanitizer);
   protected readonly i18n = inject(I18nService);
 
   status = signal<AiStatus | null>(null);
@@ -310,6 +313,10 @@ export class AiPage implements OnInit {
       },
       error: () => this.insightsLoading.set(false),
     });
+  }
+
+  sanitize(html: string): string {
+    return this.sanitizer.sanitize(SecurityContext.HTML, html) || '';
   }
 
   severityIcon(severity: string): string {

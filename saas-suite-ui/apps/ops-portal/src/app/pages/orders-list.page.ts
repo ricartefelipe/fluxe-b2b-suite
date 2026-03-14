@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, AfterViewInit, effect } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, AfterViewInit, effect, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -97,6 +97,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
     .filters { display: flex; gap: 12px; margin-bottom: 16px; }
     .full-width { width: 100%; }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrdersListPage implements OnInit, AfterViewInit {
   protected facade = inject(OrdersFacade);

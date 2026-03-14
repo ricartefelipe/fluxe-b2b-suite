@@ -34,13 +34,8 @@ import { I18nService } from '@saas-suite/shared/i18n';
         <input matInput [(ngModel)]="filters.action" [placeholder]="i18n.messages().adminPlaceholders.auditAction">
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>{{ i18n.messages().admin.outcome }}</mat-label>
-        <mat-select [(ngModel)]="filters.outcome">
-          <mat-option [value]="undefined">{{ i18n.messages().common.all }}</mat-option>
-          <mat-option value="SUCCESS">{{ i18n.messages().statuses['SUCCESS'] }}</mat-option>
-          <mat-option value="DENIED">{{ i18n.messages().statuses['DENIED'] }}</mat-option>
-          <mat-option value="ERROR">{{ i18n.messages().statuses['ERROR'] }}</mat-option>
-        </mat-select>
+        <mat-label>{{ i18n.messages().admin.actor }}</mat-label>
+        <input matInput [(ngModel)]="filters.actorSub" [placeholder]="i18n.messages().adminPlaceholders.correlationId">
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>Correlation ID</mat-label>
@@ -65,11 +60,11 @@ import { I18nService } from '@saas-suite/shared/i18n';
         </ng-container>
         <ng-container matColumnDef="outcome">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.result }}</th>
-          <td mat-cell *matCellDef="let a"><saas-status-chip [status]="a.outcome" /></td>
+          <td mat-cell *matCellDef="let a"><saas-status-chip [status]="deriveOutcome(a.statusCode)" /></td>
         </ng-container>
-        <ng-container matColumnDef="userId">
+        <ng-container matColumnDef="actorSub">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.user }}</th>
-          <td mat-cell *matCellDef="let a">{{ a.userId || '—' }}</td>
+          <td mat-cell *matCellDef="let a">{{ a.actorSub || '—' }}</td>
         </ng-container>
         <ng-container matColumnDef="resourceType">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().admin.resource }}</th>
@@ -104,7 +99,7 @@ export class AuditListPage implements OnInit, AfterViewInit {
 
   dataSource = new MatTableDataSource<any>([]);
   filters: AuditListParams = {};
-  columns = ['createdAt', 'action', 'outcome', 'userId', 'resourceType', 'correlationId'];
+  columns = ['createdAt', 'action', 'outcome', 'actorSub', 'resourceType', 'correlationId'];
 
   constructor() {
     effect(() => {
@@ -120,4 +115,11 @@ export class AuditListPage implements OnInit, AfterViewInit {
   async ngOnInit(): Promise<void> { await this.search(); }
   async search(): Promise<void> { await this.facade.loadAuditLogs(this.filters); }
   fmtDate(d: string): string { return formatDateTime(d); }
+
+  deriveOutcome(statusCode?: number): string {
+    if (statusCode == null) return 'UNKNOWN';
+    if (statusCode >= 500) return 'ERROR';
+    if (statusCode >= 400) return 'DENIED';
+    return 'SUCCESS';
+  }
 }

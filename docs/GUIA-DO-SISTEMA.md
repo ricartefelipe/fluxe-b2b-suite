@@ -190,6 +190,20 @@ O sistema suporta **Português (pt-BR)** e **Inglês (en-US)** em todas as inter
 - **Auditoria completa**: todas as ações sensíveis e negações são registradas
 - **Sem credenciais em código**: variáveis de ambiente em produção
 - **BCrypt para senhas**: hashing seguro com salt
+- **XSS prevenido**: conteúdo dinâmico (LLM, busca) sanitizado com DomSanitizer
+- **Ledger validado**: débitos == créditos verificado antes de cada persistência
+- **Exceções tipadas**: todos os backends usam exceções de domínio (não genéricas)
+- **Health checks robustos**: readyz retorna 503 quando componentes falham
+
+### Padrões de Arquitetura
+- **Hexagonal / Ports & Adapters**: spring-saas-core com ports em application, adapters em infra
+- **Domain Exceptions**: hierarquia tipada em todos os backends (PaymentNotFound, InvalidOrderState, etc.)
+- **Value Objects**: Email e TenantId com validação no domínio (spring-saas-core)
+- **Repository Interfaces**: IOrderRepository como porta de abstração (node-b2b-orders)
+- **ABAC centralizado**: enforceOrThrow() elimina boilerplate nos controllers
+- **OpenAPI documentado**: @Operation em 27 endpoints do spring-saas-core
+- **OnPush**: ChangeDetectionStrategy.OnPush em 18+ componentes do frontend
+- **Global Exception Handlers**: ProblemDetails (RFC 7807) em todos os backends
 
 ---
 
@@ -230,7 +244,7 @@ O sistema suporta **Português (pt-BR)** e **Inglês (en-US)** em todas as inter
 | Banco de Dados | PostgreSQL (compartilhado, isolamento por tenant_id) |
 | Mensageria | RabbitMQ (outbox pattern) |
 | CI/CD | GitHub Actions |
-| Monorepo Frontend | Nx 22 + Angular 19 |
+| Monorepo Frontend | Nx 22 + Angular 21 |
 | Migrações DB | Liquibase (spring-saas-core) + Prisma (node-b2b-orders) |
 | Containerização | Docker |
 

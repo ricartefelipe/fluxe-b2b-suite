@@ -5,6 +5,24 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-03-14
+
+### Added
+- **Billing/assinatura real**: Stripe Billing integrado no spring-saas-core (StripeBillingPort, StripeBillingAdapter, NoopBillingAdapter)
+- **Email transacional**: EmailSender conectado em password reset, invite e welcome; ResendEmailSender adapter (api.resend.com)
+- **Página de Faturamento**: Admin Console com status de assinatura, planos, portal Stripe, troca de plano
+- **Landing page**: /welcome no Shop com hero, 4 features, 3 planos, tech stack (i18n completo)
+- **Link signup na login**: "Criar conta" em todas as telas de login
+- **Testes**: NoopBillingAdapterTest, LogEmailSenderTest (spring); billing.page.spec, landing.component.spec (frontend); test_gateway_factory (python)
+
+### Changed
+- **Gateways**: Factory corrigida (api_key_ref por provider); PagSeguro/MercadoPago webhooks com verificação; MercadoPago delete_payment_method implementado
+- **Migration 010**: stripe_customer_id, stripe_price_id, stripe_subscription_id em tenants/plan_definitions/subscriptions
+
+### Configuration (produção)
+- spring-saas-core: STRIPE_BILLING_SECRET_KEY, RESEND_API_KEY, FRONTEND_URL, app.billing.provider=stripe, app.email.provider=resend
+- py-payments-ledger: GATEWAY_PROVIDER, STRIPE_API_KEY, PAGSEGURO_TOKEN, MERCADOPAGO_ACCESS_TOKEN, MERCADOPAGO_WEBHOOK_SECRET
+
 ## [1.3.0] - 2026-03-14
 
 ### Security

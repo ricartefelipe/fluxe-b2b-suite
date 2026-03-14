@@ -8,6 +8,7 @@ import {
   Policy, CreatePolicyRequest, PolicyListParams,
   FeatureFlag, CreateFlagRequest, UpdateFlagRequest,
   AuditLog, AuditListParams,
+  PlanDefinition, Subscription,
 } from './models';
 
 function normalizePage<T>(raw: Record<string, unknown>): PageResponse<T> {
@@ -75,5 +76,21 @@ export class CoreApiClient {
   listAuditLogs(p?: AuditListParams): Observable<PageResponse<AuditLog>> {
     return this.http.get<Record<string, unknown>>(`${this.base}/v1/audit`, { params: toParams(p as Record<string, unknown>) })
       .pipe(map(r => normalizePage<AuditLog>(r)));
+  }
+
+  listPlans(): Observable<PlanDefinition[]> {
+    return this.http.get<PlanDefinition[]>(`${this.base}/v1/billing/plans`);
+  }
+
+  getCurrentSubscription(): Observable<Subscription> {
+    return this.http.get<Subscription>(`${this.base}/v1/subscriptions/current`);
+  }
+
+  createPortalSession(returnUrl: string): Observable<{ url: string }> {
+    return this.http.post<{ url: string }>(`${this.base}/v1/billing/portal-session`, { returnUrl });
+  }
+
+  startTrial(planSlug: string): Observable<Subscription> {
+    return this.http.post<Subscription>(`${this.base}/v1/subscriptions/trial`, { planSlug });
   }
 }

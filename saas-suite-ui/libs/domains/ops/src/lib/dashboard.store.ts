@@ -20,13 +20,16 @@ export interface OrderStatusCount {
 
 const STATUS_COLORS: Record<OrderStatus, string> = {
   DRAFT: '#78909c',
+  CREATED: '#90a4ae',
   RESERVED: '#ff9800',
   CONFIRMED: '#4caf50',
+  SHIPPED: '#1e88e5',
+  DELIVERED: '#00897b',
   CANCELLED: '#ef5350',
   PAID: '#2e7d32',
 };
 
-const ALL_STATUSES: OrderStatus[] = ['DRAFT', 'RESERVED', 'CONFIRMED', 'CANCELLED', 'PAID'];
+const ALL_STATUSES: OrderStatus[] = ['DRAFT', 'CREATED', 'RESERVED', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'PAID'];
 
 @Injectable({ providedIn: 'root' })
 export class DashboardStore {

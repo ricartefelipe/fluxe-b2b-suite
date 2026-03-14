@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, AfterViewInit, effect } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, AfterViewInit, effect, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -89,6 +89,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
     code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
     .correlation { color: #6a1b9a; }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuditListPage implements OnInit, AfterViewInit {
   protected facade = inject(AuditFacade);

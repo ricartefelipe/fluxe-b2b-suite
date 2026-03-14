@@ -1,4 +1,4 @@
-import { Component, inject, signal, viewChild } from '@angular/core';
+import { Component, inject, signal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -748,6 +748,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
       }
     }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutComponent {
   protected readonly cart = inject(CartService);

@@ -406,9 +406,16 @@ export class GlobalSearchComponent {
     const query = this.searchService.query();
     if (!query) return text;
 
+    const safe = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
     const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(`(${escaped})`, 'gi');
-    return text.replace(regex, '<mark>$1</mark>');
+    return safe.replace(regex, '<mark>$1</mark>');
   }
 
   private selectByIndex(index: number): void {

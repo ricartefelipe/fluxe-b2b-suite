@@ -10,6 +10,7 @@ export const PT_BR_MESSAGES: Messages = {
     noData: 'Nenhum dado encontrado',
     search: 'Buscar',
     filter: 'Filtrar',
+    clear: 'Limpar',
     create: 'Criar',
     edit: 'Editar',
     back: 'Voltar',
@@ -169,6 +170,7 @@ export const PT_BR_MESSAGES: Messages = {
     credits: 'Créditos',
     debits: 'Débitos',
     reference: 'Referência',
+    account: 'Conta',
   },
   checkout: {
     cart: 'Carrinho',

@@ -75,8 +75,7 @@
       "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/apps/ops-portal",
-        "passWithNoTests": true
+        "reportsDirectory": "../../coverage/apps/ops-portal"
       }
     },
     "serve-static": {

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, AfterViewInit, effect } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, AfterViewInit, effect, untracked } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -115,6 +115,12 @@ export class FlagsListPage implements OnInit, AfterViewInit {
   constructor() {
     effect(() => {
       this.dataSource.data = this.facade.flags();
+    });
+    effect(() => {
+      const tid = this.tenantStore.activeTenantId();
+      if (tid) {
+        untracked(() => this.facade.loadFlags(tid, true));
+      }
     });
   }
 

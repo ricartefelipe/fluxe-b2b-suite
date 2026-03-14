@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, signal, computed, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -634,6 +634,7 @@ const REGIONS = [
       }
     }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TenantOnboardingPage implements OnInit, OnDestroy {
   readonly store = inject(TenantOnboardingStore);

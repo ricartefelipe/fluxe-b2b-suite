@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, AfterViewInit, signal } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, AfterViewInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
@@ -248,6 +248,7 @@ export class InviteUserDialog {
       padding: 2px 8px !important;
     }
   `],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UsersListPage implements OnInit, AfterViewInit {
   protected readonly i18n = inject(I18nService);

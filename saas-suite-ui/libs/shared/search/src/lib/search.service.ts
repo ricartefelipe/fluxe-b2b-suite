@@ -8,6 +8,7 @@ import { OrdersApiClient, Order, InventoryItem } from '@saas-suite/data-access/o
 import { PaymentsApiClient, PaymentIntent } from '@saas-suite/data-access/payments';
 import { ProductsService } from '@union.solutions/shop/data';
 import { Product } from '@union.solutions/models';
+import { CursorResponse } from '@saas-suite/shared/http';
 
 import { SearchResult, SearchEntityType, SearchConfig } from './search.model';
 import { SEARCH_CONFIG, DEFAULT_SEARCH_CONFIG } from './provide-search';
@@ -76,7 +77,7 @@ export class SearchService {
 
     if (enabled.includes('tenant')) {
       searches.push(
-        this.coreApi.listTenants({ name: query, pageSize: max }).pipe(
+        this.coreApi.listTenants({ name: query, limit: max }).pipe(
           map(res => res.data.map(t => this.mapTenant(t, q))),
           catchError(() => of([])),
         ),
@@ -85,7 +86,7 @@ export class SearchService {
 
     if (enabled.includes('order')) {
       searches.push(
-        this.ordersApi.listOrders({ pageSize: max * 3 }).pipe(
+        this.ordersApi.listOrders({ limit: max * 3 }).pipe(
           map(res =>
             res.data
               .filter(o => this.matchesOrder(o, q))
@@ -99,7 +100,7 @@ export class SearchService {
 
     if (enabled.includes('payment')) {
       searches.push(
-        this.paymentsApi.listPayments({ pageSize: max * 3 }).pipe(
+        this.paymentsApi.listPayments({ limit: max * 3 }).pipe(
           map(res =>
             res.data
               .filter(p => this.matchesPayment(p, q))
@@ -123,8 +124,8 @@ export class SearchService {
     if (enabled.includes('inventory')) {
       searches.push(
         this.ordersApi.listInventory(query).pipe(
-          map(items =>
-            items.slice(0, max).map(i => this.mapInventory(i, q)),
+          map((res: CursorResponse<InventoryItem>) =>
+            res.data.slice(0, max).map(i => this.mapInventory(i, q)),
           ),
           catchError(() => of([])),
         ),
@@ -133,7 +134,7 @@ export class SearchService {
 
     if (enabled.includes('audit')) {
       searches.push(
-        this.coreApi.listAuditLogs({ action: query, pageSize: max }).pipe(
+        this.coreApi.listAuditLogs({ action: query, limit: max }).pipe(
           map(res => res.data.map(a => this.mapAudit(a, q))),
           catchError(() => of([])),
         ),
@@ -160,7 +161,7 @@ export class SearchService {
       order.id.toLowerCase().includes(query) ||
       order.status.toLowerCase().includes(query) ||
       order.customerId.toLowerCase().includes(query) ||
-      order.currency.toLowerCase().includes(query)
+      (order.currency ?? '').toLowerCase().includes(query)
     );
   }
 
@@ -190,7 +191,7 @@ export class SearchService {
       id: order.id,
       entityType: 'order',
       title: `Order #${order.id.slice(0, 8)}`,
-      subtitle: `${order.status} - ${order.currency} ${order.totalAmount}`,
+      subtitle: `${order.status} - ${order.currency || 'BRL'} ${order.totalAmount}`,
       icon: 'receipt_long',
       url: `/orders/${order.id}`,
       score: this.calculateScore(order.id, query),
@@ -226,7 +227,7 @@ export class SearchService {
       id: item.sku,
       entityType: 'inventory',
       title: `SKU: ${item.sku}`,
-      subtitle: `Qty: ${item.quantity} (${item.availableQuantity} available)`,
+      subtitle: `Qty: ${item.qty} (${item.availableQty} available)`,
       icon: 'warehouse',
       url: '/inventory',
       score: this.calculateScore(item.sku, query),
@@ -238,7 +239,7 @@ export class SearchService {
       id: audit.id,
       entityType: 'audit',
       title: audit.action,
-      subtitle: `${audit.outcome} - ${audit.resourceType ?? 'N/A'}`,
+      subtitle: `${audit.statusCode != null ? (audit.statusCode >= 500 ? 'ERROR' : audit.statusCode >= 400 ? 'DENIED' : 'SUCCESS') : 'N/A'} - ${audit.resourceType ?? 'N/A'}`,
       icon: 'history',
       url: '/audit',
       score: this.calculateScore(audit.action, query),

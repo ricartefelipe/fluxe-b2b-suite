@@ -45,7 +45,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
           <mat-option [value]="undefined">{{ i18n.messages().common.all }}</mat-option>
           <mat-option value="ACTIVE">{{ i18n.messages().tenant.statusActive }}</mat-option>
           <mat-option value="SUSPENDED">{{ i18n.messages().tenant.statusSuspended }}</mat-option>
-          <mat-option value="PENDING">{{ i18n.messages().tenant.statusPending }}</mat-option>
+          <mat-option value="DELETED">{{ i18n.messages().tenant.statusDeleted }}</mat-option>
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="outline">
@@ -73,10 +73,6 @@ import { formatDateTime } from '@saas-suite/shared/util';
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.name }}</th>
           <td mat-cell *matCellDef="let t">{{ t.name }}</td>
-        </ng-container>
-        <ng-container matColumnDef="slug">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().tenant.tenantSlug }}</th>
-          <td mat-cell *matCellDef="let t"><code>{{ t.slug }}</code></td>
         </ng-container>
         <ng-container matColumnDef="plan">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().tenant.tenantPlan }}</th>
@@ -122,7 +118,7 @@ export class TenantsListPage implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   dataSource = new MatTableDataSource<any>([]);
-  columns = ['name', 'slug', 'plan', 'status', 'createdAt', 'actions'];
+  columns = ['name', 'plan', 'status', 'createdAt', 'actions'];
   filterName?: string;
   filterStatus?: TenantStatus;
   filterPlan?: TenantPlan;

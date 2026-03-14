@@ -14,7 +14,7 @@ export interface Order {
   status: OrderStatus;
   items: OrderItem[];
   totalAmount: number;
-  currency: string;
+  currency?: string;
   correlationId?: string;
   createdAt: string;
   updatedAt: string;
@@ -27,7 +27,7 @@ export interface CreateOrderRequest {
 
 export interface OrderListParams {
   status?: OrderStatus;
-  customerId?: string;
-  page?: number;
-  pageSize?: number;
+  q?: string;
+  cursor?: string;
+  limit?: number;
 }

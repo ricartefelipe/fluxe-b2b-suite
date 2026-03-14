@@ -3,8 +3,8 @@ export interface FeatureFlag {
   tenantId: string;
   name: string;
   enabled: boolean;
-  description?: string;
-  metadata?: Record<string, unknown>;
+  rolloutPercent?: number;
+  allowedRoles?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -12,12 +12,12 @@ export interface FeatureFlag {
 export interface CreateFlagRequest {
   name: string;
   enabled: boolean;
-  description?: string;
-  metadata?: Record<string, unknown>;
+  rolloutPercent?: number;
+  allowedRoles?: string;
 }
 
 export interface UpdateFlagRequest {
   enabled?: boolean;
-  description?: string;
-  metadata?: Record<string, unknown>;
+  rolloutPercent?: number;
+  allowedRoles?: string;
 }

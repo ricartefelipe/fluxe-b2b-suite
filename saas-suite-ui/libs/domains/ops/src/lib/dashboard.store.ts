@@ -54,7 +54,7 @@ export class DashboardStore {
   );
 
   readonly activeInventoryItems = computed(() =>
-    this._inventoryItems().filter(i => i.availableQuantity > 0).length,
+    this._inventoryItems().filter(i => i.availableQty > 0).length,
   );
 
   readonly pendingPayments = computed(() =>
@@ -107,7 +107,7 @@ export class DashboardStore {
   );
 
   readonly lowStockItems = computed(() =>
-    this._inventoryItems().filter(i => i.availableQuantity > 0 && i.availableQuantity < 10),
+    this._inventoryItems().filter(i => i.availableQty > 0 && i.availableQty < 10),
   );
 
   readonly recentAdjustments = computed(() =>
@@ -120,14 +120,14 @@ export class DashboardStore {
     this._loading.set(true);
     try {
       const [ordersRes, paymentsRes, inventory, adjustmentsRes] = await Promise.all([
-        firstValueFrom(this.ordersApi.listOrders({ pageSize: 100 })),
-        firstValueFrom(this.paymentsApi.listPayments({ pageSize: 100 })),
+        firstValueFrom(this.ordersApi.listOrders({ limit: 100 })),
+        firstValueFrom(this.paymentsApi.listPayments({ limit: 100 })),
         firstValueFrom(this.ordersApi.listInventory()),
-        firstValueFrom(this.ordersApi.listAdjustments({ pageSize: 50 })),
+        firstValueFrom(this.ordersApi.listAdjustments({ limit: 50 })),
       ]);
       this._orders.set(ordersRes.data);
       this._payments.set(paymentsRes.data);
-      this._inventoryItems.set(Array.isArray(inventory) ? inventory : (inventory as any)?.data ?? []);
+      this._inventoryItems.set(inventory.data ?? []);
       this._adjustments.set(adjustmentsRes.data);
     } catch (e) {
       this.logger.error('DashboardStore.loadAll failed', e);

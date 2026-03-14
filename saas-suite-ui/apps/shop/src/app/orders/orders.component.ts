@@ -163,7 +163,7 @@ const STATUS_CLASSES: Record<OrderStatus, string> = {
                     </span>
                   </td>
                   <td>{{ order.items.length }}</td>
-                  <td class="total-cell">{{ order.totalAmount | currency:order.currency:'symbol':'1.2-2' }}</td>
+                  <td class="total-cell">{{ order.totalAmount | currency:(order.currency || 'BRL'):'symbol':'1.2-2' }}</td>
                   <td>
                     <a mat-icon-button [routerLink]="['/orders', order.id]" [matTooltip]="i18n.messages().shop.viewDetails">
                       <mat-icon>visibility</mat-icon>
@@ -197,7 +197,7 @@ const STATUS_CLASSES: Record<OrderStatus, string> = {
                 <mat-divider />
                 <div class="card-detail-row card-total">
                   <span class="card-label">{{ i18n.messages().shop.total }}</span>
-                  <strong>{{ order.totalAmount | currency:order.currency:'symbol':'1.2-2' }}</strong>
+                  <strong>{{ order.totalAmount | currency:(order.currency || 'BRL'):'symbol':'1.2-2' }}</strong>
                 </div>
               </mat-card-content>
             </mat-card>

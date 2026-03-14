@@ -1,13 +1,15 @@
 export interface AuditLog {
   id: string;
   tenantId?: string;
-  userId?: string;
+  actorSub?: string;
+  actorRoles?: string[];
   action: string;
   resourceType?: string;
   resourceId?: string;
+  method?: string;
+  path?: string;
+  statusCode?: number;
   correlationId?: string;
-  permissionCode?: string;
-  outcome: 'SUCCESS' | 'DENIED' | 'ERROR';
   details?: Record<string, unknown>;
   createdAt: string;
 }
@@ -15,10 +17,10 @@ export interface AuditLog {
 export interface AuditListParams {
   tenantId?: string;
   action?: string;
-  outcome?: string;
+  actorSub?: string;
   from?: string;
   to?: string;
   correlationId?: string;
-  page?: number;
-  pageSize?: number;
+  cursor?: string;
+  limit?: number;
 }

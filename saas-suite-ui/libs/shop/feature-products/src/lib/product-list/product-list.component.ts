@@ -943,7 +943,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     if (this.inStockOnly) filter.inStock = true;
     if (this.minPrice !== null) filter.minPrice = this.minPrice;
     if (this.maxPrice !== null) filter.maxPrice = this.maxPrice;
-    if (sort.field !== 'relevance') {
+    if (sort.field !== 'relevance' && sort.field !== 'rating') {
       filter.sortBy = sort.field;
       filter.sortOrder = sort.order;
     }

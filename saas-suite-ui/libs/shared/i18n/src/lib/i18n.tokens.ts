@@ -572,6 +572,37 @@ export interface Messages {
     userUpdated: string;
     userError: string;
   };
+  landing: {
+    subtitle: string;
+    description: string;
+    ctaStart: string;
+    ctaDemo: string;
+    ctaContact: string;
+    featuresTitle: string;
+    feat1Title: string;
+    feat1Desc: string;
+    feat2Title: string;
+    feat2Desc: string;
+    feat3Title: string;
+    feat3Desc: string;
+    feat4Title: string;
+    feat4Desc: string;
+    pricingTitle: string;
+    free: string;
+    custom: string;
+    popular: string;
+    plan1a: string;
+    plan1b: string;
+    plan1c: string;
+    plan2a: string;
+    plan2b: string;
+    plan2c: string;
+    plan3a: string;
+    plan3b: string;
+    plan3c: string;
+    techTitle: string;
+    rights: string;
+  };
 }
 
 export type Locale = 'pt-BR' | 'en-US';

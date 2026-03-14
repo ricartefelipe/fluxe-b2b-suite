@@ -71,7 +71,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
         </ng-container>
         <ng-container matColumnDef="quantity">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().inventory.quantity }}</th>
-          <td mat-cell *matCellDef="let a">{{ a.quantity }}</td>
+          <td mat-cell *matCellDef="let a">{{ a.qty }}</td>
         </ng-container>
         <ng-container matColumnDef="reason">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().inventory.reason }}</th>
@@ -116,7 +116,7 @@ export class AdjustmentsListPage implements OnInit, AfterViewInit {
   async ngOnInit(): Promise<void> { await this.search(); }
 
   async search(): Promise<void> {
-    await this.facade.loadAdjustments({ sku: this.filterSku, type: this.filterType });
+    await this.facade.loadAdjustments({ sku: this.filterSku });
   }
 
   fmtDate(d: string): string { return formatDateTime(d); }

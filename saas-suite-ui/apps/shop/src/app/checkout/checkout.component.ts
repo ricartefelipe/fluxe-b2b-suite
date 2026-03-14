@@ -799,6 +799,10 @@ export class CheckoutComponent {
     this.cart.updateQuantity(item.product.id, item.quantity - 1);
   }
 
+  private delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   async placeOrder(): Promise<void> {
     this.termsAccepted.markAsTouched();
     if (this.termsAccepted.invalid) return;
@@ -822,9 +826,12 @@ export class CheckoutComponent {
         return;
       }
 
+      await this.ordersFacade.loadOrder(order.id);
+      const fullOrder = this.ordersFacade.selectedOrder();
+
       const paymentReq: CreatePaymentIntentRequest = {
-        amount: order.totalAmount,
-        currency: order.currency,
+        amount: fullOrder?.totalAmount ?? order.totalAmount,
+        currency: fullOrder?.currency || order.currency || 'BRL',
         customer_ref: this.customerId,
       };
       const payment = await this.paymentsFacade.createPayment(paymentReq);
@@ -840,13 +847,20 @@ export class CheckoutComponent {
         return;
       }
 
-      const confirmedOrd = await this.ordersFacade.confirmOrder(order.id);
+      let confirmedOrd = await this.ordersFacade.confirmOrder(order.id);
+      if (!confirmedOrd) {
+        await this.delay(1500);
+        confirmedOrd = await this.ordersFacade.confirmOrder(order.id);
+      }
       if (!confirmedOrd) {
         this.checkoutError.set(msgs.failedConfirmOrder);
         return;
       }
 
-      this.confirmedOrder.set(confirmedOrd);
+      await this.ordersFacade.loadOrder(order.id);
+      const finalOrder = this.ordersFacade.selectedOrder();
+
+      this.confirmedOrder.set(finalOrder ?? confirmedOrd);
       this.cart.clear();
       this.stepper()?.next();
     } catch (e) {

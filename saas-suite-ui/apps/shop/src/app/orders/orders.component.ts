@@ -23,11 +23,14 @@ import { I18nService } from '@saas-suite/shared/i18n';
 type StatusFilter = OrderStatus | 'ALL';
 
 const STATUS_CLASSES: Record<OrderStatus, string> = {
+  DRAFT: 'status-pending',
+  CREATED: 'status-pending',
+  RESERVED: 'status-pending',
   CONFIRMED: 'status-success',
+  SHIPPED: 'status-info',
+  DELIVERED: 'status-success',
   PAID: 'status-success',
   CANCELLED: 'status-error',
-  DRAFT: 'status-pending',
-  RESERVED: 'status-pending',
 };
 
 @Component({
@@ -160,7 +163,7 @@ const STATUS_CLASSES: Record<OrderStatus, string> = {
                     </span>
                   </td>
                   <td>{{ order.items.length }}</td>
-                  <td class="total-cell">{{ order.totalAmount | currency }}</td>
+                  <td class="total-cell">{{ order.totalAmount | currency:order.currency:'symbol':'1.2-2' }}</td>
                   <td>
                     <a mat-icon-button [routerLink]="['/orders', order.id]" [matTooltip]="i18n.messages().shop.viewDetails">
                       <mat-icon>visibility</mat-icon>
@@ -194,7 +197,7 @@ const STATUS_CLASSES: Record<OrderStatus, string> = {
                 <mat-divider />
                 <div class="card-detail-row card-total">
                   <span class="card-label">{{ i18n.messages().shop.total }}</span>
-                  <strong>{{ order.totalAmount | currency }}</strong>
+                  <strong>{{ order.totalAmount | currency:order.currency:'symbol':'1.2-2' }}</strong>
                 </div>
               </mat-card-content>
             </mat-card>
@@ -456,12 +459,16 @@ export class OrdersComponent implements OnInit {
 
   getStatusLabel(status: StatusFilter): string {
     if (status === 'ALL') return this.i18n.messages().shop.allStatuses;
+    const msgs = this.i18n.messages();
     const map: Record<OrderStatus, string> = {
-      DRAFT: this.i18n.messages().orders.draft,
-      RESERVED: this.i18n.messages().orders.reserved,
-      CONFIRMED: this.i18n.messages().orders.confirmed,
-      PAID: this.i18n.messages().orders.paid,
-      CANCELLED: this.i18n.messages().orders.cancelled,
+      DRAFT: msgs.orders.draft,
+      CREATED: msgs.statuses['CREATED'],
+      RESERVED: msgs.orders.reserved,
+      CONFIRMED: msgs.orders.confirmed,
+      SHIPPED: msgs.statuses['SHIPPED'],
+      DELIVERED: msgs.statuses['DELIVERED'],
+      PAID: msgs.orders.paid,
+      CANCELLED: msgs.orders.cancelled,
     };
     return map[status];
   }

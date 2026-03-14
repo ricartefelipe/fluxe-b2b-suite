@@ -1,4 +1,4 @@
-export type OrderStatus = 'DRAFT' | 'RESERVED' | 'CONFIRMED' | 'CANCELLED' | 'PAID';
+export type OrderStatus = 'DRAFT' | 'CREATED' | 'RESERVED' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'PAID';
 
 export interface OrderItem {
   sku: string;

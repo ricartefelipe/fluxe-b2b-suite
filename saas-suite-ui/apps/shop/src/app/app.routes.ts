@@ -3,6 +3,11 @@ import { shopAuthGuard } from './guards/shop-auth.guard';
 
 export const appRoutes: Route[] = [
   {
+    path: 'welcome',
+    title: 'Fluxe B2B Suite',
+    loadComponent: () => import('./landing/landing.component').then(m => m.LandingComponent),
+  },
+  {
     path: 'login',
     loadComponent: () => import('@saas-suite/shared/auth').then(m => m.LoginPageComponent),
   },

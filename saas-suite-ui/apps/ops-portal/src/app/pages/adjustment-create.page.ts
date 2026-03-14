@@ -73,7 +73,7 @@ export class AdjustmentCreatePage {
   async submit(): Promise<void> {
     if (!this.sku || !this.reason) return;
     this.submitting.set(true);
-    const adj = await this.facade.createAdjustment({ sku: this.sku, type: this.type, quantity: this.quantity, reason: this.reason });
+    const adj = await this.facade.createAdjustment({ sku: this.sku, type: this.type, qty: this.quantity, reason: this.reason });
     this.submitting.set(false);
     if (adj) {
       this.snackBar.open(this.i18n.messages().inventory.adjustmentCreated, 'OK', { duration: 2000 });

@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators, FormGroup, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,11 +23,6 @@ const REGIONS = [
   { value: 'us-east-1', label: 'América do Norte (Virgínia)' },
   { value: 'eu-west-1', label: 'Europa (Irlanda)' },
 ];
-
-function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
-  if (!ctrl.value) return null;
-  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(ctrl.value) ? null : { slug: true };
-}
 
 @Component({
   selector: 'app-tenant-onboarding',
@@ -66,24 +61,12 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
             <form [formGroup]="orgForm" class="org-form">
               <mat-form-field appearance="outline" class="full-width">
                 <mat-label>{{ ob.orgName }}</mat-label>
-                <input matInput formControlName="name" [placeholder]="i18n.messages().adminPlaceholders.orgName" (input)="onNameChange()">
+                <input matInput formControlName="name" [placeholder]="i18n.messages().adminPlaceholders.orgName">
                 @if (orgForm.controls['name'].hasError('required') && orgForm.controls['name'].touched) {
                   <mat-error>{{ ob.nameRequired }}</mat-error>
                 }
                 @if (orgForm.controls['name'].hasError('minlength')) {
                   <mat-error>{{ ob.nameMinLength }}</mat-error>
-                }
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>{{ ob.slug }}</mat-label>
-                <input matInput formControlName="slug" [placeholder]="i18n.messages().adminPlaceholders.orgSlug">
-                <mat-hint>{{ ob.slugHint }}</mat-hint>
-                @if (orgForm.controls['slug'].hasError('required') && orgForm.controls['slug'].touched) {
-                  <mat-error>{{ ob.slugRequired }}</mat-error>
-                }
-                @if (orgForm.controls['slug'].hasError('slug')) {
-                  <mat-error>{{ ob.slugFormat }}</mat-error>
                 }
               </mat-form-field>
 
@@ -245,11 +228,6 @@ function slugValidator(ctrl: AbstractControl): ValidationErrors | null {
                   <div class="review-row">
                     <span class="review-label">{{ ob.name }}</span>
                     <span class="review-value">{{ store.orgInfo().name }}</span>
-                  </div>
-                  <mat-divider />
-                  <div class="review-row">
-                    <span class="review-label">{{ ob.slug }}</span>
-                    <span class="review-value mono">{{ store.orgInfo().slug }}</span>
                   </div>
                   <mat-divider />
                   <div class="review-row">
@@ -666,7 +644,7 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
   get ob() { return this.i18n.messages().onboarding; }
 
   readonly regions = REGIONS;
-  readonly selectedPlan = signal<TenantPlan | null>('professional');
+  readonly selectedPlan = signal<TenantPlan | null>('pro');
 
   readonly planOptions = computed(() => {
     const m = this.i18n.messages().onboarding;
@@ -684,7 +662,7 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
         ],
       },
       {
-        key: 'professional' as TenantPlan,
+        key: 'pro' as TenantPlan,
         name: 'Professional',
         price: 'R$ 749' + m.perMonth,
         recommended: true,
@@ -719,7 +697,6 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
 
   readonly orgForm: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
-    slug: ['', [Validators.required, slugValidator]],
     region: ['sa-east-1', Validators.required],
   });
 
@@ -729,22 +706,11 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.reset();
-    this.store.setPlan('professional');
+    this.store.setPlan('pro');
   }
 
   ngOnDestroy(): void {
     this.store.reset();
-  }
-
-  onNameChange(): void {
-    const name = this.orgForm.get('name')?.value ?? '';
-    const slug = name
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, '')
-      .replace(/\s+/g, '-')
-      .replace(/-+/g, '-')
-      .replace(/^-|-$/g, '');
-    this.orgForm.get('slug')?.setValue(slug, { emitEvent: false });
   }
 
   selectPlan(plan: TenantPlan): void {
@@ -756,7 +722,6 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
     if (event.selectedIndex >= 1) {
       const org: OrgInfo = {
         name: this.orgForm.get('name')?.value,
-        slug: this.orgForm.get('slug')?.value,
         region: this.orgForm.get('region')?.value,
       };
       this.store.setOrgInfo(org);
@@ -773,7 +738,6 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
   async onSubmit(stepper: { next: () => void }): Promise<void> {
     const org: OrgInfo = {
       name: this.orgForm.get('name')?.value,
-      slug: this.orgForm.get('slug')?.value,
       region: this.orgForm.get('region')?.value,
     };
     this.store.setOrgInfo(org);
@@ -800,9 +764,9 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
 
   createAnother(stepper: { reset: () => void }): void {
     this.store.reset();
-    this.orgForm.reset({ name: '', slug: '', region: 'sa-east-1' });
+    this.orgForm.reset({ name: '', region: 'sa-east-1' });
     this.configForm.reset({ adminEmail: '' });
-    this.selectedPlan.set('professional');
+    this.selectedPlan.set('pro');
     stepper.reset();
   }
 

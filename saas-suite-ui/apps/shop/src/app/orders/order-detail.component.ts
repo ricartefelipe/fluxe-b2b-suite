@@ -90,7 +90,7 @@ const STATUS_CLASSES: Record<OrderStatus, string> = {
             </mat-card-header>
             <mat-card-content>
               <div class="items-list">
-                @for (item of order.items; track $index) {
+                @for (item of order.items; track item.sku) {
                   <div class="detail-item">
                     <div class="detail-item-info">
                       <span class="detail-item-name">{{ item.sku }}</span>

@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { PaymentsApiClient } from './payments-api.client';
-import { LedgerEntry, LedgerBalance, LedgerParams } from './models/ledger.model';
+import { LedgerJournalEntry, LedgerEntryRow, LedgerBalance, LedgerParams } from './models/ledger.model';
 import { LoggerService } from '@saas-suite/shared/telemetry';
 
 @Injectable({ providedIn: 'root' })
@@ -9,7 +9,7 @@ export class LedgerFacade {
   private api = inject(PaymentsApiClient);
   private logger = inject(LoggerService);
 
-  private readonly _entries = signal<LedgerEntry[]>([]);
+  private readonly _entries = signal<LedgerEntryRow[]>([]);
   private readonly _balances = signal<LedgerBalance[]>([]);
   private readonly _total = signal(0);
   private readonly _loading = signal(false);
@@ -22,8 +22,10 @@ export class LedgerFacade {
   async loadEntries(params?: LedgerParams): Promise<void> {
     this._loading.set(true);
     try {
-      const r = await firstValueFrom(this.api.listLedgerEntries(params));
-      this._entries.set(r.data); this._total.set(r.total);
+      const journals = await firstValueFrom(this.api.listLedgerEntries(params));
+      const rows = this.flattenJournals(journals);
+      this._entries.set(rows);
+      this._total.set(rows.length);
     } catch (e) { this.logger.error('loadLedgerEntries failed', e); }
     finally { this._loading.set(false); }
   }
@@ -35,5 +37,23 @@ export class LedgerFacade {
       this._balances.set(b);
     } catch (e) { this.logger.error('loadBalances failed', e); }
     finally { this._loading.set(false); }
+  }
+
+  private flattenJournals(journals: LedgerJournalEntry[]): LedgerEntryRow[] {
+    const rows: LedgerEntryRow[] = [];
+    for (const j of journals) {
+      for (const line of j.lines) {
+        rows.push({
+          id: j.id,
+          postedAt: j.posted_at,
+          side: line.side,
+          account: line.account,
+          amount: parseFloat(line.amount),
+          currency: line.currency,
+          paymentIntentId: j.payment_intent_id,
+        });
+      }
+    }
+    return rows;
   }
 }

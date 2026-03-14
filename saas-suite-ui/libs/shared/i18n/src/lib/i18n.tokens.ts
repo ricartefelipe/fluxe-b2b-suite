@@ -61,6 +61,8 @@ export interface Messages {
     signOut: string;
     sessionExpired: string;
     accessDenied: string;
+    noAccount: string;
+    signupLink: string;
   };
   tenant: {
     selectTenant: string;
@@ -478,6 +480,28 @@ export interface Messages {
     users: string;
     auditLog: string;
     aiAssistant: string;
+    billing: string;
+  };
+  billing: {
+    title: string;
+    currentPlan: string;
+    status: string;
+    period: string;
+    trial: string;
+    active: string;
+    pastDue: string;
+    cancelled: string;
+    expired: string;
+    manageBilling: string;
+    changePlan: string;
+    perMonth: string;
+    perYear: string;
+    users: string;
+    projects: string;
+    storage: string;
+    freePlan: string;
+    currentPlanBadge: string;
+    noSubscription: string;
   };
   admin: {
     policiesTitle: string;

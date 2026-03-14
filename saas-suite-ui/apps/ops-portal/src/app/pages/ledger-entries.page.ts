@@ -6,6 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
@@ -16,9 +18,10 @@ import { formatDateTime } from '@saas-suite/shared/util';
 @Component({
   selector: 'app-ledger-entries',
   standalone: true,
+  providers: [provideNativeDateAdapter()],
   imports: [
     FormsModule, DecimalPipe, MatTableModule, MatButtonModule, MatIconModule,
-    MatFormFieldModule, MatInputModule, MatSortModule, MatPaginatorModule,
+    MatFormFieldModule, MatInputModule, MatDatepickerModule, MatSortModule, MatPaginatorModule,
     StatusChipComponent, EmptyStateComponent, TableSkeletonComponent,
   ],
   template: `
@@ -30,40 +33,46 @@ import { formatDateTime } from '@saas-suite/shared/util';
     <div class="filters">
       <mat-form-field appearance="outline">
         <mat-label>{{ i18n.messages().ledger.from }}</mat-label>
-        <input matInput type="date" [(ngModel)]="from">
+        <input matInput [matDatepicker]="fromPicker" [(ngModel)]="fromDate" (dateChange)="search()">
+        <mat-datepicker-toggle matIconSuffix [for]="fromPicker" />
+        <mat-datepicker #fromPicker />
       </mat-form-field>
       <mat-form-field appearance="outline">
         <mat-label>{{ i18n.messages().ledger.to }}</mat-label>
-        <input matInput type="date" [(ngModel)]="to">
+        <input matInput [matDatepicker]="toPicker" [(ngModel)]="toDate" (dateChange)="search()">
+        <mat-datepicker-toggle matIconSuffix [for]="toPicker" />
+        <mat-datepicker #toPicker />
       </mat-form-field>
-      <button mat-raised-button color="primary" (click)="search()">{{ i18n.messages().common.filter }}</button>
+      <button mat-stroked-button (click)="clearFilters()"><mat-icon>clear</mat-icon> {{ i18n.messages().common.clear }}</button>
     </div>
 
     @if (facade.loading()) {
-      <saas-table-skeleton [rowCount]="5" [columns]="5" />
+      <saas-table-skeleton [rowCount]="5" [columns]="6" />
     } @else if (dataSource.data.length === 0) {
       <saas-empty-state icon="account_balance" [title]="i18n.messages().ledger.noEntriesFound" />
     } @else {
       <table mat-table [dataSource]="dataSource" matSort class="full-width">
-        <ng-container matColumnDef="createdAt">
+        <ng-container matColumnDef="postedAt">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.date }}</th>
-          <td mat-cell *matCellDef="let e">{{ fmtDate(e.createdAt) }}</td>
+          <td mat-cell *matCellDef="let e">{{ fmtDate(e.postedAt) }}</td>
         </ng-container>
-        <ng-container matColumnDef="type">
+        <ng-container matColumnDef="side">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.type }}</th>
-          <td mat-cell *matCellDef="let e"><saas-status-chip [status]="e.type" /></td>
+          <td mat-cell *matCellDef="let e"><saas-status-chip [status]="e.side" /></td>
+        </ng-container>
+        <ng-container matColumnDef="account">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().ledger.account }}</th>
+          <td mat-cell *matCellDef="let e">{{ e.account }}</td>
         </ng-container>
         <ng-container matColumnDef="amount">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.amount }}</th>
-          <td mat-cell *matCellDef="let e">{{ e.currency }} {{ e.amount | number:'1.2-2' }}</td>
+          <td mat-cell *matCellDef="let e" [class]="e.side === 'CREDIT' ? 'credit' : 'debit'">
+            {{ e.side === 'CREDIT' ? '+' : '-' }}{{ e.amount | number:'1.2-2' }} {{ e.currency }}
+          </td>
         </ng-container>
-        <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.description }}</th>
-          <td mat-cell *matCellDef="let e">{{ e.description || '—' }}</td>
-        </ng-container>
-        <ng-container matColumnDef="referenceId">
+        <ng-container matColumnDef="paymentIntentId">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().ledger.reference }}</th>
-          <td mat-cell *matCellDef="let e"><code>{{ e.referenceId?.substring(0, 8) || '—' }}</code></td>
+          <td mat-cell *matCellDef="let e"><code>{{ e.paymentIntentId?.substring(0, 8) || '—' }}</code></td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
         <tr mat-row *matRowDef="let row; columns: columns;"></tr>
@@ -73,8 +82,11 @@ import { formatDateTime } from '@saas-suite/shared/util';
   `,
   styles: [`
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .filters { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
+    .filters { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
     .full-width { width: 100%; }
+    .credit { color: #2e7d32; font-weight: 500; }
+    .debit { color: #c62828; font-weight: 500; }
+    code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
   `],
 })
 export class LedgerEntriesPage implements OnInit, AfterViewInit {
@@ -85,9 +97,9 @@ export class LedgerEntriesPage implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   dataSource = new MatTableDataSource<any>([]);
-  from?: string;
-  to?: string;
-  columns = ['createdAt', 'type', 'amount', 'description', 'referenceId'];
+  fromDate: Date | null = null;
+  toDate: Date | null = null;
+  columns = ['postedAt', 'side', 'account', 'amount', 'paymentIntentId'];
 
   constructor() {
     effect(() => {
@@ -100,11 +112,26 @@ export class LedgerEntriesPage implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  async ngOnInit(): Promise<void> { await this.search(); }
+  async ngOnInit(): Promise<void> {
+    await this.search();
+  }
 
   async search(): Promise<void> {
-    await this.facade.loadEntries({ from: this.from, to: this.to });
+    const params: Record<string, string | undefined> = {};
+    if (this.fromDate) params['from'] = this.toIsoDate(this.fromDate);
+    if (this.toDate) params['to'] = this.toIsoDate(this.toDate);
+    await this.facade.loadEntries(params);
+  }
+
+  clearFilters(): void {
+    this.fromDate = null;
+    this.toDate = null;
+    this.search();
   }
 
   fmtDate(d: string): string { return formatDateTime(d); }
+
+  private toIsoDate(d: Date): string {
+    return d.toISOString().split('T')[0];
+  }
 }

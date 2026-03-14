@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-03-14
+
+### Fixed
+- Admin Console: tenant auto-selecionado ao inicializar (JWT ou primeiro da lista)
+- Feature Flags: tela sempre vazia corrigida — recarrega reativamente ao mudar de tenant
+- Página de flags agora usa `effect()` + `untracked()` para reatividade segura com Angular Signals
+
 ## [1.0.0] - 2026-03-07
 
 ### Added

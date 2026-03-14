@@ -2,6 +2,7 @@ export * from './lib/models/tenant.model';
 export * from './lib/models/policy.model';
 export * from './lib/models/flag.model';
 export * from './lib/models/audit.model';
+export * from './lib/models/billing.model';
 export * from './lib/core-api.client';
 export * from './lib/tenants.facade';
 export * from './lib/policies.facade';

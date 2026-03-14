@@ -2,6 +2,7 @@ import { Component, inject, computed, OnInit } from '@angular/core';
 import { ShellComponent, NavItem } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
+import { AuthStore } from '@saas-suite/shared/auth';
 
 @Component({
   selector: 'app-admin-shell',
@@ -12,6 +13,7 @@ import { TenantContextStore } from '@saas-suite/domains/tenancy';
 export class AdminShellComponent implements OnInit {
   private i18n = inject(I18nService);
   private tenantStore = inject(TenantContextStore);
+  private authStore = inject(AuthStore);
 
   readonly appTitle = computed(() => this.i18n.messages().adminNav.appTitle);
 
@@ -30,5 +32,14 @@ export class AdminShellComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.tenantStore.loadTenants();
+    if (!this.tenantStore.activeTenantId()) {
+      const tid = this.authStore.session()?.tenantId;
+      const match = this.tenantStore.tenants().find(t => t.id === tid);
+      if (match) {
+        this.tenantStore.selectTenant(match);
+      } else if (this.tenantStore.tenants().length > 0) {
+        this.tenantStore.selectTenant(this.tenantStore.tenants()[0]);
+      }
+    }
   }
 }

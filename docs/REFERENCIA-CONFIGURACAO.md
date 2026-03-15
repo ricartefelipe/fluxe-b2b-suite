@@ -2,6 +2,8 @@
 
 Todas as variáveis de ambiente dos serviços backend, extraídas dos arquivos de configuração do código-fonte.
 
+**Portas e hosts por ambiente:** use a tabela única em [config/env/README.md](../config/env/README.md) para local vs Docker; evita trocar variáveis à mão.
+
 ---
 
 ## spring-saas-core

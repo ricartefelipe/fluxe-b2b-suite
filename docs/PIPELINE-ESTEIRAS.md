@@ -38,6 +38,7 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 ### 4. CI/CD — portas obrigatórias
 
+- **PRs:** Todo pull request que tem como destino `develop` ou `master` dispara CI (lint, test, build). Só fazer merge com CI verde.
 - **develop:** CI deve passar antes de merge em develop; build-push gera imagem `:develop`
 - **master:** CI deve passar antes de merge em master; build-push gera imagem `:master`/`:latest`
 - **Deploy:** Não fazer deploy manual de branch que não passou em CI
@@ -162,16 +163,31 @@ Esta é a forma adotada no dia a dia:
 |-------|------|
 | 1 | Criar `feature/nome` ou `fix/nome` a partir de `develop` |
 | 2 | Desenvolver, commitar |
-| 3 | `git checkout develop` → `git merge feature/nome --no-ff` |
-| 4 | `git push origin develop` |
-| 5 | CI, build-push e deploy em staging rodam automaticamente |
-| 6 | Quando validado em staging: merge `develop` → `master`, push |
+| 3 | `git push origin feature/nome` e abrir **Pull Request** `feature/nome` → `develop` |
+| 4 | Revisar, garantir CI verde no PR, fazer **merge** (preferir *Merge commit* / `--no-ff`) |
+| 5 | Após o merge: **apagar a branch** `feature/nome` (no GitHub: "Delete branch"; local: `git branch -d feature/nome`) |
+| 6 | `git checkout develop` → `git pull origin develop`; CI e deploy em staging rodam automaticamente |
+| 7 | Quando validado em staging: abrir PR `develop` → `master`, merge, criar tag de release (seção Release e tags) |
 
-**Produção:** merge manual de develop em master quando pronto; sem branch de release nem tags por enquanto.
+**Produção:** merge manual de develop em master quando pronto. Recomenda-se criar **tag de release** ao promover para master (ver abaixo).
 
-**Evolução futura (quando fizer sentido):**
-- **Tags:** criar `v1.0.0` ao promover para master — facilita rollback e changelog
-- **Branch release:** considerar se surgir QA prolongado ou time maior
+### Release e tags
+
+Ao fazer merge `develop` → `master` (produção), **criar uma tag** para rastreabilidade e rollback:
+
+1. Após o merge em `master`, na raiz do repositório:
+   ```bash
+   git checkout master
+   git pull origin master
+   git tag -a v1.5.0 -m "Release v1.5.0: go-live produção, docs GO-LIVE-VENDA"
+   git push origin v1.5.0
+   ```
+2. Seguir [Semantic Versioning](https://semver.org/): `MAJOR.MINOR.PATCH` (ex.: 1.5.0, 1.6.0, 2.0.0).
+3. Manter o [CHANGELOG.md](../CHANGELOG.md) atualizado por release; a tag pode referenciar a seção do changelog.
+
+**Repositórios:** aplicar tags nos 4 repos quando houver mudanças relevantes (ex.: fluxe-b2b-suite e spring-saas-core na mesma release). Se apenas um repo mudou, tagar só esse repo.
+
+**Evolução futura:** branch `release/x.y.z` para QA prolongado ou múltiplos passos antes de master (opcional).
 
 ---
 
@@ -196,6 +212,8 @@ Esta é a forma adotada no dia a dia:
 - [ ] Cada serviço Railway com Production Branch correto (develop ou master)
 - [ ] Variáveis de ambiente por ambiente (JWT_SECRET, DB, etc.)
 - [ ] CORS_ORIGINS com URLs dos frontends de cada ambiente
+
+Para checklist completo de go-live (produção, Stripe, Resend, domínio, OIDC, termos): [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md).
 
 ---
 

@@ -4,11 +4,13 @@ on:
     branches: [master, develop]
     paths:
       - 'saas-suite-ui/**'
+      - 'docs/**'
       - '.github/workflows/deploy.yml'
   pull_request:
     branches: [master, develop]
     paths:
       - 'saas-suite-ui/**'
+      - 'docs/**'
       - '.github/workflows/deploy.yml'
 
 jobs:

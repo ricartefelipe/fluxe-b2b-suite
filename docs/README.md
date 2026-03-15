@@ -10,7 +10,9 @@
 |-----------|-----------|
 | [README.md](README.md) | Este índice |
 | [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md) | Configuração dos 3 ambientes: local, staging, produção |
-| [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Pipeline, esteiras develop/master e protocolos (Git Flow, qualidade, testes, CI/CD, docs) |
+| [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md) | Checklist completo go-live para venda (produção, Stripe, Resend, domínio, OIDC, termos) |
+| [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) | Deploy no Railway: passo a passo, variáveis, domínio customizado e SSL |
+| [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Pipeline, esteiras develop/master, release e tags, protocolos (Git Flow, CI/CD, docs) |
 | [OBSERVABILITY.md](OBSERVABILITY.md) | Observabilidade: Sentry, logging, correlation, backup (todos os serviços) |
 | [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) | Deploy completo passo a passo (servidor, Docker, domínios, SSL) |
 | [GUIA-OPERACIONAL.md](GUIA-OPERACIONAL.md) | Visão geral dos 4 serviços, diagrama de dependência e procedimentos operacionais |
@@ -25,6 +27,7 @@
 | [CATALOGO-API.md](CATALOGO-API.md) | Catálogo de todos os endpoints REST dos 3 serviços backend (gerado por `scripts/api-catalog.py`) |
 | [CATALOGO-EVENTOS.md](CATALOGO-EVENTOS.md) | Catálogo completo de eventos RabbitMQ: exchanges, routing keys, schemas, payloads |
 | [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md) | Referência de todas as variáveis de ambiente por serviço |
+| [TERMOS-PRIVACIDADE.md](TERMOS-PRIVACIDADE.md) | Referência para publicação de Termos de Uso e Política de Privacidade |
 
 ### Scripts de documentação
 

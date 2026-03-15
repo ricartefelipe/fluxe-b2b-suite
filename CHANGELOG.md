@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-03-15
+
+### Added
+- **Go-live para venda**: [docs/GO-LIVE-VENDA.md](docs/GO-LIVE-VENDA.md) — checklist completo (produção, Stripe, Resend, domínio, OIDC, migrations, termos)
+- **Termos e privacidade**: [docs/TERMOS-PRIVACIDADE.md](docs/TERMOS-PRIVACIDADE.md) — referência para publicação de Termos de Uso e Política de Privacidade
+- **Release e tags**: processo documentado em [PIPELINE-ESTEIRAS.md](docs/PIPELINE-ESTEIRAS.md) — criar tag (ex.: v1.5.0) ao promover develop → master
+
+### Changed
+- **DEPLOY-RAILWAY**: link para GO-LIVE-VENDA, seção domínio customizado e SSL expandida, AUTH_MODE=oidc em produção
+- **Frontends railway.prod.env.example**: AUTH_MODE=oidc como padrão produção, comentários para OIDC e domínios
+- **docs/README.md**: índice atualizado com GO-LIVE-VENDA, DEPLOY-RAILWAY, TERMOS-PRIVACIDADE
+- **PIPELINE-ESTEIRAS**: checklist de setup com link para GO-LIVE-VENDA
+
 ## [1.4.0] - 2026-03-14
 
 ### Added

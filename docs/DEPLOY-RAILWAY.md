@@ -1,6 +1,7 @@
 # Deploy no Railway — Fluxe B2B Suite
 
-> **Ambientes:** Para configuração completa de local, staging e produção (dados, seed, variáveis), veja [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md).
+> **Ambientes:** Para configuração completa de local, staging e produção (dados, seed, variáveis), veja [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md).  
+> **Go-live para venda:** Use o checklist completo em [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md).
 
 ## Visão Geral
 
@@ -108,7 +109,8 @@ Variáveis para **todos** os frontends (ver `saas-suite-ui/railway.prod.env.exam
 - `CORE_API_BASE_URL` → URL do spring-saas-core no Railway
 - `ORDERS_API_BASE_URL` → URL do node-b2b-orders no Railway
 - `PAYMENTS_API_BASE_URL` → URL do py-payments-ledger no Railway
-- `AUTH_MODE=hs256`
+- `AUTH_MODE=oidc` em produção (recomendado); `hs256` apenas para staging/demo
+- Em produção, configurar `OIDC_ISSUER`, `OIDC_CLIENT_ID`, `OIDC_SCOPE` conforme [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md)
 
 ### 6. Migrations
 
@@ -139,25 +141,30 @@ railway run python -m src.infrastructure.db.seed
 
 ## Checklist Pós-Deploy
 
+Ver checklist completo em [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md). Resumo:
+
 - [ ] Health check de cada backend (`/actuator/health`, `/v1/healthz`, `/healthz`)
 - [ ] Frontends carregam e exibem a tela de login
-- [ ] Login funciona (perfis rápidos ou OIDC)
+- [ ] Login funciona (OIDC ou HS256 com segredo forte)
 - [ ] Produtos listam no Shop
 - [ ] Dashboard do Ops Portal carrega
 - [ ] Tenants listam no Admin Console
 - [ ] JWT_SECRET é o **mesmo** nos 3 backends
 - [ ] `APP_DEV_TOKEN_ENDPOINT_ENABLED=false` em produção
-- [ ] CORS configurado com os domínios corretos dos frontends
+- [ ] CORS configurado com os domínios corretos dos frontends (incl. domínio customizado se usado)
 
-## Domínio Customizado
+## Domínio customizado e SSL
 
-No Railway, cada serviço recebe `*.up.railway.app`. Para domínio próprio:
+No Railway, cada serviço recebe `*.up.railway.app`. Para **produção com domínio próprio**:
 
-1. **Settings** → **Domains** → **Custom Domain**
-2. Apontar CNAME do seu domínio para o Railway
-3. SSL automático via Let's Encrypt
+1. No serviço: **Settings** → **Domains** → **Custom Domain**
+2. Informar o domínio (ex.: `app.seudominio.com.br`)
+3. No provedor DNS: criar **CNAME** apontando para o host indicado pelo Railway (ex.: `xxx.up.railway.app`)
+4. SSL: Railway provisiona certificado **Let's Encrypt** automaticamente após o DNS propagar
+5. Atualizar **CORS** em todos os backends com a lista exata de origens (ex.: `https://app.seudominio.com.br,https://admin.seudominio.com.br,https://ops.seudominio.com.br`)
+6. Atualizar variáveis dos frontends (`CORE_API_BASE_URL`, etc.) se usar domínio customizado também para as APIs
 
-Exemplo:
+Exemplo de mapeamento:
 - `app.fluxe.com.br` → shop
 - `admin.fluxe.com.br` → admin-console
 - `ops.fluxe.com.br` → ops-portal

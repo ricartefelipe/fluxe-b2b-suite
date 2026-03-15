@@ -19,6 +19,15 @@ A stack completa requer **7 serviços** no Railway:
 
 > **RabbitMQ**: use [CloudAMQP](https://www.cloudamqp.com/) (free tier: 1M msgs/mês).
 
+### Branch e ambiente (não alterar)
+
+| Branch | Ambiente |
+|--------|----------|
+| `master` | Produção |
+| `develop` | Staging |
+
+Configure cada projeto Railway com **Production Branch** = `develop` (staging) ou `master` (produção) conforme o ambiente.
+
 ## Custo Estimado
 
 | Cenário | Custo/mês |
@@ -226,7 +235,16 @@ Exemplo:
 | 401 nas APIs | Verificar se `JWT_SECRET` é o mesmo em todos os backends |
 | **EventSource MIME type / 401 em `/api/notifications/stream`** | O endpoint de notificações SSE não existe no Spring Core. O front não conecta em staging/prod (só mock em dev local). Se aparecer 401 ou "MIME type not text/event-stream", ignore — o recurso de notificações em tempo real será implementado depois. |
 | **500 em `GET /v1/tenants`** | Erro no backend. Verifique logs do spring-saas-core no Railway. Causas comuns: tabela `policies` vazia (ABAC precisa de ao menos uma política ALLOW para `tenants:read`), falha de Redis/DB, ou JWT inválido. Staging: rodar seed (`./scripts/staging-seed.sh railway`) para popular policies e dados iniciais. |
+| **Tenants não listam no Admin Console** | Ver seção [Tenants não listam](#tenants-não-listam-no-admin-console) abaixo. |
 | Frontend não conecta | Verificar `CORE_API_BASE_URL` e CORS_ORIGINS |
 | **Painel Ops (ou Admin) não carrega / dashboard vazio** | Nos serviços **ops-portal** e **admin-console**, definir **URLs absolutas** das APIs: `CORE_API_BASE_URL`, `ORDERS_API_BASE_URL`, `PAYMENTS_API_BASE_URL` (ex.: `https://spring-saas-core-xxx.up.railway.app`). O `entrypoint.sh` gera `/assets/config.json` a partir do template; se essas variáveis não estiverem setadas, o front chama URLs quebradas. Também garantir que o usuário logado tenha `tenantId` na sessão (Core deve estar acessível para login e lista de tenants). |
 | RabbitMQ não conecta | Verificar URL do CloudAMQP e credenciais |
 | Migrations falham | Verificar `DATABASE_URL` e se o PostgreSQL está acessível |
+
+### Tenants não listam no Admin Console
+
+1. **Verificar `CORE_API_BASE_URL` no admin-console:** Deve apontar para o **Spring Core** (ex.: `https://spring-saas-core-xxx.up.railway.app`). Confirme em `/assets/config.json` do build que `coreApiBaseUrl` está correto.
+2. **Se `CORE_API_BASE_URL` apontar para o Node (BFF):** No **node-b2b-orders**, defina `CORE_API_URL` com a URL do Spring Core. O proxy em `/v1/tenants` encaminha para o Core.
+3. **Testar `GET /v1/tenants` diretamente:** Com um JWT válido, faça `curl -H "Authorization: Bearer <token>" https://<core-url>/v1/tenants`. Deve retornar 200 com `{ items: [...] }`.
+4. **Policies no Spring:** O Liquibase changeset `008-essential-seed-all-envs.yaml` insere `tenants:read` e `tenants:write`. Se a tabela `policies` estiver vazia, o ABAC bloqueia. Em staging: `SPRING_PROFILES_ACTIVE=staging` e seed (`./scripts/staging-seed.sh railway`). Em prod: o 008 roda no startup e popula as políticas essenciais.
+5. **CORS:** O Spring deve ter `CORS_ALLOWED_ORIGINS` com a origem do admin-console (ex.: `https://admin-console-xxx.up.railway.app`).

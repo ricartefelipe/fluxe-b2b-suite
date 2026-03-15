@@ -1100,7 +1100,7 @@ Vamos configurar **3 projetos** — um para cada frontend: Shop, Ops Portal e Ad
 7. Clique **"Begin setup"**
 8. Configure:
    - **Project name:** `fluxe-shop`
-   - **Production branch:** `main` (ou `develop`, dependendo do seu workflow)
+   - **Production branch:** `master` (produção) ou `develop` (staging)
    - **Framework preset:** selecione **"None"** (vamos configurar manualmente)
    - **Build command:**
      ```

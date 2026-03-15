@@ -280,7 +280,6 @@ SERVER_PORT=8080 \
 DB_URL="jdbc:postgresql://localhost:5435/saascore" \
 DB_USER=saascore \
 DB_PASS=saascore \
-SPRING_LIQUIBASE_CONTEXTS=local \
 AUTH_MODE=hs256 \
 JWT_HS256_SECRET="$JWT_SECRET" \
 JWT_ISSUER="$JWT_ISSUER" \

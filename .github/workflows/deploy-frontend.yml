@@ -86,9 +86,9 @@ jobs:
       - name: Inject runtime config
         if: github.ref == 'refs/heads/master'
         env:
-          CORE_API_URL: ${{ vars.CORE_API_URL }}
-          ORDERS_API_URL: ${{ vars.ORDERS_API_URL }}
-          PAYMENTS_API_URL: ${{ vars.PAYMENTS_API_URL }}
+          CORE_API_BASE_URL: ${{ vars.CORE_API_BASE_URL }}
+          ORDERS_API_BASE_URL: ${{ vars.ORDERS_API_BASE_URL }}
+          PAYMENTS_API_BASE_URL: ${{ vars.PAYMENTS_API_BASE_URL }}
           KEYCLOAK_URL: ${{ vars.KEYCLOAK_URL }}
           KEYCLOAK_REALM: ${{ vars.KEYCLOAK_REALM }}
           KEYCLOAK_CLIENT_ID: ${{ vars.KEYCLOAK_CLIENT_ID }}
@@ -96,10 +96,9 @@ jobs:
           OUTPUT_DIR="${{ matrix.app.output }}"
           cat > "${OUTPUT_DIR}/config.json" << CONF
           {
-            "coreApiUrl": "${CORE_API_URL:-https://api.fluxe.com.br}",
-            "ordersApiUrl": "${ORDERS_API_URL:-https://orders.fluxe.com.br}",
-            "paymentsApiUrl": "${PAYMENTS_API_URL:-https://payments.fluxe.com.br}",
-            "keycloakUrl": "${KEYCLOAK_URL:-https://auth.fluxe.com.br}"
+            "coreApiBaseUrl": "${CORE_API_BASE_URL:-https://api.fluxe.com.br}",
+            "ordersApiBaseUrl": "${ORDERS_API_BASE_URL:-https://orders.fluxe.com.br}",
+            "paymentsApiBaseUrl": "${PAYMENTS_API_BASE_URL:-https://payments.fluxe.com.br}"
           }
           CONF
           cat > "${OUTPUT_DIR}/config.keycloak.json" << KC

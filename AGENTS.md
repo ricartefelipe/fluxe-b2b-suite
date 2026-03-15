@@ -33,6 +33,7 @@ Não presumir que "ambiente não existe" — staging e produção já foram usad
 
 - Branches: `master` (prod), `develop` (staging), `feature/*`, `fix/*`
 - Merge via PR; CI deve passar antes do merge
+- **Mensagens de commit:** proibido citar o IDE ou ferramenta (ex.: não incluir "Made with …" no corpo da mensagem). Remover qualquer trailer de atribuição antes de commitar ou no amend.
 - Atualizar documentação quando alterar contratos, APIs, variáveis ou fluxos
 - Ver [docs/PIPELINE-ESTEIRAS.md](docs/PIPELINE-ESTEIRAS.md) e [CONTRIBUTING.md](CONTRIBUTING.md)
 

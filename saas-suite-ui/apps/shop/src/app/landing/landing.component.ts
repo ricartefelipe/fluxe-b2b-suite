@@ -22,7 +22,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
             <a mat-raised-button color="primary" routerLink="/signup" class="cta-primary">
               {{ i18n.messages().landing.ctaStart }}
             </a>
-            <a mat-stroked-button (click)="scrollTo('features')" class="cta-secondary">
+            <a mat-stroked-button (click)="scrollTo('features')" (keydown.enter)="scrollTo('features')" (keydown.space)="scrollTo('features'); $event.preventDefault()" tabindex="0" role="button" class="cta-secondary">
               {{ i18n.messages().landing.ctaDemo }}
             </a>
           </div>

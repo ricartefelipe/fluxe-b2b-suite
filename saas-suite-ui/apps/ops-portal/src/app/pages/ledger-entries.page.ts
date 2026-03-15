@@ -12,7 +12,7 @@ import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
-import { LedgerFacade } from '@saas-suite/data-access/payments';
+import { LedgerFacade, LedgerEntryRow } from '@saas-suite/data-access/payments';
 import { formatDateTime } from '@saas-suite/shared/util';
 
 @Component({
@@ -96,7 +96,7 @@ export class LedgerEntriesPage implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<LedgerEntryRow>([]);
   fromDate: Date | null = null;
   toDate: Date | null = null;
   columns = ['postedAt', 'side', 'account', 'amount', 'paymentIntentId'];

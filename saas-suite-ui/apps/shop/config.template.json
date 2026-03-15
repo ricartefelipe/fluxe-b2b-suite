@@ -3,6 +3,8 @@
   "ordersApiBaseUrl": "${ORDERS_API_BASE_URL}",
   "paymentsApiBaseUrl": "${PAYMENTS_API_BASE_URL}",
   "authMode": "${AUTH_MODE}",
+  "supportEmail": "${SUPPORT_EMAIL}",
+  "supportDocsUrl": "${SUPPORT_DOCS_URL}",
   "oidc": {
     "issuer": "${OIDC_ISSUER}",
     "clientId": "${OIDC_CLIENT_ID}",

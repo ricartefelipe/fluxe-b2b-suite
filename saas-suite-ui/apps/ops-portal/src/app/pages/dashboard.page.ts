@@ -582,7 +582,9 @@ export class DashboardPage implements OnInit {
 
   readonly yAxisTicks = computed(() => {
     const max = this.store.maxDailyRevenue();
-    if (max === 0) return [];
+    if (!Number.isFinite(max) || max <= 0) {
+      return [{ y: 190 - BAR_MAX_HEIGHT * 0.5, label: '0' }];
+    }
     return [0.25, 0.5, 0.75, 1].map(pct => ({
       y: 190 - pct * BAR_MAX_HEIGHT,
       label: this.shortCurrency(max * pct),
@@ -614,8 +616,8 @@ export class DashboardPage implements OnInit {
     this.store.loadAll();
   }
 
-  /** Altura mínima em px para barras com receita zero (para o gráfico não ficar vazio). */
-  private readonly MIN_BAR_HEIGHT = 4;
+  /** Altura mínima em px para barras com receita zero (gráfico sempre visível). */
+  private readonly MIN_BAR_HEIGHT = 18;
 
   barHeight(amount: number): number {
     const amt = Number(amount) || 0;

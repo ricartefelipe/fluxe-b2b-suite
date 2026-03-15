@@ -13,6 +13,7 @@
 | [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md) | Checklist completo go-live para venda (produção, Stripe, Resend, domínio, OIDC, termos) |
 | [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) | Deploy no Railway: passo a passo, variáveis, domínio customizado e SSL |
 | [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Pipeline, esteiras develop/master, release e tags, protocolos (Git Flow, CI/CD, docs) |
+| [FLUXO-PR-FEATURE.md](FLUXO-PR-FEATURE.md) | Fluxo resumido: feature branch → PR → merge → apagar branch |
 | [OBSERVABILITY.md](OBSERVABILITY.md) | Observabilidade: Sentry, logging, correlation, backup (todos os serviços) |
 | [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) | Deploy completo passo a passo (servidor, Docker, domínios, SSL) |
 | [GUIA-OPERACIONAL.md](GUIA-OPERACIONAL.md) | Visão geral dos 4 serviços, diagrama de dependência e procedimentos operacionais |

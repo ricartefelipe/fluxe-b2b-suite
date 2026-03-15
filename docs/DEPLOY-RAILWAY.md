@@ -77,6 +77,7 @@ Variáveis (ver `railway.prod.env.example`):
 - `REDIS_HOST`, `REDIS_PORT` → referências ao plugin Redis
 - `RABBITMQ_HOST/PORT/USER/PASS` → CloudAMQP
 - `JWT_HS256_SECRET` → gerar com `openssl rand -base64 32`
+- **Email (convites):** `EMAIL_PROVIDER=resend`, `RESEND_API_KEY=re_xxx`, `FRONTEND_URL=https://admin-console-xxx.up.railway.app`, `EMAIL_FROM=noreply@seudominio.com.br` (domínio verificado no Resend)
 - `APP_DEV_TOKEN_ENDPOINT_ENABLED=false`
 
 #### node-b2b-orders

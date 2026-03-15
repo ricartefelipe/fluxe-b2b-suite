@@ -8,7 +8,7 @@ Siga os protocolos definidos em **[docs/PIPELINE-ESTEIRAS.md](docs/PIPELINE-ESTE
 
 | Área | Protocolo |
 |------|------------|
-| **Git Flow** | `feature/*` ou `fix/*` a partir de `develop` → PR para develop → PR para master quando pronto |
+| **Git Flow** | `feature/*` ou `fix/*` → merge em develop (--no-ff) → push → staging. merge develop→master quando pronto para prod |
 | **Qualidade** | Lint, testes e build devem passar no CI antes do merge |
 | **Testes** | Não fazer merge com testes quebrados; coverage mantido |
 | **CI/CD** | develop → staging; master → production |

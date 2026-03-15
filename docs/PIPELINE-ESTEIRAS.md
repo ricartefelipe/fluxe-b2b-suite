@@ -154,6 +154,27 @@ feature/* → develop (merge) → master (merge, quando pronto)
 
 ---
 
+## Fluxo prático (como trabalhamos hoje)
+
+Esta é a forma adotada no dia a dia:
+
+| Passo | Ação |
+|-------|------|
+| 1 | Criar `feature/nome` ou `fix/nome` a partir de `develop` |
+| 2 | Desenvolver, commitar |
+| 3 | `git checkout develop` → `git merge feature/nome --no-ff` |
+| 4 | `git push origin develop` |
+| 5 | CI, build-push e deploy em staging rodam automaticamente |
+| 6 | Quando validado em staging: merge `develop` → `master`, push |
+
+**Produção:** merge manual de develop em master quando pronto; sem branch de release nem tags por enquanto.
+
+**Evolução futura (quando fizer sentido):**
+- **Tags:** criar `v1.0.0` ao promover para master — facilita rollback e changelog
+- **Branch release:** considerar se surgir QA prolongado ou time maior
+
+---
+
 ## URLs esperadas (após configurar Railway)
 
 | Serviço    | Staging (develop)                 | Production (master)                |

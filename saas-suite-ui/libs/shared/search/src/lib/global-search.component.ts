@@ -126,6 +126,8 @@ interface ResultGroup {
       display: flex;
       flex-direction: column;
       max-height: 70vh;
+      background: #fff;
+      color: #111827;
     }
 
     .gs-input-row {
@@ -151,11 +153,11 @@ interface ResultGroup {
       font-size: 16px;
       font-family: inherit;
       background: transparent;
-      color: #1f2937;
+      color: #111827;
       line-height: 1.5;
     }
     .gs-input::placeholder {
-      color: #9ca3af;
+      color: #6b7280;
     }
 
     .gs-clear-btn {
@@ -380,6 +382,11 @@ export class GlobalSearchComponent {
     const total = this.totalResults();
 
     switch (event.key) {
+      case 'Escape':
+        event.preventDefault();
+        this.dialogRef.close();
+        break;
+
       case 'ArrowDown':
         event.preventDefault();
         this.selectedIndex.update(i => (i < total - 1 ? i + 1 : 0));

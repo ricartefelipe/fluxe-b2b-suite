@@ -224,6 +224,8 @@ Exemplo:
 |---|---|
 | Build falha (Maven/npm) | Verificar se o Dockerfile está correto e as dependências estão no `package.json`/`pom.xml` |
 | 401 nas APIs | Verificar se `JWT_SECRET` é o mesmo em todos os backends |
+| **EventSource MIME type / 401 em `/api/notifications/stream`** | O endpoint de notificações SSE não existe no Spring Core. O front não conecta em staging/prod (só mock em dev local). Se aparecer 401 ou "MIME type not text/event-stream", ignore — o recurso de notificações em tempo real será implementado depois. |
+| **500 em `GET /v1/tenants`** | Erro no backend. Verifique logs do spring-saas-core no Railway. Causas comuns: tabela `policies` vazia (ABAC precisa de ao menos uma política ALLOW para `tenants:read`), falha de Redis/DB, ou JWT inválido. Staging: rodar seed (`./scripts/staging-seed.sh railway`) para popular policies e dados iniciais. |
 | Frontend não conecta | Verificar `CORE_API_BASE_URL` e CORS_ORIGINS |
 | **Painel Ops (ou Admin) não carrega / dashboard vazio** | Nos serviços **ops-portal** e **admin-console**, definir **URLs absolutas** das APIs: `CORE_API_BASE_URL`, `ORDERS_API_BASE_URL`, `PAYMENTS_API_BASE_URL` (ex.: `https://spring-saas-core-xxx.up.railway.app`). O `entrypoint.sh` gera `/assets/config.json` a partir do template; se essas variáveis não estiverem setadas, o front chama URLs quebradas. Também garantir que o usuário logado tenha `tenantId` na sessão (Core deve estar acessível para login e lista de tenants). |
 | RabbitMQ não conecta | Verificar URL do CloudAMQP e credenciais |

@@ -62,7 +62,7 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 | **develop** | Staging   | Railway (staging) + Cloudflare preview  |
 | **master**  | Production| Railway (production) + Cloudflare prod  |
 
-**Staging — dados para testes:** após o deploy em `develop`, alimente o ambiente com `./scripts/staging-seed.sh railway` (a partir do repo fluxe-b2b-suite, com Railway CLI e backends linkados ao projeto Staging). Ver [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md).
+**Staging — dados para testes:** após o deploy em `develop`, rode `./scripts/staging-seed.sh railway` no repo fluxe-b2b-suite (Railway CLI e backends linkados ao projeto Staging). Detalhes: [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md#alimentar-staging-com-dados-após-primeiro-deploy).
 
 ---
 

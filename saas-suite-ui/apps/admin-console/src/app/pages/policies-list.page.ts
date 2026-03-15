@@ -122,7 +122,7 @@ export class PoliciesListPage implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<Policy>([]);
   columns = ['permissionCode', 'effect', 'enabled', 'notes', 'actions'];
   showForm = false;
 
@@ -152,11 +152,15 @@ export class PoliciesListPage implements OnInit, AfterViewInit {
       return;
     }
     const val = this.policyForm.getRawValue();
+    const permissionCode = val.permissionCode;
+    const effect = val.effect;
+    const enabled = val.enabled;
+    if (permissionCode == null || effect == null || enabled == null) return;
     const req: CreatePolicyRequest & { enabled: boolean } = {
-      permissionCode: val.permissionCode!,
-      effect: val.effect!,
+      permissionCode,
+      effect,
       notes: val.notes ?? undefined,
-      enabled: val.enabled!,
+      enabled,
     };
     const p = await this.facade.createPolicy(req);
     if (p) {

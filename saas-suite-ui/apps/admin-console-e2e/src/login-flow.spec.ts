@@ -8,7 +8,7 @@ test.describe('Admin Console Login', () => {
 
   test('should display login page', async ({ page }) => {
     await page.goto('/login');
-    await expect(page.locator('button, mat-card')).toBeVisible();
+    await expect(page.getByRole('button', { name: /login|entrar|sign in|admin/i })).toBeVisible();
   });
 
   test('should login with dev credentials', async ({ page }) => {

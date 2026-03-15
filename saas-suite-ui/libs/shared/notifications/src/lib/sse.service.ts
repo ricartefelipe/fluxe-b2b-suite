@@ -82,7 +82,6 @@ export class SseService implements OnDestroy {
       this.startMockMode();
       return;
     }
-    this.connectSse();
   }
 
   disconnect(): void {

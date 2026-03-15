@@ -12,7 +12,7 @@ import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
-import { OrdersFacade, OrderStatus } from '@saas-suite/data-access/orders';
+import { OrdersFacade, OrderStatus, Order } from '@saas-suite/data-access/orders';
 import { formatDateTime } from '@saas-suite/shared/util';
 
 @Component({
@@ -107,7 +107,7 @@ export class OrdersListPage implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<Order>([]);
   filterStatus?: OrderStatus;
   filterCustomer?: string;
   columns = ['id', 'customerId', 'totalAmount', 'status', 'createdAt', 'actions'];

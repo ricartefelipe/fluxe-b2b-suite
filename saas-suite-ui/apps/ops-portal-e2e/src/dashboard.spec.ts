@@ -8,11 +8,10 @@ test.describe('Ops Dashboard', () => {
       .filter({ hasText: /login|admin|operator/i })
       .first();
 
-    if (await loginBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+    const visible = await loginBtn.isVisible({ timeout: 3000 }).catch(() => false);
+    if (visible) {
       await loginBtn.click();
-      await page
-        .waitForURL(/(dashboard|orders)/, { timeout: 5000 })
-        .catch(() => {});
+      await page.waitForURL(/(dashboard|orders)/, { timeout: 5000 }).catch(() => undefined);
     }
   });
 
@@ -20,9 +19,7 @@ test.describe('Ops Dashboard', () => {
     await page.goto('/dashboard');
 
     const cards = page.locator('mat-card, .kpi-card, .dashboard-card');
-    await expect(cards.first())
-      .toBeVisible({ timeout: 10000 })
-      .catch(() => {});
+    await expect(cards.first()).toBeVisible({ timeout: 10000 });
   });
 
   test('should display charts section', async ({ page }) => {

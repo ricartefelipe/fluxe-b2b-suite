@@ -59,18 +59,17 @@ Ambiente na nuvem para testar antes de produção. Deploy automático quando há
 3. Variáveis de ambiente (ver `railway.prod.env.example` em cada repo)
 4. **SPRING_PROFILES_ACTIVE=staging** no spring-saas-core (usa `application-staging.yml` com seed)
 
-### Migrations e seed (após primeiro deploy)
+### Alimentar Staging com dados (após primeiro deploy)
+
+Do repositório **fluxe-b2b-suite**, com Railway CLI logado e cada backend (node-b2b-orders, py-payments-ledger) linkado ao **projeto Railway Staging**:
+
 ```bash
-# spring-saas-core: Liquibase roda no startup (contexts: staging,seed)
-
-# node-b2b-orders
-railway run npx prisma migrate deploy
-railway run npx prisma db seed
-
-# py-payments-ledger
-railway run alembic upgrade head
-railway run python -m src.infrastructure.db.seed
+./scripts/staging-seed.sh railway
 ```
+
+O script roda em sequência: migrations + seed do node-b2b-orders e do py-payments-ledger. O **spring-saas-core** já aplica seed no deploy quando `SPRING_PROFILES_ACTIVE=staging` (Liquibase contexts: staging,seed).
+
+Para dados extras (pedidos, payment intents, inventário via API), use `./scripts/demo-seed.sh` apontando para as URLs de staging (variáveis `CORE`, `ORDERS`, `PAYMENTS` ou editar o script).
 
 ### Dados
 - Mesmo que local: **migration + seed completo** para testes ricos.

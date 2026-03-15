@@ -118,7 +118,7 @@ export class TenantsListPage implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<Tenant>([]);
   columns = ['name', 'plan', 'status', 'createdAt', 'actions'];
   filterName?: string;
   filterStatus?: TenantStatus;

@@ -102,7 +102,7 @@ export class FlagsListPage implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<FeatureFlag>([]);
   columns = ['name', 'enabled', 'rolloutPercent', 'actions'];
   showForm = false;
   newName = '';

@@ -15,6 +15,10 @@ import type { PageResponse } from '@saas-suite/shared/http';
 
 const BASE = 'http://localhost:8080';
 
+const mockConfig = {
+  get: (key: string) => (key === 'coreApiBaseUrl' ? BASE : ''),
+};
+
 function stubTenant(overrides: Partial<Tenant> = {}): Tenant {
   return {
     id: 'tid-1',
@@ -51,7 +55,11 @@ describe('CoreApiClient', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: RuntimeConfigService, useValue: mockConfig },
+      ],
     });
     api = TestBed.inject(CoreApiClient);
     httpCtrl = TestBed.inject(HttpTestingController);

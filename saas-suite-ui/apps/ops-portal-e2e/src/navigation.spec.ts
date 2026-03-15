@@ -19,7 +19,8 @@ test.describe('Ops Portal Navigation', () => {
 
     for (const section of ['orders', 'payments', 'inventory/adjustments']) {
       await page.goto(`/${section}`);
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
+      await expect(page).toHaveURL(/\/(orders|payments|inventory|login)/);
     }
   });
 });

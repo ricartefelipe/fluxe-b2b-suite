@@ -8,6 +8,21 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./landing/landing.component').then(m => m.LandingComponent),
   },
   {
+    path: 'terms',
+    title: 'Termos de Uso | Fluxe B2B Suite',
+    loadComponent: () => import('./legal/terms.component').then(m => m.TermsComponent),
+  },
+  {
+    path: 'privacy',
+    title: 'Política de Privacidade | Fluxe B2B Suite',
+    loadComponent: () => import('./legal/privacy.component').then(m => m.PrivacyComponent),
+  },
+  {
+    path: 'contact',
+    title: 'Fale conosco | Fluxe B2B Suite',
+    loadComponent: () => import('./legal/contact.component').then(m => m.ContactComponent),
+  },
+  {
     path: 'login',
     loadComponent: () => import('@saas-suite/shared/auth').then(m => m.LoginPageComponent),
   },

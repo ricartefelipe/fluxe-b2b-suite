@@ -36,6 +36,12 @@ Não presumir que "ambiente não existe" — staging e produção já foram usad
 - Atualizar documentação quando alterar contratos, APIs, variáveis ou fluxos
 - Ver [docs/PIPELINE-ESTEIRAS.md](docs/PIPELINE-ESTEIRAS.md) e [CONTRIBUTING.md](CONTRIBUTING.md)
 
+### Ao terminar uma tarefa (obrigatório para o agente)
+
+- **Nunca** commitar direto na `develop`. Sempre usar feature branch.
+- Fluxo: (1) criar branch `feature/nome-da-tarefa` **antes** de editar; (2) fazer o trabalho nessa branch; (3) ao concluir: commit (mensagem sem menção a Cursor), merge em `develop`, apagar a branch de feature.
+- Aplicar esse processo em **toda** tarefa que envolva commit.
+
 ---
 
 ## Testes e qualidade

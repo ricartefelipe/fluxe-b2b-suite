@@ -147,12 +147,14 @@ export class OrderCreatePage {
     }
     this.submitting.set(true);
     const val = this.orderForm.getRawValue();
+    const customerId = val.customerId;
+    if (!customerId) return;
     const order = await this.facade.createOrder({
-      customerId: val.customerId!,
+      customerId,
       items: val.items.map(i => ({
-        sku: i.sku!,
-        qty: i.quantity!,
-        price: i.unitPrice!,
+        sku: i.sku ?? '',
+        qty: i.quantity ?? 0,
+        price: i.unitPrice ?? 0,
         description: i.description ?? undefined,
       })),
     });

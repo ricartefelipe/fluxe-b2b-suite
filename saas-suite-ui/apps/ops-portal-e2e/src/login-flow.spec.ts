@@ -19,9 +19,8 @@ test.describe('Ops Portal Login', () => {
       .filter({ hasText: /login|sign in|admin|operator/i })
       .first();
 
-    if (await devLogin.isVisible()) {
-      await devLogin.click();
-      await page.waitForURL(/(dashboard|orders)/);
-    }
+    await expect(devLogin).toBeVisible({ timeout: 5000 });
+    await devLogin.click();
+    await expect(page).toHaveURL(/(dashboard|orders)/, { timeout: 10000 });
   });
 });

@@ -9,7 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
-import { AuditFacade, AuditListParams } from '@saas-suite/data-access/core';
+import { AuditFacade, AuditListParams, AuditLog } from '@saas-suite/data-access/core';
 import { formatDateTime } from '@saas-suite/shared/util';
 import { I18nService } from '@saas-suite/shared/i18n';
 
@@ -98,7 +98,7 @@ export class AuditListPage implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<AuditLog>([]);
   filters: AuditListParams = {};
   columns = ['createdAt', 'action', 'outcome', 'actorSub', 'resourceType', 'correlationId'];
 

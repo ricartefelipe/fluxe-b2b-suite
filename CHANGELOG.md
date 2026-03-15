@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-03-15
+
+### Added
+- **Staging — script de seed:** `scripts/staging-seed.sh railway` orquestra migrations + seeds de node-b2b-orders e py-payments-ledger no Railway (staging); spring-saas-core já recebe seed no deploy com profile `staging`
+- **Docs:** DEPLOY-RAILWAY e AMBIENTES-CONFIGURACAO atualizados com passos para alimentar staging; README da documentação com link para scripts operacionais (staging-seed, demo-seed) e para DEPLOY-RAILWAY
+
+### Changed
+- Separação explícita produção vs staging: seed completo apenas em staging; produção só migrations e dados via aplicação
+
 ## [1.4.0] - 2026-03-14
 
 ### Added

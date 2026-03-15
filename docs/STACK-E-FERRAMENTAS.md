@@ -42,3 +42,13 @@ Ou seja: **Rabbit, Redis, métricas, Grafana, circuit breaker e análise estáti
 - **SonarCloud** para o front: workflow em `saas-suite-ui/.github/workflows/sonarcloud.yml` e guia em `saas-suite-ui/docs/SONARCLOUD.md`.  
 - **Métricas no deploy:** seção "Métricas e Grafana no deploy" em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) (Grafana Cloud ou Prometheus+Grafana no Railway).  
 - **Cache Redis pro front:** padrão de chave, TTL e exemplos por stack em [CACHE-REDIS-FRONT.md](CACHE-REDIS-FRONT.md); implementação fica em cada backend.
+
+---
+
+## 4. Próximos passos (ação manual)
+
+| # | Ação | Onde |
+|---|------|------|
+| 1 | **Ativar SonarCloud** | Criar projeto em [sonarcloud.io](https://sonarcloud.io), gerar token, adicionar secret `SONAR_TOKEN` no GitHub e preencher `sonar.organization` e `sonar.projectKey` em `saas-suite-ui/sonar-project.properties`. Ver [saas-suite-ui/docs/SONARCLOUD.md](saas-suite-ui/docs/SONARCLOUD.md). |
+| 2 | **Ligar métricas no deploy** | Escolher Grafana Cloud (scrape das URLs dos backends) ou subir Prometheus + Grafana no Railway. Seguir a seção "Métricas e Grafana no deploy" em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md). |
+| 3 | **Implementar cache Redis nos backends** | Em cada repo (spring-saas-core, node-b2b-orders, py-payments-ledger), aplicar o padrão e os endpoints sugeridos em [CACHE-REDIS-FRONT.md](CACHE-REDIS-FRONT.md). |

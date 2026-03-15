@@ -23,8 +23,9 @@ Análise estática do monorepo (lint, duplicação, vulnerabilidades, code smell
    - Se o repositório for só o `saas-suite-ui` (não monorepo), no workflow remova ou ajuste `projectBaseDir: saas-suite-ui`.
 
 4. **Rodar**
-   - O job **SonarCloud** roda em todo push em `master`/`develop` e em pull requests.
+   - O job **SonarCloud** roda em todo push em `master`/`develop` e em pull requests. O step de scan só executa se o secret `SONAR_TOKEN` estiver definido; caso contrário é ignorado e o CI segue verde.
    - Resultados e badge: página do projeto no SonarCloud.
+   - Para o quality gate do SonarCloud falhar o build quando a análise não passar, o workflow já está configurado para falhar nesse caso (sem `continue-on-error`).
 
 ## Cobertura (opcional)
 

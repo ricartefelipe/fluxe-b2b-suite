@@ -190,3 +190,16 @@ feature/* → develop (merge) → master (merge, quando pronto)
 | py-payments-ledger | ci.yml, build-push.yml |
 
 **Próximo passo:** configurar Railway e testar push em `develop` e `master`.
+
+---
+
+## Status staging (última verificação)
+
+| Repo | CI | Build & Push | Deploy Frontend |
+|------|----|--------------|------------------|
+| fluxe-b2b-suite | ✅ | — | ✅ (Cloudflare preview) |
+| spring-saas-core | ✅ | ✅ | — |
+| node-b2b-orders | ✅ | ✅ | — |
+| py-payments-ledger | ✅ | ✅ | — |
+
+**Imagens GHCR** (tag `:develop`): disponíveis para Railway staging.

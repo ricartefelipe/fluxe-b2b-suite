@@ -183,7 +183,7 @@ Para **ver** métricas em produção você pode usar uma destas opções.
 
 1. Crie conta em [grafana.com/products/cloud](https://grafana.com/products/cloud) (free tier).
 2. Crie um **Prometheus** stack (ou use o Prometheus da Grafana Cloud).
-3. Em **Connections** → **Add new connection** → **Prometheus**, configure um **Remote Write** ou use **Scrape** apontando para as URLs públicas dos backends:
+3. Em **Connections** → **Add new connection** → **Prometheus**, configure um **Remote Write** ou use **Scrape** apontando para as URLs públicas dos backends. Exemplo de `scrape_configs` com URLs Railway: [monitoring/prometheus/prometheus.railway.example.yml](../monitoring/prometheus/prometheus.railway.example.yml) (substitua `XXXX` pelos IDs reais dos seus serviços).
    - `https://<spring-saas-core>.up.railway.app/actuator/prometheus`
    - `https://<node-b2b-orders>.up.railway.app/metrics`
    - `https://<py-payments-ledger>.up.railway.app/metrics`

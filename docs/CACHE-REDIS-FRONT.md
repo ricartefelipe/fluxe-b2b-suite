@@ -98,4 +98,12 @@ Redis já usado. Opções:
 - [ ] Em writes que afetem os dados cacheados, invalidar as chaves correspondentes (ou confiar só no TTL).
 - [ ] Medir latência antes/depois e uso de Redis (memória).
 
-Os arquivos de configuração do Prometheus/Grafana e desta doc ficam no repositório `fluxe-b2b-suite`; a implementação do cache fica em cada repositório de backend (spring-saas-core, node-b2b-orders, py-payments-ledger).
+Os arquivos de configuração do Prometheus/Grafana e desta doc ficam no repositório `fluxe-b2b-suite`; a implementação do cache fica em cada repositório de backend.
+
+---
+
+## Implementação aplicada
+
+- **spring-saas-core:** `RedisCacheConfig` (cache `frontTenants`, TTL 120s), `@Cacheable` em `TenantUseCase.searchCursor`, `@CacheEvict` em create/update/softDelete. Listagem GET /v1/tenants.
+- **node-b2b-orders:** cache em `OrdersService.listOrders` com chave `front:cache:orders:v1/orders:{tenantId}:{queryHash}`, TTL 30s.
+- **py-payments-ledger:** cache em `list_all` (GET /v1/payment-intents) com chave `front:cache:payments:v1/payment-intents:{tenant_id}:{query_hash}`, TTL 60s.

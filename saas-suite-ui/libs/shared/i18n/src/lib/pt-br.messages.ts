@@ -203,6 +203,8 @@ export const PT_BR_MESSAGES: Messages = {
     noLowStock: 'Nenhum item com estoque baixo.',
     recentAdjustments: 'Ajustes Recentes',
     availableQty: 'Disponível',
+    loadError: 'Não foi possível carregar os dados. Verifique as URLs das APIs no ambiente ou tente novamente.',
+    loadErrorAction: 'Tentar novamente',
   },
   onboarding: {
     title: 'Criar Novo Tenant',
@@ -636,5 +638,16 @@ export const PT_BR_MESSAGES: Messages = {
     plan3c: 'Armazenamento ilimitado',
     techTitle: 'Construído com tecnologia de ponta',
     rights: 'Todos os direitos reservados.',
+    terms: 'Termos de Uso',
+    privacy: 'Política de Privacidade',
+    contact: 'Fale conosco',
+  },
+  legal: {
+    termsTitle: 'Termos de Uso',
+    privacyTitle: 'Política de Privacidade',
+    contactTitle: 'Fale conosco',
+    contactDesc: 'Para dúvidas, suporte técnico ou comercial, entre em contato pelo e-mail abaixo.',
+    contactEmail: 'suporte@fluxe.com.br',
+    backToHome: 'Voltar ao início',
   },
 };

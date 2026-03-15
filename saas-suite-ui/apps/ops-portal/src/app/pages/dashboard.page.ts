@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { StatusChipComponent } from '@saas-suite/shared/ui';
@@ -22,7 +23,7 @@ const BAR_MAX_HEIGHT = 170;
   imports: [
     CurrencyPipe, SlicePipe, RouterLink,
     MatCardModule, MatTableModule, MatIconModule, MatProgressBarModule,
-    MatListModule, MatTooltipModule,
+    MatButtonModule, MatListModule, MatTooltipModule,
     StatusChipComponent,
   ],
   template: `
@@ -31,6 +32,15 @@ const BAR_MAX_HEIGHT = 170;
         <mat-progress-bar mode="indeterminate" />
       }
 
+      @if (store.loadError()) {
+        <mat-card class="error-card">
+          <mat-card-content>
+            <mat-icon class="error-icon">error_outline</mat-icon>
+            <p class="error-message">{{ i18n.messages().dashboard.loadError }}</p>
+            <button mat-raised-button color="primary" (click)="retryLoad()">{{ i18n.messages().dashboard.loadErrorAction }}</button>
+          </mat-card-content>
+        </mat-card>
+      } @else {
       <h1 class="page-title">{{ i18n.messages().dashboard.title }}</h1>
 
       <!-- KPI Cards -->
@@ -248,11 +258,37 @@ const BAR_MAX_HEIGHT = 170;
           </mat-card-content>
         </mat-card>
       </div>
+      }
     </div>
   `,
   styles: [`
     .dashboard {
       padding: 8px 0;
+    }
+
+    .error-card {
+      margin-bottom: 24px;
+      border-radius: 12px;
+      text-align: center;
+      padding: 32px;
+    }
+    .error-card mat-card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .error-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: var(--app-chip-warn-text);
+    }
+    .error-message {
+      margin: 0;
+      font-size: 15px;
+      color: var(--app-text-secondary);
+      max-width: 480px;
     }
 
     .page-title {
@@ -567,6 +603,10 @@ export class DashboardPage implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.store.loadAll();
+  }
+
+  retryLoad(): void {
+    this.store.loadAll();
   }
 
   barHeight(amount: number): number {

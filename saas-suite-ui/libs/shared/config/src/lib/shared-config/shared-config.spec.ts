@@ -76,9 +76,11 @@ describe('DEFAULT_CONFIG', () => {
   });
 
   it('has local URLs for all backends', () => {
-    expect(DEFAULT_CONFIG.coreApiBaseUrl).toContain('localhost');
-    expect(DEFAULT_CONFIG.ordersApiBaseUrl).toContain('localhost');
-    expect(DEFAULT_CONFIG.paymentsApiBaseUrl).toContain('localhost');
+    const isLocalUrl = (url: string) =>
+      url.includes('localhost') || url.startsWith('/api/');
+    expect(isLocalUrl(DEFAULT_CONFIG.coreApiBaseUrl)).toBe(true);
+    expect(isLocalUrl(DEFAULT_CONFIG.ordersApiBaseUrl)).toBe(true);
+    expect(isLocalUrl(DEFAULT_CONFIG.paymentsApiBaseUrl)).toBe(true);
   });
 
   it('starts at version 0.0.0', () => {

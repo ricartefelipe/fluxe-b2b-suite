@@ -39,6 +39,9 @@ usage() {
   echo "  py-payments-ledger: alembic upgrade + python -m src.infrastructure.db.seed"
   echo ""
   echo "  Repos irmãos esperados: $WKS_ROOT/node-b2b-orders, $WKS_ROOT/py-payments-ledger"
+  echo ""
+  echo "  Se 'railway run' falhar com Can't reach database (postgres.railway.internal), use DATABASE_PUBLIC_URL:"
+  echo "  Variável fica no serviço Postgres do projeto Railway. Ver config/env/README.md § Seed de staging a partir da máquina."
   echo "  Documentação: docs/AMBIENTES-CONFIGURACAO.md, docs/DEPLOY-RAILWAY.md"
   echo ""
 }

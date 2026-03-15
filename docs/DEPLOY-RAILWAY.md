@@ -110,6 +110,22 @@ Variáveis para **todos** os frontends (ver `saas-suite-ui/railway.prod.env.exam
 - `PAYMENTS_API_BASE_URL` → URL do py-payments-ledger no Railway
 - `AUTH_MODE=hs256`
 
+Para **ops-portal** e **admin-console** use sempre **URLs absolutas** (ex.: `https://spring-saas-core-xxx.up.railway.app`). URLs relativas (`/api/core`) só funcionam com proxy reverso; no Railway cada app é um serviço separado.
+
+**Shop (opcional):** `SUPPORT_EMAIL` (e-mail da página Fale conosco) e `SUPPORT_DOCS_URL` (URL do help center; se definida, o link "Ajuda" no rodapé abre essa URL).
+
+### 5.1 CORS nos backends
+
+Cada backend precisa aceitar as origens dos 3 frontends. Defina a variável no **projeto** ou **serviço** de cada backend:
+
+| Backend | Variável | Exemplo (Railway) |
+|---------|----------|-------------------|
+| spring-saas-core | `CORS_ALLOWED_ORIGINS` | `https://shop.xxx.up.railway.app,https://admin-console.xxx.up.railway.app,https://ops-portal.xxx.up.railway.app` |
+| node-b2b-orders | `CORS_ORIGINS` | Idem (lista separada por vírgula) |
+| py-payments-ledger | `CORS_ORIGINS` | Idem |
+
+Use os URLs reais dos seus serviços. Com domínio customizado: `https://app.fluxe.com.br,https://admin.fluxe.com.br,https://ops.fluxe.com.br`.
+
 ### 6. Migrations
 
 Após o primeiro deploy, rodar migrations:
@@ -147,7 +163,8 @@ cd fluxe-b2b-suite
 - [ ] Tenants listam no Admin Console
 - [ ] JWT_SECRET é o **mesmo** nos 3 backends
 - [ ] `APP_DEV_TOKEN_ENDPOINT_ENABLED=false` em produção
-- [ ] CORS configurado com os domínios corretos dos frontends
+- [ ] CORS: nos 3 backends, variável `CORS_ORIGINS` ou `CORS_ALLOWED_ORIGINS` com as origens dos frontends (vírgula)
+- [ ] Frontends (ops-portal, admin-console): `CORE_API_BASE_URL`, `ORDERS_API_BASE_URL`, `PAYMENTS_API_BASE_URL` com URLs absolutas
 
 ## Domínio Customizado
 

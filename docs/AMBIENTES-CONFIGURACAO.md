@@ -35,11 +35,12 @@ Ou projeto por projeto (ver `spring-saas-core/docs/SUBIR-E-TESTAR-TODOS-PROJETOS
 - **py-payments-ledger:** `alembic upgrade head` + seed (scripts)
 - **demo-seed.sh:** popula dados extras via API (se existir)
 
-### Variáveis
-- `.env` nos projetos (copiado de `.env.example` se não existir)
-- **spring-saas-core:** Liquibase contexts vêm do profile (application-local.yml); override via `SPRING_LIQUIBASE_CONTEXTS` se necessário
-- JWT_SECRET igual em todos os backends
-- Portas: 8080 (core), 3000 (orders), 8000 (payments), 4200/4300/4400 (frontends)
+### Variáveis e portas (fonte única)
+- **Referência central:** [config/env/](../config/env/README.md) — tabela de hosts/portas por contexto (local vs Docker) e arquivo `local.env.example`.
+- **Portas local** (infra via `spring-saas-core/docker-compose`): Postgres `localhost:5435`, Redis `localhost:6382`, RabbitMQ `localhost:5675`; APIs: Core 8080, Orders 3000, Payments 8000; fronts 4200/4300.
+- **node-b2b-orders:** `.env` = valores Docker (postgres, redis, rabbitmq). Para rodar na máquina: `cp .env.local.example .env.local` no repo; o app carrega `.env` e depois `.env.local` (overrides).
+- **spring-saas-core:** `application.yml` já tem defaults para local (5435, 6382, 5675); use `SPRING_PROFILES_ACTIVE=local`.
+- JWT_SECRET igual em todos os backends (local).
 
 ### Quando usar
 - Desenvolvimento diário
@@ -142,7 +143,9 @@ Produção:   migration + 008 (essencial) + schema dos outros; sem seed de demo
 
 ## Referências
 
+- **[config/env/README.md](../config/env/README.md)** — tabela única de portas/hosts (local vs Docker), como evitar troca de config
 - [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) — branches, CI/CD, protocolos
 - [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) — passo a passo Railway
 - [GUIA-OPERACIONAL.md](GUIA-OPERACIONAL.md) — subir local, smoke tests
+- [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md) — lista completa de variáveis por serviço
 - `spring-saas-core/docs/SUBIR-E-TESTAR-TODOS-PROJETOS.md` — guia por projeto

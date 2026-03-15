@@ -79,6 +79,19 @@ Todas as variáveis de ambiente dos serviços backend, extraídas dos arquivos d
 |----------|------|--------|-----------|
 | `CORS_ALLOWED_ORIGINS` | string | `*` | Origens permitidas para CORS |
 
+### Email (convites, reset de senha)
+
+Por padrão o Core **não envia email**: só registra o conteúdo no log (`provider=log`). Para o convidado **receber** o email, configure o envio real com Resend:
+
+| Variável (Spring) | Env var | Padrão | Descrição |
+|-------------------|---------|--------|-----------|
+| `app.email.provider` | `EMAIL_PROVIDER` | `log` | `log` = só log; `resend` = envia via Resend |
+| `app.email.resend-api-key` | `RESEND_API_KEY` | _(vazio)_ | API key do [Resend](https://resend.com) (obrigatório se provider=resend) |
+| `app.email.from` | `EMAIL_FROM` | `noreply@fluxe.com.br` | Endereço remetente (domínio verificado no Resend) |
+| `app.email.frontend-url` | `FRONTEND_URL` | `http://localhost:4200` | URL do admin-console para links no email (login, reset) |
+
+**Railway (staging/prod):** no serviço spring-saas-core defina `EMAIL_PROVIDER=resend`, `RESEND_API_KEY=re_xxx`, `FRONTEND_URL=https://admin-console-xxx.up.railway.app`. Verifique o domínio do remetente em resend.com.
+
 ### IA/LLM
 
 | Variável | Tipo | Padrão | Descrição |

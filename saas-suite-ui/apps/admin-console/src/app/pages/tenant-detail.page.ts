@@ -64,17 +64,17 @@ import { firstValueFrom } from 'rxjs';
           </button>
         </mat-card-content>
       </mat-card>
-    } @else if (tenant()) {
+    } @else if (tenant(); as t) {
       <div class="page-header">
         <div>
-          <h1>{{ tenant()!.name }}</h1>
-          <saas-status-chip [status]="tenant()!.status" />
+          <h1>{{ t.name }}</h1>
+          <saas-status-chip [status]="t.status" />
         </div>
         <div class="actions">
           <button mat-stroked-button (click)="goBack()"><mat-icon>arrow_back</mat-icon> {{ i18n.messages().common.back }}</button>
-          @if (tenant()!.status === 'ACTIVE') {
+          @if (t.status === 'ACTIVE') {
             <button mat-raised-button color="warn" (click)="suspend()">{{ i18n.messages().admin.suspend }}</button>
-          } @else if (tenant()!.status === 'SUSPENDED') {
+          } @else if (t.status === 'SUSPENDED') {
             <button mat-raised-button color="primary" (click)="activate()">{{ i18n.messages().admin.activate }}</button>
           }
         </div>
@@ -103,7 +103,7 @@ import { firstValueFrom } from 'rxjs';
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>{{ i18n.messages().tenant.tenantRegion }}</mat-label>
-              <input matInput [value]="tenant()!.region" disabled>
+              <input matInput [value]="t.region" disabled>
             </mat-form-field>
           </form>
           <button mat-raised-button color="primary" (click)="save()" [disabled]="editForm.invalid || saving()">
@@ -171,11 +171,11 @@ export class TenantDetailPage implements OnInit {
     }
     this.saving.set(true);
     const val = this.createForm.getRawValue();
-    const created = await this.facade.createTenant({
-      name: val.name!,
-      plan: val.plan!,
-      region: val.region!,
-    });
+    const name = val.name;
+    const plan = val.plan;
+    const region = val.region;
+    if (!name || !plan || !region) return;
+    const created = await this.facade.createTenant({ name, plan, region });
     if (created) {
       this.snackBar.open(this.i18n.messages().admin.tenantCreated, 'OK', { duration: 2000 });
       this.router.navigate(['/tenants', created.id]);
@@ -191,7 +191,10 @@ export class TenantDetailPage implements OnInit {
     }
     this.saving.set(true);
     const val = this.editForm.getRawValue();
-    const t = await this.facade.updateTenant(current.id, { name: val.name!, plan: val.plan! });
+    const name = val.name;
+    const plan = val.plan;
+    if (!name || !plan) return;
+    const t = await this.facade.updateTenant(current.id, { name, plan });
     if (t) { this.tenant.set(t); this.snackBar.open(this.i18n.messages().admin.tenantUpdated, 'OK', { duration: 2000 }); }
     this.saving.set(false);
   }

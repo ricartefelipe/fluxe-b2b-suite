@@ -42,8 +42,10 @@ export class DashboardStore {
   private readonly _inventoryItems = signal<InventoryItem[]>([]);
   private readonly _adjustments = signal<InventoryAdjustment[]>([]);
   private readonly _loading = signal(false);
+  private readonly _loadError = signal(false);
 
   readonly loading = this._loading.asReadonly();
+  readonly loadError = this._loadError.asReadonly();
 
   readonly totalOrders = computed(() => this._orders().length);
 
@@ -118,6 +120,7 @@ export class DashboardStore {
 
   async loadAll(): Promise<void> {
     this._loading.set(true);
+    this._loadError.set(false);
     const results = await Promise.allSettled([
       firstValueFrom(this.ordersApi.listOrders({ limit: 100 })),
       firstValueFrom(this.paymentsApi.listPayments({ limit: 100 })),
@@ -151,6 +154,8 @@ export class DashboardStore {
       this.logger.error('loadAdjustments failed', results[3].reason);
     }
 
+    const hasError = results.some(r => r.status === 'rejected');
+    this._loadError.set(hasError);
     this._loading.set(false);
   }
 }

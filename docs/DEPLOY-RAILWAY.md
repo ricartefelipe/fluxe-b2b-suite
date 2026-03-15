@@ -170,5 +170,6 @@ Exemplo:
 | Build falha (Maven/npm) | Verificar se o Dockerfile está correto e as dependências estão no `package.json`/`pom.xml` |
 | 401 nas APIs | Verificar se `JWT_SECRET` é o mesmo em todos os backends |
 | Frontend não conecta | Verificar `CORE_API_BASE_URL` e CORS_ORIGINS |
+| **Painel Ops (ou Admin) não carrega / dashboard vazio** | Nos serviços **ops-portal** e **admin-console**, definir **URLs absolutas** das APIs: `CORE_API_BASE_URL`, `ORDERS_API_BASE_URL`, `PAYMENTS_API_BASE_URL` (ex.: `https://spring-saas-core-xxx.up.railway.app`). O `entrypoint.sh` gera `/assets/config.json` a partir do template; se essas variáveis não estiverem setadas, o front chama URLs quebradas. Também garantir que o usuário logado tenha `tenantId` na sessão (Core deve estar acessível para login e lista de tenants). |
 | RabbitMQ não conecta | Verificar URL do CloudAMQP e credenciais |
 | Migrations falham | Verificar `DATABASE_URL` e se o PostgreSQL está acessível |

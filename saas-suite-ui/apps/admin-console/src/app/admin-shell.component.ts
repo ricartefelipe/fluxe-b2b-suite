@@ -16,11 +16,13 @@ export class AdminShellComponent implements OnInit {
   private tenantStore = inject(TenantContextStore);
   private authStore = inject(AuthStore);
 
-  readonly appTitle = computed(() => this.i18n.messages().adminNav.appTitle);
+  readonly appTitle = computed(() => this.i18n.messages()?.adminNav?.appTitle ?? 'Admin');
 
   readonly navItems = computed<NavItem[]>(() => {
-    const m = this.i18n.messages().adminNav;
-    return [
+    try {
+      const m = this.i18n.messages()?.adminNav;
+      if (!m) return [];
+      return [
       { label: m.tenants, route: '/tenants', icon: 'business', permission: 'tenants:read' },
       { label: m.newTenant, route: '/onboarding', icon: 'add_business', permission: 'tenants:write' },
       { label: m.policies, route: '/policies', icon: 'policy', permission: 'policies:read' },
@@ -30,6 +32,9 @@ export class AdminShellComponent implements OnInit {
       { label: m.auditLog, route: '/audit', icon: 'history', permission: 'audit:read' },
       { label: m.aiAssistant, route: '/ai', icon: 'smart_toy', permission: 'analytics:read' },
     ];
+    } catch {
+      return [];
+    }
   });
 
   async ngOnInit(): Promise<void> {

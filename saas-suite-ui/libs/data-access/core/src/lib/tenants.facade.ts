@@ -25,7 +25,10 @@ export class TenantsFacade {
       const r = await firstValueFrom(this.api.listTenants(params));
       this._tenants.set(r.data); this._total.set(r.total);
     } catch (e) {
-      this._error.set('Falha ao carregar tenants'); this.logger.error('loadTenants failed', e);
+      this._tenants.set([]);
+      this._total.set(0);
+      this._error.set('Falha ao carregar tenants');
+      this.logger.error('loadTenants failed', e);
     } finally { this._loading.set(false); }
   }
 

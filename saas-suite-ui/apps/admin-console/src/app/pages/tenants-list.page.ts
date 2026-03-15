@@ -12,6 +12,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
+import { MatCardModule } from '@angular/material/card';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantsFacade, Tenant, TenantStatus, TenantPlan } from '@saas-suite/data-access/core';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
@@ -23,7 +24,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
   imports: [
     MatTableModule, MatButtonModule, MatIconModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatChipsModule,
-    MatDialogModule, FormsModule, MatSortModule, MatPaginatorModule,
+    MatDialogModule, MatCardModule, FormsModule, MatSortModule, MatPaginatorModule,
     StatusChipComponent, EmptyStateComponent, TableSkeletonComponent,
   ],
   template: `
@@ -59,7 +60,15 @@ import { formatDateTime } from '@saas-suite/shared/util';
       </mat-form-field>
     </div>
 
-    @if (facade.loading()) {
+    @if (facade.error()) {
+      <mat-card class="error-card">
+        <mat-card-content>
+          <p class="error-message">{{ facade.error() }}</p>
+          <p class="error-hint">Verifique se a URL da API do Core está correta (variável CORE_API_BASE_URL no ambiente).</p>
+          <button mat-raised-button color="primary" (click)="search()">Tentar novamente</button>
+        </mat-card-content>
+      </mat-card>
+    } @else if (facade.loading()) {
       <saas-table-skeleton [rowCount]="5" [columns]="6" />
     } @else if (dataSource.data.length === 0) {
       <saas-empty-state
@@ -105,6 +114,9 @@ import { formatDateTime } from '@saas-suite/shared/util';
     .filters mat-form-field { min-width: 180px; }
     .full-width { width: 100%; }
     .clickable-row:hover { background: rgba(0,0,0,.04); }
+    .error-card { margin-top: 16px; }
+    .error-message { margin: 0 0 8px; font-weight: 500; }
+    .error-hint { margin: 0 0 16px; font-size: 13px; color: var(--app-text-secondary, #666); }
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

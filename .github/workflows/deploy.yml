@@ -1,14 +1,18 @@
 name: CI
 on:
   push:
-    branches: [main, master, develop]
+    branches: [master, develop]
     paths:
       - 'saas-suite-ui/**'
+      - 'scripts/**'
+      - 'docs/**'
       - '.github/workflows/deploy.yml'
   pull_request:
-    branches: [main, master, develop]
+    branches: [master, develop]
     paths:
       - 'saas-suite-ui/**'
+      - 'scripts/**'
+      - 'docs/**'
       - '.github/workflows/deploy.yml'
 
 jobs:

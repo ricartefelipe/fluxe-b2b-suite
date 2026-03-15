@@ -113,6 +113,7 @@ const BAR_MAX_HEIGHT = 170;
                   [attr.height]="barHeight(day.amount)"
                   rx="4"
                   class="bar"
+                  [class.bar--zero]="day.amount === 0"
                   [style.animation-delay]="i * 80 + 'ms'"
                   [matTooltip]="day.label + ': ' + formatCurrency(day.amount)"
                 />
@@ -402,6 +403,10 @@ const BAR_MAX_HEIGHT = 170;
       filter: brightness(1.15);
     }
 
+    .bar--zero {
+      opacity: 0.35;
+    }
+
     @keyframes bar-grow {
       from {
         transform: scaleY(0);
@@ -609,8 +614,15 @@ export class DashboardPage implements OnInit {
     this.store.loadAll();
   }
 
+  /** Altura mínima em px para barras com receita zero (para o gráfico não ficar vazio). */
+  private readonly MIN_BAR_HEIGHT = 4;
+
   barHeight(amount: number): number {
-    return (amount / this.store.maxDailyRevenue()) * BAR_MAX_HEIGHT;
+    const amt = Number(amount) || 0;
+    const max = this.store.maxDailyRevenue();
+    if (!Number.isFinite(max) || max <= 0) return this.MIN_BAR_HEIGHT;
+    if (amt <= 0) return this.MIN_BAR_HEIGHT;
+    return Math.min((amt / max) * BAR_MAX_HEIGHT, BAR_MAX_HEIGHT);
   }
 
   formatCurrency(amount: number): string {

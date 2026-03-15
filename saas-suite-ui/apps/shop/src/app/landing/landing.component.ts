@@ -4,6 +4,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { I18nService } from '@saas-suite/shared/i18n';
+import { RuntimeConfigService } from '@saas-suite/shared/config';
 
 @Component({
   selector: 'app-landing',
@@ -93,6 +94,12 @@ import { I18nService } from '@saas-suite/shared/i18n';
           <a routerLink="/privacy" class="footer-link">{{ i18n.messages().landing.privacy }}</a>
           ·
           <a routerLink="/contact" class="footer-link">{{ i18n.messages().landing.contact }}</a>
+          ·
+          @if (supportDocsUrl()) {
+            <a [href]="supportDocsUrl()" target="_blank" rel="noopener noreferrer" class="footer-link">{{ i18n.messages().landing.help }}</a>
+          } @else {
+            <a routerLink="/contact" class="footer-link">{{ i18n.messages().landing.help }}</a>
+          }
         </p>
         <p>© 2026 Fluxe B2B Suite — {{ i18n.messages().landing.rights }}</p>
       </footer>
@@ -264,6 +271,10 @@ import { I18nService } from '@saas-suite/shared/i18n';
 })
 export class LandingComponent {
   protected readonly i18n = inject(I18nService);
+  private readonly config = inject(RuntimeConfigService);
+
+  protected supportDocsUrl = (): string =>
+    (this.config.get('supportDocsUrl') as string | undefined)?.trim() || '';
 
   readonly techStack = ['Angular', 'NestJS', 'Spring Boot', 'FastAPI', 'PostgreSQL', 'RabbitMQ', 'Stripe', 'Docker'];
 

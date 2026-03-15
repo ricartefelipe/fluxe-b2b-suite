@@ -15,3 +15,4 @@ export * from './lib/a11y/skip-link.component';
 export * from './lib/a11y/live-announcer.service';
 export * from './lib/a11y/focus-on-nav.directive';
 export * from './lib/a11y/provide-accessibility';
+export * from './lib/cookie-banner/cookie-banner.component';

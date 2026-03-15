@@ -641,6 +641,7 @@ export const EN_US_MESSAGES: Messages = {
     terms: 'Terms of Use',
     privacy: 'Privacy Policy',
     contact: 'Contact us',
+    help: 'Help',
   },
   legal: {
     termsTitle: 'Terms of Use',
@@ -649,5 +650,7 @@ export const EN_US_MESSAGES: Messages = {
     contactDesc: 'For questions, technical or commercial support, contact us at the email below.',
     contactEmail: 'support@fluxe.com.br',
     backToHome: 'Back to home',
+    cookieBannerText: 'We use necessary cookies for the site to work.',
+    cookieBannerAccept: 'OK',
   },
 };

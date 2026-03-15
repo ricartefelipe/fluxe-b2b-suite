@@ -607,6 +607,7 @@ export interface Messages {
     terms: string;
     privacy: string;
     contact: string;
+    help: string;
   };
   legal: {
     termsTitle: string;
@@ -615,6 +616,8 @@ export interface Messages {
     contactDesc: string;
     contactEmail: string;
     backToHome: string;
+    cookieBannerText: string;
+    cookieBannerAccept: string;
   };
 }
 

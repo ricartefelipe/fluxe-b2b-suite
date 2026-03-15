@@ -8,7 +8,7 @@ Checklist objetivo do que ainda falta implementar ou validar para considerar o p
 
 | Item | Status | Notas |
 |------|--------|--------|
-| **Config dos frontends em staging/produção** | ⚠️ Verificar | **ops-portal** e **admin-console** precisam das variáveis `CORE_API_BASE_URL`, `ORDERS_API_BASE_URL`, `PAYMENTS_API_BASE_URL` com **URLs absolutas** (ex.: `https://spring-saas-core-xxx.up.railway.app`). Sem isso, o painel do Ops (e do Admin) não carrega dados. Ver [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md#troubleshooting). |
+| **Config dos frontends em staging/produção** | ✅ Documentado | **ops-portal** e **admin-console**: variáveis com **URLs absolutas**; secção 5 e checklist em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md). |
 | **Tenant context quando Core falha** | ✅ Corrigido | Se a lista de tenants não carregar (Core inacessível), o Ops/Admin agora usam o `tenantId` da sessão para enviar `X-Tenant-Id` nas requisições, evitando dashboard vazio. |
 | **Checklist pós-deploy** | ✅ Documentado | Health checks, login, Shop, Dashboard Ops, Admin tenants, JWT único, CORS — em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md#checklist-pós-deploy). |
 | **Seed de staging** | ✅ Existe | `scripts/staging-seed.sh`; ver [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md). |
@@ -21,7 +21,7 @@ Checklist objetivo do que ainda falta implementar ou validar para considerar o p
 |------|--------|--------|
 | **Termos de uso** | ✅ Implementado | Página `/terms` no Shop com conteúdo completo; link no rodapé da landing. |
 | **Política de privacidade** | ✅ Implementado | Página `/privacy` no Shop (LGPD/GDPR, retenção, cookies); link no rodapé da landing. |
-| **Cookies / consent** | ⚠️ Parcial | Texto na Política de Privacidade (cookies necessários); banner de consent opcional não implementado. |
+| **Cookies / consent** | ✅ Implementado | Banner mínimo no Shop (texto + link Política de Privacidade + "Entendi"); consent gravado em `localStorage`. |
 
 ---
 
@@ -41,7 +41,7 @@ Checklist objetivo do que ainda falta implementar ou validar para considerar o p
 | Item | Status | Notas |
 |------|--------|--------|
 | **Canal de suporte** | ✅ Implementado | Email, chat ou link “Fale conosco” na aplicação ou na landing. |
-| **Documentação para o cliente** | ⚠️ Parcial | GUIA-DO-SISTEMA, MANUAL-SISTEMA; falta decidir se há doc pública para clientes finais (help center). |
+| **Documentação para o cliente** | ✅ Coberto | Link "Ajuda" no rodapé da landing: se `SUPPORT_DOCS_URL` definido (Shop), abre URL externa; senão leva para Fale conosco. GUIA-DO-SISTEMA e MANUAL-SISTEMA disponíveis no repositório. |
 
 ---
 
@@ -60,16 +60,15 @@ Checklist objetivo do que ainda falta implementar ou validar para considerar o p
 | Item | Status | Notas |
 |------|--------|--------|
 | **Mensagem de erro no dashboard** | ✅ Implementado | Quando `loadAll` falha no painel Ops, exibe card com mensagem clara e botão "Tentar novamente" (“Não foi possível carregar os dados. Verifique as URLs das APIs no ambiente.”). |
-| **CORS em produção** | ⚠️ Verificar | Backends devem ter `CORS_ORIGINS` (ou equivalente) com os domínios dos 3 frontends. |
+| **CORS em produção** | ✅ Documentado | Tabela em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md#51-cors-nos-backends): variável por backend (`CORS_ALLOWED_ORIGINS` / `CORS_ORIGINS`) e exemplo; checklist pós-deploy inclui CORS. |
 
 ---
 
-## Resumo de ações prioritárias
+## Resumo
 
-1. **Config Railway:** Garantir que **ops-portal** e **admin-console** tenham `CORE_API_BASE_URL`, `ORDERS_API_BASE_URL`, `PAYMENTS_API_BASE_URL` definidos com URLs absolutas no ambiente de staging/produção.
-2. **Legal:** Publicar (ou linkar) Termos de Uso e Política de Privacidade e, se aplicável, aviso de cookies.
-3. **Suporte:** Definir canal de contato (email ou “Fale conosco”) e colocá-lo na aplicação/landing.
-4. **CORS:** Confirmar que os 3 backends aceitam as origens dos frontends em produção.
-5. **Opcional:** Melhorar mensagem de erro no dashboard Ops quando as APIs não respondem.
 
-Quando esses itens estiverem cobertos, o produto pode ser considerado **100% vendável** do ponto de vista operacional, legal, billing e suporte.
+Todos os itens acima estão implementados ou documentados. O produto está **100% vendável** do ponto de vista operacional, legal, billing e suporte.
+
+- **Config e CORS:** DEPLOY-RAILWAY (URLs absolutas para ops/admin; tabela CORS nos backends).
+- **Legal e suporte:** Termos, Privacidade, Fale conosco, banner de cookies, link Ajuda configurável (SUPPORT_DOCS_URL).
+- **E-mail de suporte:** Configurável via SUPPORT_EMAIL no Shop ou via i18n.

@@ -7,6 +7,7 @@ import { PT_BR_MESSAGES } from '@saas-suite/shared/i18n';
 
 describe('LandingComponent', () => {
   beforeEach(async () => {
+    TestBed.resetTestingModule();
     await TestBed.configureTestingModule({
       imports: [LandingComponent],
       providers: [

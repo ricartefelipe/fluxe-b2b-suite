@@ -124,18 +124,18 @@ railway run npx prisma migrate deploy
 railway run alembic upgrade head
 ```
 
-### 7. Seed
+### 7. Seed (apenas Staging)
 
-- **Staging:** rodar seed para dados completos de teste
-- **Produção:** não rodar seed; dados reais via aplicação
+- **Staging:** migration + seed completo para testes. Use o script orquestrador a partir do repo `fluxe-b2b-suite` (repos irmãos linkados ao projeto Railway Staging):
 
 ```bash
-# node-b2b-orders (apenas em staging):
-railway run npx prisma db seed
-
-# py-payments-ledger (apenas em staging):
-railway run python -m src.infrastructure.db.seed
+cd fluxe-b2b-suite
+./scripts/staging-seed.sh railway
 ```
+
+  Isso executa em sequência: `node-b2b-orders` (migrate + prisma db seed) e `py-payments-ledger` (alembic upgrade + seed). O **spring-saas-core** já recebe seed no deploy quando `SPRING_PROFILES_ACTIVE=staging` (Liquibase contexts: staging,seed).
+
+- **Produção:** não rodar seed; apenas migrations. Dados reais via aplicação.
 
 ## Checklist Pós-Deploy
 

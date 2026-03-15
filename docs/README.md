@@ -9,6 +9,9 @@
 | Documento | Descrição |
 |-----------|-----------|
 | [README.md](README.md) | Este índice |
+| [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md) | Configuração dos 3 ambientes: local, staging, produção (inclui como alimentar staging com dados) |
+| [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) | Deploy no Railway: serviços, variáveis, migrations e seed (staging vs produção) |
+| [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Pipeline, esteiras develop/master e protocolos (Git Flow, qualidade, testes, CI/CD, docs) |
 | [OBSERVABILITY.md](OBSERVABILITY.md) | Observabilidade: Sentry, logging, correlation, backup (todos os serviços) |
 | [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) | Deploy completo passo a passo (servidor, Docker, domínios, SSL) |
 | [GUIA-OPERACIONAL.md](GUIA-OPERACIONAL.md) | Visão geral dos 4 serviços, diagrama de dependência e procedimentos operacionais |
@@ -30,6 +33,13 @@
 |--------|-----------|
 | [scripts/generate-docs.sh](scripts/generate-docs.sh) | Gera `DOCUMENTACAO-VIVA.md` — conecta nos serviços ou roda em modo `--offline` |
 | [scripts/api-catalog.py](scripts/api-catalog.py) | Gera `CATALOGO-API.md` via parsing estático do código-fonte (sem dependências externas) |
+
+### Scripts operacionais (ambientes)
+
+| Script | Descrição |
+|--------|-----------|
+| [scripts/staging-seed.sh](../scripts/staging-seed.sh) | Alimenta **staging** com dados (migrations + seeds) via Railway CLI; ver [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md) |
+| [scripts/demo-seed.sh](../scripts/demo-seed.sh) | Popula dados demo via API (local ou staging); requer backends no ar |
 
 ---
 

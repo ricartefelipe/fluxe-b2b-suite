@@ -31,6 +31,16 @@ const STATUS_COLORS: Record<OrderStatus, string> = {
 
 const ALL_STATUSES: OrderStatus[] = ['DRAFT', 'CREATED', 'RESERVED', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'PAID'];
 
+/** Status que entram na receita (gráfico e KPI). */
+const REVENUE_STATUSES: Set<string> = new Set(['CONFIRMED', 'PAID', 'SHIPPED', 'DELIVERED']);
+
+function getOrderDateStr(created: string | number | Date): string {
+  if (typeof created === 'string' && created.length >= 10 && created[4] === '-' && created[7] === '-') {
+    return created.slice(0, 10);
+  }
+  return new Date(typeof created === 'number' ? created : created).toISOString().slice(0, 10);
+}
+
 @Injectable({ providedIn: 'root' })
 export class DashboardStore {
   private ordersApi = inject(OrdersApiClient);
@@ -51,7 +61,7 @@ export class DashboardStore {
 
   readonly totalRevenue = computed(() =>
     this._orders()
-      .filter(o => o.status === 'CONFIRMED' || o.status === 'PAID')
+      .filter(o => ['CONFIRMED', 'PAID', 'SHIPPED', 'DELIVERED'].includes(o.status))
       .reduce((sum, o) => sum + o.totalAmount, 0),
   );
 
@@ -73,8 +83,13 @@ export class DashboardStore {
       d.setDate(d.getDate() - i);
       const dateStr = d.toISOString().slice(0, 10);
       const amount = orders
-        .filter(o => o.createdAt.slice(0, 10) === dateStr && (o.status === 'CONFIRMED' || o.status === 'PAID'))
-        .reduce((s, o) => s + o.totalAmount, 0);
+        .filter(o => {
+          const created = o?.createdAt;
+          if (created == null) return false;
+          const orderDate = getOrderDateStr(created);
+          return orderDate === dateStr && REVENUE_STATUSES.has(o.status);
+        })
+        .reduce((s, o) => s + (Number(o.totalAmount) || 0), 0);
       days.push({
         date: dateStr,
         label: d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', ''),

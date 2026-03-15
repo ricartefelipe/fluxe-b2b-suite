@@ -1,5 +1,7 @@
 # Deploy no Railway — Fluxe B2B Suite
 
+> **Ambientes:** Para configuração completa de local, staging e produção (dados, seed, variáveis), veja [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md).
+
 ## Visão Geral
 
 A stack completa requer **7 serviços** no Railway:
@@ -60,7 +62,8 @@ railway up
 ```
 
 Variáveis (ver `railway.prod.env.example`):
-- `SPRING_PROFILES_ACTIVE=prod`
+- **Produção:** `SPRING_PROFILES_ACTIVE=prod` (Liquibase só essencial, sem seed)
+- **Staging:** `SPRING_PROFILES_ACTIVE=staging` (Liquibase com seed completo)
 - `DB_URL`, `DB_USER`, `DB_PASS` → referências ao plugin PostgreSQL
 - `REDIS_HOST`, `REDIS_PORT` → referências ao plugin Redis
 - `RABBITMQ_HOST/PORT/USER/PASS` → CloudAMQP
@@ -121,13 +124,16 @@ railway run npx prisma migrate deploy
 railway run alembic upgrade head
 ```
 
-### 7. Seed (opcional)
+### 7. Seed
+
+- **Staging:** rodar seed para dados completos de teste
+- **Produção:** não rodar seed; dados reais via aplicação
 
 ```bash
-# node-b2b-orders:
+# node-b2b-orders (apenas em staging):
 railway run npx prisma db seed
 
-# py-payments-ledger:
+# py-payments-ledger (apenas em staging):
 railway run python -m src.infrastructure.db.seed
 ```
 

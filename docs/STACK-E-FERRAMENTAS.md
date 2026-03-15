@@ -37,4 +37,8 @@ Ou seja: **Rabbit, Redis, métricas, Grafana, circuit breaker e análise estáti
 - **Alertas:** `monitoring/prometheus/alerts/` (incluindo RabbitMQ queue backlog).
 - **Deploy Railway:** RabbitMQ é externo (CloudAMQP); Redis é plugin; Prometheus/Grafana não sobem por padrão no Railway — é preciso incluir no deploy ou usar um serviço de monitoring externo.
 
-Se quiser, no próximo passo dá para: (1) documentar um “checklist de métricas” (onde clicar em cada ambiente); (2) propor Sonar/Qodana nos outros repos; (3) esboçar uso de Redis (ou outro) para retenção/cache pro front.
+
+**Implementado / documentado neste repo:**  
+- **SonarCloud** para o front: workflow em `saas-suite-ui/.github/workflows/sonarcloud.yml` e guia em `saas-suite-ui/docs/SONARCLOUD.md`.  
+- **Métricas no deploy:** seção "Métricas e Grafana no deploy" em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) (Grafana Cloud ou Prometheus+Grafana no Railway).  
+- **Cache Redis pro front:** padrão de chave, TTL e exemplos por stack em [CACHE-REDIS-FRONT.md](CACHE-REDIS-FRONT.md); implementação fica em cada backend.

@@ -6,6 +6,33 @@ import { Order, OrderStatus, InventoryItem, InventoryAdjustment } from '@saas-su
 import { PaymentIntent } from '@saas-suite/data-access/payments';
 import { LoggerService } from '@saas-suite/shared/telemetry';
 
+const VALID_STATUSES: OrderStatus[] = ['DRAFT', 'CREATED', 'RESERVED', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'PAID'];
+
+/** Normaliza ordem vinda da API (status em maiúsculas, datas como string, totalAmount como número). */
+function normalizeOrder(o: Record<string, unknown>): Order {
+  const statusRaw = (o['status'] != null ? String(o['status']) : 'CREATED').toUpperCase();
+  const status: OrderStatus = VALID_STATUSES.includes(statusRaw as OrderStatus) ? (statusRaw as OrderStatus) : 'CREATED';
+  const createdAt = o['createdAt'] != null
+    ? (typeof o['createdAt'] === 'string' ? o['createdAt'] : new Date(o['createdAt'] as Date).toISOString())
+    : new Date().toISOString();
+  const totalAmount = typeof o['totalAmount'] === 'number' ? o['totalAmount'] : Number(o['totalAmount']) || 0;
+  const items = Array.isArray(o['items']) ? (o['items'] as Order['items']) : [];
+  return {
+    id: String(o['id'] ?? ''),
+    tenantId: String(o['tenantId'] ?? ''),
+    customerId: String(o['customerId'] ?? ''),
+    status,
+    items,
+    totalAmount,
+    currency: o['currency'] != null ? String(o['currency']) : undefined,
+    correlationId: o['correlationId'] != null ? String(o['correlationId']) : undefined,
+    createdAt,
+    updatedAt: o['updatedAt'] != null
+      ? (typeof o['updatedAt'] === 'string' ? o['updatedAt'] : new Date(o['updatedAt'] as Date).toISOString())
+      : createdAt,
+  };
+}
+
 export interface DailyRevenue {
   date: string;
   label: string;
@@ -31,6 +58,16 @@ const STATUS_COLORS: Record<OrderStatus, string> = {
 
 const ALL_STATUSES: OrderStatus[] = ['DRAFT', 'CREATED', 'RESERVED', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'PAID'];
 
+/** Status que entram na receita (gráfico e KPI). */
+const REVENUE_STATUSES: Set<string> = new Set(['CONFIRMED', 'PAID', 'SHIPPED', 'DELIVERED']);
+
+function getOrderDateStr(created: string | number | Date): string {
+  if (typeof created === 'string' && created.length >= 10 && created[4] === '-' && created[7] === '-') {
+    return created.slice(0, 10);
+  }
+  return new Date(typeof created === 'number' ? created : created).toISOString().slice(0, 10);
+}
+
 @Injectable({ providedIn: 'root' })
 export class DashboardStore {
   private ordersApi = inject(OrdersApiClient);
@@ -42,14 +79,16 @@ export class DashboardStore {
   private readonly _inventoryItems = signal<InventoryItem[]>([]);
   private readonly _adjustments = signal<InventoryAdjustment[]>([]);
   private readonly _loading = signal(false);
+  private readonly _loadError = signal(false);
 
   readonly loading = this._loading.asReadonly();
+  readonly loadError = this._loadError.asReadonly();
 
   readonly totalOrders = computed(() => this._orders().length);
 
   readonly totalRevenue = computed(() =>
     this._orders()
-      .filter(o => o.status === 'CONFIRMED' || o.status === 'PAID')
+      .filter(o => ['CONFIRMED', 'PAID', 'SHIPPED', 'DELIVERED'].includes(o.status))
       .reduce((sum, o) => sum + o.totalAmount, 0),
   );
 
@@ -71,8 +110,13 @@ export class DashboardStore {
       d.setDate(d.getDate() - i);
       const dateStr = d.toISOString().slice(0, 10);
       const amount = orders
-        .filter(o => o.createdAt.slice(0, 10) === dateStr && (o.status === 'CONFIRMED' || o.status === 'PAID'))
-        .reduce((s, o) => s + o.totalAmount, 0);
+        .filter(o => {
+          const created = o?.createdAt;
+          if (created == null) return false;
+          const orderDate = getOrderDateStr(created);
+          return orderDate === dateStr && REVENUE_STATUSES.has(o.status);
+        })
+        .reduce((s, o) => s + (Number(o.totalAmount) || 0), 0);
       days.push({
         date: dateStr,
         label: d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', ''),
@@ -102,7 +146,7 @@ export class DashboardStore {
 
   readonly recentOrders = computed(() =>
     [...this._orders()]
-      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .sort((a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? ''))
       .slice(0, 5),
   );
 
@@ -112,12 +156,13 @@ export class DashboardStore {
 
   readonly recentAdjustments = computed(() =>
     [...this._adjustments()]
-      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .sort((a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? ''))
       .slice(0, 5),
   );
 
   async loadAll(): Promise<void> {
     this._loading.set(true);
+    this._loadError.set(false);
     const results = await Promise.allSettled([
       firstValueFrom(this.ordersApi.listOrders({ limit: 100 })),
       firstValueFrom(this.paymentsApi.listPayments({ limit: 100 })),
@@ -126,7 +171,15 @@ export class DashboardStore {
     ]);
 
     if (results[0].status === 'fulfilled') {
-      this._orders.set(results[0].value.data);
+      const raw = results[0].value as { data?: unknown[]; items?: unknown[] } | unknown[];
+      const list = Array.isArray(raw)
+        ? raw
+        : Array.isArray((raw as { data?: unknown[] }).data)
+          ? (raw as { data: unknown[] }).data
+          : Array.isArray((raw as { items?: unknown[] }).items)
+            ? (raw as { items: unknown[] }).items
+            : [];
+      this._orders.set(list.map(o => normalizeOrder(o as Record<string, unknown>)));
     } else {
       this.logger.error('loadOrders failed', results[0].reason);
     }
@@ -146,11 +199,14 @@ export class DashboardStore {
     }
 
     if (results[3].status === 'fulfilled') {
-      this._adjustments.set(results[3].value.data);
+      const adjRaw = results[3].value as { data?: InventoryAdjustment[] } | InventoryAdjustment[];
+      this._adjustments.set(Array.isArray(adjRaw) ? adjRaw : (adjRaw?.data ?? []));
     } else {
       this.logger.error('loadAdjustments failed', results[3].reason);
     }
 
+    const hasError = results.some(r => r.status === 'rejected');
+    this._loadError.set(hasError);
     this._loading.set(false);
   }
 }

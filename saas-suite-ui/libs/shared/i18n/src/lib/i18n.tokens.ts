@@ -203,6 +203,8 @@ export interface Messages {
     noLowStock: string;
     recentAdjustments: string;
     availableQty: string;
+    loadError: string;
+    loadErrorAction: string;
   };
   onboarding: {
     title: string;
@@ -602,6 +604,20 @@ export interface Messages {
     plan3c: string;
     techTitle: string;
     rights: string;
+    terms: string;
+    privacy: string;
+    contact: string;
+    help: string;
+  };
+  legal: {
+    termsTitle: string;
+    privacyTitle: string;
+    contactTitle: string;
+    contactDesc: string;
+    contactEmail: string;
+    backToHome: string;
+    cookieBannerText: string;
+    cookieBannerAccept: string;
   };
 }
 

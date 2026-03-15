@@ -1,0 +1,79 @@
+# Exemplo para Prometheus raspar backends no Railway (URLs públicas).
+# Copie para prometheus.yml e substitua os targets pelas URLs reais dos seus serviços.
+# Uso: Grafana Cloud (Data source → Prometheus → Scrape) ou um Prometheus externo.
+#
+# global:
+#   scrape_interval: 15s
+#   evaluation_interval: 15s
+# scrape_configs:
+#   - job_name: saas-core
+#     metrics_path: /actuator/prometheus
+#     scrape_interval: 10s
+#     static_configs:
+#       - targets: ['https://spring-saas-core-XXXX.up.railway.app']
+#     scheme: https
+#     relabel_configs:
+#       - source_labels: [__address__]
+#         target_label: instance
+#         replacement: saas-core
+#   - job_name: orders-api
+#     metrics_path: /metrics
+#     scrape_interval: 10s
+#     static_configs:
+#       - targets: ['https://node-b2b-orders-XXXX.up.railway.app']
+#     scheme: https
+#     relabel_configs:
+#       - source_labels: [__address__]
+#         target_label: instance
+#         replacement: orders-api
+#   - job_name: payments-api
+#     metrics_path: /metrics
+#     scrape_interval: 10s
+#     static_configs:
+#       - targets: ['https://py-payments-ledger-XXXX.up.railway.app']
+#     scheme: https
+#     relabel_configs:
+#       - source_labels: [__address__]
+#         target_label: instance
+#         replacement: payments-api
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: saas-core
+    metrics_path: /actuator/prometheus
+    scrape_interval: 10s
+    scheme: https
+    static_configs:
+      - targets:
+          - spring-saas-core-XXXX.up.railway.app
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: saas-core
+
+  - job_name: orders-api
+    metrics_path: /metrics
+    scrape_interval: 10s
+    scheme: https
+    static_configs:
+      - targets:
+          - node-b2b-orders-XXXX.up.railway.app
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: orders-api
+
+  - job_name: payments-api
+    metrics_path: /metrics
+    scrape_interval: 10s
+    scheme: https
+    static_configs:
+      - targets:
+          - py-payments-ledger-XXXX.up.railway.app
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: payments-api

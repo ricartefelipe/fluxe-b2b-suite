@@ -8,9 +8,10 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Meta, Title } from '@angular/platform-browser';
+import { CookieBannerComponent } from '@saas-suite/shared/ui';
 
 @Component({
-  imports: [RouterModule],
+  imports: [RouterModule, CookieBannerComponent],
   selector: 'app-root',
   templateUrl: './app.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

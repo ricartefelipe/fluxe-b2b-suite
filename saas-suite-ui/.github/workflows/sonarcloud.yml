@@ -1,0 +1,49 @@
+# SonarCloud — análise estática do monorepo saas-suite-ui
+# Configurar em: https://sonarcloud.io (Add project → GitHub) e adicionar SONAR_TOKEN nos secrets do repositório
+name: SonarCloud
+
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  sonar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '9'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: saas-suite-ui/pnpm-lock.yaml
+
+      - name: Install
+        working-directory: saas-suite-ui
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint & typecheck (quality gate local)
+        working-directory: saas-suite-ui
+        run: pnpm nx run-many -t lint typecheck --skip-nx-cache || true
+
+      - name: SonarCloud Scan
+        if: secrets.SONAR_TOKEN != ''
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: saas-suite-ui

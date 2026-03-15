@@ -12,8 +12,19 @@ export class RuntimeConfigService {
 
   async load(): Promise<void> {
     try {
-      const cfg = await firstValueFrom(this.http.get<Partial<AppConfig>>('/assets/config.json'));
-      this._config.set({ ...DEFAULT_CONFIG, ...cfg });
+      const cfg = await firstValueFrom(this.http.get<Record<string, unknown>>('/assets/config.json'));
+      const merged = { ...DEFAULT_CONFIG, ...cfg } as AppConfig;
+      const r = cfg as Record<string, unknown>;
+      if (merged.coreApiBaseUrl === DEFAULT_CONFIG.coreApiBaseUrl && typeof r['coreApiUrl'] === 'string') {
+        merged.coreApiBaseUrl = r['coreApiUrl'] as string;
+      }
+      if (merged.ordersApiBaseUrl === DEFAULT_CONFIG.ordersApiBaseUrl && typeof r['ordersApiUrl'] === 'string') {
+        merged.ordersApiBaseUrl = r['ordersApiUrl'] as string;
+      }
+      if (merged.paymentsApiBaseUrl === DEFAULT_CONFIG.paymentsApiBaseUrl && typeof r['paymentsApiUrl'] === 'string') {
+        merged.paymentsApiBaseUrl = r['paymentsApiUrl'] as string;
+      }
+      this._config.set(merged);
     } catch {
       console.warn('[RuntimeConfig] Could not load config.json — using defaults');
       this._config.set(DEFAULT_CONFIG);

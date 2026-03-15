@@ -12,10 +12,11 @@ import {
 } from './models';
 
 function normalizePage<T>(raw: Record<string, unknown>): PageResponse<T> {
-  const data = (raw['data'] ?? raw['items'] ?? raw['content'] ?? []) as T[];
-  const total = (raw['total'] ?? raw['totalElements'] ?? (data as T[]).length) as number;
+  const rawData = raw['data'] ?? raw['items'] ?? raw['content'];
+  const data = Array.isArray(rawData) ? (rawData as T[]) : [];
+  const total = (raw['total'] ?? raw['totalElements'] ?? data.length) as number;
   const page = (raw['page'] ?? raw['number'] ?? 0) as number;
-  const pageSize = (raw['pageSize'] ?? raw['size'] ?? (data as T[]).length) as number;
+  const pageSize = (raw['pageSize'] ?? raw['size'] ?? data.length) as number;
   return { data, total, page, pageSize };
 }
 

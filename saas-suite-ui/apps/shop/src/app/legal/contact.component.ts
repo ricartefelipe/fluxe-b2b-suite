@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { I18nService } from '@saas-suite/shared/i18n';
+import { RuntimeConfigService } from '@saas-suite/shared/config';
 
 @Component({
   selector: 'app-legal-contact',
@@ -14,9 +15,9 @@ import { I18nService } from '@saas-suite/shared/i18n';
       <a mat-stroked-button routerLink="/welcome" class="back-link">{{ i18n.messages().legal.backToHome }}</a>
       <h1 class="legal-title">{{ i18n.messages().legal.contactTitle }}</h1>
       <p class="legal-desc">{{ i18n.messages().legal.contactDesc }}</p>
-      <a mat-raised-button color="primary" [href]="'mailto:' + i18n.messages().legal.contactEmail" class="contact-cta">
+      <a mat-raised-button color="primary" [href]="'mailto:' + supportEmail()" class="contact-cta">
         <mat-icon>email</mat-icon>
-        {{ i18n.messages().legal.contactEmail }}
+        {{ supportEmail() }}
       </a>
     </div>
   `,
@@ -41,4 +42,8 @@ import { I18nService } from '@saas-suite/shared/i18n';
 })
 export class ContactComponent {
   protected readonly i18n = inject(I18nService);
+  private readonly config = inject(RuntimeConfigService);
+
+  protected supportEmail = () =>
+    (this.config.get('supportEmail') as string | undefined)?.trim() || this.i18n.messages().legal.contactEmail;
 }

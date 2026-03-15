@@ -14,6 +14,8 @@ if [ -f "$CONFIG_TEMPLATE" ]; then
     -e "s|\${OIDC_SCOPE}|${OIDC_SCOPE:-}|g" \
     -e "s|\${LOG_LEVEL}|${LOG_LEVEL:-warn}|g" \
     -e "s|\${APP_VERSION}|${APP_VERSION:-1.0.0}|g" \
+    -e "s|\${SUPPORT_EMAIL}|${SUPPORT_EMAIL:-}|g" \
+    -e "s|\${SUPPORT_DOCS_URL}|${SUPPORT_DOCS_URL:-}|g" \
     "$CONFIG_TEMPLATE" > "$CONFIG_DIR/config.json"
 fi
 

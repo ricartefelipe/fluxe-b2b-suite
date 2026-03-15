@@ -3,6 +3,7 @@ import { ShellComponent, NavItem } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
 import { AuthStore } from '@saas-suite/shared/auth';
+import { Tenant } from '@saas-suite/data-access/core';
 
 @Component({
   selector: 'app-admin-shell',
@@ -35,11 +36,15 @@ export class AdminShellComponent implements OnInit {
     await this.tenantStore.loadTenants();
     if (!this.tenantStore.activeTenantId()) {
       const tid = this.authStore.session()?.tenantId;
-      const match = this.tenantStore.tenants().find(t => t.id === tid);
+      const tenants = this.tenantStore.tenants();
+      const match = tenants.find(t => t.id === tid);
       if (match) {
         this.tenantStore.selectTenant(match);
-      } else if (this.tenantStore.tenants().length > 0) {
-        this.tenantStore.selectTenant(this.tenantStore.tenants()[0]);
+      } else if (tenants.length > 0) {
+        this.tenantStore.selectTenant(tenants[0]);
+      } else if (tid) {
+        const fallback: Tenant = { id: tid, name: '', plan: 'starter', region: '', status: 'ACTIVE', createdAt: '', updatedAt: '' };
+        this.tenantStore.selectTenant(fallback);
       }
     }
   }

@@ -11,12 +11,16 @@
 | [README.md](README.md) | Este índice |
 | [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md) | Configuração dos 3 ambientes: local, staging, produção (inclui como alimentar staging com dados) |
 | [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) | Deploy no Railway: serviços, variáveis, migrations e seed (staging vs produção) |
+| [URLS-AMBIENTES.md](URLS-AMBIENTES.md) | URLs de staging e production (fronts e APIs) e usuário inicial nos 3 fronts |
 | [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Pipeline, esteiras develop/master e protocolos (Git Flow, qualidade, testes, CI/CD, docs) |
 | [OBSERVABILITY.md](OBSERVABILITY.md) | Observabilidade: Sentry, logging, correlation, backup (todos os serviços) |
 | [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) | Deploy completo passo a passo (servidor, Docker, domínios, SSL) |
 | [GUIA-OPERACIONAL.md](GUIA-OPERACIONAL.md) | Visão geral dos 4 serviços, diagrama de dependência e procedimentos operacionais |
 | [MANUAL-SISTEMA.md](MANUAL-SISTEMA.md) | Manual completo: arquitetura, segurança, fluxos E2E, APIs e operação |
 | [VISTORIA-COMPLETA.md](VISTORIA-COMPLETA.md) | Vistoria dos 4 serviços: o que falta, o que ficou pela metade, o que está inconsistente |
+| [O-QUE-FALTA-100-VENDAVEL.md](O-QUE-FALTA-100-VENDAVEL.md) | Checklist do que falta para o produto estar 100% vendável (config, legal, suporte, CORS) |
+| [STACK-E-FERRAMENTAS.md](STACK-E-FERRAMENTAS.md) | O que já usamos (Rabbit, Redis, métricas, Grafana, circuit breaker) e o que pode ser adicionado (Kafka, NoSQL pro front, Sonar) |
+| [CACHE-REDIS-FRONT.md](CACHE-REDIS-FRONT.md) | Cache Redis para respostas consumidas pelo front (padrão de chave, TTL, exemplos por stack) |
 
 ### Documentação auto-gerada
 
@@ -53,7 +57,7 @@ Documentos futuros ainda não criados:
 | **documento-implantacao.md** | Ordem de deploy, variáveis por serviço, health checks, rollback |
 | **ci-cd-e-deploy.md** | CI (GitHub Actions) por repo; CD/deploy |
 | **E2E-RUN.md** | Subir os 4 repos integrados (envs, JWT, RabbitMQ) e sugestões de hospedagem |
-| **ESTADO-ENTREGA.md** | Estado da entrega: pronto para venda vs em progresso |
+| **ESTADO-ENTREGA.md** | Estado da entrega: pronto para venda vs em progresso _(parcialmente coberto por_ [O-QUE-FALTA-100-VENDAVEL.md](O-QUE-FALTA-100-VENDAVEL.md)_)_ |
 | **PUBLICAR-PASSO-A-PASSO.md** | Publicar frontend (GitHub Pages) ou aplicação completa (Railway) |
 
 ---

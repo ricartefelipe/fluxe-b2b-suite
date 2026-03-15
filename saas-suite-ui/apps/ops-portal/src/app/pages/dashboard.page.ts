@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { StatusChipComponent } from '@saas-suite/shared/ui';
@@ -22,7 +23,7 @@ const BAR_MAX_HEIGHT = 170;
   imports: [
     CurrencyPipe, SlicePipe, RouterLink,
     MatCardModule, MatTableModule, MatIconModule, MatProgressBarModule,
-    MatListModule, MatTooltipModule,
+    MatButtonModule, MatListModule, MatTooltipModule,
     StatusChipComponent,
   ],
   template: `
@@ -31,6 +32,15 @@ const BAR_MAX_HEIGHT = 170;
         <mat-progress-bar mode="indeterminate" />
       }
 
+      @if (store.loadError()) {
+        <mat-card class="error-card">
+          <mat-card-content>
+            <mat-icon class="error-icon">error_outline</mat-icon>
+            <p class="error-message">{{ i18n.messages().dashboard.loadError }}</p>
+            <button mat-raised-button color="primary" (click)="retryLoad()">{{ i18n.messages().dashboard.loadErrorAction }}</button>
+          </mat-card-content>
+        </mat-card>
+      } @else {
       <h1 class="page-title">{{ i18n.messages().dashboard.title }}</h1>
 
       <!-- KPI Cards -->
@@ -103,6 +113,7 @@ const BAR_MAX_HEIGHT = 170;
                   [attr.height]="barHeight(day.amount)"
                   rx="4"
                   class="bar"
+                  [class.bar--zero]="day.amount === 0"
                   [style.animation-delay]="i * 80 + 'ms'"
                   [matTooltip]="day.label + ': ' + formatCurrency(day.amount)"
                 />
@@ -248,11 +259,37 @@ const BAR_MAX_HEIGHT = 170;
           </mat-card-content>
         </mat-card>
       </div>
+      }
     </div>
   `,
   styles: [`
     .dashboard {
       padding: 8px 0;
+    }
+
+    .error-card {
+      margin-bottom: 24px;
+      border-radius: 12px;
+      text-align: center;
+      padding: 32px;
+    }
+    .error-card mat-card-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+    .error-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: var(--app-chip-warn-text);
+    }
+    .error-message {
+      margin: 0;
+      font-size: 15px;
+      color: var(--app-text-secondary);
+      max-width: 480px;
     }
 
     .page-title {
@@ -364,6 +401,10 @@ const BAR_MAX_HEIGHT = 170;
     .bar:hover {
       opacity: 1;
       filter: brightness(1.15);
+    }
+
+    .bar--zero {
+      opacity: 0.35;
     }
 
     @keyframes bar-grow {
@@ -541,7 +582,9 @@ export class DashboardPage implements OnInit {
 
   readonly yAxisTicks = computed(() => {
     const max = this.store.maxDailyRevenue();
-    if (max === 0) return [];
+    if (!Number.isFinite(max) || max <= 0) {
+      return [{ y: 190 - BAR_MAX_HEIGHT * 0.5, label: '0' }];
+    }
     return [0.25, 0.5, 0.75, 1].map(pct => ({
       y: 190 - pct * BAR_MAX_HEIGHT,
       label: this.shortCurrency(max * pct),
@@ -569,8 +612,19 @@ export class DashboardPage implements OnInit {
     await this.store.loadAll();
   }
 
+  retryLoad(): void {
+    this.store.loadAll();
+  }
+
+  /** Altura mínima em px para barras com receita zero (gráfico sempre visível). */
+  private readonly MIN_BAR_HEIGHT = 18;
+
   barHeight(amount: number): number {
-    return (amount / this.store.maxDailyRevenue()) * BAR_MAX_HEIGHT;
+    const amt = Number(amount) || 0;
+    const max = this.store.maxDailyRevenue();
+    if (!Number.isFinite(max) || max <= 0) return this.MIN_BAR_HEIGHT;
+    if (amt <= 0) return this.MIN_BAR_HEIGHT;
+    return Math.min((amt / max) * BAR_MAX_HEIGHT, BAR_MAX_HEIGHT);
   }
 
   formatCurrency(amount: number): string {

@@ -165,6 +165,44 @@ cd fluxe-b2b-suite
 - [ ] `APP_DEV_TOKEN_ENDPOINT_ENABLED=false` em produção
 - [ ] CORS: nos 3 backends, variável `CORS_ORIGINS` ou `CORS_ALLOWED_ORIGINS` com as origens dos frontends (vírgula)
 - [ ] Frontends (ops-portal, admin-console): `CORE_API_BASE_URL`, `ORDERS_API_BASE_URL`, `PAYMENTS_API_BASE_URL` com URLs absolutas
+- [ ] (Opcional) Métricas: Prometheus/Grafana configurados (ver seção abaixo)
+
+## Métricas e Grafana no deploy
+
+Os backends já expõem métricas (Prometheus):
+
+| Serviço              | Endpoint                  |
+|----------------------|---------------------------|
+| spring-saas-core     | `GET /actuator/prometheus` |
+| node-b2b-orders      | `GET /metrics`            |
+| py-payments-ledger   | `GET /metrics`            |
+
+Para **ver** métricas em produção você pode usar uma destas opções.
+
+### Opção A — Grafana Cloud (recomendado para Railway)
+
+1. Crie conta em [grafana.com/products/cloud](https://grafana.com/products/cloud) (free tier).
+2. Crie um **Prometheus** stack (ou use o Prometheus da Grafana Cloud).
+3. Em **Connections** → **Add new connection** → **Prometheus**, configure um **Remote Write** ou use **Scrape** apontando para as URLs públicas dos backends:
+   - `https://<spring-saas-core>.up.railway.app/actuator/prometheus`
+   - `https://<node-b2b-orders>.up.railway.app/metrics`
+   - `https://<py-payments-ledger>.up.railway.app/metrics`
+4. Importe os dashboards que estão em `fluxe-b2b-suite/monitoring/grafana/dashboards/` (overview, saas-core, orders, payments) ou recrie os painéis a partir deles.
+
+Se os endpoints `/actuator/prometheus` e `/metrics` forem restritos (ex.: só rede interna), use um **Grafana Agent** ou um job de scrape em um servidor que tenha acesso (ou exponha com autenticação e configure no Grafana Cloud).
+
+### Opção B — Prometheus + Grafana como serviços no Railway
+
+1. No mesmo projeto Railway, adicione dois serviços (ou use um compose):
+   - **Prometheus**: imagem `prom/prometheus`, com um `prometheus.yml` que faça scrape das URLs **internas** dos backends (no Railway, use o hostname do serviço, ex.: `spring-saas-core.railway.internal:8080` se disponível, ou as URLs públicas).
+2. **Grafana**: imagem `grafana/grafana`, variável `GF_SECURITY_ADMIN_PASSWORD`, datasource Prometheus apontando para `http://prometheus:9090`.
+3. Use os arquivos em `monitoring/prometheus/` e `monitoring/grafana/` como base; ajuste `scrape_configs` com os endereços reais dos backends no Railway.
+
+### Checklist rápido de métricas
+
+- [ ] Prometheus (ou Grafana Cloud) fazendo scrape de pelo menos um backend.
+- [ ] Dashboards de overview/saas-core/orders/payments visíveis.
+- [ ] Alertas (opcional): usar `monitoring/prometheus/alerts/` se tiver Alertmanager.
 
 ## Domínio Customizado
 

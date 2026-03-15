@@ -12,7 +12,7 @@ import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
-import { PaymentsFacade, PaymentStatus } from '@saas-suite/data-access/payments';
+import { PaymentsFacade, PaymentStatus, PaymentIntent } from '@saas-suite/data-access/payments';
 import { formatDateTime } from '@saas-suite/shared/util';
 
 @Component({
@@ -99,7 +99,7 @@ export class PaymentsListPage implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  dataSource = new MatTableDataSource<any>([]);
+  dataSource = new MatTableDataSource<PaymentIntent>([]);
   filterStatus?: PaymentStatus;
   filterCustomer?: string;
   columns = ['id', 'customerRef', 'amount', 'status', 'created_at', 'actions'];

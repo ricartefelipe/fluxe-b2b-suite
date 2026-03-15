@@ -133,7 +133,7 @@ cd fluxe-b2b-suite
 ./scripts/staging-seed.sh railway
 ```
 
-  Isso executa em sequência: `node-b2b-orders` (migrate + prisma db seed) e `py-payments-ledger` (alembic upgrade + seed). O **spring-saas-core** já recebe seed no deploy quando `SPRING_PROFILES_ACTIVE=staging` (Liquibase contexts: staging,seed).
+  Detalhes do que cada serviço executa: [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md#alimentar-staging-com-dados-após-primeiro-deploy).
 
 - **Produção:** não rodar seed; apenas migrations. Dados reais via aplicação.
 

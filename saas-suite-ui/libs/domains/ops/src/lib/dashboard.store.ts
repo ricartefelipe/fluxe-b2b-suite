@@ -6,6 +6,33 @@ import { Order, OrderStatus, InventoryItem, InventoryAdjustment } from '@saas-su
 import { PaymentIntent } from '@saas-suite/data-access/payments';
 import { LoggerService } from '@saas-suite/shared/telemetry';
 
+const VALID_STATUSES: OrderStatus[] = ['DRAFT', 'CREATED', 'RESERVED', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'PAID'];
+
+/** Normaliza ordem vinda da API (status em maiúsculas, datas como string, totalAmount como número). */
+function normalizeOrder(o: Record<string, unknown>): Order {
+  const statusRaw = (o['status'] != null ? String(o['status']) : 'CREATED').toUpperCase();
+  const status: OrderStatus = VALID_STATUSES.includes(statusRaw as OrderStatus) ? (statusRaw as OrderStatus) : 'CREATED';
+  const createdAt = o['createdAt'] != null
+    ? (typeof o['createdAt'] === 'string' ? o['createdAt'] : new Date(o['createdAt'] as Date).toISOString())
+    : new Date().toISOString();
+  const totalAmount = typeof o['totalAmount'] === 'number' ? o['totalAmount'] : Number(o['totalAmount']) || 0;
+  const items = Array.isArray(o['items']) ? (o['items'] as Order['items']) : [];
+  return {
+    id: String(o['id'] ?? ''),
+    tenantId: String(o['tenantId'] ?? ''),
+    customerId: String(o['customerId'] ?? ''),
+    status,
+    items,
+    totalAmount,
+    currency: o['currency'] != null ? String(o['currency']) : undefined,
+    correlationId: o['correlationId'] != null ? String(o['correlationId']) : undefined,
+    createdAt,
+    updatedAt: o['updatedAt'] != null
+      ? (typeof o['updatedAt'] === 'string' ? o['updatedAt'] : new Date(o['updatedAt'] as Date).toISOString())
+      : createdAt,
+  };
+}
+
 export interface DailyRevenue {
   date: string;
   label: string;
@@ -119,7 +146,7 @@ export class DashboardStore {
 
   readonly recentOrders = computed(() =>
     [...this._orders()]
-      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .sort((a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? ''))
       .slice(0, 5),
   );
 
@@ -129,7 +156,7 @@ export class DashboardStore {
 
   readonly recentAdjustments = computed(() =>
     [...this._adjustments()]
-      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+      .sort((a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? ''))
       .slice(0, 5),
   );
 
@@ -144,7 +171,15 @@ export class DashboardStore {
     ]);
 
     if (results[0].status === 'fulfilled') {
-      this._orders.set(results[0].value.data);
+      const raw = results[0].value as { data?: unknown[]; items?: unknown[] } | unknown[];
+      const list = Array.isArray(raw)
+        ? raw
+        : Array.isArray((raw as { data?: unknown[] }).data)
+          ? (raw as { data: unknown[] }).data
+          : Array.isArray((raw as { items?: unknown[] }).items)
+            ? (raw as { items: unknown[] }).items
+            : [];
+      this._orders.set(list.map(o => normalizeOrder(o as Record<string, unknown>)));
     } else {
       this.logger.error('loadOrders failed', results[0].reason);
     }
@@ -164,7 +199,8 @@ export class DashboardStore {
     }
 
     if (results[3].status === 'fulfilled') {
-      this._adjustments.set(results[3].value.data);
+      const adjRaw = results[3].value as { data?: InventoryAdjustment[] } | InventoryAdjustment[];
+      this._adjustments.set(Array.isArray(adjRaw) ? adjRaw : (adjRaw?.data ?? []));
     } else {
       this.logger.error('loadAdjustments failed', results[3].reason);
     }

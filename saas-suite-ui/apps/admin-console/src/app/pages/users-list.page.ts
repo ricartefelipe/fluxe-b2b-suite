@@ -13,6 +13,7 @@ import { MatDialogModule, MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angu
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { I18nService } from '@saas-suite/shared/i18n';
@@ -131,7 +132,7 @@ export class InviteUserDialog {
     MatTableModule, MatButtonModule, MatIconModule,
     MatFormFieldModule, MatInputModule, MatSelectModule, MatChipsModule,
     MatDialogModule, FormsModule, MatSortModule, MatPaginatorModule,
-    MatSnackBarModule,
+    MatSnackBarModule, MatTooltipModule,
     StatusChipComponent, EmptyStateComponent, TableSkeletonComponent,
   ],
   template: `
@@ -205,6 +206,11 @@ export class InviteUserDialog {
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let u">
+            @if (u.status !== 'DELETED') {
+              <button mat-icon-button (click)="resendInvite(u)" [attr.aria-label]="i18n.messages().admin.resendInvite" matTooltip="{{ i18n.messages().admin.resendInvite }}">
+                <mat-icon>mail</mat-icon>
+              </button>
+            }
             <button mat-icon-button color="primary" (click)="openEdit(u)" [attr.aria-label]="i18n.messages().common.edit">
               <mat-icon>edit</mat-icon>
             </button>
@@ -354,6 +360,15 @@ export class UsersListPage implements OnInit, AfterViewInit {
         this.snack.open(this.i18n.messages().admin.userError, '', { duration: 3000 });
       }
     });
+  }
+
+  async resendInvite(user: UserDto): Promise<void> {
+    try {
+      await firstValueFrom(this.http.post(`${this.baseUrl}/${user.id}/resend-invite`, null));
+      this.snack.open(this.i18n.messages().admin.resendInviteSent, '', { duration: 3000 });
+    } catch {
+      this.snack.open(this.i18n.messages().admin.userError, '', { duration: 3000 });
+    }
   }
 
   async deleteUser(user: UserDto): Promise<void> {

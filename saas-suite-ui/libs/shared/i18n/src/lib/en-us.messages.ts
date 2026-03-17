@@ -605,6 +605,8 @@ export const EN_US_MESSAGES: Messages = {
     confirmDeleteUser: 'Are you sure you want to remove this user?',
     userDeleted: 'User removed',
     inviteSent: 'Invite sent',
+    resendInvite: 'Resend invite',
+    resendInviteSent: 'Invite resent',
     userUpdated: 'User updated',
     userError: 'Error processing request',
   },

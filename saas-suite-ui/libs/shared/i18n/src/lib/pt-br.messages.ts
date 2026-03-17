@@ -605,6 +605,8 @@ export const PT_BR_MESSAGES: Messages = {
     confirmDeleteUser: 'Tem certeza que deseja remover este usuário?',
     userDeleted: 'Usuário removido',
     inviteSent: 'Convite enviado',
+    resendInvite: 'Reenviar convite',
+    resendInviteSent: 'Convite reenviado',
     userUpdated: 'Usuário atualizado',
     userError: 'Erro ao processar solicitação',
   },

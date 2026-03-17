@@ -571,6 +571,8 @@ export interface Messages {
     confirmDeleteUser: string;
     userDeleted: string;
     inviteSent: string;
+    resendInvite: string;
+    resendInviteSent: string;
     userUpdated: string;
     userError: string;
   };

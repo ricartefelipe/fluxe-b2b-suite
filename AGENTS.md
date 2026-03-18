@@ -1,6 +1,14 @@
 # AGENTS.md — Diretrizes para IA no Fluxe B2B Suite
 
-Este arquivo define regras e preferências para assistentes de código (Cursor, Copilot, etc.) que trabalham neste repositório.
+Este arquivo define regras e preferências para assistentes de código que trabalham neste repositório.
+
+---
+
+## Regras imutáveis (o agente aprende e aplica sempre)
+
+- **Git Flow:** toda alteração via branch `feature/*` ou `fix/*` a partir de `develop` → PR → merge; nunca commit direto em `develop` ou `master`.
+- **Sem menções a ferramentas em commits:** nunca incluir "Cursor", "Made with Cursor", "Copilot" ou similar em mensagens de commit.
+- **Ao concluir:** fazer o processo de subida completo (branch, commit, push, PR, CI verde, merge) e, se aplicável, release `develop` → `master` para deploy em produção.
 
 ---
 

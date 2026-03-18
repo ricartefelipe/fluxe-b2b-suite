@@ -9,7 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { I18nService } from '@saas-suite/shared/i18n';
@@ -254,10 +254,12 @@ const DEV_PROFILES: DevProfile[] = [
             </button>
           </ng-template>
 
-          <p class="signup-link">
-            {{ i18n.messages().auth.noAccount }}
-            <a routerLink="/signup">{{ i18n.messages().auth.signupLink }}</a>
-          </p>
+          @if (showSignupLink) {
+            <p class="signup-link">
+              {{ i18n.messages().auth.noAccount }}
+              <a routerLink="/signup">{{ i18n.messages().auth.signupLink }}</a>
+            </p>
+          }
 
           <div class="login-footer">
             <span>Fluxe B2B Suite &copy; {{ currentYear }}</span>
@@ -635,8 +637,10 @@ const DEV_PROFILES: DevProfile[] = [
 export class DevLoginComponent {
   private authService = inject(AuthService);
   private config = inject(RuntimeConfigService);
+  private route = inject(ActivatedRoute, { optional: true });
   protected i18n = inject(I18nService);
 
+  showSignupLink = this.route?.snapshot?.data?.['showSignupLink'] !== false;
   isDevMode = this.config.get('authMode') === 'dev';
   currentYear = new Date().getFullYear();
   profiles = DEV_PROFILES;

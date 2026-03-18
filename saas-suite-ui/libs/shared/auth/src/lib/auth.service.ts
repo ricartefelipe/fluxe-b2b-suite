@@ -27,6 +27,7 @@ interface TokenResponse {
   access_token: string;
   token_type: string;
   expires_in: number;
+  must_change_password?: boolean;
 }
 
 function base64url(obj: object): string {
@@ -139,6 +140,21 @@ export class AuthService {
       this.tenantCtx.setActiveTenantId(session.tenantId);
     }
     if (this.isBrowser) sessionStorage.setItem('dev_token', token);
+    if (resp.must_change_password) {
+      await this.router.navigate(['/change-password']);
+    } else {
+      await this.router.navigate(['/']);
+    }
+  }
+
+  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+    const baseUrl = this.config.get('coreApiBaseUrl');
+    await firstValueFrom(
+      this.http.post<{ message: string }>(`${baseUrl}/v1/auth/change-password`, {
+        currentPassword,
+        newPassword,
+      }).pipe(timeout(10_000))
+    );
     await this.router.navigate(['/']);
   }
 

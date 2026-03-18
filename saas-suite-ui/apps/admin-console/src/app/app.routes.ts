@@ -11,6 +11,11 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('@saas-suite/shared/auth').then(m => m.SignupPageComponent),
   },
   {
+    path: 'change-password',
+    loadComponent: () => import('@saas-suite/shared/auth').then(m => m.ChangePasswordPageComponent),
+    canActivate: [authGuard],
+  },
+  {
     path: '',
     loadComponent: () => import('./admin-shell.component').then(m => m.AdminShellComponent),
     canActivate: [authGuard],

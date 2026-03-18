@@ -514,6 +514,19 @@ export interface Messages {
     currentPlanBadge: string;
     noSubscription: string;
   };
+  usage: {
+    title: string;
+    users: string;
+  };
+  status: {
+    title: string;
+    operational: string;
+    degraded: string;
+    outage: string;
+  };
+  changelog: {
+    title: string;
+  };
   onboardingChecklist: {
     checklistTitle: string;
     checklistSubtitle: string;

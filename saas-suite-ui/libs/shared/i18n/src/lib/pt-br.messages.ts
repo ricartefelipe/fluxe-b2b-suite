@@ -548,6 +548,19 @@ export const PT_BR_MESSAGES: Messages = {
     currentPlanBadge: 'Atual',
     noSubscription: 'Nenhuma assinatura ativa. Escolha um plano para começar.',
   },
+  usage: {
+    title: 'Seu uso este mês',
+    users: 'Usuários',
+  },
+  status: {
+    title: 'Status dos serviços',
+    operational: 'Operacional',
+    degraded: 'Degradado',
+    outage: 'Indisponível',
+  },
+  changelog: {
+    title: 'Changelog',
+  },
   onboardingChecklist: {
     checklistTitle: 'Conclua sua configuração',
     checklistSubtitle: 'Siga os passos para começar.',

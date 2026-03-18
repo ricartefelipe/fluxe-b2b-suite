@@ -81,6 +81,14 @@ export const appRoutes: Route[] = [
         data: { fullPage: false, useOptionalSubtitle: true },
       },
       {
+        path: 'status',
+        loadComponent: () => import('./pages/status.page').then(m => m.StatusPage),
+      },
+      {
+        path: 'changelog',
+        loadComponent: () => import('./pages/changelog.page').then(m => m.ChangelogPage),
+      },
+      {
         path: '403',
         loadComponent: () => import('@saas-suite/shared/ui').then(m => m.ErrorPageComponent),
         data: { code: 403, title: 'Acesso Negado', message: 'Você não tem permissão para acessar este recurso.' },

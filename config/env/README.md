@@ -69,4 +69,18 @@ Use `local.env.example` como referência ao configurar cada repositório (spring
 3. **spring-saas-core:** `application.yml` já tem defaults para local (5435, 6382, 5675). `.env.example` documenta as mesmas portas; opcionalmente `source .env.local` antes de rodar. Ver `docs/CONFIG-AMBIENTES.md` no repo.
 4. **Front (saas-suite-ui):** Em dev, config com paths relativos e proxy. Em deploy, injetar URLs via env no build.
 
+---
+
+## Seed de staging a partir da máquina
+
+O script `./scripts/staging-seed.sh railway` roda `railway run` nos repos linkados; dentro da rede do Railway a `DATABASE_URL` usa host interno (`postgres.railway.internal`). Se você rodar **na sua máquina** (por exemplo para debugar o seed), esse host não resolve. Use a **URL pública** do Postgres:
+
+- No Railway: serviço **Postgres** do projeto → variável **DATABASE_PUBLIC_URL** (ex.: `ballast.proxy.rlwy.net:35931`).
+- Exporte e rode os comandos manualmente, por exemplo para node-b2b-orders:
+  ```bash
+  export DATABASE_URL="<valor de DATABASE_PUBLIC_URL do serviço Postgres>"
+  cd node-b2b-orders && npx prisma migrate deploy && npx prisma db seed
+  ```
+- Obter a URL: no diretório do monorepo, `railway link` ao serviço Postgres do ambiente staging e depois `railway run -s <postgres-service-id> env | grep DATABASE_PUBLIC_URL`.
+
 Referência completa de variáveis: [REFERENCIA-CONFIGURACAO.md](../../docs/REFERENCIA-CONFIGURACAO.md).

@@ -8,6 +8,8 @@ export interface AuthSession {
   plan: string;
   region: string;
   expiresAt: number;
+  /** JWT claim mcp — must change password before using the app */
+  mustChangePassword?: boolean;
 }
 
 export function isExpired(session: AuthSession): boolean {
@@ -47,5 +49,6 @@ export function sessionFromJwt(token: string): AuthSession {
     plan: (payload['plan'] as string) ?? '',
     region: (payload['region'] as string) ?? '',
     expiresAt: exp * 1000,
+    mustChangePassword: payload['mcp'] === true,
   };
 }

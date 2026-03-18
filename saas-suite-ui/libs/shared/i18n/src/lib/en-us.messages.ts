@@ -578,7 +578,7 @@ export const EN_US_MESSAGES: Messages = {
     recommendationsDesc: 'Governance suggestions based on current state',
     governanceRecsTitle: 'Governance Recommendations',
     insights: 'Insights',
-    insightsDesc: 'System health indicators and opportunities',
+    insightsDesc: 'Fluxe B2B Suite health indicators and opportunities',
     aiError: 'Error querying AI. Check if the backend is running.',
     actor: 'Actor',
     rollout: 'Rollout',

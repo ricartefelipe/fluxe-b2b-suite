@@ -578,7 +578,7 @@ export const PT_BR_MESSAGES: Messages = {
     recommendationsDesc: 'Sugestões de governança baseadas no estado atual',
     governanceRecsTitle: 'Recomendações de Governança',
     insights: 'Insights',
-    insightsDesc: 'Indicadores de saúde e oportunidades do sistema',
+    insightsDesc: 'Indicadores de saúde e oportunidades do Fluxe B2B Suite',
     aiError: 'Erro ao consultar a IA. Verifique se o backend está rodando.',
     actor: 'Ator',
     rollout: 'Rollout',

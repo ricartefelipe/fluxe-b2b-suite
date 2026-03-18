@@ -369,7 +369,7 @@ Se tudo deu certo, você vai ver algo como:
 ```
 Welcome to Ubuntu 22.04.x LTS (GNU/Linux 5.15.0-xxx-generic aarch64)
 
-  System information as of ...
+  Fluxe B2B Suite server — system information as of ...
 
 ubuntu@fluxe-server:~$
 ```

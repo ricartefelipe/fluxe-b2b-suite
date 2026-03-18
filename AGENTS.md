@@ -1,6 +1,14 @@
 # AGENTS.md — Diretrizes para IA no Fluxe B2B Suite
 
-Este arquivo define regras e preferências para assistentes de código (Cursor, Copilot, etc.) que trabalham neste repositório.
+Este arquivo define regras e preferências para assistentes de código que trabalham neste repositório.
+
+---
+
+## Regras imutáveis (o agente aprende e aplica sempre)
+
+- **Git Flow:** toda alteração via branch `feature/*` ou `fix/*` a partir de `develop` → PR → merge; nunca commit direto em `develop` ou `master`.
+- **Sem menções a ferramentas em commits:** nunca incluir "Cursor", "Made with Cursor", "Copilot" ou similar em mensagens de commit.
+- **Ao concluir:** fazer o processo de subida completo (branch, commit, push, PR, CI verde, merge em `develop`). **Release para produção** (`develop` → `master`) é da responsabilidade do utilizador; o agente só executa quando o utilizador pedir e seguindo as preferências dele (ver secção "Release para produção").
 
 ---
 
@@ -19,28 +27,54 @@ Este arquivo define regras e preferências para assistentes de código (Cursor, 
 
 O projeto tem **três ambientes** bem definidos. Ver [docs/AMBIENTES-CONFIGURACAO.md](docs/AMBIENTES-CONFIGURACAO.md):
 
-| Ambiente | Uso | Dados |
-|----------|-----|-------|
-| **Local** | Dev na máquina | Migration + seed até a tampa |
-| **Staging** | Railway, branch develop | Migration + seed completo |
-| **Produção** | Railway, branch master | Migration + só essencial |
+| Ambiente | Onde | Branch que “alimenta” o deploy | Dados |
+|----------|------|--------------------------------|-------|
+| **Local** | Máquina do dev | *(não há deploy)* — qualquer branch | Migration + seed até a tampa |
+| **Staging** | Railway | **`develop`** | Migration + seed completo |
+| **Produção** | Railway | **`master`** | Migration + só essencial |
 
-Não presumir que "ambiente não existe" — staging e produção já foram usados. Não inventar passos de setup do zero sem checar a doc.
+- **“Subir ambiente local”** = Docker/scripts na máquina (`./scripts/up-local.sh`, `nx serve`, etc.) — ver doc.  
+- **“Staging / produção”** = resultado do que está em **`develop`** / **`master`** no remoto após CI e deploy Railway — não é o mesmo que “processo de subida” Git (PR), embora o PR para `develop` seja o que **dispara** o deploy de staging.
+
+Não presumir que staging/produção “não existem”. Não inventar setup sem checar a doc.
 
 ---
 
 ## Git Flow e protocolos
+
+### Glossário (não confundir)
+
+- **“Processo de subida” / “subir” / “git flow”** (o que o time pede ao terminar trabalho) = **este fluxo Git abaixo** (branch → commit → push → PR → `develop`). **Não** significa `pnpm dev`, `nx serve`, Docker local ou “subir servidor”, a menos que a pessoa peça explicitamente isso.
 
 - Branches: `master` (prod), `develop` (staging), `feature/*`, `fix/*`
 - Merge via PR; CI deve passar antes do merge
 - Atualizar documentação quando alterar contratos, APIs, variáveis ou fluxos
 - Ver [docs/PIPELINE-ESTEIRAS.md](docs/PIPELINE-ESTEIRAS.md) e [CONTRIBUTING.md](CONTRIBUTING.md)
 
-### Ao terminar uma tarefa (obrigatório para o agente)
+### Ao terminar uma tarefa — processo de subida (obrigatório para o agente)
 
-- **Nunca** commitar direto na `develop`. Sempre usar feature branch.
-- Fluxo: (1) criar branch `feature/nome-da-tarefa` **antes** de editar; (2) fazer o trabalho nessa branch; (3) ao concluir: commit (mensagem sem menção a Cursor), merge em `develop`, apagar a branch de feature.
-- Aplicar esse processo em **toda** tarefa que envolva commit.
+1. Garantir que está em `develop` atualizada: `git fetch origin && git checkout develop && git pull origin develop`
+2. Criar branch: `git checkout -b feature/nome-descritivo` (ou `fix/...`) — **nunca** commitar direto na `develop`
+3. Fazer alterações, `git add`, `git commit` (mensagem **sem** “Made-with: Cursor” ou similar)
+4. `git push -u origin feature/nome-descritivo`
+5. Abrir **PR para `develop`** (ou merge local seguindo o mesmo critério); **CI verde** antes de mergear
+6. Após merge: apagar branch remota/local da feature quando aplicável
+7. **Release para produção:** não fazer merge `develop` → `master` nem criar/mergear o PR de release por iniciativa própria. O responsável pela release é o utilizador; quando ele pedir, executar conforme a secção abaixo.
+
+Aplicar em **toda** tarefa que envolva commit.
+
+### Release para produção (responsabilidade do utilizador)
+
+- **Dono do processo:** o utilizador é o responsável pela release; o agente segue as preferências dele.
+- **Sem pedido explícito:** o agente não abre nem mergeia PR `develop` → `master` nem faz deploy para produção.
+- **Quando o utilizador pedir release:** o agente deve fazer exactamente como o utilizador prefere. Preferências a aplicar (a documentar/refinar pelo utilizador):
+  - Repos em que fazer release (ex.: fluxe-b2b-suite, spring-saas-core; um de cada vez ou em conjunto).
+  - Nome/título do PR de release (ex.: "Release: develop → master", "Deploy produção", etc.).
+  - Se criar tag (ex.: `v1.2.3`) e em que momento.
+  - Se actualizar CHANGELOG ou release notes antes do merge.
+  - Quem faz o merge (utilizador faz manualmente ou o agente pode fazer após aprovação).
+  - Ordem dos repos (ex.: primeiro Core, depois frontend).
+- **Referência:** [PIPELINE-ESTEIRAS.md](docs/PIPELINE-ESTEIRAS.md) — merge manual de develop em master quando pronto; CI verde antes do merge.
 
 ---
 

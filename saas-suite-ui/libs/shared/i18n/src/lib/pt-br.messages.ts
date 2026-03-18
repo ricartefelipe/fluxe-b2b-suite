@@ -63,6 +63,13 @@ export const PT_BR_MESSAGES: Messages = {
     accessDenied: 'Acesso negado.',
     noAccount: 'Ainda não tem conta?',
     signupLink: 'Criar conta',
+    changePasswordTitle: 'Alterar senha',
+    changePasswordSubtitle: 'É obrigatório definir uma nova senha antes de continuar.',
+    currentPassword: 'Senha atual',
+    newPassword: 'Nova senha',
+    confirmNewPassword: 'Confirmar nova senha',
+    confirmPasswordMismatch: 'Nova senha e confirmação não conferem.',
+    changePasswordButton: 'Alterar senha',
   },
   tenant: {
     selectTenant: 'Selecione um Tenant',

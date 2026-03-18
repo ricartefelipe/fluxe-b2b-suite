@@ -63,6 +63,13 @@ export interface Messages {
     accessDenied: string;
     noAccount: string;
     signupLink: string;
+    changePasswordTitle: string;
+    changePasswordSubtitle: string;
+    currentPassword: string;
+    newPassword: string;
+    confirmNewPassword: string;
+    confirmPasswordMismatch: string;
+    changePasswordButton: string;
   };
   tenant: {
     selectTenant: string;

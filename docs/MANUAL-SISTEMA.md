@@ -209,7 +209,7 @@ O spring-saas-core é o coração da plataforma. Centraliza:
 ### 3.5 Dados de Seed
 
 Ao iniciar (Liquibase, automático):
-- **Tenants**: System (admin global), Demo Corp (plano pro, region-a)
+- **Tenants**: Fluxe B2B Suite (admin global), Demo Corp (plano pro, region-a)
 - **Policies**: 7 políticas para tenants, policies, flags, admin, profile, audit, analytics
 - **Feature Flags**: fast_checkout, chaos_controls (Demo Corp)
 

@@ -489,9 +489,10 @@ export interface Messages {
     policies: string;
     featureFlags: string;
     users: string;
+    billing: string;
+    help: string;
     auditLog: string;
     aiAssistant: string;
-    billing: string;
   };
   billing: {
     title: string;
@@ -513,6 +514,17 @@ export interface Messages {
     freePlan: string;
     currentPlanBadge: string;
     noSubscription: string;
+    trialBannerMessage: string;
+    trialCtaAddCard: string;
+    scheduleCancel: string;
+    undoScheduleCancel: string;
+    scheduledCancelMessage: string;
+    healthSection: string;
+    lastActivity: string;
+    activeUsers: string;
+    never: string;
+    exportData: string;
+    exportDataHint: string;
   };
   admin: {
     policiesTitle: string;
@@ -629,6 +641,18 @@ export interface Messages {
     backToHome: string;
     cookieBannerText: string;
     cookieBannerAccept: string;
+  };
+  helpPage: {
+    title: string;
+    faqTitle: string;
+    faq1Question: string;
+    faq1Answer: string;
+    faq2Question: string;
+    faq2Answer: string;
+    faq3Question: string;
+    faq3Answer: string;
+    dataSectionTitle: string;
+    exportLinkHint: string;
   };
 }
 

@@ -140,7 +140,9 @@ export class AuthService {
       this.tenantCtx.setActiveTenantId(session.tenantId);
     }
     if (this.isBrowser) sessionStorage.setItem('dev_token', token);
-    if (resp.must_change_password) {
+    const mustChange =
+      resp.must_change_password === true || session.mustChangePassword === true;
+    if (mustChange) {
       await this.router.navigate(['/change-password']);
     } else {
       await this.router.navigate(['/']);
@@ -149,12 +151,22 @@ export class AuthService {
 
   async changePassword(currentPassword: string, newPassword: string): Promise<void> {
     const baseUrl = this.config.get('coreApiBaseUrl');
-    await firstValueFrom(
-      this.http.post<{ message: string }>(`${baseUrl}/v1/auth/change-password`, {
-        currentPassword,
-        newPassword,
-      }).pipe(timeout(10_000))
+    const resp = await firstValueFrom(
+      this.http
+        .post<TokenResponse & { message?: string }>(`${baseUrl}/v1/auth/change-password`, {
+          currentPassword,
+          newPassword,
+        })
+        .pipe(timeout(10_000))
     );
+    if (resp.access_token) {
+      const session = sessionFromJwt(resp.access_token);
+      this.store.setSession(session);
+      if (session.tenantId && this.tenantCtx) {
+        this.tenantCtx.setActiveTenantId(session.tenantId);
+      }
+      if (this.isBrowser) sessionStorage.setItem('dev_token', resp.access_token);
+    }
     await this.router.navigate(['/']);
   }
 

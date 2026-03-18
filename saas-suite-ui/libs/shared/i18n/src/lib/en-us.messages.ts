@@ -65,6 +65,8 @@ export const EN_US_MESSAGES: Messages = {
     signupLink: 'Sign up',
     changePasswordTitle: 'Change password',
     changePasswordSubtitle: 'You must set a new password before continuing.',
+    changePasswordSubtitleOptional: 'Update your account password.',
+    changePasswordMenuLabel: 'Change password',
     currentPassword: 'Current password',
     newPassword: 'New password',
     confirmNewPassword: 'Confirm new password',

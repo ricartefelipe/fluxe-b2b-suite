@@ -1,4 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, computed } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -20,11 +21,11 @@ import { I18nService } from '@saas-suite/shared/i18n';
     MatProgressSpinnerModule,
   ],
   template: `
-    <div class="page">
+    <div class="page" [class.page--embedded]="!fullPage()">
       <mat-card class="card">
         <mat-card-header>
           <mat-card-title>{{ i18n.messages().auth.changePasswordTitle }}</mat-card-title>
-          <mat-card-subtitle>{{ i18n.messages().auth.changePasswordSubtitle }}</mat-card-subtitle>
+          <mat-card-subtitle>{{ subtitle() }}</mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
           @if (error()) {
@@ -67,6 +68,15 @@ import { I18nService } from '@saas-suite/shared/i18n';
         padding: 24px;
         background: #f4f6f9;
       }
+      .page--embedded {
+        min-height: 0;
+        padding: 0;
+        background: transparent;
+        display: block;
+      }
+      .page--embedded .card {
+        max-width: 420px;
+      }
       .card {
         max-width: 400px;
         width: 100%;
@@ -88,12 +98,28 @@ import { I18nService } from '@saas-suite/shared/i18n';
 export class ChangePasswordPageComponent {
   private readonly authService = inject(AuthService);
   readonly i18n = inject(I18nService);
+  private readonly route = inject(ActivatedRoute);
+
+  fullPage = signal(true);
+  subtitle = computed(() => {
+    const useOptional = this.route.snapshot.data['useOptionalSubtitle'] === true;
+    const m = this.i18n.messages()?.auth;
+    if (!m) return 'Alterar senha';
+    return useOptional && m.changePasswordSubtitleOptional
+      ? m.changePasswordSubtitleOptional
+      : m.changePasswordSubtitle;
+  });
 
   currentPassword = '';
   newPassword = '';
   confirmNewPassword = '';
   loading = signal(false);
   error = signal<string | null>(null);
+
+  constructor() {
+    const fullPage = this.route.snapshot.data['fullPage'];
+    if (fullPage === false) this.fullPage.set(false);
+  }
 
   async submit(): Promise<void> {
     if (!this.currentPassword || !this.newPassword || this.newPassword.length < 8) return;

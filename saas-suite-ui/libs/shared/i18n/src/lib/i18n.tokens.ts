@@ -65,6 +65,8 @@ export interface Messages {
     signupLink: string;
     changePasswordTitle: string;
     changePasswordSubtitle: string;
+    changePasswordSubtitleOptional: string;
+    changePasswordMenuLabel: string;
     currentPassword: string;
     newPassword: string;
     confirmNewPassword: string;

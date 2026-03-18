@@ -63,6 +63,13 @@ export const EN_US_MESSAGES: Messages = {
     accessDenied: 'Access denied.',
     noAccount: "Don't have an account?",
     signupLink: 'Sign up',
+    changePasswordTitle: 'Change password',
+    changePasswordSubtitle: 'You must set a new password before continuing.',
+    currentPassword: 'Current password',
+    newPassword: 'New password',
+    confirmNewPassword: 'Confirm new password',
+    confirmPasswordMismatch: 'New password and confirmation do not match.',
+    changePasswordButton: 'Change password',
   },
   tenant: {
     selectTenant: 'Select a Tenant',

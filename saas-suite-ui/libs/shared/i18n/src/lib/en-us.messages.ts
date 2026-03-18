@@ -548,6 +548,17 @@ export const EN_US_MESSAGES: Messages = {
     currentPlanBadge: 'Current',
     noSubscription: 'No active subscription. Choose a plan to get started.',
   },
+  onboardingChecklist: {
+    checklistTitle: 'Complete your setup',
+    checklistSubtitle: 'Follow the steps to get started.',
+    stepCreateTenant: 'Create organization (tenant)',
+    stepInviteUser: 'Invite a user',
+    stepConfigureBilling: 'Configure billing',
+    actionNewTenant: 'Create',
+    actionInvite: 'Invite',
+    actionBilling: 'Configure',
+    dismiss: 'Dismiss',
+  },
   admin: {
     policiesTitle: 'Policies (ABAC/RBAC)',
     newPolicy: 'New Policy',

@@ -514,6 +514,17 @@ export interface Messages {
     currentPlanBadge: string;
     noSubscription: string;
   };
+  onboardingChecklist: {
+    checklistTitle: string;
+    checklistSubtitle: string;
+    stepCreateTenant: string;
+    stepInviteUser: string;
+    stepConfigureBilling: string;
+    actionNewTenant: string;
+    actionInvite: string;
+    actionBilling: string;
+    dismiss: string;
+  };
   admin: {
     policiesTitle: string;
     newPolicy: string;

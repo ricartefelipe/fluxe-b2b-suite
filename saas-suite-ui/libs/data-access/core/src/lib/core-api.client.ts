@@ -94,4 +94,9 @@ export class CoreApiClient {
   startTrial(planSlug: string): Observable<Subscription> {
     return this.http.post<Subscription>(`${this.base}/v1/subscriptions/trial`, { planSlug });
   }
+
+  /** List users for the current tenant (tenant from auth context). */
+  listUsers(): Observable<Array<{ id: string }>> {
+    return this.http.get<Array<{ id: string }>>(`${this.base}/v1/users`);
+  }
 }

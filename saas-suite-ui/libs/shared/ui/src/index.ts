@@ -16,3 +16,4 @@ export * from './lib/a11y/live-announcer.service';
 export * from './lib/a11y/focus-on-nav.directive';
 export * from './lib/a11y/provide-accessibility';
 export * from './lib/cookie-banner/cookie-banner.component';
+export * from './lib/onboarding-checklist/onboarding-checklist.component';

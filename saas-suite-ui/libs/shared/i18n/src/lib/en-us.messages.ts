@@ -548,6 +548,19 @@ export const EN_US_MESSAGES: Messages = {
     currentPlanBadge: 'Current',
     noSubscription: 'No active subscription. Choose a plan to get started.',
   },
+  usage: {
+    title: 'Your usage this month',
+    users: 'Users',
+  },
+  status: {
+    title: 'Service status',
+    operational: 'Operational',
+    degraded: 'Degraded',
+    outage: 'Outage',
+  },
+  changelog: {
+    title: 'Changelog',
+  },
   onboardingChecklist: {
     checklistTitle: 'Complete your setup',
     checklistSubtitle: 'Follow the steps to get started.',

@@ -1,4 +1,5 @@
 import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,8 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
-import { CoreApiClient, PlanDefinition, Subscription, SubscriptionStatus } from '@saas-suite/data-access/core';
+import { CoreApiClient, PlanDefinition, Subscription, SubscriptionStatus, UsageSummary } from '@saas-suite/data-access/core';
 import { I18nService } from '@saas-suite/shared/i18n';
+import { UsageWidgetComponent } from './usage-widget.component';
 
 @Component({
   selector: 'app-billing-page',
@@ -20,6 +22,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
     MatChipsModule,
     MatProgressSpinnerModule,
     MatDividerModule,
+    UsageWidgetComponent,
   ],
   template: `
     <div class="billing-container">
@@ -33,6 +36,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
           <mat-spinner diameter="40" />
         </div>
       } @else {
+        <app-usage-widget [usage]="usage()" />
         <section class="current-subscription">
           @if (subscription(); as sub) {
             <mat-card class="subscription-card">
@@ -304,6 +308,7 @@ export class BillingPage implements OnInit {
   readonly loading = signal(true);
   readonly plans = signal<PlanDefinition[]>([]);
   readonly subscription = signal<Subscription | null>(null);
+  readonly usage = signal<UsageSummary | null>(null);
 
   readonly currentPlan = computed(() => {
     const sub = this.subscription();
@@ -318,13 +323,28 @@ export class BillingPage implements OnInit {
   private async loadData(): Promise<void> {
     this.loading.set(true);
     try {
-      this.api.listPlans().subscribe({
-        next: plans => this.plans.set(plans),
-      });
-      this.api.getCurrentSubscription().subscribe({
-        next: sub => this.subscription.set(sub),
-        error: () => this.subscription.set(null),
-      });
+      const [plans, sub, users] = await Promise.all([
+        firstValueFrom(this.api.listPlans()).then(p => p ?? []),
+        firstValueFrom(this.api.getCurrentSubscription()).catch(() => null),
+        firstValueFrom(this.api.listUsers()).then(u => u ?? []),
+      ]);
+      this.plans.set(plans);
+      this.subscription.set(sub);
+      if (sub) {
+        const plan = plans.find(p => p.slug === sub.planSlug);
+        if (plan) {
+          this.usage.set({
+            usersUsed: users.length,
+            usersLimit: plan.maxUsers,
+            planSlug: plan.slug,
+            planDisplayName: plan.displayName,
+          });
+        } else {
+          this.usage.set(null);
+        }
+      } else {
+        this.usage.set(null);
+      }
     } finally {
       this.loading.set(false);
     }

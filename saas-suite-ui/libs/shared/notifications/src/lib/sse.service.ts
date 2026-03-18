@@ -47,7 +47,7 @@ const MOCK_TEMPLATES: MockTemplate[] = [
   {
     type: 'info',
     category: 'system',
-    title: () => 'System maintenance scheduled',
+    title: () => 'Fluxe B2B Suite maintenance scheduled',
     message: () => 'Scheduled maintenance window: Saturday 02:00–04:00 UTC. Plan accordingly.',
   },
   {

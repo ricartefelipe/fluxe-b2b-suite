@@ -31,3 +31,9 @@ export interface TenantListParams {
   cursor?: string;
   limit?: number;
 }
+
+export interface TenantHealth {
+  tenantId: string;
+  lastActivityAt: string | null;
+  activeUsersCount: number;
+}

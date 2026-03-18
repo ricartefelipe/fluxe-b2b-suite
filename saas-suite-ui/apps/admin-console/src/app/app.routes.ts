@@ -76,6 +76,10 @@ export const appRoutes: Route[] = [
         data: { permissions: ['tenants:read'] },
       },
       {
+        path: 'help',
+        loadComponent: () => import('./pages/help.page').then(m => m.HelpPage),
+      },
+      {
         path: 'account/password',
         loadComponent: () => import('@saas-suite/shared/auth').then(m => m.ChangePasswordPageComponent),
         data: { fullPage: false, useOptionalSubtitle: true },

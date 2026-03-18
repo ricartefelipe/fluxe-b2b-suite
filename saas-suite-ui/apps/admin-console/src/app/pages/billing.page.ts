@@ -6,8 +6,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
-import { CoreApiClient, PlanDefinition, Subscription, SubscriptionStatus } from '@saas-suite/data-access/core';
+import { CoreApiClient, PlanDefinition, Subscription, SubscriptionStatus, TenantHealth } from '@saas-suite/data-access/core';
 import { I18nService } from '@saas-suite/shared/i18n';
+import { TenantContextStore } from '@saas-suite/domains/tenancy';
 
 @Component({
   selector: 'app-billing-page',
@@ -33,6 +34,15 @@ import { I18nService } from '@saas-suite/shared/i18n';
           <mat-spinner diameter="40" />
         </div>
       } @else {
+        @if (subscription(); as sub) {
+          @if (sub.status === 'TRIAL' && sub.trialEndsAt && trialDaysLeft(sub) > 0) {
+            <div class="trial-banner">
+              <mat-icon>schedule</mat-icon>
+              <span>{{ trialBannerText(trialDaysLeft(sub)) }}</span>
+              <button mat-flat-button color="primary" (click)="openBillingPortal()">{{ b.trialCtaAddCard }}</button>
+            </div>
+          }
+        }
         <section class="current-subscription">
           @if (subscription(); as sub) {
             <mat-card class="subscription-card">
@@ -63,9 +73,22 @@ import { I18nService } from '@saas-suite/shared/i18n';
                       <span class="sub-value">{{ sub.trialEndsAt | date:'shortDate' }}</span>
                     </div>
                   }
+                  @if (sub.cancelAtPeriodEnd && sub.currentPeriodEnd) {
+                    <mat-divider />
+                    <div class="sub-row sub-row-scheduled">
+                      <span class="sub-value">{{ scheduledCancelMessage(sub) }}</span>
+                    </div>
+                  }
                 </div>
               </mat-card-content>
               <mat-card-actions align="end">
+                @if (sub.cancelAtPeriodEnd) {
+                  <button mat-stroked-button color="primary" (click)="undoScheduleCancel()">
+                    {{ b.undoScheduleCancel }}
+                  </button>
+                } @else if (sub.status === 'ACTIVE' || sub.status === 'TRIAL') {
+                  <button mat-stroked-button (click)="scheduleCancel()">{{ b.scheduleCancel }}</button>
+                }
                 <button mat-flat-button color="primary" (click)="openBillingPortal()">
                   <mat-icon>open_in_new</mat-icon>
                   {{ b.manageBilling }}
@@ -84,6 +107,35 @@ import { I18nService } from '@saas-suite/shared/i18n';
           }
         </section>
 
+        @if (tenantId()) {
+          <section class="health-export-section">
+            <mat-card class="health-export-card">
+              <mat-card-header>
+                <mat-icon mat-card-avatar>health_and_safety</mat-icon>
+                <mat-card-title>{{ b.healthSection }}</mat-card-title>
+              </mat-card-header>
+              <mat-card-content>
+                @if (health(); as h) {
+                  <div class="health-row">
+                    <span class="health-label">{{ b.lastActivity }}</span>
+                    <span class="health-value">{{ h.lastActivityAt ? (h.lastActivityAt | date:'short') : b.never }}</span>
+                  </div>
+                  <div class="health-row">
+                    <span class="health-label">{{ b.activeUsers }}</span>
+                    <span class="health-value">{{ h.activeUsersCount }}</span>
+                  </div>
+                }
+                <p class="export-hint">{{ b.exportDataHint }}</p>
+              </mat-card-content>
+              <mat-card-actions>
+                <button mat-stroked-button (click)="exportData()">
+                  <mat-icon>download</mat-icon>
+                  {{ b.exportData }}
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          </section>
+        }
         <section class="plans-section">
           <h2>{{ b.changePlan }}</h2>
           <div class="plans-grid">
@@ -201,6 +253,10 @@ import { I18nService } from '@saas-suite/shared/i18n';
       font-size: 14px;
       color: var(--app-text, #212121);
     }
+    .sub-row-scheduled .sub-value {
+      color: #e65100;
+      font-weight: 500;
+    }
 
     .status-trial { --mdc-chip-elevated-container-color: #e3f2fd; --mdc-chip-label-text-color: #1565c0; }
     .status-active { --mdc-chip-elevated-container-color: #e8f5e9; --mdc-chip-label-text-color: #2e7d32; }
@@ -224,6 +280,29 @@ import { I18nService } from '@saas-suite/shared/i18n';
       margin: 0;
       color: var(--app-text-secondary, #666);
       font-size: 15px;
+    }
+
+    .trial-banner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+      border: 1px solid #90caf9;
+    }
+    .trial-banner mat-icon {
+      color: #1565c0;
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+    .trial-banner span {
+      flex: 1;
+      font-size: 15px;
+      color: #0d47a1;
+      font-weight: 500;
     }
 
     .plans-section h2 {
@@ -287,6 +366,12 @@ import { I18nService } from '@saas-suite/shared/i18n';
       color: var(--app-primary, #1565c0);
     }
 
+    .health-export-section { margin-bottom: 24px; }
+    .health-export-card { border-radius: 12px; }
+    .health-row { display: flex; justify-content: space-between; padding: 8px 0; }
+    .health-label { font-weight: 500; color: var(--app-text-secondary, #666); }
+    .health-value { color: var(--app-text, #212121); }
+    .export-hint { font-size: 13px; color: var(--app-text-secondary, #666); margin: 12px 0 0; }
     @media (max-width: 768px) {
       .plans-grid {
         grid-template-columns: 1fr;
@@ -298,12 +383,15 @@ import { I18nService } from '@saas-suite/shared/i18n';
 export class BillingPage implements OnInit {
   private api = inject(CoreApiClient);
   private i18n = inject(I18nService);
+  private tenantStore = inject(TenantContextStore);
 
   get b() { return this.i18n.messages().billing; }
 
   readonly loading = signal(true);
   readonly plans = signal<PlanDefinition[]>([]);
   readonly subscription = signal<Subscription | null>(null);
+  readonly health = signal<TenantHealth | null>(null);
+  readonly tenantId = computed(() => this.tenantStore.activeTenantId() ?? null);
 
   readonly currentPlan = computed(() => {
     const sub = this.subscription();
@@ -325,6 +413,13 @@ export class BillingPage implements OnInit {
         next: sub => this.subscription.set(sub),
         error: () => this.subscription.set(null),
       });
+      const tid = this.tenantStore.activeTenantId();
+      if (tid) {
+        this.api.getTenantHealth(tid).subscribe({
+          next: h => this.health.set(h),
+          error: () => this.health.set(null),
+        });
+      }
     } finally {
       this.loading.set(false);
     }
@@ -349,6 +444,35 @@ export class BillingPage implements OnInit {
     return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   }
 
+  trialDaysLeft(sub: Subscription): number {
+    if (!sub.trialEndsAt) return 0;
+    const end = new Date(sub.trialEndsAt).getTime();
+    const now = Date.now();
+    const days = Math.ceil((end - now) / (24 * 60 * 60 * 1000));
+    return Math.max(0, days);
+  }
+
+  trialBannerText(days: number): string {
+    return this.b.trialBannerMessage.replace('{{days}}', String(days));
+  }
+
+  scheduledCancelMessage(sub: Subscription): string {
+    const date = sub.currentPeriodEnd ? new Date(sub.currentPeriodEnd).toLocaleDateString() : '';
+    return this.b.scheduledCancelMessage.replace('{{date}}', date);
+  }
+
+  scheduleCancel(): void {
+    this.api.scheduleCancelAtPeriodEnd().subscribe({
+      next: sub => this.subscription.set(sub),
+    });
+  }
+
+  undoScheduleCancel(): void {
+    this.api.undoScheduleCancelAtPeriodEnd().subscribe({
+      next: sub => this.subscription.set(sub),
+    });
+  }
+
   openBillingPortal(): void {
     this.api.createPortalSession(window.location.href).subscribe({
       next: res => window.location.href = res.url,
@@ -358,6 +482,22 @@ export class BillingPage implements OnInit {
   selectPlan(plan: PlanDefinition): void {
     this.api.startTrial(plan.slug).subscribe({
       next: sub => this.subscription.set(sub),
+    });
+  }
+
+  exportData(): void {
+    const tid = this.tenantStore.activeTenantId();
+    if (!tid) return;
+    this.api.exportTenantData(tid).subscribe({
+      next: data => {
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `tenant-export-${tid}-${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      },
     });
   }
 }

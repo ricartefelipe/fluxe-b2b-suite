@@ -10,7 +10,7 @@ Documento central que define os **três ambientes** do Fluxe B2B Suite: configur
 |----------|-----------|--------|-------|
 | **Local** | Sua máquina | qualquer | Migration + seed **até a tampa** (máximo para testar) |
 | **Staging** | Railway | `develop` | Migration + seed completo |
-| **Produção** | Railway | `master` | Migration + **só o essencial** (tenant System, políticas, estrutura) |
+| **Produção** | Railway | `master` | Migration + **só o essencial** (tenant Fluxe B2B Suite, políticas, estrutura) |
 
 **Seu usuário funciona em todos os ambientes.** Mesmo login (ex.: `admin@local` / `admin123` em local/staging; em prod, criar usuário real ou manter um admin inicial).
 
@@ -107,7 +107,7 @@ railway run alembic upgrade head
 ```
 
 ### Dados
-- **spring-saas-core:** 008 apenas → tenant System, políticas ABAC essenciais
+- **spring-saas-core:** 008 apenas → tenant Fluxe B2B Suite, políticas ABAC essenciais
 - **node-b2b-orders:** apenas schema (sem seed de produtos/pedidos)
 - **py-payments-ledger:** apenas schema
 - Itens, produtos, usuários reais → criados via fluxo normal da aplicação (Admin, Shop, etc.)

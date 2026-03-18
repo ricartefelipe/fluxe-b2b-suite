@@ -103,11 +103,11 @@ Cada projeto já popula dados automaticamente durante o startup:
 
 | Entidade | Dados |
 |----------|-------|
-| Tenants | `System` (enterprise, global), `Demo Corp` (pro, sa-east-1) |
+| Tenants | `Fluxe B2B Suite` (enterprise, global), `Demo Corp` (pro, sa-east-1) |
 | Policies | 12 políticas ABAC (tenants, policies, flags, admin, audit, users, analytics) |
 | Feature Flags | `new_dashboard`, `beta_export` (Demo Corp) |
 
-> **Nota:** Os changesets 002 (seed) rodam apenas em contexto `dev/test/local`. O changeset 008 roda em **todos os ambientes** e garante que o tenant System e as políticas essenciais existam inclusive em produção.
+> **Nota:** Os changesets 002 (seed) rodam apenas em contexto `dev/test/local`. O changeset 008 roda em **todos os ambientes** e garante que o tenant Fluxe B2B Suite e as políticas essenciais existam inclusive em produção.
 
 ### node-b2b-orders (Prisma seed)
 

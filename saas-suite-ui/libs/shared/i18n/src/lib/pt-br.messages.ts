@@ -65,6 +65,8 @@ export const PT_BR_MESSAGES: Messages = {
     signupLink: 'Criar conta',
     changePasswordTitle: 'Alterar senha',
     changePasswordSubtitle: 'É obrigatório definir uma nova senha antes de continuar.',
+    changePasswordSubtitleOptional: 'Altere sua senha de acesso ao sistema.',
+    changePasswordMenuLabel: 'Ajustar senha',
     currentPassword: 'Senha atual',
     newPassword: 'Nova senha',
     confirmNewPassword: 'Confirmar nova senha',

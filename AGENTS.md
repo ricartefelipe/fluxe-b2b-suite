@@ -8,7 +8,7 @@ Este arquivo define regras e preferências para assistentes de código que traba
 
 - **Git Flow:** toda alteração via branch `feature/*` ou `fix/*` a partir de `develop` → PR → merge; nunca commit direto em `develop` ou `master`.
 - **Sem menções a ferramentas em commits:** nunca incluir "Cursor", "Made with Cursor", "Copilot" ou similar em mensagens de commit.
-- **Ao concluir:** fazer o processo de subida completo (branch, commit, push, PR, CI verde, merge) e, se aplicável, release `develop` → `master` para deploy em produção.
+- **Ao concluir:** fazer o processo de subida completo (branch, commit, push, PR, CI verde, merge em `develop`). **Release para produção** (`develop` → `master`) é da responsabilidade do utilizador; o agente só executa quando o utilizador pedir e seguindo as preferências dele (ver secção "Release para produção").
 
 ---
 
@@ -59,9 +59,22 @@ Não presumir que staging/produção “não existem”. Não inventar setup sem
 4. `git push -u origin feature/nome-descritivo`
 5. Abrir **PR para `develop`** (ou merge local seguindo o mesmo critério); **CI verde** antes de mergear
 6. Após merge: apagar branch remota/local da feature quando aplicável
-7. Release para produção: só depois de staging ok — PR `develop` → `master` conforme [PIPELINE-ESTEIRAS.md](docs/PIPELINE-ESTEIRAS.md)
+7. **Release para produção:** não fazer merge `develop` → `master` nem criar/mergear o PR de release por iniciativa própria. O responsável pela release é o utilizador; quando ele pedir, executar conforme a secção abaixo.
 
 Aplicar em **toda** tarefa que envolva commit.
+
+### Release para produção (responsabilidade do utilizador)
+
+- **Dono do processo:** o utilizador é o responsável pela release; o agente segue as preferências dele.
+- **Sem pedido explícito:** o agente não abre nem mergeia PR `develop` → `master` nem faz deploy para produção.
+- **Quando o utilizador pedir release:** o agente deve fazer exactamente como o utilizador prefere. Preferências a aplicar (a documentar/refinar pelo utilizador):
+  - Repos em que fazer release (ex.: fluxe-b2b-suite, spring-saas-core; um de cada vez ou em conjunto).
+  - Nome/título do PR de release (ex.: "Release: develop → master", "Deploy produção", etc.).
+  - Se criar tag (ex.: `v1.2.3`) e em que momento.
+  - Se actualizar CHANGELOG ou release notes antes do merge.
+  - Quem faz o merge (utilizador faz manualmente ou o agente pode fazer após aprovação).
+  - Ordem dos repos (ex.: primeiro Core, depois frontend).
+- **Referência:** [PIPELINE-ESTEIRAS.md](docs/PIPELINE-ESTEIRAS.md) — merge manual de develop em master quando pronto; CI verde antes do merge.
 
 ---
 

@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
+import { Router } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -57,6 +58,9 @@ import { SearchTriggerComponent } from '@saas-suite/shared/search';
             <span class="user-role">{{ auth.session()?.roles?.[0] ?? 'user' }}</span>
           </div>
           <mat-divider />
+          <button mat-menu-item (click)="goToChangePassword()">
+            <mat-icon aria-hidden="true">lock</mat-icon> {{ i18n.messages()?.auth?.changePasswordMenuLabel ?? 'Ajustar senha' }}
+          </button>
           <button mat-menu-item (click)="logout()">
             <mat-icon aria-hidden="true">logout</mat-icon> {{ i18n.messages().auth.logout }}
           </button>
@@ -157,6 +161,11 @@ export class HeaderComponent {
   protected auth = inject(AuthStore);
   protected i18n = inject(I18nService);
   private authService = inject(AuthService);
+  private router = inject(Router);
+
+  goToChangePassword(): void {
+    this.router.navigate(['/account/password']);
+  }
 
   async logout(): Promise<void> {
     await this.authService.logout();

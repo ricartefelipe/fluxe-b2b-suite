@@ -14,6 +14,8 @@ O **CI** (`deploy.yml`) corre em push/PR para `develop`/`master` quando mudam `s
 | **Deploy Frontend** | `deploy-frontend.yml` | Push em `develop`/`master` (paths `saas-suite-ui/**`) ou **Run workflow** | Mesmos testes + deploy para **Cloudflare Pages** (produção em `master`; preview em `develop`) |
 | **Deploy Production** | `deploy-prod.yml` | Push em `master` com alterações em `deploy/**`, `docker-compose.prod.yml`, `scripts/**`, ou **Run workflow** | `rsync` para o VPS, `./scripts/deploy.sh`, smoke tests |
 
+**Importante:** um merge em `master` que mexe só em `saas-suite-ui/**` dispara o **Deploy Frontend** (Cloudflare), mas **não** este workflow. Para atualizar o **VPS** nesse caso, corre **Actions → Deploy Production → Run workflow** (e define as tags de imagem se precisares de outra que não `latest`).
+
 ## Secrets e variáveis (GitHub)
 
 - **Deploy Frontend**: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`; variáveis de ambiente do front (`CORE_API_BASE_URL`, etc.) em **Settings → Variables**.

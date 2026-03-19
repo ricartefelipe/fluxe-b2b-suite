@@ -28,17 +28,24 @@ chmod +x scripts/build-push-image.sh
 
 Isto faz: `mvn package`, `docker build`, `docker push` para `ghcr.io/ricartefelipe/spring-saas-core:latest`.
 
-Se o build Docker falhar (ex.: rede/Alpine), pode fazer à mão:
+O script usa `docker/app.Dockerfile.hostbuild` (JAR construído no host, sem Maven dentro do container). Se preferir à mão:
 
 ```bash
 ./mvnw -B package -DskipTests
-docker build -f docker/app.Dockerfile -t ghcr.io/ricartefelipe/spring-saas-core:latest .
+docker build -f docker/app.Dockerfile.hostbuild -t ghcr.io/ricartefelipe/spring-saas-core:latest .
 docker push ghcr.io/ricartefelipe/spring-saas-core:latest
 ```
 
 ### 2. Configurar variáveis do deploy
 
-Na raiz do repo **fluxe-b2b-suite**, crie `.env.deploy` (não versionado):
+Na raiz do repo **fluxe-b2b-suite**, crie `.env.deploy` (não versionado). Pode copiar o exemplo:
+
+```bash
+cp .env.deploy.example .env.deploy
+# Edite .env.deploy e preencha VPS_HOST e VPS_USER
+```
+
+Conteúdo mínimo:
 
 ```bash
 VPS_HOST=seu-servidor.exemplo.com

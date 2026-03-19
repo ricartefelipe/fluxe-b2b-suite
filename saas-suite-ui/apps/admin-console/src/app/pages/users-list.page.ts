@@ -333,8 +333,14 @@ export class UsersListPage implements OnInit, AfterViewInit {
         );
         this.snack.open(this.i18n.messages().admin.inviteSent, '', { duration: 3000 });
         await this.loadUsers();
-      } catch {
-        this.snack.open(this.i18n.messages().admin.userError, '', { duration: 3000 });
+      } catch (err: unknown) {
+        const msg =
+          err && typeof err === 'object' && 'error' in err && typeof (err as { error?: { detail?: string } }).error?.detail === 'string'
+            ? (err as { error: { detail: string } }).error.detail
+            : err && typeof err === 'object' && 'error' in err && typeof (err as { error?: { message?: string } }).error?.message === 'string'
+              ? (err as { error: { message: string } }).error.message
+              : this.i18n.messages().admin.userError;
+        this.snack.open(msg, '', { duration: 5000 });
       }
     });
   }

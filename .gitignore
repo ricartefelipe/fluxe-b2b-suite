@@ -27,7 +27,6 @@ pnpm-debug.log*
 
 # Environment
 .env
-.env.deploy
 .env.local
 .env.*.local
 

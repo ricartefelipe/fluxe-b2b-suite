@@ -36,7 +36,8 @@ if [[ "$BUILD_CORE" == "1" || "$BUILD_CORE" == "true" ]]; then
     warn "CORE_REPO_PATH=$CORE_REPO_PATH não encontrado. Ignorando build do core."
   else
     log "Build e push da imagem spring-saas-core em $CORE_REPO_PATH ..."
-    (cd "$CORE_REPO_PATH" && docker build -f docker/app.Dockerfile -t "ghcr.io/${GHCR_ORG}/spring-saas-core:latest" .)
+    (cd "$CORE_REPO_PATH" && ./mvnw -B -q package -DskipTests)
+    (cd "$CORE_REPO_PATH" && docker build -f docker/app.Dockerfile.hostbuild -t "ghcr.io/${GHCR_ORG}/spring-saas-core:latest" .)
     docker push "ghcr.io/${GHCR_ORG}/spring-saas-core:latest"
     log "Imagem spring-saas-core:latest publicada."
   fi

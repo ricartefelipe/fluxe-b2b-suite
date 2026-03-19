@@ -1,6 +1,8 @@
 # Deploy via GitHub (Actions)
 
-O fluxo oficial de CI/CD deste monorepo é **GitHub Actions** em `.github/workflows/`.
+Quando o **GitHub Actions** está ativo, estes workflows publicam e validam o suite.
+
+**Deploy sem Actions** (imagem do core + sync VPS): [DEPLOY-MANUAL.md](DEPLOY-MANUAL.md) — mantém o mesmo destino (GHCR + `deploy.sh` no servidor).
 
 ## Workflows
 

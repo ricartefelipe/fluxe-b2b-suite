@@ -2,7 +2,7 @@
 
 CI/CD do monorepo: workflows em `.github/workflows/`.
 
-<!-- CI dispara em alterações em docs/** -->
+Alterações em `docs/**` disparam o workflow **CI** (`deploy.yml`) em push para `develop`/`master`.
 
 ## Workflows
 

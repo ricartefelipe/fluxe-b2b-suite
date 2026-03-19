@@ -1,4 +1,4 @@
-# Deploy manual (sem GitHub Actions)
+# Deploy manual (sem GitHub Actions) — Opção B
 
 Use quando o billing do GitHub Actions estiver bloqueado ou quiser subir a versão a partir da sua máquina.
 
@@ -7,60 +7,79 @@ Use quando o billing do GitHub Actions estiver bloqueado ou quiser subir a vers�
 - `docker`, `rsync`, `ssh`
 - Acesso ao VPS (chave SSH ou `VPS_SSH_KEY`)
 - No VPS: ficheiro `~/fluxe-b2b-suite/.env` preenchido (como no deploy automático)
-- Para publicar nova imagem do **spring-saas-core**: `docker login ghcr.io` (token com `write:packages`)
+- Para publicar a imagem **spring-saas-core**: `docker login ghcr.io` (token com `write:packages`)
 
-## 1. Variáveis
+---
 
-Crie na raiz do repo **fluxe-b2b-suite** um ficheiro `.env.deploy` (não versionado):
+## Passo a passo (Opção B — publicar tudo manualmente)
+
+### 1. Publicar imagem spring-saas-core no GHCR
+
+No repo **spring-saas-core** (branch `develop` já atualizada):
+
+```bash
+cd /caminho/para/spring-saas-core
+docker login ghcr.io -u ricartefelipe
+# (password = Personal Access Token com write:packages)
+
+chmod +x scripts/build-push-image.sh
+./scripts/build-push-image.sh
+```
+
+Isto faz: `mvn package`, `docker build`, `docker push` para `ghcr.io/ricartefelipe/spring-saas-core:latest`.
+
+Se o build Docker falhar (ex.: rede/Alpine), pode fazer à mão:
+
+```bash
+./mvnw -B package -DskipTests
+docker build -f docker/app.Dockerfile -t ghcr.io/ricartefelipe/spring-saas-core:latest .
+docker push ghcr.io/ricartefelipe/spring-saas-core:latest
+```
+
+### 2. Configurar variáveis do deploy
+
+Na raiz do repo **fluxe-b2b-suite**, crie `.env.deploy` (não versionado):
 
 ```bash
 VPS_HOST=seu-servidor.exemplo.com
 VPS_USER=deploy
 GHCR_ORG=ricartefelipe
-# Opcional: chave SSH em base64 ou texto (se não usar chave default)
+# Opcional: se não usar chave SSH default
 # VPS_SSH_KEY="-----BEGIN OPENSSH PRIVATE KEY-----
 # ..."
 ```
 
-Ou exporte antes de correr o script:
+### 3. Fazer deploy no VPS
+
+No repo **fluxe-b2b-suite** (branch `develop` já atualizada):
 
 ```bash
-export VPS_HOST=...
-export VPS_USER=...
-export GHCR_ORG=ricartefelipe
+cd /caminho/para/fluxe-b2b-suite
+chmod +x scripts/deploy-manual.sh
+./scripts/deploy-manual.sh
 ```
 
-## 2. Nova imagem do spring-saas-core (opcional)
+O script envia `docker-compose.prod.yml`, `deploy/` e `scripts/` para o VPS, corre `./scripts/deploy.sh` no servidor (pull das imagens, migrations, `docker compose up`) e faz smoke test.
 
-Se alterou o **spring-saas-core** e quer que o VPS use essa versão:
+---
 
-1. No repo **spring-saas-core**: `./mvnw -B package -DskipTests`
-2. Build e push da imagem (a partir do repo spring-saas-core):
+## Variáveis (referência)
 
-   ```bash
-   docker build -f docker/app.Dockerfile -t ghcr.io/ricartefelipe/spring-saas-core:latest .
-   docker push ghcr.io/ricartefelipe/spring-saas-core:latest
-   ```
+| Variável    | Obrigatória | Descrição                          |
+|------------|-------------|------------------------------------|
+| `VPS_HOST` | Sim         | Hostname ou IP do servidor         |
+| `VPS_USER` | Sim         | Utilizador SSH                     |
+| `GHCR_ORG` | Não         | Org GHCR (default: ricartefelipe)  |
+| `VPS_SSH_KEY` | Não      | Chave SSH (se não usar a default)  |
 
-Ou, a partir do **fluxe-b2b-suite**, com o caminho do outro repo:
+---
+
+## Deploy só do core (build local + push)
+
+Se quiser que o script de deploy construa e faça push da imagem antes de ligar ao VPS (ex.: os dois repos estão na mesma máquina):
 
 ```bash
 BUILD_CORE=1 CORE_REPO_PATH=/caminho/para/spring-saas-core ./scripts/deploy-manual.sh
 ```
 
-## 3. Executar deploy
-
-Na raiz do **fluxe-b2b-suite**:
-
-```bash
-chmod +x scripts/deploy-manual.sh
-./scripts/deploy-manual.sh
-```
-
-Para construir e publicar o core antes de fazer deploy:
-
-```bash
-BUILD_CORE=1 ./scripts/deploy-manual.sh
-```
-
-O script envia `docker-compose.prod.yml`, `deploy/` e `scripts/` para o VPS e corre `./scripts/deploy.sh` no servidor (pull das imagens, migrations, compose up).
+Requer `docker login ghcr.io` feito antes.

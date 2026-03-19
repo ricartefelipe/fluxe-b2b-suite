@@ -2,6 +2,8 @@
 
 CI/CD do monorepo: workflows em `.github/workflows/`.
 
+<!-- CI dispara em alterações em docs/** -->
+
 ## Workflows
 
 | Nome no GitHub | Ficheiro | Gatilho | Função |

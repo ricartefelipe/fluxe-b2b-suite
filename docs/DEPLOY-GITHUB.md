@@ -1,8 +1,6 @@
 # Deploy via GitHub (Actions)
 
-Quando o **GitHub Actions** está ativo, estes workflows publicam e validam o suite.
-
-**Deploy sem Actions** (imagem do core + sync VPS): [DEPLOY-MANUAL.md](DEPLOY-MANUAL.md) — mantém o mesmo destino (GHCR + `deploy.sh` no servidor).
+CI/CD do monorepo: workflows em `.github/workflows/`.
 
 ## Workflows
 

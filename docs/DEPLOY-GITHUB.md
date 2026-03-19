@@ -2,9 +2,7 @@
 
 CI/CD do monorepo: workflows em `.github/workflows/`.
 
-O **CI** (`deploy.yml`) corre em push/PR para `develop`/`master` quando mudam `saas-suite-ui/**`, `scripts/**`, `docs/**` ou o próprio workflow. Podes também disparar em **Actions → CI → Run workflow** (`workflow_dispatch`), sem commits artificiais.
-
-> **Nota:** Tentativas antigas de “deploy manual” fora do GitHub (scripts só no disco) foram descartadas; o fluxo oficial é Git + Actions + documentação neste repositório e no **spring-saas-core**.
+O **CI** (`deploy.yml`) corre em push/PR para `develop`/`master` quando mudam `saas-suite-ui/**`, `scripts/**`, `docs/**` ou o próprio workflow. Podes também disparar em **Actions → CI → Run workflow** (`workflow_dispatch`).
 
 ## Workflows
 

@@ -2,13 +2,15 @@
 
 CI/CD do monorepo: workflows em `.github/workflows/`.
 
-Alterações em `docs/**` disparam o workflow **CI** (`deploy.yml`) em push para `develop`/`master`.
+O **CI** (`deploy.yml`) corre em push/PR para `develop`/`master` quando mudam `saas-suite-ui/**`, `scripts/**`, `docs/**` ou o próprio workflow. Podes também disparar em **Actions → CI → Run workflow** (`workflow_dispatch`), sem commits artificiais.
+
+> **Nota:** Tentativas antigas de “deploy manual” fora do GitHub (scripts só no disco) foram descartadas; o fluxo oficial é Git + Actions + documentação neste repositório e no **spring-saas-core**.
 
 ## Workflows
 
 | Nome no GitHub | Ficheiro | Gatilho | Função |
 |----------------|----------|---------|--------|
-| **CI** | `deploy.yml` | Push/PR em `develop`/`master` (paths `saas-suite-ui/**`, `scripts/**`, `docs/**`, workflow) | `pnpm install`, lint, test, build das 3 apps (ops-portal, admin-console, shop) |
+| **CI** | `deploy.yml` | Push/PR em `develop`/`master` (paths filtrados) ou **Run workflow** | `pnpm install`, lint, test, build das 3 apps (ops-portal, admin-console, shop) |
 | **Deploy Frontend** | `deploy-frontend.yml` | Push em `develop`/`master` (paths `saas-suite-ui/**`) ou **Run workflow** | Mesmos testes + deploy para **Cloudflare Pages** (produção em `master`; preview em `develop`) |
 | **Deploy Production** | `deploy-prod.yml` | Push em `master` com alterações em `deploy/**`, `docker-compose.prod.yml`, `scripts/**`, ou **Run workflow** | `rsync` para o VPS, `./scripts/deploy.sh`, smoke tests |
 

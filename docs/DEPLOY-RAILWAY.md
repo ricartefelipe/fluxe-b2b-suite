@@ -88,6 +88,8 @@ railway up
 ```
 
 Variáveis (ver `railway.prod.env.example`):
+- **Staging:** `NODE_ENV=staging` (roda migrate + seed no startup)
+- **Produção:** `NODE_ENV=production` (apenas migrate)
 - `DATABASE_URL` → referência ao plugin PostgreSQL
 - `REDIS_URL` → referência ao plugin Redis
 - `RABBITMQ_URL` → CloudAMQP
@@ -102,6 +104,8 @@ railway up
 ```
 
 Variáveis (ver `railway.prod.env.example`):
+- **Staging:** `APP_ENV=staging` (roda migrate + seed no startup)
+- **Produção:** `APP_ENV=production` (apenas migrate)
 - Mesma lógica dos outros backends
 - `ENCRYPTION_KEY` → gerar com `python -m src.shared.encryption`
 - `JWT_SECRET` → **mesmo** valor dos outros

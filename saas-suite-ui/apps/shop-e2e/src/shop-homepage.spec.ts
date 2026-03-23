@@ -1,39 +1,32 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
+import { loginWithQuickProfile } from './dev-login.helper';
 
-test.describe('Shop Homepage', () => {
-  test.beforeEach(async ({ page }) => {
+test.describe('Shop landing e catálogo', () => {
+  test('landing pública: hero e rodapé', async ({ page }) => {
+    await page.goto('/welcome');
+    await expect(page.locator('h1.hero-title')).toContainText('Fluxe B2B Suite');
+    await expect(page.locator('footer.landing-footer')).toContainText('© 2026 Fluxe B2B Suite');
+  });
+
+  test('com sessão: cabeçalho e navegação para produtos', async ({ page }) => {
+    await loginWithQuickProfile(page, 'Viewer');
+    await page.goto('/products');
+    await expect(
+      page.getByRole('link', { name: /Todos os Produtos|All Products|Products/i })
+    ).toBeVisible();
+    await expect(page.locator('.logo-name')).toContainText('Fluxe');
+  });
+
+  test('com sessão: raiz redireciona para /products', async ({ page }) => {
+    await loginWithQuickProfile(page, 'Viewer');
     await page.goto('/');
+    await page.waitForURL(/\/products/, { timeout: 15000 });
+    await expect(page.locator('.catalog-layout')).toBeVisible();
+    await expect(page.locator('article.product-card').first()).toBeVisible();
   });
 
-  test('should display the main header and navigation', async ({ page }) => {
-    const header = page.locator('h1').first();
-    await expect(header).toContainText('Union Solutions B2B Suite');
-
-    const productsLink = page.locator('nav a:has-text("Products")');
-    await expect(productsLink).toBeVisible();
-    await expect(productsLink).toHaveAttribute('href', '/products');
-  });
-
-  test('should display footer with copyright information', async ({ page }) => {
-    const footer = page.locator('footer');
-    await expect(footer).toContainText('© 2026 Union Solutions');
-    await expect(footer).toContainText(
-      'Plataforma B2B para gestão empresarial'
-    );
-  });
-
-  test('should redirect to products page by default', async ({ page }) => {
-    await page.waitForURL('**/products');
-    expect(page.url()).toContain('/products');
-
-    const productsHeading = page.locator('h1:has-text("Our Products")');
-    await expect(productsHeading).toBeVisible();
-  });
-
-  test('should have proper page title and meta', async ({ page }) => {
-    await expect(page).toHaveTitle(/shop/i);
-
-    const viewport = page.viewportSize();
-    expect(viewport).toBeTruthy();
+  test('título da página contém referência ao shop', async ({ page }) => {
+    await page.goto('/welcome');
+    await expect(page).toHaveTitle(/shop|Fluxe/i);
   });
 });

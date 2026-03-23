@@ -48,7 +48,7 @@ Afeta: `auth.interceptor`, `error.interceptor`, `correlation.interceptor`, `idem
 
 ### 1.3 Dívida Técnica
 
-- **TODO** em `tenant-onboarding.page.ts:650`: planos hardcoded; substituir por `CoreApiClient.listPlans()`
+- ~~**TODO** em `tenant-onboarding.page.ts`~~: planos dinâmicos implementados via `CoreApiClient.listPlans()` (fallback hardcoded)
 - **Risco de peer mismatch**: `angular-oauth2-oidc@20` com Angular 21
 
 ### 1.4 CI / Pipelines
@@ -184,7 +184,7 @@ O CI do node-b2b-orders configura serviços Docker (Postgres, Redis) e variávei
 | **py-payments-ledger** | conftest: monkeypatch JWT_SECRET, JWT_ISSUER, etc. para testes API passarem |
 | **node-b2b-orders** | docker-compose.e2e.yml + secção no README para E2E locais |
 
-**Pendente (requer decisão):** `npm audit fix --force` no node-b2b-orders (breaking changes); vulnerabilidades em deps transitivas.
+**Pendente (requer decisão):** `npm audit fix --force` no node-b2b-orders foi tentado e **revertido** — causa breaking changes (NestJS 10→11, Fastify 4→5, incompatibilidades CORS). Vulnerabilidades em deps transitivas permanecem; upgrade de NestJS para v11 seria necessário.
 
 ---
 

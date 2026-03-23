@@ -15,7 +15,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatChipsModule } from '@angular/material/chips';
 import { TenantOnboardingStore, OrgInfo, OnboardingConfig } from '@saas-suite/domains/admin';
-import { TenantPlan } from '@saas-suite/data-access/core';
+import { CoreApiClient, PlanDefinition, TenantPlan } from '@saas-suite/data-access/core';
 import { I18nService } from '@saas-suite/shared/i18n';
 
 const REGIONS = [
@@ -645,52 +645,34 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
   get ob() { return this.i18n.messages().onboarding; }
 
   readonly regions = REGIONS;
-  readonly selectedPlan = signal<TenantPlan | null>('pro');
+  readonly selectedPlan = signal<TenantPlan | string | null>('pro');
+  private readonly api = inject(CoreApiClient);
+  readonly plansFromApi = signal<PlanDefinition[]>([]);
 
-  // TODO: Replace hardcoded plans with dynamic data from CoreApiClient.listPlans()
-  // when the billing API is available. Map PlanDefinition to the plan card format below.
   readonly planOptions = computed(() => {
+    const plans = this.plansFromApi();
     const m = this.i18n.messages().onboarding;
+    if (plans.length > 0) {
+      return plans.map((p, i) => ({
+        key: p.slug,
+        name: p.displayName,
+        price: p.monthlyPriceCents > 0
+          ? (p.monthlyPriceCents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + m.perMonth
+          : m.custom,
+        recommended: i === 1,
+        features: [
+          m.users.replace('{n}', String(p.maxUsers)),
+          m.ordersPerMonth.replace('{n}', p.maxProjects > 0 ? p.maxProjects.toLocaleString('pt-BR') : '∞'),
+          p.maxUsers >= 25 ? m.prioritySupport : m.basicSupport,
+          p.maxUsers >= 25 ? m.analyticsInsights : m.standardDashboard,
+          ...(p.maxUsers >= 100 ? [m.unlimitedUsers, m.dedicatedSupport] : []),
+        ].slice(0, 6),
+      }));
+    }
     return [
-      {
-        key: 'starter' as TenantPlan,
-        name: 'Starter',
-        price: 'R$ 249' + m.perMonth,
-        recommended: false,
-        features: [
-          m.users.replace('{n}', '5'),
-          m.ordersPerMonth.replace('{n}', '100'),
-          m.basicSupport,
-          m.standardDashboard,
-        ],
-      },
-      {
-        key: 'pro' as TenantPlan,
-        name: 'Professional',
-        price: 'R$ 749' + m.perMonth,
-        recommended: true,
-        features: [
-          m.users.replace('{n}', '25'),
-          m.ordersPerMonth.replace('{n}', '1.000'),
-          m.prioritySupport,
-          m.analyticsInsights,
-          m.apiAccess,
-        ],
-      },
-      {
-        key: 'enterprise' as TenantPlan,
-        name: 'Enterprise',
-        price: m.custom,
-        recommended: false,
-        features: [
-          m.unlimitedUsers,
-          m.unlimitedOrders,
-          m.dedicatedSupport,
-          m.customIntegrations,
-          m.slaGuarantee,
-          m.ssoScim,
-        ],
-      },
+      { key: 'starter', name: 'Starter', price: 'R$ 249' + m.perMonth, recommended: false, features: [m.users.replace('{n}', '5'), m.ordersPerMonth.replace('{n}', '100'), m.basicSupport, m.standardDashboard] },
+      { key: 'pro', name: 'Professional', price: 'R$ 749' + m.perMonth, recommended: true, features: [m.users.replace('{n}', '25'), m.ordersPerMonth.replace('{n}', '1.000'), m.prioritySupport, m.analyticsInsights, m.apiAccess] },
+      { key: 'enterprise', name: 'Enterprise', price: m.custom, recommended: false, features: [m.unlimitedUsers, m.unlimitedOrders, m.dedicatedSupport, m.customIntegrations, m.slaGuarantee, m.ssoScim] },
     ];
   });
 
@@ -710,13 +692,17 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.reset();
     this.store.setPlan('pro');
+    this.api.listPlans().subscribe({
+      next: (plans) => this.plansFromApi.set(plans),
+      error: () => this.plansFromApi.set([]),
+    });
   }
 
   ngOnDestroy(): void {
     this.store.reset();
   }
 
-  selectPlan(plan: TenantPlan): void {
+  selectPlan(plan: TenantPlan | string): void {
     this.selectedPlan.set(plan);
     this.store.setPlan(plan);
   }
@@ -777,7 +763,7 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
     return REGIONS.find(r => r.value === value)?.label ?? value;
   }
 
-  planLabel(key: TenantPlan): string {
-    return this.planOptions().find(p => p.key === key)?.name ?? key;
+  planLabel(key: TenantPlan | string): string {
+    return this.planOptions().find(p => p.key === key)?.name ?? String(key);
   }
 }

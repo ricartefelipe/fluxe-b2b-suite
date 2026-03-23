@@ -40,7 +40,7 @@ export class TenantOnboardingStore {
   private api = inject(CoreApiClient);
 
   readonly orgInfo = signal<OrgInfo>({ name: '', region: 'us-east-1' });
-  readonly plan = signal<TenantPlan>('pro');
+  readonly plan = signal<TenantPlan | string>('pro');
   readonly config = signal<OnboardingConfig>({ flags: DEFAULT_FLAGS, adminEmail: '' });
   readonly createdTenant = signal<Tenant | null>(null);
   readonly submitting = signal(false);
@@ -57,7 +57,7 @@ export class TenantOnboardingStore {
     this.orgInfo.set(info);
   }
 
-  setPlan(plan: TenantPlan): void {
+  setPlan(plan: TenantPlan | string): void {
     this.plan.set(plan);
   }
 

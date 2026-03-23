@@ -13,6 +13,8 @@
 | [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) | Deploy no Railway: serviços, variáveis, migrations e seed (staging vs produção) |
 | [URLS-AMBIENTES.md](URLS-AMBIENTES.md) | URLs de staging e production (fronts e APIs) e usuário inicial nos 3 fronts |
 | [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Pipeline, esteiras develop/master e protocolos (Git Flow, qualidade, testes, CI/CD, docs) |
+| [BRANCHES-E-WORKFLOWS.md](BRANCHES-E-WORKFLOWS.md) | **Matriz factual:** que ramos disparam que workflows (sem suposições sobre ambientes) |
+| [DEPLOY-GITHUB.md](DEPLOY-GITHUB.md) | Deploy via GitHub Actions (CI, Cloudflare Pages, VPS) |
 | [OBSERVABILITY.md](OBSERVABILITY.md) | Observabilidade: Sentry, logging, correlation, backup (todos os serviços) |
 | [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) | Deploy completo passo a passo (servidor, Docker, domínios, SSL) |
 | [GUIA-OPERACIONAL.md](GUIA-OPERACIONAL.md) | Visão geral dos 4 serviços, diagrama de dependência e procedimentos operacionais |

@@ -1,17 +1,11 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
 
 test.describe('Ops Portal Navigation', () => {
-  test('should have sidebar navigation', async ({ page }) => {
+  test('should have sidebar navigation or login', async ({ page }) => {
     await page.goto('/');
-
-    const hasSidebar = await page
-      .locator('nav, aside, .sidebar')
-      .first()
-      .isVisible({ timeout: 5000 })
-      .catch(() => false);
-    const isLogin = page.url().includes('login');
-
-    expect(hasSidebar || isLogin).toBeTruthy();
+    await expect(
+      page.locator('nav, aside, .sidebar, mat-form-field, [type="password"]').first()
+    ).toBeVisible({ timeout: 15000 });
   });
 
   test('should navigate between sections', async ({ page }) => {

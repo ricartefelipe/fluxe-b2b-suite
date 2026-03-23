@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
+import { loginWithQuickProfile } from './dev-login.helper';
 
 test.describe('Admin Console Login', () => {
   test('should redirect to login when not authenticated', async ({ page }) => {
@@ -8,20 +9,12 @@ test.describe('Admin Console Login', () => {
 
   test('should display login page', async ({ page }) => {
     await page.goto('/login');
-    await expect(page.getByRole('button', { name: /login|entrar|sign in|admin/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Bem-vindo de volta/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /^Acessar$/i })).toBeVisible();
   });
 
   test('should login with dev credentials', async ({ page }) => {
-    await page.goto('/login');
-
-    const devLogin = page
-      .locator('button')
-      .filter({ hasText: /login|sign in|admin/i })
-      .first();
-
-    if (await devLogin.isVisible()) {
-      await devLogin.click();
-      await page.waitForURL(/(tenants|dashboard|onboarding)/);
-    }
+    await loginWithQuickProfile(page, 'Super Admin');
+    await expect(page).toHaveURL(/(tenants|dashboard|onboarding)/, { timeout: 15000 });
   });
 });

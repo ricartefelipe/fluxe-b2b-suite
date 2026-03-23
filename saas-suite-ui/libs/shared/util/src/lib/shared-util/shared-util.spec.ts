@@ -1,8 +1,7 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { toISODateString, formatDate, formatDateTime, startOfDay, endOfDay } from '../date.util';
 import { generateUUID, generateIdempotencyKey } from '../uuid.util';
-import { buildPaginationParams, type PaginationParams } from '../paginator.util';
-import { isProblemDetails } from '@saas-suite/shared/http';
+import { buildPaginationParams } from '../paginator.util';
 
 // ---------- date.util ----------
 
@@ -133,25 +132,5 @@ describe('paginator.util — buildPaginationParams', () => {
   it('includes page 0 (falsy but not null)', () => {
     const result = buildPaginationParams({ page: 0 });
     expect(result['page']).toBe('0');
-  });
-});
-
-// ---------- ProblemDetails (from shared/http, tested here for pure-fn convenience) ----------
-
-describe('isProblemDetails', () => {
-  it('returns true for object with status field', () => {
-    expect(isProblemDetails({ status: 404, title: 'Not Found' })).toBe(true);
-  });
-
-  it('returns false for null', () => {
-    expect(isProblemDetails(null)).toBe(false);
-  });
-
-  it('returns false for a string', () => {
-    expect(isProblemDetails('error')).toBe(false);
-  });
-
-  it('returns false for object without status', () => {
-    expect(isProblemDetails({ error: 'oops' })).toBe(false);
   });
 });

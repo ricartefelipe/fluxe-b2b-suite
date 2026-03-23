@@ -13,7 +13,7 @@ export interface Tenant {
 
 export interface CreateTenantRequest {
   name: string;
-  plan: TenantPlan;
+  plan: TenantPlan | string; // slug do plano (API billing)
   region: string;
 }
 
@@ -30,4 +30,10 @@ export interface TenantListParams {
   name?: string;
   cursor?: string;
   limit?: number;
+}
+
+export interface TenantHealth {
+  tenantId: string;
+  lastActivityAt: string | null;
+  activeUsersCount: number;
 }

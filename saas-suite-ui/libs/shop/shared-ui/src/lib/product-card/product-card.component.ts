@@ -39,6 +39,7 @@ import { OptimizedImageComponent } from '../optimized-image/optimized-image.comp
           <div class="quick-add-overlay">
             <button
               class="btn-add-to-cart"
+              [attr.data-testid]="'add-to-cart'"
               (click)="onAddToCart($event)"
               [attr.aria-label]="msg.shop.addToCart + ' ' + product().name"
             >

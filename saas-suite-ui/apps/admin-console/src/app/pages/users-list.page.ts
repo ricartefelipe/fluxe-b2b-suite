@@ -37,6 +37,8 @@ interface UserDto {
   status: string;
   createdAt: string;
   updatedAt: string;
+  /** Present when backend uses EMAIL_PROVIDER=log (no real email). */
+  temporaryPassword?: string | null;
 }
 
 // ---------------------------------------------------------------------------
@@ -87,7 +89,7 @@ interface UserDto {
     <mat-dialog-actions align="end">
       <button mat-button mat-dialog-close>{{ i18n.messages().common.cancel }}</button>
       <button mat-flat-button color="primary" [disabled]="!isValid()" (click)="submit()">
-        {{ i18n.messages().common.save }}
+        {{ data?.user ? i18n.messages().common.save : i18n.messages().admin.inviteUser }}
       </button>
     </mat-dialog-actions>
   `,
@@ -119,6 +121,64 @@ export class InviteUserDialog {
 
   submit(): void {
     this.dialogRef.close(this.form);
+  }
+}
+
+@Component({
+  selector: 'app-temporary-password-dialog',
+  standalone: true,
+  imports: [MatButtonModule, MatIconModule, MatDialogModule],
+  template: `
+    <h2 mat-dialog-title>{{ i18n.messages().admin.inviteTemporaryPasswordTitle }}</h2>
+    <mat-dialog-content class="pwd-dialog">
+      <p class="hint">{{ i18n.messages().admin.inviteTemporaryPasswordHint }}</p>
+      <code class="pwd-box">{{ data.password }}</code>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>{{ i18n.messages().common.close }}</button>
+      <button mat-flat-button color="primary" (click)="copy()">
+        <mat-icon>content_copy</mat-icon> {{ i18n.messages().admin.copyTemporaryPassword }}
+      </button>
+    </mat-dialog-actions>
+  `,
+  styles: [
+    `
+      .pwd-dialog {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-width: 320px;
+      }
+      .hint {
+        margin: 0;
+        font-size: 0.875rem;
+        color: rgba(0, 0, 0, 0.65);
+      }
+      .pwd-box {
+        display: block;
+        padding: 12px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        font-size: 1rem;
+        word-break: break-all;
+      }
+    `,
+  ],
+})
+export class TemporaryPasswordDialog {
+  protected readonly i18n = inject(I18nService);
+  private snack = inject(MatSnackBar);
+  private dialogRef = inject(MatDialogRef<TemporaryPasswordDialog>);
+  protected data: { password: string } = inject(MAT_DIALOG_DATA);
+
+  async copy(): Promise<void> {
+    try {
+      await navigator.clipboard.writeText(this.data.password);
+      this.snack.open(this.i18n.messages().admin.temporaryPasswordCopied, '', { duration: 2500 });
+      this.dialogRef.close();
+    } catch {
+      this.snack.open(this.i18n.messages().admin.userError, '', { duration: 3000 });
+    }
   }
 }
 
@@ -324,14 +384,23 @@ export class UsersListPage implements OnInit, AfterViewInit {
     ref.afterClosed().subscribe(async (result) => {
       if (!result) return;
       try {
-        await firstValueFrom(
-          this.http.post(`${this.baseUrl}/invite`, {
+        const created = await firstValueFrom(
+          this.http.post<UserDto>(`${this.baseUrl}/invite`, {
             name: result.name,
             email: result.email,
             roles: result.roles,
           }),
         );
-        this.snack.open(this.i18n.messages().admin.inviteSent, '', { duration: 3000 });
+        if (created.temporaryPassword) {
+          this.dialog.open(TemporaryPasswordDialog, {
+            width: '440px',
+            data: { password: created.temporaryPassword },
+            disableClose: true,
+          });
+          this.snack.open(this.i18n.messages().admin.inviteCreatedNoEmail, '', { duration: 6000 });
+        } else {
+          this.snack.open(this.i18n.messages().admin.inviteSent, '', { duration: 3000 });
+        }
         await this.loadUsers();
       } catch (err: unknown) {
         const msg =
@@ -370,8 +439,22 @@ export class UsersListPage implements OnInit, AfterViewInit {
 
   async resendInvite(user: UserDto): Promise<void> {
     try {
-      await firstValueFrom(this.http.post(`${this.baseUrl}/${user.id}/resend-invite`, null));
-      this.snack.open(this.i18n.messages().admin.resendInviteSent, '', { duration: 3000 });
+      const body = await firstValueFrom(
+        this.http.post<{ temporaryPassword?: string | null }>(
+          `${this.baseUrl}/${user.id}/resend-invite`,
+          null,
+        ),
+      );
+      if (body?.temporaryPassword) {
+        this.dialog.open(TemporaryPasswordDialog, {
+          width: '440px',
+          data: { password: body.temporaryPassword },
+          disableClose: true,
+        });
+        this.snack.open(this.i18n.messages().admin.inviteCreatedNoEmail, '', { duration: 6000 });
+      } else {
+        this.snack.open(this.i18n.messages().admin.resendInviteSent, '', { duration: 3000 });
+      }
     } catch {
       this.snack.open(this.i18n.messages().admin.userError, '', { duration: 3000 });
     }

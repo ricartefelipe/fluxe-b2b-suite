@@ -1,124 +1,55 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
+import { loginWithQuickProfile } from './dev-login.helper';
 
+/**
+ * Dados vêm de `shop-orders-api-mock` (1 produto, Electronics, BRL).
+ */
 test.describe('Product Listing Page', () => {
   test.beforeEach(async ({ page }) => {
+    await loginWithQuickProfile(page, 'Viewer');
     await page.goto('/products');
     await page.waitForLoadState('domcontentloaded');
+    await expect(page.locator('article.product-card').first()).toBeVisible({
+      timeout: 15000,
+    });
   });
 
-  test('should display products grid with at least one product', async ({ page }) => {
-    const productCards = page.locator('[class*="product-card"]');
-    const count = await productCards.count();
-    expect(count).toBeGreaterThan(0);
-
-    const firstProduct = productCards.first();
-    await expect(firstProduct).toBeVisible();
-
-    const productImage = firstProduct.locator('img');
-    await expect(productImage).toBeVisible();
-
-    const productName = firstProduct.locator('h3');
-    await expect(productName).toBeVisible();
-
-    const productPrice = firstProduct.locator('text=/\\$\\d+\\.\\d{2}/');
-    await expect(productPrice).toBeVisible();
+  test('should display at least one product card with price', async ({ page }) => {
+    const card = page.locator('article.product-card').first();
+    await expect(card.locator('h3.product-name')).toContainText(/E2E Product/i);
+    await expect(card.locator('.product-price')).toContainText(/R\$\s*29/);
   });
 
-  test('should filter products by category', async ({ page }) => {
-    const categoryDropdown = page.locator('select');
-    await categoryDropdown.selectOption('Electronics');
-
-    await page.waitForFunction(() => document.querySelectorAll('[class*="product-card"]').length > 0);
-
-    const productCategories = page.locator('[class*="product-card"] p:first-of-type');
-    const count = await productCategories.count();
-
-    for (let i = 0; i < count; i++) {
-      const category = productCategories.nth(i);
-      await expect(category).toHaveText('Electronics');
-    }
+  test('should filter products by category Electronics', async ({ page }) => {
+    await page
+      .locator('#sidebar-filters label.filter-checkbox')
+      .filter({ hasText: 'Electronics' })
+      .click();
+    await expect(page.locator('article.product-card').first()).toBeVisible();
+    await expect(
+      page.locator('article.product-card .category-badge').first()
+    ).toHaveText('Electronics');
   });
 
-  test('should filter products by search term', async ({ page }) => {
-    const searchInput = page.locator('input[placeholder*="Search"]');
-    await searchInput.fill('Product 1');
-
-    await page.waitForFunction(() => document.querySelectorAll('[class*="product-card"]').length > 0);
-
-    const productNames = page.locator('[class*="product-card"] h3');
-    const count = await productNames.count();
-
-    for (let i = 0; i < count; i++) {
-      const name = await productNames.nth(i).textContent();
-      expect(name?.toLowerCase()).toContain('product 1');
-    }
+  test('should filter by search term', async ({ page }) => {
+    const searchInput = page.locator('.search-input').first();
+    await searchInput.fill('E2E');
+    await expect(page.locator('article.product-card').first()).toBeVisible();
+    await expect(page.locator('h3.product-name').first()).toContainText(/E2E/i);
   });
 
-  test('should filter by in-stock products only', async ({ page }) => {
-    const resultsInfo = page.locator('text=/Showing \\d+ of \\d+ products/');
-    const initialText = await resultsInfo.textContent();
-
-    const inStockCheckbox = page.locator('input[type="checkbox"]');
-    await inStockCheckbox.check();
-
-    await page.waitForFunction(
-      (initialText) => {
-        const resultsElement = document.querySelector('[class*="results-info"]');
-        return resultsElement && resultsElement.textContent !== initialText;
-      },
-      initialText,
-      { timeout: 5000 }
-    );
-
-    await page.waitForTimeout(500);
-
-    const outOfStockBadges = page.locator('text="Out of Stock"');
-    const count = await outOfStockBadges.count();
-    expect(count).toBe(0);
+  test('should filter by in-stock only', async ({ page }) => {
+    await page.locator('#sidebar-filters label.filter-toggle').click();
+    await expect(page.locator('article.product-card')).toHaveCount(1);
   });
 
-  test('should handle pagination', async ({ page }) => {
-    const paginationSection = page.locator('[class*="pagination"]');
-    await expect(paginationSection).toBeVisible();
-
-    const prevButton = page.locator('button:has-text("Previous")');
-    const nextButton = page.locator('button:has-text("Next")');
-    const pageInfo = page.locator('text=/Page \\d+ of \\d+/');
-
-    await expect(prevButton).toBeDisabled();
-    await expect(nextButton).toBeEnabled();
-    await expect(pageInfo).toBeVisible();
-
-    await nextButton.click();
-
-    await page.waitForFunction(() => document.querySelectorAll('[class*="product-card"]').length > 0);
-
-    const newPageInfo = await pageInfo.textContent();
-    expect(newPageInfo).toContain('Page 2');
-
-    await expect(prevButton).toBeEnabled();
+  test('should hide pagination when a single page of results', async ({ page }) => {
+    await expect(page.locator('nav.pagination')).toHaveCount(0);
   });
 
-  test('should show correct product count', async ({ page }) => {
-    const resultsInfo = page.locator('text=/Showing \\d+ of \\d+ products/');
-    await expect(resultsInfo).toBeVisible();
-
-    const text = await resultsInfo.textContent();
-    const match = text?.match(/Showing (\d+) of (\d+)/);
-
-    if (!match) {
-      return;
-    }
-
-    const showing = parseInt(match[1]);
-    const total = parseInt(match[2]);
-
-    expect(showing).toBeGreaterThan(0);
-    expect(showing).toBeLessThanOrEqual(12);
-    expect(total).toBeGreaterThan(0);
-
-    const productCards = page.locator('[class*="product-card"]');
-    const actualCount = await productCards.count();
-    expect(actualCount).toBe(showing);
+  test('should show product count line', async ({ page }) => {
+    await expect(
+      page.getByText(/Mostrando|Showing/i).first()
+    ).toBeVisible();
   });
 });

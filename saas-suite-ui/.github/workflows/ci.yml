@@ -36,13 +36,14 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      # Nx Cloud task distribution
-      - run: pnpm nx start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e"
+      # Nx Cloud: distribui lint/test/build/typecheck; E2E fica sequencial (porta 4200 partilhada)
+      - run: pnpm nx start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="typecheck"
 
       - run: pnpm exec playwright install --only-shell
 
       - run: pnpm nx record -- echo Hello World
-      - run: pnpm nx run-many -t lint test build typecheck e2e
+      - run: pnpm nx run-many -t lint test build typecheck
+      - run: CI=true pnpm nx run-many -t e2e --projects=admin-console-e2e,ops-portal-e2e,shop-e2e --parallel=1
 
       - run: pnpm nx fix-ci
         if: always()

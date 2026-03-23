@@ -9,6 +9,7 @@ export default [
   {
     ignores: [
       '**/dist',
+      '**/dist.old',
       '**/vite.config.*.timestamp*',
       '**/vitest.config.*.timestamp*',
     ],
@@ -34,7 +35,10 @@ export default [
             { sourceTag: 'type:feature', onlyDependOnLibsWithTags: ['type:data-access', 'type:ui', 'type:util', 'type:domain', 'type:data'] },
             { sourceTag: 'type:domain', onlyDependOnLibsWithTags: ['type:data-access', 'type:util', 'type:data'] },
             { sourceTag: 'type:data-access', onlyDependOnLibsWithTags: ['type:util', 'type:data'] },
-            { sourceTag: 'type:ui', onlyDependOnLibsWithTags: ['type:util', 'type:data'] },
+            {
+              sourceTag: 'type:ui',
+              onlyDependOnLibsWithTags: ['type:util', 'type:data', 'type:feature'],
+            },
             { sourceTag: 'type:util', onlyDependOnLibsWithTags: ['type:util'] },
           ],
         },

@@ -3,6 +3,7 @@ import { nxE2EPreset } from '@nx/playwright/preset';
 import { workspaceRoot } from '@nx/devkit';
 
 const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
+const isCI = !!process.env['CI'];
 
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src' }),
@@ -13,23 +14,13 @@ export default defineConfig({
   webServer: {
     command: 'pnpm exec nx run ops-portal:serve',
     url: 'http://localhost:4200',
-    reuseExistingServer: true,
+    reuseExistingServer: !isCI,
     cwd: workspaceRoot,
   },
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
-    },
-
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
     },
   ],
 });

@@ -59,7 +59,7 @@ import { SearchTriggerComponent } from '@saas-suite/shared/search';
           </div>
           <mat-divider />
           <button mat-menu-item (click)="goToChangePassword()">
-            <mat-icon aria-hidden="true">lock</mat-icon> {{ i18n.messages()?.auth?.changePasswordMenuLabel ?? 'Ajustar senha' }}
+            <mat-icon aria-hidden="true">lock</mat-icon> {{ i18n.messages().auth.changePasswordMenuLabel ?? 'Ajustar senha' }}
           </button>
           <button mat-menu-item (click)="logout()">
             <mat-icon aria-hidden="true">logout</mat-icon> {{ i18n.messages().auth.logout }}

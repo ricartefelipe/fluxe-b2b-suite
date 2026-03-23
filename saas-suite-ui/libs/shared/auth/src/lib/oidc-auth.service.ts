@@ -7,7 +7,7 @@ import { AuthStore } from './auth.store';
 import { sessionFromJwt } from './models/auth-session.model';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 // eslint-disable-next-line @nx/enforce-module-boundaries -- circular with shared-http (see auth.service)
-import { TenantContextService } from '@saas-suite/shared/http';
+import { TenantContextService } from '@saas-suite/shared/util';
 
 @Injectable({ providedIn: 'root' })
 export class OidcAuthService implements OnDestroy {

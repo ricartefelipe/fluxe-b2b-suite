@@ -1,10 +1,15 @@
-# Deploy das 3 apps Angular para Cloudflare Pages.
-# Production: push em master | Preview: push em develop
+# Cloudflare Pages — produção (somente ramo master).
+#
+# Staging dos fronts está no Railway (ramo develop nos projetos Railway), ver docs/URLS-STAGING.md.
+# Não dispare este workflow em develop: evita build duplicado sem deploy e mantém um destino claro por ramo.
+#
+# Pré-requisito: o workflow "CI" (deploy.yml) também corre em push para master quando mudam os mesmos
+# caminhos em saas-suite-ui; validação completa (lint, test, e2e) fica lá. Aqui só: artefacto + wrangler.
 name: Deploy Frontend
 
 on:
   push:
-    branches: [master, develop]
+    branches: [master]
     paths:
       - 'saas-suite-ui/**'
       - '.github/workflows/deploy-frontend.yml'
@@ -20,35 +25,7 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: saas-suite-ui
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
-          cache-dependency-path: saas-suite-ui/pnpm-lock.yaml
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Lint
-        run: pnpm nx run-many -t lint --projects=ops-portal,admin-console,shop
-
-      - name: Test
-        run: pnpm nx run-many -t test --projects=ops-portal,admin-console,shop
-
-  build-and-deploy:
-    needs: test
+  cloudflare-pages:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -81,11 +58,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build ${{ matrix.app.name }}
+      - name: Build ${{ matrix.app.name }} (production)
         run: pnpm nx build ${{ matrix.app.name }} --configuration=production
 
-      - name: Inject runtime config
-        if: github.ref == 'refs/heads/master'
+      - name: Inject runtime config (production)
         env:
           CORE_API_BASE_URL: ${{ vars.CORE_API_BASE_URL }}
           ORDERS_API_BASE_URL: ${{ vars.ORDERS_API_BASE_URL }}
@@ -111,7 +87,6 @@ jobs:
           KC
 
       - name: Deploy to Cloudflare Pages
-        if: github.ref == 'refs/heads/master'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

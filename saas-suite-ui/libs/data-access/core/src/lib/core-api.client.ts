@@ -4,7 +4,7 @@ import { Observable, map } from 'rxjs';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { PageResponse, toParams } from '@saas-suite/shared/http';
 import {
-  Tenant, CreateTenantRequest, UpdateTenantRequest, TenantListParams,
+  Tenant, CreateTenantRequest, UpdateTenantRequest, TenantListParams, TenantHealth,
   Policy, CreatePolicyRequest, PolicyListParams,
   FeatureFlag, CreateFlagRequest, UpdateFlagRequest,
   AuditLog, AuditListParams,
@@ -33,6 +33,14 @@ export class CoreApiClient {
   }
   getTenant(id: string): Observable<Tenant> {
     return this.http.get<Tenant>(`${this.base}/v1/tenants/${id}`);
+  }
+
+  getTenantHealth(tenantId: string): Observable<TenantHealth> {
+    return this.http.get<TenantHealth>(`${this.base}/v1/tenants/${tenantId}/health`);
+  }
+
+  exportTenantData(tenantId: string): Observable<Record<string, unknown>> {
+    return this.http.get<Record<string, unknown>>(`${this.base}/v1/tenants/${tenantId}/export`);
   }
   createTenant(req: CreateTenantRequest): Observable<Tenant> {
     return this.http.post<Tenant>(`${this.base}/v1/tenants`, req);
@@ -93,6 +101,14 @@ export class CoreApiClient {
 
   startTrial(planSlug: string): Observable<Subscription> {
     return this.http.post<Subscription>(`${this.base}/v1/subscriptions/trial`, { planSlug });
+  }
+
+  scheduleCancelAtPeriodEnd(): Observable<Subscription> {
+    return this.http.post<Subscription>(`${this.base}/v1/subscriptions/schedule-cancel`, {});
+  }
+
+  undoScheduleCancelAtPeriodEnd(): Observable<Subscription> {
+    return this.http.post<Subscription>(`${this.base}/v1/subscriptions/undo-schedule-cancel`, {});
   }
 
   /** List users for the current tenant (tenant from auth context). */

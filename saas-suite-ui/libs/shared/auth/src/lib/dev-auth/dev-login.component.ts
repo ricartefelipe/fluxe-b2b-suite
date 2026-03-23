@@ -37,6 +37,7 @@ const DEV_PROFILES: DevProfile[] = [
     perms: [
       'tenants:read', 'tenants:write', 'policies:read', 'policies:write',
       'flags:read', 'flags:write', 'audit:read', 'analytics:read', 'admin:write',
+      'users:read', 'users:write',
       'orders:read', 'orders:write', 'inventory:read', 'inventory:write',
       'payments:read', 'payments:write', 'ledger:read',
       'products:read', 'products:write', 'profile:read',

@@ -257,6 +257,7 @@ saas-suite-ui/
 
 ## Execução E2E e hospedagem
 
+- **Playwright no monorepo (mocks, comandos, CI):** [saas-suite-ui/docs/E2E.md](saas-suite-ui/docs/E2E.md)
 - **Rodar os 4 repositórios integrados:** ver [docs/README.md](docs/README.md) e [docs/GUIA-DEPLOY-PASSO-A-PASSO.md](docs/GUIA-DEPLOY-PASSO-A-PASSO.md)
 - **Validar backends com Docker:** `./scripts/e2e-integrated.sh`
 - **Regras de negócio e implantação:** ver índice em [docs/README.md](docs/README.md) (documentos planejados: regras-de-negocio, documento-implantacao)

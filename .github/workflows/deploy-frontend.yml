@@ -1,5 +1,8 @@
-# Deploy das 3 apps Angular para Cloudflare Pages.
-# Production: push em master | Preview: push em develop
+# Deploy das 3 apps Angular (Cloudflare Pages).
+# Gatilho: push em master OU develop (paths abaixo).
+# - test + build: correm em master e develop.
+# - Injeção de config.json / config.keycloak.json e "Deploy to Cloudflare Pages": só se github.ref == refs/heads/master (ver if nos passos).
+# Isto significa: push em develop NÃO executa wrangler deploy neste workflow (apenas CI de teste/build).
 name: Deploy Frontend
 
 on:

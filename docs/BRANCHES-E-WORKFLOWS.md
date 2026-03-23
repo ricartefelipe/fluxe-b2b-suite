@@ -10,8 +10,8 @@ Não substitui a verificação do separador **Actions** no GitHub (estado de cad
 | Ramo | Uso |
 |------|-----|
 | `feature/*` | Desenvolvimento; integração via PR para `develop`. |
-| `develop` | Integração contínua; imagens Docker e alguns pipelines disparam em push aqui. |
-| `master` | Linha estável; deploy de frontend (Cloudflare) e condições específicas para VPS; `latest` em GHCR quando o ramo predefinido é `master`. |
+| `develop` | Integração: **CI** do monorepo; **staging** dos fronts via **Railway** (não Cloudflare deste workflow). Backends: imagens GHCR em push. |
+| `master` | **Produção**: **Deploy Frontend** (Cloudflare Pages) quando mudam `saas-suite-ui/**`; VPS só com paths em `deploy-prod.yml`; `latest` em GHCR no ramo predefinido. |
 
 ---
 
@@ -33,17 +33,12 @@ Não substitui a verificação do separador **Actions** no GitHub (estado de cad
 
 | Gatilho | Ramos | Filtro de paths |
 |---------|--------|-----------------|
-| `push` | `master`, `develop` | `saas-suite-ui/**`, `.github/workflows/deploy-frontend.yml` |
+| `push` | **`master` apenas** | `saas-suite-ui/**`, `.github/workflows/deploy-frontend.yml` |
 | `workflow_dispatch` | manual | — |
 
-**Jobs que correm sempre (em `master` e `develop`):** `test` (lint + test) e `build-and-deploy` com build de produção das 3 apps (matrix).
+**Efeito:** um único job em matrix (shop, ops-portal, admin-console): `pnpm install` → build produção → injeção de `config.json` / `config.keycloak.json` → `wrangler pages deploy` para **Cloudflare Pages** (produção). Não duplica lint/test/E2E (isso fica no workflow **CI**).
 
-**Passos condicionados a `github.ref == 'refs/heads/master'` (ver ficheiro):**
-
-- Injeção de `config.json` / `config.keycloak.json` no artefacto.
-- `Deploy to Cloudflare Pages` (`wrangler pages deploy`).
-
-**Conclusão factual:** em **`develop`**, este workflow **não** executa deploy para Cloudflare nem a injeção de config acima; apenas testes e build. Em **`master`**, após build, **sim** — deploy Cloudflare (desde que secrets `CLOUDFLARE_*` estejam configurados e o job conclua com sucesso).
+**Staging:** não é este ficheiro. Fronts em ambiente de integração: **Railway** com ramo `develop`, ver [URLS-STAGING.md](URLS-STAGING.md).
 
 ---
 
@@ -124,8 +119,9 @@ Mesmo padrão que `node-b2b-orders`:
 ## 5. Onde verificar execução (sem suposições)
 
 1. GitHub → repositório → **Actions** → escolher o workflow → última execução no ramo desejado.
-2. Cloudflare Dashboard → **Workers & Pages** → projeto (`fluxe-shop`, etc.) → **Deployments** (só relevante após sucesso do job em `master` no `Deploy Frontend`).
-3. VPS / Railway: conforme [DEPLOY-GITHUB.md](DEPLOY-GITHUB.md) e variáveis do ambiente.
+2. Cloudflare Dashboard → **Workers & Pages** → projeto (`fluxe-shop`, etc.) → **Deployments** (após push em `master` que dispare **Deploy Frontend** com sucesso).
+3. **Railway** (staging): painel do projeto com **branch** `develop` — ver [URLS-STAGING.md](URLS-STAGING.md).
+4. VPS: conforme [DEPLOY-GITHUB.md](DEPLOY-GITHUB.md).
 
 ---
 

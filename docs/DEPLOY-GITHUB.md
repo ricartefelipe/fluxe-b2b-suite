@@ -8,11 +8,13 @@ O **CI** (`deploy.yml`) corre em push/PR para `develop`/`master` quando mudam `s
 
 | Nome no GitHub | Ficheiro | Gatilho | Função |
 |----------------|----------|---------|--------|
-| **CI** | `deploy.yml` | Push/PR em `develop`/`master` (paths filtrados) ou **Run workflow** | `pnpm install`, lint, test, build das 3 apps (ops-portal, admin-console, shop) |
-| **Deploy Frontend** | `deploy-frontend.yml` | Push em `develop`/`master` (paths `saas-suite-ui/**`) ou **Run workflow** | Mesmos testes + deploy para **Cloudflare Pages** (produção em `master`; preview em `develop`) |
+| **CI** | `deploy.yml` | Push/PR em `develop`/`master` (paths filtrados) ou **Run workflow** | Lint, test, typecheck, build, E2E Playwright das 3 apps |
+| **Deploy Frontend** | `deploy-frontend.yml` | Push apenas em **`master`** (paths `saas-suite-ui/**` ou este workflow) ou **Run workflow** | Build produção + injeção de `config.json` + **Cloudflare Pages** (produção). **Não** corre em `develop`. |
 | **Deploy Production** | `deploy-prod.yml` | Push em `master` com alterações em `deploy/**`, `docker-compose.prod.yml`, `scripts/**`, ou **Run workflow** | `rsync` para o VPS, `./scripts/deploy.sh`, smoke tests |
 
-**Importante:** um merge em `master` que mexe só em `saas-suite-ui/**` dispara o **Deploy Frontend** (Cloudflare), mas **não** este workflow. Para atualizar o **VPS** nesse caso, corre **Actions → Deploy Production → Run workflow** (e define as tags de imagem se precisares de outra que não `latest`).
+**Staging (fronts em `develop`):** não passa por este repositório no Cloudflare; os URLs de staging estão no Railway — ver [URLS-STAGING.md](URLS-STAGING.md) e [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) (ramo `develop` nos projetos Railway).
+
+**Importante:** um merge em `master` que mexe só em `saas-suite-ui/**` dispara **CI** + **Deploy Frontend** (Cloudflare). Para atualizar o **VPS** (imagens Docker), só **Deploy Production** quando mudam `deploy/**`, `docker-compose.prod.yml` ou `scripts/**`, ou corre **Actions → Deploy Production → Run workflow** manualmente.
 
 ## Secrets e variáveis (GitHub)
 

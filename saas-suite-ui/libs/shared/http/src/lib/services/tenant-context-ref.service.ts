@@ -1,14 +1,5 @@
-import { Injectable } from '@angular/core';
-
-@Injectable({ providedIn: 'root' })
-export class TenantContextService {
-  private activeTenantId: string | null = null;
-
-  setActiveTenantId(id: string | null): void {
-    this.activeTenantId = id;
-  }
-
-  getActiveTenantId(): string | null {
-    return this.activeTenantId;
-  }
-}
+/**
+ * Re-export for backward compatibility. Implementação em @saas-suite/shared/util.
+ * @deprecated Import from @saas-suite/shared/util instead.
+ */
+export { TenantContextService } from '@saas-suite/shared/util';

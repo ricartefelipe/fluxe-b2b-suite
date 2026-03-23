@@ -30,6 +30,7 @@ const MOBILE_BREAKPOINT = 768;
       <div class="shell-content">
         <saas-header [appTitle]="appTitle" (menuToggle)="toggleSidebar()" />
         <main id="main-content" class="shell-main" saasFocusOnNav>
+          <ng-content select="[mainTop]" />
           <router-outlet />
         </main>
       </div>

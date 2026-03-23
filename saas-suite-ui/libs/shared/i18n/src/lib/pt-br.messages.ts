@@ -560,6 +560,30 @@ export const PT_BR_MESSAGES: Messages = {
     exportData: 'Exportar meus dados',
     exportDataHint: 'Baixa um arquivo JSON com tenant, usuários, políticas e feature flags.',
   },
+  usage: {
+    title: 'Seu uso este mês',
+    users: 'Usuários',
+  },
+  status: {
+    title: 'Status dos serviços',
+    operational: 'Operacional',
+    degraded: 'Degradado',
+    outage: 'Indisponível',
+  },
+  changelog: {
+    title: 'Changelog',
+  },
+  onboardingChecklist: {
+    checklistTitle: 'Conclua sua configuração',
+    checklistSubtitle: 'Siga os passos para começar.',
+    stepCreateTenant: 'Criar organização (tenant)',
+    stepInviteUser: 'Convidar usuário',
+    stepConfigureBilling: 'Configurar faturamento',
+    actionNewTenant: 'Criar',
+    actionInvite: 'Convidar',
+    actionBilling: 'Configurar',
+    dismiss: 'Dispensar',
+  },
   admin: {
     policiesTitle: 'Políticas (ABAC/RBAC)',
     newPolicy: 'Nova Policy',

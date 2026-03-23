@@ -526,6 +526,30 @@ export interface Messages {
     exportData: string;
     exportDataHint: string;
   };
+  usage: {
+    title: string;
+    users: string;
+  };
+  status: {
+    title: string;
+    operational: string;
+    degraded: string;
+    outage: string;
+  };
+  changelog: {
+    title: string;
+  };
+  onboardingChecklist: {
+    checklistTitle: string;
+    checklistSubtitle: string;
+    stepCreateTenant: string;
+    stepInviteUser: string;
+    stepConfigureBilling: string;
+    actionNewTenant: string;
+    actionInvite: string;
+    actionBilling: string;
+    dismiss: string;
+  };
   admin: {
     policiesTitle: string;
     newPolicy: string;

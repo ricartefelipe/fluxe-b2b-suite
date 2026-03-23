@@ -266,6 +266,7 @@ saas-suite-ui/
 
 ## Documentação
 
+- [docs/BRANCHES-E-WORKFLOWS.md](docs/BRANCHES-E-WORKFLOWS.md) — Ramos Git e o que cada workflow dispara (só com base nos YAML)
 - [docs/README.md](docs/README.md) — **Índice da documentação** (disponível e planejada)
 - [docs/OBSERVABILITY.md](docs/OBSERVABILITY.md) — Observabilidade (Sentry, backup)
 - [docs/GUIA-DEPLOY-PASSO-A-PASSO.md](docs/GUIA-DEPLOY-PASSO-A-PASSO.md) — Deploy passo a passo

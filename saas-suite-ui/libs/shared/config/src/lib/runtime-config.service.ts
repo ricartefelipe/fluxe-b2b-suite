@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { AppConfig, DEFAULT_CONFIG } from './app-config.model';
@@ -8,7 +8,7 @@ export class RuntimeConfigService {
   private readonly _config = signal<AppConfig>(DEFAULT_CONFIG);
   readonly config = this._config.asReadonly();
 
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
 
   async load(): Promise<void> {
     try {

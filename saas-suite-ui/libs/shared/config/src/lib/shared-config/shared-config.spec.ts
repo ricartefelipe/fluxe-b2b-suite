@@ -44,7 +44,7 @@ describe('RuntimeConfigService', () => {
   });
 
   it('load() falls back to defaults when HTTP request fails', async () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
 
     const loadPromise = service.load();
     const req = httpCtrl.expectOne('/assets/config.json');

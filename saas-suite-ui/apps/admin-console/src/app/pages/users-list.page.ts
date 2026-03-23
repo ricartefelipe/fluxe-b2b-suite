@@ -78,7 +78,7 @@ interface UserDto {
           <mat-label>{{ i18n.messages().common.status }}</mat-label>
           <mat-select [(ngModel)]="form.status">
             @for (s of statuses; track s) {
-              <mat-option [value]="s">{{ i18n.messages().statuses[s] ?? s }}</mat-option>
+              <mat-option [value]="s">{{ i18n.messages().statuses[s] }}</mat-option>
             }
           </mat-select>
         </mat-form-field>
@@ -154,7 +154,7 @@ export class InviteUserDialog {
         <mat-select [(ngModel)]="filterStatus" (ngModelChange)="applyFilter()">
           <mat-option [value]="''">{{ i18n.messages().common.all }}</mat-option>
           @for (s of statuses; track s) {
-            <mat-option [value]="s">{{ i18n.messages().statuses[s] ?? s }}</mat-option>
+            <mat-option [value]="s">{{ i18n.messages().statuses[s] }}</mat-option>
           }
         </mat-select>
       </mat-form-field>

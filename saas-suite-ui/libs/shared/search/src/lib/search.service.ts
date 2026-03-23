@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, Subject, forkJoin, of } from 'rxjs';
@@ -6,19 +7,20 @@ import { catchError, debounceTime, map, switchMap } from 'rxjs/operators';
 import { CoreApiClient, Tenant, AuditLog } from '@saas-suite/data-access/core';
 import { OrdersApiClient, Order, InventoryItem } from '@saas-suite/data-access/orders';
 import { PaymentsApiClient, PaymentIntent } from '@saas-suite/data-access/payments';
-import { ProductsService } from '@union.solutions/shop/data';
+import { RuntimeConfigService } from '@saas-suite/shared/config';
+import { CursorResponse, PageResponse, toParams } from '@saas-suite/shared/http';
 import { Product } from '@union.solutions/models';
-import { CursorResponse } from '@saas-suite/shared/http';
 
-import { SearchResult, SearchEntityType, SearchConfig } from './search.model';
+import { SearchResult, SearchConfig } from './search.model';
 import { SEARCH_CONFIG, DEFAULT_SEARCH_CONFIG } from './provide-search';
 
 @Injectable({ providedIn: 'root' })
 export class SearchService {
+  private readonly http = inject(HttpClient);
+  private readonly runtimeConfig = inject(RuntimeConfigService);
   private readonly coreApi = inject(CoreApiClient);
   private readonly ordersApi = inject(OrdersApiClient);
   private readonly paymentsApi = inject(PaymentsApiClient);
-  private readonly productsService = inject(ProductsService);
   private readonly config: SearchConfig =
     inject(SEARCH_CONFIG, { optional: true }) ?? DEFAULT_SEARCH_CONFIG;
 
@@ -114,8 +116,8 @@ export class SearchService {
 
     if (enabled.includes('product')) {
       searches.push(
-        this.productsService.getProducts({ searchTerm: query }, 1, max).pipe(
-          map(res => res.items.map(p => this.mapProduct(p, q))),
+        this.fetchProductsBySearchTerm(query, max).pipe(
+          map((items) => items.map((p) => this.mapProduct(p, q))),
           catchError(() => of([])),
         ),
       );
@@ -146,6 +148,19 @@ export class SearchService {
     return forkJoin(searches).pipe(
       map(groups => groups.flat().sort((a, b) => b.score - a.score)),
     );
+  }
+
+  private fetchProductsBySearchTerm(query: string, max: number): Observable<Product[]> {
+    const base = this.runtimeConfig.get('ordersApiBaseUrl');
+    const paramObj: Record<string, unknown> = { limit: max, searchTerm: query };
+    return this.http
+      .get<PageResponse<Product>>(`${base}/v1/products`, {
+        params: toParams(paramObj),
+      })
+      .pipe(
+        map((res) => res.data ?? []),
+        catchError(() => of([])),
+      );
   }
 
   private calculateScore(text: string, query: string): number {
@@ -215,9 +230,9 @@ export class SearchService {
       id: product.id,
       entityType: 'product',
       title: product.name,
-      subtitle: `${product.category} - $${product.price}`,
+      subtitle: `${product.category} - ${product.currency ?? 'BRL'} ${product.price}`,
       icon: 'inventory_2',
-      url: `/products/${product.id}`,
+      url: `/product/${product.id}`,
       score: this.calculateScore(product.name, query),
     };
   }

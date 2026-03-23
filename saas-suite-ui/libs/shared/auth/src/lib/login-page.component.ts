@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, isDevMode } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { DevLoginComponent } from './dev-auth/dev-login.component';

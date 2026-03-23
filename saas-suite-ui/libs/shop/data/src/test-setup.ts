@@ -8,6 +8,9 @@ import {
 import { getTestBed } from '@angular/core/testing';
 
 const testBed = getTestBed();
-if (!(testBed as any).platform) {
+type TestBedWithOptionalPlatform = ReturnType<typeof getTestBed> & {
+  platform?: unknown;
+};
+if (!(testBed as TestBedWithOptionalPlatform).platform) {
   testBed.initTestEnvironment(BrowserTestingModule, platformBrowserTesting());
 }

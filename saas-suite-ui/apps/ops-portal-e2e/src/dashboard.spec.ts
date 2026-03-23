@@ -1,18 +1,9 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
+import { loginWithQuickProfile } from './dev-login.helper';
 
 test.describe('Ops Dashboard', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/login');
-    const loginBtn = page
-      .locator('button')
-      .filter({ hasText: /login|admin|operator/i })
-      .first();
-
-    const visible = await loginBtn.isVisible({ timeout: 3000 }).catch(() => false);
-    if (visible) {
-      await loginBtn.click();
-      await page.waitForURL(/(dashboard|orders)/, { timeout: 5000 }).catch(() => undefined);
-    }
+    await loginWithQuickProfile(page, 'Ops User');
   });
 
   test('should display KPI cards', async ({ page }) => {
@@ -24,18 +15,8 @@ test.describe('Ops Dashboard', () => {
 
   test('should display charts section', async ({ page }) => {
     await page.goto('/dashboard');
-
-    const hasSvg = await page
-      .locator('svg')
-      .first()
-      .isVisible({ timeout: 5000 })
-      .catch(() => false);
-    const hasTable = await page
-      .locator('mat-table, table')
-      .first()
-      .isVisible({ timeout: 5000 })
-      .catch(() => false);
-
-    expect(hasSvg || hasTable).toBeTruthy();
+    await expect(
+      page.locator('svg, mat-table, table, canvas').first()
+    ).toBeVisible({ timeout: 15000 });
   });
 });

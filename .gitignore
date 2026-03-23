@@ -52,6 +52,7 @@ temp/
 test-results/
 playwright-report/
 playwright/.cache/
+saas-suite-ui/apps/shop-e2e/.auth/
 
 # Local dev environment
 .local-logs/

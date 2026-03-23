@@ -68,7 +68,12 @@
 
         <!-- Cart -->
         <div class="cart-trigger-wrapper">
-          <button class="action-btn cart-trigger" (click)="toggleMinicart()" [attr.aria-expanded]="minicartOpen()">
+          <button
+            class="action-btn cart-trigger"
+            [attr.data-testid]="'cart-icon'"
+            (click)="toggleMinicart()"
+            [attr.aria-expanded]="minicartOpen()"
+          >
             <mat-icon>shopping_cart</mat-icon>
             @if (cart.totalItems() > 0) {
               <span class="action-badge cart-badge">{{ cart.totalItems() > 99 ? '99+' : cart.totalItems() }}</span>

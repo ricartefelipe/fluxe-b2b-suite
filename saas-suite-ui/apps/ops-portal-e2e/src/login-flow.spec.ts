@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from './fixtures';
+import { loginWithQuickProfile } from './dev-login.helper';
 
 test.describe('Ops Portal Login', () => {
   test('should redirect to login when not authenticated', async ({ page }) => {
@@ -8,19 +9,12 @@ test.describe('Ops Portal Login', () => {
 
   test('should display login page', async ({ page }) => {
     await page.goto('/login');
-    await expect(page.locator('button, mat-card')).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Bem-vindo de volta/i })).toBeVisible();
+    await expect(page.getByRole('tab', { name: /Credenciais/i })).toBeVisible();
   });
 
   test('should login with dev credentials', async ({ page }) => {
-    await page.goto('/login');
-
-    const devLogin = page
-      .locator('button')
-      .filter({ hasText: /login|sign in|admin|operator/i })
-      .first();
-
-    await expect(devLogin).toBeVisible({ timeout: 5000 });
-    await devLogin.click();
-    await expect(page).toHaveURL(/(dashboard|orders)/, { timeout: 10000 });
+    await loginWithQuickProfile(page, 'Ops User');
+    await expect(page).toHaveURL(/(dashboard|orders)/, { timeout: 15000 });
   });
 });

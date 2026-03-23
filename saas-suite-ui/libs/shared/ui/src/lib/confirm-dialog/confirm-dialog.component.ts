@@ -1,4 +1,4 @@
-import { Component, Inject, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { I18nService } from '@saas-suite/shared/i18n';
@@ -37,8 +37,6 @@ export interface ConfirmDialogData {
 })
 export class ConfirmDialogComponent {
   protected i18n = inject(I18nService);
-  constructor(
-    public dialogRef: MatDialogRef<ConfirmDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData,
-  ) {}
+  readonly dialogRef = inject(MatDialogRef<ConfirmDialogComponent>);
+  readonly data = inject<ConfirmDialogData>(MAT_DIALOG_DATA);
 }

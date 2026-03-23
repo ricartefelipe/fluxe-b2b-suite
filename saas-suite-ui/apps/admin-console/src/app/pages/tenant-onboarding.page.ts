@@ -24,6 +24,17 @@ const REGIONS = [
   { value: 'eu-west-1', label: 'Europa (Irlanda)' },
 ];
 
+/** Retorna o limite de pedidos/mês por plano (maxProjects no Core = projetos, não pedidos). */
+function ordersLimitForPlan(slug: string): string {
+  const limits: Record<string, string> = {
+    free: '50',
+    starter: '100',
+    pro: '300',
+    enterprise: '∞',
+  };
+  return limits[slug] ?? '∞';
+}
+
 @Component({
   selector: 'app-tenant-onboarding',
   standalone: true,
@@ -337,7 +348,7 @@ const REGIONS = [
                   <div class="review-row">
                     <span class="review-label">{{ ob.status }}</span>
                     <mat-chip-set>
-                      <mat-chip highlighted>{{ i18n.messages().statuses[tenant.status] ?? tenant.status }}</mat-chip>
+                      <mat-chip highlighted>{{ i18n.messages().statuses[tenant.status] }}</mat-chip>
                     </mat-chip-set>
                   </div>
                 </mat-card-content>
@@ -662,7 +673,7 @@ export class TenantOnboardingPage implements OnInit, OnDestroy {
         recommended: i === 1,
         features: [
           m.users.replace('{n}', String(p.maxUsers)),
-          m.ordersPerMonth.replace('{n}', p.maxProjects > 0 ? p.maxProjects.toLocaleString('pt-BR') : '∞'),
+          m.ordersPerMonth.replace('{n}', ordersLimitForPlan(p.slug)),
           p.maxUsers >= 25 ? m.prioritySupport : m.basicSupport,
           p.maxUsers >= 25 ? m.analyticsInsights : m.standardDashboard,
           ...(p.maxUsers >= 100 ? [m.unlimitedUsers, m.dedicatedSupport] : []),

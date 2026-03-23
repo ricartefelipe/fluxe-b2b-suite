@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import type { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthStore } from '../auth.store';
 import {
   AuthSession,
@@ -217,14 +217,15 @@ describe('AuthStore', () => {
 // ---------- authGuard ----------
 
 describe('authGuard', () => {
+  const route = {} as ActivatedRouteSnapshot;
+  const state = {} as RouterStateSnapshot;
+
   it('returns true when authenticated', async () => {
     const { authGuard } = await import('../guards/auth.guard');
     const store = TestBed.inject(AuthStore);
     store.setSession(validSession());
 
-    const result = TestBed.runInInjectionContext(() =>
-      authGuard({} as any, {} as any),
-    );
+    const result = TestBed.runInInjectionContext(() => authGuard(route, state));
     expect(result).toBe(true);
   });
 
@@ -233,9 +234,7 @@ describe('authGuard', () => {
     const store = TestBed.inject(AuthStore);
     store.clearSession();
 
-    const result = TestBed.runInInjectionContext(() =>
-      authGuard({} as any, {} as any),
-    );
+    const result = TestBed.runInInjectionContext(() => authGuard(route, state));
     expect(result).not.toBe(true);
     expect(result.toString()).toBe('/login');
   });
@@ -244,14 +243,16 @@ describe('authGuard', () => {
 // ---------- permissionGuard ----------
 
 describe('permissionGuard', () => {
+  const state = {} as RouterStateSnapshot;
+
   it('returns true when no permissions are required', async () => {
     const { permissionGuard } = await import('../guards/permission.guard');
     const store = TestBed.inject(AuthStore);
     store.setSession(validSession());
 
-    const route = { data: {} } as any;
+    const route = { data: {} } as Pick<ActivatedRouteSnapshot, 'data'> as ActivatedRouteSnapshot;
     const result = TestBed.runInInjectionContext(() =>
-      permissionGuard(route, {} as any),
+      permissionGuard(route, state),
     );
     expect(result).toBe(true);
   });
@@ -261,9 +262,11 @@ describe('permissionGuard', () => {
     const store = TestBed.inject(AuthStore);
     store.setSession(validSession({ permissions: ['tenant:read'] }));
 
-    const route = { data: { permissions: ['tenant:read', 'tenant:write'] } } as any;
+    const route = {
+      data: { permissions: ['tenant:read', 'tenant:write'] },
+    } as Pick<ActivatedRouteSnapshot, 'data'> as ActivatedRouteSnapshot;
     const result = TestBed.runInInjectionContext(() =>
-      permissionGuard(route, {} as any),
+      permissionGuard(route, state),
     );
     expect(result).toBe(true);
   });
@@ -273,9 +276,11 @@ describe('permissionGuard', () => {
     const store = TestBed.inject(AuthStore);
     store.setSession(validSession({ permissions: [] }));
 
-    const route = { data: { permissions: ['admin:super'] } } as any;
+    const route = {
+      data: { permissions: ['admin:super'] },
+    } as Pick<ActivatedRouteSnapshot, 'data'> as ActivatedRouteSnapshot;
     const result = TestBed.runInInjectionContext(() =>
-      permissionGuard(route, {} as any),
+      permissionGuard(route, state),
     );
     expect(result).not.toBe(true);
     expect(result.toString()).toBe('/403');

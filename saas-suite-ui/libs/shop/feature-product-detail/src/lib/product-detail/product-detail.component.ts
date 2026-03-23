@@ -128,6 +128,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
 
             <button
               class="add-to-cart-btn"
+              [attr.data-testid]="'add-to-cart'"
               (click)="addToCart()"
               [disabled]="!p.inStock"
               [class.disabled]="!p.inStock"

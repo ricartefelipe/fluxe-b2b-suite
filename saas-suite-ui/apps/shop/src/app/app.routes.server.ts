@@ -6,9 +6,11 @@ export const serverRoutes: ServerRoute[] = [
   { path: 'orders', renderMode: RenderMode.Client },
   { path: 'orders/:id', renderMode: RenderMode.Client },
   { path: 'checkout', renderMode: RenderMode.Client },
-  { path: 'product/:id', renderMode: RenderMode.Server },
-  { path: 'product', renderMode: RenderMode.Server },
-  { path: 'products', renderMode: RenderMode.Server },
-  { path: 'products/**', renderMode: RenderMode.Server },
+  // Rotas autenticadas: Client evita SSR sem sessionStorage (guard falha no servidor → redirect login).
+  { path: '', renderMode: RenderMode.Client },
+  { path: 'product/:id', renderMode: RenderMode.Client },
+  { path: 'product', renderMode: RenderMode.Client },
+  { path: 'products', renderMode: RenderMode.Client },
+  { path: 'products/**', renderMode: RenderMode.Client },
   { path: '**', renderMode: RenderMode.Server },
 ];

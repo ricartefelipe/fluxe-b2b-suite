@@ -2,7 +2,7 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { SKIP_TENANT_HEADER } from '@saas-suite/shared/util';
 import { AuthStore } from '@saas-suite/shared/auth';
-import { TenantContextService } from '../services/tenant-context-ref.service';
+import { TenantContextService } from '@saas-suite/shared/util';
 
 /** Platform tenant UUID — Super Admin (tid "*") uses this for user management. */
 const PLATFORM_TENANT_ID = '00000000-0000-0000-0000-000000000001';

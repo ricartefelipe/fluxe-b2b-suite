@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { TestBed } from '@angular/core/testing';
 import {
   HttpClient,
@@ -21,7 +21,7 @@ import { authInterceptor } from '../interceptors/auth.interceptor';
 import { tenantInterceptor } from '../interceptors/tenant.interceptor';
 import { correlationInterceptor } from '../interceptors/correlation.interceptor';
 import { idempotencyInterceptor } from '../interceptors/idempotency.interceptor';
-import { TenantContextService } from '../services/tenant-context-ref.service';
+import { TenantContextService } from '@saas-suite/shared/util';
 import { CorrelationContextService } from '../services/correlation-context.service';
 
 // ---------- authInterceptor ----------
@@ -150,7 +150,7 @@ describe('correlationInterceptor', () => {
     http.get('/api/x').subscribe();
     const req = httpCtrl.expectOne('/api/x');
     expect(req.request.headers.has('X-Correlation-Id')).toBe(true);
-    expect(req.request.headers.get('X-Correlation-Id')!.length).toBeGreaterThan(0);
+    expect((req.request.headers.get('X-Correlation-Id') ?? '').length).toBeGreaterThan(0);
   });
 
   it('uses the active scope from CorrelationContextService', () => {
@@ -289,5 +289,27 @@ describe('CorrelationContextService', () => {
       // expected
     }
     expect(service.getCurrentScope()).toBeNull();
+  });
+});
+
+// ---------- isProblemDetails ----------
+
+import { isProblemDetails } from '../models/problem-details.model';
+
+describe('isProblemDetails', () => {
+  it('returns true for object with status field', () => {
+    expect(isProblemDetails({ status: 404, title: 'Not Found' })).toBe(true);
+  });
+
+  it('returns false for null', () => {
+    expect(isProblemDetails(null)).toBe(false);
+  });
+
+  it('returns false for a string', () => {
+    expect(isProblemDetails('error')).toBe(false);
+  });
+
+  it('returns false for object without status', () => {
+    expect(isProblemDetails({ error: 'oops' })).toBe(false);
   });
 });

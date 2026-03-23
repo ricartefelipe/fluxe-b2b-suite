@@ -616,6 +616,11 @@ export interface Messages {
     confirmDeleteUser: string;
     userDeleted: string;
     inviteSent: string;
+    inviteCreatedNoEmail: string;
+    inviteTemporaryPasswordTitle: string;
+    inviteTemporaryPasswordHint: string;
+    copyTemporaryPassword: string;
+    temporaryPasswordCopied: string;
     resendInvite: string;
     resendInviteSent: string;
     userUpdated: string;

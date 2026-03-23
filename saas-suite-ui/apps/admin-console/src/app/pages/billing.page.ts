@@ -1,4 +1,5 @@
 import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,9 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
-import { CoreApiClient, PlanDefinition, Subscription, SubscriptionStatus, TenantHealth } from '@saas-suite/data-access/core';
+import { CoreApiClient, PlanDefinition, Subscription, SubscriptionStatus, TenantHealth, UsageSummary } from '@saas-suite/data-access/core';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
+import { UsageWidgetComponent } from './usage-widget.component';
 
 @Component({
   selector: 'app-billing-page',
@@ -21,6 +23,7 @@ import { TenantContextStore } from '@saas-suite/domains/tenancy';
     MatChipsModule,
     MatProgressSpinnerModule,
     MatDividerModule,
+    UsageWidgetComponent,
   ],
   template: `
     <div class="billing-container">
@@ -43,6 +46,7 @@ import { TenantContextStore } from '@saas-suite/domains/tenancy';
             </div>
           }
         }
+        <app-usage-widget [usage]="usage()" />
         <section class="current-subscription">
           @if (subscription(); as sub) {
             <mat-card class="subscription-card">
@@ -390,6 +394,7 @@ export class BillingPage implements OnInit {
   readonly loading = signal(true);
   readonly plans = signal<PlanDefinition[]>([]);
   readonly subscription = signal<Subscription | null>(null);
+  readonly usage = signal<UsageSummary | null>(null);
   readonly health = signal<TenantHealth | null>(null);
   readonly tenantId = computed(() => this.tenantStore.activeTenantId() ?? null);
 
@@ -406,19 +411,39 @@ export class BillingPage implements OnInit {
   private async loadData(): Promise<void> {
     this.loading.set(true);
     try {
-      this.api.listPlans().subscribe({
-        next: plans => this.plans.set(plans),
-      });
-      this.api.getCurrentSubscription().subscribe({
-        next: sub => this.subscription.set(sub),
-        error: () => this.subscription.set(null),
-      });
+      const [plans, sub, users] = await Promise.all([
+        firstValueFrom(this.api.listPlans()).then(p => p ?? []),
+        firstValueFrom(this.api.getCurrentSubscription()).catch(() => null),
+        firstValueFrom(this.api.listUsers()).then(u => u ?? []),
+      ]);
+      this.plans.set(plans);
+      this.subscription.set(sub);
+      if (sub) {
+        const plan = plans.find(p => p.slug === sub.planSlug);
+        if (plan) {
+          this.usage.set({
+            usersUsed: users.length,
+            usersLimit: plan.maxUsers,
+            planSlug: plan.slug,
+            planDisplayName: plan.displayName,
+          });
+        } else {
+          this.usage.set(null);
+        }
+      } else {
+        this.usage.set(null);
+      }
+
       const tid = this.tenantStore.activeTenantId();
       if (tid) {
-        this.api.getTenantHealth(tid).subscribe({
-          next: h => this.health.set(h),
-          error: () => this.health.set(null),
-        });
+        try {
+          const h = await firstValueFrom(this.api.getTenantHealth(tid));
+          this.health.set(h);
+        } catch {
+          this.health.set(null);
+        }
+      } else {
+        this.health.set(null);
       }
     } finally {
       this.loading.set(false);

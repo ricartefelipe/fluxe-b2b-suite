@@ -45,7 +45,11 @@ jobs:
         run: pnpm nx run-many -t lint --projects=ops-portal,admin-console,shop
 
       - name: Test
-        run: pnpm nx run-many -t test --projects=ops-portal,admin-console,shop
+        run: pnpm nx run-many -t test,vite:test --projects=ops-portal,admin-console,shop
+
+      - name: Typecheck
+        run: pnpm nx run-many -t typecheck || true
+        continue-on-error: true
 
       - name: Build ops-portal
         run: pnpm nx build ops-portal --configuration=production
@@ -55,3 +59,9 @@ jobs:
 
       - name: Build shop
         run: pnpm nx build shop --configuration=production
+
+      - name: E2E (optional)
+        run: |
+          pnpm exec playwright install --with-deps chromium 2>/dev/null || true
+          pnpm nx run-many -t e2e --projects=admin-console-e2e,ops-portal-e2e,shop-e2e || true
+        continue-on-error: true

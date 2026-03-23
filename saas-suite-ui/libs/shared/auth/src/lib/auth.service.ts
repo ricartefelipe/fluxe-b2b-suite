@@ -6,8 +6,7 @@ import { firstValueFrom, timeout, catchError, of } from 'rxjs';
 import { AuthStore } from './auth.store';
 import { sessionFromJwt } from './models/auth-session.model';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
-// eslint-disable-next-line @nx/enforce-module-boundaries -- shared-http uses AuthStore; auth needs TenantContextService
-import { TenantContextService } from '@saas-suite/shared/http';
+import { TenantContextService } from '@saas-suite/shared/util';
 import { OidcAuthService } from './oidc-auth.service';
 import { SKIP_AUTH, SKIP_TENANT_HEADER } from '@saas-suite/shared/util';
 

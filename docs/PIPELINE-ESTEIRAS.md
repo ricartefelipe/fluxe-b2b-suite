@@ -58,10 +58,10 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 ## Estratégia de branches
 
-| Branch   | Ambiente   | Deploy automático                        |
-|----------|------------|------------------------------------------|
-| **develop** | Staging   | Railway (staging) + Cloudflare preview  |
-| **master**  | Production| Railway (production) + Cloudflare prod  |
+| Branch   | Ambiente   | Deploy automático |
+|----------|------------|-------------------|
+| **develop** | Staging   | **Railway** (fronts + serviços com branch `develop`). Cloudflare Pages **não** é disparado por `deploy-frontend.yml` neste ramo. |
+| **master**  | Production| **Cloudflare Pages** (`deploy-frontend.yml`) + **Railway** (produção, se o projeto estiver com branch `master`) + **VPS** quando aplicável (`deploy-prod.yml`). |
 
 **Staging — dados para testes:** após o deploy em `develop`, rode `./scripts/staging-seed.sh railway` no repo fluxe-b2b-suite (Railway CLI e backends linkados ao projeto Staging). Em **produção** não rodar seed (apenas migrations essenciais). Detalhes: [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md#alimentar-staging-com-dados-após-primeiro-deploy).
 
@@ -75,8 +75,8 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 | Workflow           | Disparo              | Ação                                            |
 |--------------------|-----------------------|-------------------------------------------------|
-| deploy.yml         | push develop/master  | CI: lint, test, build das 3 apps                 |
-| deploy-frontend.yml| push develop/master  | deploy-frontend: test → build → Cloudflare      |
+| deploy.yml         | push develop/master  | CI: lint, test, typecheck, build, E2E Playwright |
+| deploy-frontend.yml| push **master** (paths `saas-suite-ui/**`) | Build + `config.json` + **Cloudflare Pages** (produção) |
 | deploy-prod.yml    | push master (paths)   | Deploy VPS via SSH (docker-compose.prod)       |
 
 **Railway:** 3 serviços (shop, ops-portal, admin-console) conectados ao repo.  
@@ -221,9 +221,9 @@ Esta é a forma adotada no dia a dia:
 
 ## Status staging (última verificação)
 
-| Repo | CI | Build & Push | Deploy Frontend |
-|------|----|--------------|------------------|
-| fluxe-b2b-suite | ✅ | — | ✅ (Cloudflare preview) |
+| Repo | CI | Build & Push | Deploy Frontend (Cloudflare) |
+|------|----|--------------|-------------------------------|
+| fluxe-b2b-suite | ✅ | — | ✅ em **master** (produção); **develop** → Railway staging |
 | spring-saas-core | ✅ | ✅ | — |
 | node-b2b-orders | ✅ | ✅ | — |
 | py-payments-ledger | ✅ | ✅ | — |

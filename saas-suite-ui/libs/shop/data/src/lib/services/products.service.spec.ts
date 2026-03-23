@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { ProductsService } from './products.service';
-import { Product, PaginatedResponse, ProductFilter } from '@union.solutions/models';
+import { Product, ProductFilter } from '@union.solutions/models';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 
 const TEST_BASE = 'http://test.api';

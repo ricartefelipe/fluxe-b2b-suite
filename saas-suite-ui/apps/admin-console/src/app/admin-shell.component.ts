@@ -1,20 +1,29 @@
 import { Component, inject, computed, OnInit } from '@angular/core';
-import { ShellComponent, NavItem } from '@saas-suite/shared/ui';
+import { ShellComponent, NavItem, OnboardingChecklistComponent } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
 import { AuthStore } from '@saas-suite/shared/auth';
 import { Tenant } from '@saas-suite/data-access/core';
+import { OnboardingChecklistStore } from '@saas-suite/domains/admin';
+import { CoreApiClient } from '@saas-suite/data-access/core';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-admin-shell',
   standalone: true,
-  imports: [ShellComponent],
-  template: `<saas-shell [navItems]="navItems()" [appTitle]="appTitle()" />`,
+  imports: [ShellComponent, OnboardingChecklistComponent],
+  template: `
+    <saas-shell [navItems]="navItems()" [appTitle]="appTitle()">
+      <saas-onboarding-checklist mainTop />
+    </saas-shell>
+  `,
 })
 export class AdminShellComponent implements OnInit {
   private i18n = inject(I18nService);
   private tenantStore = inject(TenantContextStore);
   private authStore = inject(AuthStore);
+  private checklistStore = inject(OnboardingChecklistStore);
+  private api = inject(CoreApiClient);
 
   readonly appTitle = computed(() => this.i18n.messages()?.adminNav?.appTitle ?? 'Admin');
 
@@ -52,6 +61,24 @@ export class AdminShellComponent implements OnInit {
         const fallback: Tenant = { id: tid, name: '', plan: 'starter', region: '', status: 'ACTIVE', createdAt: '', updatedAt: '' };
         this.tenantStore.selectTenant(fallback);
       }
+    }
+    this.syncOnboardingChecklist();
+  }
+
+  private async syncOnboardingChecklist(): Promise<void> {
+    const tenants = this.tenantStore.tenants();
+    this.checklistStore.setTenantsCount(tenants.length);
+    try {
+      const users = await firstValueFrom(this.api.listUsers());
+      this.checklistStore.setUsersCount(users?.length ?? 0);
+    } catch {
+      this.checklistStore.setUsersCount(0);
+    }
+    try {
+      const sub = await firstValueFrom(this.api.getCurrentSubscription());
+      this.checklistStore.setHasSubscription(!!sub?.id);
+    } catch {
+      this.checklistStore.setHasSubscription(false);
     }
   }
 }

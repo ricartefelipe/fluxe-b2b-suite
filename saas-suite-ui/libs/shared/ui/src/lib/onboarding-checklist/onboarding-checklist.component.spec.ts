@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { vi } from 'vitest';
 import { OnboardingChecklistComponent } from './onboarding-checklist.component';
 import { OnboardingChecklistStore } from '@saas-suite/domains/admin';
 import { I18nService } from '@saas-suite/shared/i18n';
@@ -10,7 +12,7 @@ describe('OnboardingChecklistComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [OnboardingChecklistComponent],
-      providers: [OnboardingChecklistStore],
+      providers: [provideRouter([]), OnboardingChecklistStore, I18nService],
     }).compileComponents();
 
     store = TestBed.inject(OnboardingChecklistStore);
@@ -29,7 +31,7 @@ describe('OnboardingChecklistComponent', () => {
   });
 
   it('calls store.dismiss when dismiss button is clicked', () => {
-    const dismissSpy = spyOn(store, 'dismiss');
+    const dismissSpy = vi.spyOn(store, 'dismiss');
     const btn = fixture.nativeElement.querySelector('[data-testid="dismiss-btn"]') as HTMLButtonElement;
     expect(btn).toBeTruthy();
     btn?.click();

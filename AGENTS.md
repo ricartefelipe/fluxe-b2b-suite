@@ -10,6 +10,12 @@ Este arquivo define regras e preferências para assistentes de código que traba
 - **Sem menções a ferramentas em commits:** nunca incluir "Cursor", "Made with Cursor", "Copilot" ou similar em mensagens de commit.
 - **Ao concluir:** fazer o processo de subida completo (branch, commit, push, PR, CI verde, merge em `develop`). **Release para produção** (`develop` → `master`) é da responsabilidade do utilizador; o agente só executa quando o utilizador pedir e seguindo as preferências dele (ver secção "Release para produção").
 
+### Papel do agente e delegação (autorização explícita)
+
+- O utilizador pode delegar a **execução técnica completa** no repositório: branches, implementação, testes, lint, format, commit, push, PR e merge em `develop` quando o CI estiver verde, mais docs alinhadas com o código quando o contrato mudar.
+- **Expectativa:** o agente **confirma explicitamente** quando está tudo **correto e verificado** (o que correu, resultado dos comandos), sem exigir que o utilizador repita passos que o próprio agente pode fazer no workspace.
+- **Limites fora do repo:** o agente **não** acede a contas de terceiros (Railway, Resend, DNS, login GitHub no browser), nem executa `sudo` na máquina do utilizador. Aí apenas **prepara** variáveis, diffs, PRs e checklists; o que exige painel ou credenciais humanas fica indicado de forma mínima.
+
 ---
 
 ## Código limpo (obrigatório)

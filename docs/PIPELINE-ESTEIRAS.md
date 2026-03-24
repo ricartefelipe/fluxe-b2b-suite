@@ -14,7 +14,7 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 | **Criação** | `feature/nome-descritivo` ou `fix/nome-descritivo` a partir de `develop` |
 | **Merge em develop** | Sempre via PR; usar `--no-ff` quando possível para rastreabilidade |
 | **Merge em master** | Apenas após validação em staging; via PR; gerar release/tag se relevante |
-| **Proibido** | Push direto em `master` sem PR; merge sem CI verde; incluir "Made-with: Cursor" (ou similar) em mensagens de commit |
+| **Proibido** | Push direto em `master` sem PR; merge sem CI verde; mensagens de commit com marcas de ferramentas ou rodapés automáticos |
 | **Fluxo por feature** | Criar branch `feature/nome` a partir de `develop` → trabalhar → merge em `develop` (PR ou merge local) → apagar a branch `feature/nome` → quando for release, merge `develop` em `master` |
 
 ### 2. Qualidade de código
@@ -65,7 +65,7 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 **Staging — dados para testes:** após o deploy em `develop`, rode `./scripts/staging-seed.sh railway` no repo fluxe-b2b-suite (Railway CLI e backends linkados ao projeto Staging). Em **produção** não rodar seed (apenas migrations essenciais). Detalhes: [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md#alimentar-staging-com-dados-após-primeiro-deploy).
 
-**Hook de commit:** para evitar que "Made-with: Cursor" entre em commits, instale o hook: `cp scripts/git-hooks/prepare-commit-msg .git/hooks/prepare-commit-msg && chmod +x .git/hooks/prepare-commit-msg`. Repita nos demais repositórios (spring-saas-core, node-b2b-orders, py-payments-ledger) se desejar o mesmo comportamento.
+**Hook de commit:** para bloquear rodapés indesejados em mensagens de commit, instale o hook: `cp scripts/git-hooks/prepare-commit-msg .git/hooks/prepare-commit-msg && chmod +x .git/hooks/prepare-commit-msg`. Repita nos demais repositórios (spring-saas-core, node-b2b-orders, py-payments-ledger) se desejar o mesmo comportamento.
 
 ---
 

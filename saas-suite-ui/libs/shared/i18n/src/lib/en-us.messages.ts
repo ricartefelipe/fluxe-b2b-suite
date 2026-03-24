@@ -650,7 +650,8 @@ export const EN_US_MESSAGES: Messages = {
     confirmDeleteUser: 'Are you sure you want to remove this user?',
     userDeleted: 'User removed',
     inviteSent: 'Invite sent',
-    inviteCreatedNoEmail: 'Invite created — no email was sent (log mode). Use the password shown.',
+    inviteCreatedNoEmail:
+      'Invite created — use the password shown. Email may not have been sent (log mode or delivery failure).',
     inviteTemporaryPasswordTitle: 'Temporary password',
     inviteTemporaryPasswordHint:
       'No email was sent in this environment (EMAIL_PROVIDER=log). Copy the password and share it with the user securely.',

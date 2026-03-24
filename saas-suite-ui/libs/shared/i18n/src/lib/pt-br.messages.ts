@@ -650,7 +650,8 @@ export const PT_BR_MESSAGES: Messages = {
     confirmDeleteUser: 'Tem certeza que deseja remover este usuário?',
     userDeleted: 'Usuário removido',
     inviteSent: 'Convite enviado',
-    inviteCreatedNoEmail: 'Convite criado — nenhum e-mail foi enviado (modo log). Use a senha exibida.',
+    inviteCreatedNoEmail:
+      'Convite criado — use a senha exibida. O e-mail pode não ter sido enviado (modo log ou falha no envio).',
     inviteTemporaryPasswordTitle: 'Senha temporária',
     inviteTemporaryPasswordHint:
       'Nenhum e-mail foi enviado neste ambiente (EMAIL_PROVIDER=log). Copie a senha e envie ao usuário por um canal seguro.',

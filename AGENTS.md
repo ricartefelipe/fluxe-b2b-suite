@@ -7,7 +7,7 @@ Este arquivo define regras e preferências para assistentes de código que traba
 ## Regras imutáveis (o agente aprende e aplica sempre)
 
 - **Git Flow:** toda alteração via branch `feature/*` ou `fix/*` a partir de `develop` → PR → merge; nunca commit direto em `develop` ou `master`.
-- **Sem menções a ferramentas em commits:** nunca incluir "Cursor", "Made with Cursor", "Copilot" ou similar em mensagens de commit.
+- **Sem marcas de ferramentas em artefactos Git ou docs:** não incluir nomes comerciais de IDEs ou assistentes em commits, merges, títulos de PR nem em documentação do repositório (incluindo rodapés automáticos de ferramentas).
 - **Ao concluir:** fazer o processo de subida completo (branch, commit, push, PR, CI verde, merge em `develop`). **Release para produção** (`develop` → `master`) é da responsabilidade do utilizador; o agente só executa quando o utilizador pedir e seguindo as preferências dele (ver secção "Release para produção").
 
 ### Papel do agente e delegação (autorização explícita)
@@ -61,7 +61,7 @@ Não presumir que staging/produção “não existem”. Não inventar setup sem
 
 1. Garantir que está em `develop` atualizada: `git fetch origin && git checkout develop && git pull origin develop`
 2. Criar branch: `git checkout -b feature/nome-descritivo` (ou `fix/...`) — **nunca** commitar direto na `develop`
-3. Fazer alterações, `git add`, `git commit` (mensagem **sem** “Made-with: Cursor” ou similar)
+3. Fazer alterações, `git add`, `git commit` (mensagem profissional, **sem** rodapés ou marcas de ferramentas)
 4. `git push -u origin feature/nome-descritivo`
 5. Abrir **PR para `develop`** (ou merge local seguindo o mesmo critério); **CI verde** antes de mergear
 6. Após merge: apagar branch remota/local da feature quando aplicável

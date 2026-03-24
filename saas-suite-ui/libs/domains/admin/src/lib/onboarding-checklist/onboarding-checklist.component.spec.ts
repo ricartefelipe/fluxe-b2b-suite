@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { vi } from 'vitest';
 import { OnboardingChecklistComponent } from './onboarding-checklist.component';
-import { OnboardingChecklistStore } from '@saas-suite/domains/admin';
+import { OnboardingChecklistStore } from './onboarding-checklist.store';
 import { I18nService } from '@saas-suite/shared/i18n';
 
 describe('OnboardingChecklistComponent', () => {

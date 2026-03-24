@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UsageWidgetComponent } from './usage-widget.component';
 import { I18nService } from '@saas-suite/shared/i18n';
-import { UsageSummary } from '@saas-suite/data-access/core';
 
 describe('UsageWidgetComponent', () => {
   let fixture: ComponentFixture<UsageWidgetComponent>;

@@ -30,6 +30,14 @@ import { RuntimeConfigService } from '@saas-suite/shared/config';
         </div>
       </section>
 
+      <!-- Value proposition -->
+      <section class="pitch" aria-labelledby="pitch-title">
+        <div class="pitch-inner">
+          <h2 id="pitch-title" class="pitch-title">{{ i18n.messages().landing.pitchTitle }}</h2>
+          <p class="pitch-body">{{ i18n.messages().landing.pitchBody }}</p>
+        </div>
+      </section>
+
       <!-- Features -->
       <section id="features" class="features">
         <h2 class="section-title">{{ i18n.messages().landing.featuresTitle }}</h2>
@@ -44,6 +52,19 @@ import { RuntimeConfigService } from '@saas-suite/shared/config';
             </mat-card>
           }
         </div>
+      </section>
+
+      <!-- Trust -->
+      <section class="trust" aria-labelledby="trust-title">
+        <h2 id="trust-title" class="section-title trust-heading">{{ i18n.messages().landing.trustTitle }}</h2>
+        <ul class="trust-list">
+          @for (t of trustItems; track t.text) {
+            <li class="trust-item">
+              <mat-icon class="trust-icon" aria-hidden="true">{{ t.icon }}</mat-icon>
+              <span>{{ t.text }}</span>
+            </li>
+          }
+        </ul>
       </section>
 
       <!-- Pricing -->
@@ -109,6 +130,61 @@ import { RuntimeConfigService } from '@saas-suite/shared/config';
     .landing {
       font-family: 'Inter', 'Roboto', sans-serif;
       color: var(--app-text, #1a1a2e);
+    }
+
+    .pitch {
+      padding: 56px 24px;
+      background: var(--app-surface, #fff);
+      border-bottom: 1px solid var(--app-border, #e8e8e8);
+    }
+    .pitch-inner { max-width: 720px; margin: 0 auto; text-align: center; }
+    .pitch-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin: 0 0 16px;
+      color: var(--app-text, #1a1a2e);
+      line-height: 1.3;
+    }
+    .pitch-body {
+      margin: 0;
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--app-text-secondary, #444);
+    }
+
+    .trust {
+      padding: 64px 24px 48px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .trust-heading { margin-bottom: 28px; }
+    .trust-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 16px;
+    }
+    @media (min-width: 700px) {
+      .trust-list { grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+    }
+    .trust-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background: var(--app-surface-dim, #f8f9fc);
+      border-radius: 12px;
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--app-text, #1a1a2e);
+    }
+    .trust-icon {
+      flex-shrink: 0;
+      color: var(--app-primary, #0f3460);
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
     }
 
     .hero {
@@ -277,6 +353,15 @@ export class LandingComponent {
     (this.config.get('supportDocsUrl') as string | undefined)?.trim() || '';
 
   readonly techStack = ['Angular', 'NestJS', 'Spring Boot', 'FastAPI', 'PostgreSQL', 'RabbitMQ', 'Stripe', 'Docker'];
+
+  get trustItems() {
+    const m = this.i18n.messages().landing;
+    return [
+      { icon: 'verified_user', text: m.trust1 },
+      { icon: 'history_edu', text: m.trust2 },
+      { icon: 'hub', text: m.trust3 },
+    ];
+  }
 
   get features() {
     const m = this.i18n.messages().landing;

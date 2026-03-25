@@ -632,6 +632,12 @@ export interface Messages {
     ctaStart: string;
     ctaDemo: string;
     ctaContact: string;
+    pitchTitle: string;
+    pitchBody: string;
+    trustTitle: string;
+    trust1: string;
+    trust2: string;
+    trust3: string;
     featuresTitle: string;
     feat1Title: string;
     feat1Desc: string;

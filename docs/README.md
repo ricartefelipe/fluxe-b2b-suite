@@ -10,9 +10,11 @@
 |-----------|-----------|
 | [README.md](README.md) | Este índice |
 | [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md) | Configuração dos 3 ambientes: local, staging, produção (inclui como alimentar staging com dados) |
-| [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) | Deploy no Railway: serviços, variáveis, migrations e seed (staging vs produção) |
+| [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md) | Checklist completo go-live para venda (produção, Stripe, Resend, domínio, OIDC, migrations, termos) |
+| [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) | Deploy no Railway: serviços, variáveis, migrations, seed (staging vs produção), domínio customizado e SSL |
 | [URLS-AMBIENTES.md](URLS-AMBIENTES.md) | URLs de staging e production (fronts e APIs) e usuário inicial nos 3 fronts |
-| [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Pipeline, esteiras develop/master e protocolos (Git Flow, qualidade, testes, CI/CD, docs) |
+| [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Pipeline, esteiras develop/master, release e tags, protocolos (Git Flow, qualidade, testes, CI/CD, docs) |
+| [FLUXO-PR-FEATURE.md](FLUXO-PR-FEATURE.md) | Fluxo resumido: feature branch → PR → merge → apagar branch |
 | [BRANCHES-E-WORKFLOWS.md](BRANCHES-E-WORKFLOWS.md) | **Matriz factual:** que ramos disparam que workflows (sem suposições sobre ambientes) |
 | [DEPLOY-GITHUB.md](DEPLOY-GITHUB.md) | Deploy via GitHub Actions (CI, Cloudflare Pages, VPS) |
 | [OBSERVABILITY.md](OBSERVABILITY.md) | Observabilidade: Sentry, logging, correlation, backup (todos os serviços) |
@@ -32,6 +34,7 @@
 | [CATALOGO-API.md](CATALOGO-API.md) | Catálogo de todos os endpoints REST dos 3 serviços backend (gerado por `scripts/api-catalog.py`) |
 | [CATALOGO-EVENTOS.md](CATALOGO-EVENTOS.md) | Catálogo completo de eventos RabbitMQ: exchanges, routing keys, schemas, payloads |
 | [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md) | Referência de todas as variáveis de ambiente por serviço |
+| [TERMOS-PRIVACIDADE.md](TERMOS-PRIVACIDADE.md) | Referência para publicação de Termos de Uso e Política de Privacidade |
 
 ### Scripts de documentação
 

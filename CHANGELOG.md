@@ -10,9 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Staging — script de seed:** `scripts/staging-seed.sh railway` orquestra migrations + seeds de node-b2b-orders e py-payments-ledger no Railway (staging); spring-saas-core já recebe seed no deploy com profile `staging`
 - **Docs:** DEPLOY-RAILWAY e AMBIENTES-CONFIGURACAO atualizados com passos para alimentar staging; README da documentação com link para scripts operacionais (staging-seed, demo-seed) e para DEPLOY-RAILWAY
+- **Go-live para venda**: [docs/GO-LIVE-VENDA.md](docs/GO-LIVE-VENDA.md) — checklist completo (produção, Stripe, Resend, domínio, OIDC, migrations, termos)
+- **Termos e privacidade**: [docs/TERMOS-PRIVACIDADE.md](docs/TERMOS-PRIVACIDADE.md) — referência para publicação de Termos de Uso e Política de Privacidade
+- **Fluxo de PR**: [docs/FLUXO-PR-FEATURE.md](docs/FLUXO-PR-FEATURE.md) — feature branch → PR → merge → apagar branch
+- **Release e tags**: processo documentado em [PIPELINE-ESTEIRAS.md](docs/PIPELINE-ESTEIRAS.md) — criar tag (ex.: v1.5.0) ao promover develop → master
 
 ### Changed
 - Separação explícita produção vs staging: seed completo apenas em staging; produção só migrations e dados via aplicação
+- **DEPLOY-RAILWAY**: link para GO-LIVE-VENDA, seção domínio customizado e SSL expandida, AUTH_MODE=oidc em produção
+- **Frontends railway.prod.env.example**: AUTH_MODE=oidc como padrão produção, comentários para OIDC e domínios
+- **docs/README.md**: índice atualizado com GO-LIVE-VENDA, FLUXO-PR-FEATURE, DEPLOY-RAILWAY, TERMOS-PRIVACIDADE
+- **PIPELINE-ESTEIRAS**: checklist de setup com link para GO-LIVE-VENDA
 
 ## [1.4.0] - 2026-03-14
 

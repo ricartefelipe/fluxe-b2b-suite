@@ -3,7 +3,7 @@
 Relatório de vistoria dos quatro repositórios (spring-saas-core, node-b2b-orders, py-payments-ledger, fluxe-b2b-suite): **o que falta implementar**, **o que ficou pela metade** e **o que foi implementado de forma frágil ou inconsistente**.
 
 Data da vistoria: 2025-03-07.
-Última atualização: 2026-03-12 (sprint 2 — backlog 100% concluído).
+Última atualização: 2026-03-25 — reforço de docs de go-live (`GO-LIVE-VENDA`, `FLUXO-PR-FEATURE`), contrato de eventos canónico no Core espelhado nos backends; notificações in-app em mock só em dev (sem SSE no stack actual).
 
 ---
 
@@ -14,7 +14,7 @@ Data da vistoria: 2025-03-07.
 | **spring-saas-core** | Backlog 100% concluído. Webhook, rate limit, retenção de audit, rotação JWT, Grafana, IA/LLM — tudo implementado. |
 | **node-b2b-orders** | Backlog 100% concluído. Estável com analytics, schema registry, structured logging, busca full-text. |
 | **py-payments-ledger** | Backlog 100% concluído. ROADMAP v1.1 completo. Multi-gateway, criptografia, analytics implementados. |
-| **fluxe-b2b-suite** | docs/README.md corrigido. Dashboard SVG por opção. Índice com docs planejados separados. |
+| **fluxe-b2b-suite** | docs/README, go-live, catálogo de eventos alinhado ao Core; CI E2E com Playwright + deps; sininho de notificações só mock em dev (sem endpoint SSE). |
 
 ---
 
@@ -83,11 +83,17 @@ Fonte: `docs/BACKLOG-EVOLUCAO.md`, `docs/compliance.md`, código e `scripts/smok
 
 - **✅ Resolvido.** `docs/README.md` ajustado: docs existentes separados de planejados.
 
+### 5.3 Notificações in-app (bell)
+
+- **Estado:** em **desenvolvimento local** com `authMode` dev, o feed usa **dados simulados** (intervalo). Não há `EventSource` para `/api/notifications/stream` no stack actual — o código legado de SSE foi removido para evitar confusão e erros em consola em staging/produção.
+- **Futuro:** quando o Core (ou BFF) expuser SSE autenticado, reintroduzir ligação atrás de uma flag em `config.json`.
+
 ---
 
 ## 6. Contratos e integração
 
 - Todos os 3 backends possuem `docs/contracts/` (identity, headers, events, CHANGELOG).
+- **Eventos RabbitMQ:** fonte de verdade em **spring-saas-core** `docs/contracts/events.md`; orders e payments mantêm réplica com preâmbulo.
 - JWT e headers alinhados entre serviços.
 - Schema registry de eventos no node-b2b-orders.
 - Contratos versionados com política de deprecation.
@@ -113,7 +119,7 @@ Fonte: `docs/BACKLOG-EVOLUCAO.md`, `docs/compliance.md`, código e `scripts/smok
 7. **spring-saas-core:** Webhook + rate limiting. **✅ Feito.**
 8. **py-payments-ledger:** ROADMAP v1.1. **✅ Feito.**
 
-> **Estado: todos os itens resolvidos — sprint 2 (2026-03-12).**
+> **Estado:** itens do sprint 2 resolvidos (2026-03-12). Melhorias contínuas: ver `docs/GO-LIVE-VENDA.md`, `docs/O-QUE-FALTA-100-VENDAVEL.md` e pipeline em `docs/PIPELINE-ESTEIRAS.md`.
 
 ---
 

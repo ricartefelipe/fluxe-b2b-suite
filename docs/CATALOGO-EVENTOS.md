@@ -1,10 +1,12 @@
 # Catálogo de Eventos — Fluxe B2B Suite
 
-Documentação completa dos eventos trocados entre os serviços via RabbitMQ.
+Índice de negócio e exemplos dos eventos trocados entre serviços via RabbitMQ.
+
+**Contrato técnico canónico (routing keys, tabelas completas, configuração):** repositório **spring-saas-core**, `docs/contracts/events.md` (réplicas em `node-b2b-orders` e `py-payments-ledger` com o mesmo conteúdo).
 
 > **Padrão de transporte:** Outbox Pattern → RabbitMQ (Topic Exchange)
-> **Formato do envelope:** JSON com campos `eventId`, `eventType`, `aggregateId`, `tenantId`, `payload`, `timestamp`, `correlationId`
-> **Deduplicação:** Redis com TTL de 24h (`processed:{eventType}:{eventId}`)
+> **Envelope (spring-saas-core):** `id`, `aggregateType`, `aggregateId`, `eventType`, `payload`, `createdAt` (JSON serializado no corpo da mensagem). Outros serviços podem usar campos equivalentes nos payloads.
+> **Deduplicação (orders worker):** Redis com TTL de 24h (`processed:{eventType}:{eventId}`)
 
 ---
 
@@ -25,7 +27,7 @@ Documentação completa dos eventos trocados entre os serviços via RabbitMQ.
 | Fila | Binding (routing key) | Consumidor |
 |------|-----------------------|------------|
 | `saas.outbox.events` | `saas.#` | spring-saas-core (outbox relay) |
-| `payments.saas.events` | `tenant.created`, `tenant.updated`, `tenant.deleted` | py-payments-ledger |
+| `payments.saas.events` | `saas.TENANT.tenant.created`, `saas.TENANT.tenant.updated`, `saas.TENANT.tenant.deleted` (ou padrão equivalente em `SAAS_ROUTING_KEYS`) | py-payments-ledger (`SAAS_INTEGRATION_ENABLED=true`) |
 
 ### orders.x
 
@@ -48,84 +50,78 @@ Documentação completa dos eventos trocados entre os serviços via RabbitMQ.
 
 ## Eventos do spring-saas-core
 
-Exchange: `saas.events` | Routing key prefix: `saas.`
+Exchange: `saas.events` | Routing key: `saas.{AGGREGATE_TYPE}.{eventType}` com `AGGREGATE_TYPE` em **maiúsculas** (`TENANT`, `USER`, `POLICY`, …). Ex.: `saas.TENANT.tenant.created` (não `saas.tenant.created`).
 
-### saas.tenant.created
+### tenant.created
 
 | Campo | Descrição |
 |-------|-----------|
-| **Routing key** | `saas.tenant.created` |
+| **Routing key** | `saas.TENANT.tenant.created` |
+| **eventType** | `tenant.created` |
 | **Produtor** | spring-saas-core |
-| **Consumidores** | py-payments-ledger |
-| **Descrição** | Emitido quando um novo tenant é criado |
+| **Consumidores** | py-payments-ledger (sincroniza tenant no ledger) |
+| **Descrição** | Novo tenant registado |
 
 ```json
 {
-  "eventId": "uuid",
+  "id": "outbox-event-uuid",
+  "aggregateType": "TENANT",
+  "aggregateId": "tenant-uuid",
   "eventType": "tenant.created",
-  "aggregateId": "tenant-uuid",
-  "tenantId": "tenant-uuid",
-  "timestamp": "2026-03-12T10:00:00Z",
-  "correlationId": "uuid",
   "payload": {
-    "tenantId": "tenant-uuid",
-    "slug": "acme-corp",
+    "name": "Acme",
     "plan": "pro",
-    "region": "br",
-    "status": "active"
-  }
+    "region": "eu-west-1"
+  },
+  "createdAt": "2026-03-12T10:00:00Z"
 }
 ```
 
-### saas.tenant.updated
+### tenant.updated
 
 | Campo | Descrição |
 |-------|-----------|
-| **Routing key** | `saas.tenant.updated` |
+| **Routing key** | `saas.TENANT.tenant.updated` |
 | **Produtor** | spring-saas-core |
 | **Consumidores** | py-payments-ledger |
-| **Descrição** | Emitido quando dados do tenant são alterados (plano, status, região) |
+| **Descrição** | Plano ou metadados do tenant alterados |
 
 ```json
 {
-  "eventId": "uuid",
+  "aggregateType": "TENANT",
+  "aggregateId": "tenant-uuid",
   "eventType": "tenant.updated",
-  "aggregateId": "tenant-uuid",
-  "tenantId": "tenant-uuid",
-  "timestamp": "2026-03-12T10:00:00Z",
-  "correlationId": "uuid",
   "payload": {
-    "tenantId": "tenant-uuid",
-    "changes": {
-      "plan": "enterprise",
-      "status": "active"
-    }
-  }
+    "name": "Acme",
+    "plan": "enterprise"
+  },
+  "createdAt": "2026-03-12T10:00:00Z"
 }
 ```
 
-### saas.tenant.deleted
+### tenant.deleted
 
 | Campo | Descrição |
 |-------|-----------|
-| **Routing key** | `saas.tenant.deleted` |
+| **Routing key** | `saas.TENANT.tenant.deleted` |
 | **Produtor** | spring-saas-core |
 | **Consumidores** | py-payments-ledger |
-| **Descrição** | Emitido quando um tenant é removido |
+| **Descrição** | Tenant removido (soft delete no Core) |
 
 ```json
 {
-  "eventId": "uuid",
-  "eventType": "tenant.deleted",
+  "aggregateType": "TENANT",
   "aggregateId": "tenant-uuid",
-  "tenantId": "tenant-uuid",
-  "timestamp": "2026-03-12T10:00:00Z",
-  "correlationId": "uuid",
+  "eventType": "tenant.deleted",
   "payload": {
-    "tenantId": "tenant-uuid"
-  }
+    "name": "Acme",
+    "plan": "pro"
+  },
+  "createdAt": "2026-03-12T10:00:00Z"
 }
 ```
+
+**Outros eventos Core** (subscrição, utilizadores, onboarding, flags, políticas): ver `docs/contracts/events.md` no **spring-saas-core**.
 
 ---
 
@@ -172,6 +168,15 @@ Exchange: `orders.x`
   }
 }
 ```
+
+### order.updated
+
+| Campo | Descrição |
+|-------|-----------|
+| **Routing key** | `order.updated` |
+| **Produtor** | node-b2b-orders (serviço / broadcast) |
+| **Consumidores** | Subscritores da exchange `orders.x` |
+| **Descrição** | Emitido em várias transições de ciclo de vida (atualização genérica do pedido). |
 
 ### order.confirmed
 
@@ -341,9 +346,9 @@ Exchange: `orders.x`
 | Campo | Descrição |
 |-------|-----------|
 | **Routing key** | `inventory.released` |
-| **Produtor** | node-b2b-orders (worker) |
-| **Consumidores** | — (evento conceitual, processado internamente) |
-| **Descrição** | Emitido quando o estoque é liberado após cancelamento. |
+| **Produtor** | (schema em **node-b2b-orders** `docs/contracts/schemas/`; emissão efectiva depende do worker/outbox) |
+| **Consumidores** | — |
+| **Descrição** | Liberação de stock; o fluxo principal de cancelamento usa `order.cancelled` + worker. Schema: repositório **node-b2b-orders** `docs/contracts/SCHEMA_REGISTRY.md`. |
 
 ```json
 {
@@ -462,7 +467,7 @@ Exchange: `payments.x`
 | **Routing key** | `payment.settled` |
 | **Produtor** | py-payments-ledger |
 | **Consumidores** | node-b2b-orders |
-| **Descrição** | Emitido quando o pagamento é liquidado. O serviço de pedidos marca o pedido como pago. |
+| **Descrição** | Emitido quando o pagamento é liquidado. O worker de pedidos aceita `orderId`/`tenantId` ou `order_id`/`tenant_id`. |
 
 ```json
 {
@@ -474,14 +479,23 @@ Exchange: `payments.x`
   "correlationId": "uuid",
   "payload": {
     "paymentIntentId": "pi-uuid",
-    "orderId": "order-uuid",
-    "tenantId": "tenant-uuid",
+    "order_id": "order-uuid",
+    "tenant_id": "tenant-uuid",
     "amount": 99.80,
     "currency": "BRL",
     "settledAt": "2026-03-12T10:05:00Z"
   }
 }
 ```
+
+### payment.retry_exhausted
+
+| Campo | Descrição |
+|-------|-----------|
+| **Routing key** | `payment.retry_exhausted` |
+| **Produtor** | py-payments-ledger (outbox) |
+| **Consumidores** | Webhooks / monitorização |
+| **Descrição** | Após esgotar tentativas de `authorize` no gateway para um pedido de cobrança (`payment.charge_requested`). |
 
 ### payment.voided
 

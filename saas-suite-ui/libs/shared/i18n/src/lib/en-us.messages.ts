@@ -668,6 +668,13 @@ export const EN_US_MESSAGES: Messages = {
     ctaStart: 'Start Free',
     ctaDemo: 'View Features',
     ctaContact: 'Talk to Sales',
+    pitchTitle: 'One platform — governance and operations in sync',
+    pitchBody:
+      'Replace brittle integrations with a control plane for identity, ABAC policies, and audit; orders and payments with stable contracts — built for B2B teams that need security, clarity, and room to scale.',
+    trustTitle: 'Why engineering and business stakeholders care',
+    trust1: 'Multi-tenant isolation with per-organization feature flags',
+    trust2: 'Audit trail and access visibility — not just “sign in and go”',
+    trust3: 'Modern stack (APIs, events, metrics) ready to evolve',
     featuresTitle: 'Everything you need',
     feat1Title: 'Order Management',
     feat1Desc: 'Full cycle: from catalog to payment, with real-time tracking.',

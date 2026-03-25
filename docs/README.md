@@ -69,3 +69,5 @@ Documentos futuros ainda não criados:
 - **spring-saas-core:** `docs/PROMPT-EVOLUCAO.md`, `docs/BACKLOG-EVOLUCAO.md`, `docs/compliance.md`, `docs/contracts/`
 - **node-b2b-orders:** `docs/contracts/`, `docs/api/`
 - **py-payments-ledger:** `docs/contracts/events.md`, `docs/architecture/`, `ROADMAP.md`
+
+**Contrato de eventos RabbitMQ:** a fonte de verdade é **spring-saas-core** `docs/contracts/events.md`. Os repositórios **node-b2b-orders** e **py-payments-ledger** mantêm o mesmo texto com preâmbulo (réplica); alterações ao contrato devem ser feitas primeiro no Core e depois espelhadas.

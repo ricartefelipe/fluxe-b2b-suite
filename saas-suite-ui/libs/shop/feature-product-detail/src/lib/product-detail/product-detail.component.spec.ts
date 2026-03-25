@@ -1,5 +1,5 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
 import { of, Subject, throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ProductDetailComponent } from './product-detail.component';
@@ -48,11 +48,9 @@ describe('ProductDetailComponent', () => {
 
     mockActivatedRoute = {
       snapshot: {
-        paramMap: {
-          get: vi.fn().mockReturnValue('1'),
-        },
-      } as any,
-    };
+        paramMap: convertToParamMap({ id: '1' }),
+      },
+    } as unknown as ActivatedRoute;
 
     await TestBed.configureTestingModule({
       imports: [ProductDetailComponent],
@@ -157,7 +155,9 @@ describe('ProductDetailComponent', () => {
     component.ngOnInit();
     fixture.detectChanges();
 
-    expect(component.product()!.inStock).toBe(false);
+    const loaded = component.product();
+    expect(loaded).not.toBeNull();
+    expect(loaded?.inStock).toBe(false);
 
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.out-of-stock-overlay')).toBeTruthy();

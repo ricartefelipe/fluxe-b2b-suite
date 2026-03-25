@@ -3,8 +3,6 @@ import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { AppNotification, NotificationCategory, NotificationType } from './notification.model';
 import { NotificationStore } from './notification.store';
 
-const INITIAL_RETRY_MS = 1_000;
-const MAX_RETRY_MS = 30_000;
 const MOCK_INTERVAL_MS = 30_000;
 
 interface MockTemplate {
@@ -65,19 +63,21 @@ const MOCK_TEMPLATES: MockTemplate[] = [
   },
 ];
 
+/**
+ * Notificações in-app: em dev + authMode dev usa dados simulados.
+ * Não há stream SSE no stack actual; quando existir endpoint no backend, ligar aqui com flag de config.
+ */
 @Injectable({ providedIn: 'root' })
 export class SseService implements OnDestroy {
   private readonly config = inject(RuntimeConfigService);
   private readonly store = inject(NotificationStore);
   private readonly zone = inject(NgZone);
 
-  private eventSource: EventSource | null = null;
-  private retryMs = INITIAL_RETRY_MS;
-  private retryTimeout: ReturnType<typeof setTimeout> | null = null;
   private mockInterval: ReturnType<typeof setInterval> | null = null;
   private destroyed = false;
 
   connect(): void {
+    if (this.destroyed) return;
     if (this.config.get('authMode') === 'dev' && isDevMode()) {
       this.startMockMode();
       return;
@@ -86,71 +86,12 @@ export class SseService implements OnDestroy {
 
   disconnect(): void {
     this.destroyed = true;
-    this.closeSse();
     this.stopMockMode();
     this.store.setConnected(false);
   }
 
   ngOnDestroy(): void {
     this.disconnect();
-  }
-
-  private connectSse(): void {
-    this.closeSse();
-    const baseUrl = this.config.get('coreApiBaseUrl');
-    const url = `${baseUrl}/api/notifications/stream`;
-
-    this.zone.runOutsideAngular(() => {
-      this.eventSource = new EventSource(url);
-
-      this.eventSource.onopen = () => {
-        this.zone.run(() => {
-          this.retryMs = INITIAL_RETRY_MS;
-          this.store.setConnected(true);
-        });
-      };
-
-      this.eventSource.addEventListener('notification', (event: MessageEvent) => {
-        this.zone.run(() => {
-          try {
-            const notification: AppNotification = JSON.parse(event.data);
-            this.store.add(notification);
-          } catch {
-            console.warn('[SseService] Failed to parse notification event', event.data);
-          }
-        });
-      });
-
-      this.eventSource.onerror = () => {
-        this.zone.run(() => {
-          this.store.setConnected(false);
-          this.closeSse();
-          this.scheduleReconnect();
-        });
-      };
-    });
-  }
-
-  private scheduleReconnect(): void {
-    if (this.destroyed) return;
-
-    this.retryTimeout = setTimeout(() => {
-      this.retryTimeout = null;
-      this.connectSse();
-    }, this.retryMs);
-
-    this.retryMs = Math.min(this.retryMs * 2, MAX_RETRY_MS);
-  }
-
-  private closeSse(): void {
-    if (this.retryTimeout) {
-      clearTimeout(this.retryTimeout);
-      this.retryTimeout = null;
-    }
-    if (this.eventSource) {
-      this.eventSource.close();
-      this.eventSource = null;
-    }
   }
 
   private startMockMode(): void {

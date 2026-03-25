@@ -49,7 +49,7 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 |----------|------|
 | Novo endpoint ou alteração de contrato | Atualizar `docs/contracts/`, OpenAPI, `CATALOGO-API.md` |
 | Nova variável de ambiente | Atualizar `REFERENCIA-CONFIGURACAO.md` |
-| Novo evento RabbitMQ | Atualizar `CATALOGO-EVENTOS.md`, `docs/contracts/events.md` |
+| Novo evento RabbitMQ | Atualizar `CATALOGO-EVENTOS.md`; contrato canónico em **spring-saas-core** `docs/contracts/events.md`, depois espelhar em orders/payments |
 | Alteração de fluxo operacional | Atualizar `MANUAL-SISTEMA.md`, `GUIA-OPERACIONAL.md` |
 | Alteração de pipeline/esteira | Atualizar este doc (`PIPELINE-ESTEIRAS.md`) |
 | Novo serviço ou breaking change | Atualizar `GUIA-DO-SISTEMA.md`, diagramas |

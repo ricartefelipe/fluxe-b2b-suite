@@ -851,7 +851,8 @@ Headers RabbitMQ: `X-Correlation-Id`, `X-Tenant-Id`.
 |----------|---------|-----------|
 | Identidade JWT | `docs/contracts/identity.md` | Claims, validação, modos |
 | Headers HTTP | `docs/contracts/headers.md` | Authorization, X-Tenant-Id, X-Correlation-Id, Idempotency-Key |
-| Eventos | `docs/contracts/events.md` | Formato, exchanges, routing keys |
+| Eventos (índice suite) | [CATALOGO-EVENTOS.md](CATALOGO-EVENTOS.md) | Visão de negócio e exemplos |
+| Eventos (contrato técnico) | **spring-saas-core** `docs/contracts/events.md` (réplicas nos backends) | Routing keys canónicos, config `SAAS_*` / integrações |
 
 ---
 

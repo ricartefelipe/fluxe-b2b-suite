@@ -26,8 +26,6 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 | node-b2b-orders | ESLint, Prisma | `lint`, `test`, `build` |
 | py-payments-ledger | Ruff, Black, Mypy | `ruff check`, `black --check`, `mypy`, `pytest` |
 
-**Qodana (spring-saas-core):** análise estática em PRs e push em master/develop.
-
 ### 3. Testes
 
 | Tipo | Quando rodar | Responsabilidade |
@@ -229,7 +227,7 @@ Para checklist completo de go-live (produção, Stripe, Resend, domínio, OIDC, 
 | Repo | Arquivos alterados |
 |------|--------------------|
 | fluxe-b2b-suite | deploy-frontend.yml, deploy-prod.yml, deploy.yml, saas-suite-ui/ci.yml |
-| spring-saas-core | ci.yml, build-push.yml, deploy.yml (comentário), qodana_code_quality.yml |
+| spring-saas-core | ci.yml, build-push.yml, deploy.yml (comentário) |
 | node-b2b-orders | ci.yml, build-push.yml |
 | py-payments-ledger | ci.yml, build-push.yml |
 

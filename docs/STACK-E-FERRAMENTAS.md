@@ -13,9 +13,9 @@ Resposta objetiva a: **por que não usamos X?** e **onde estão nossas métricas
 | **Métricas (Prometheus)** | Os 3 backends | `GET /metrics` ou `/actuator/prometheus` (Spring). Métricas de negócio: `orders_created_total`, `inventory_adjusted_total`, circuit breaker state, etc. |
 | **Grafana** | monitoring/ (fluxe-b2b-suite) | Dashboards: overview, saas-core, orders, payments, tracing. Alertas em `prometheus/alerts/` (infra, service-health, business, RabbitMQ queue backlog). |
 | **Circuit breaker** | Spring (Resilience4j), Node (CircuitBreakerModule), Python (gateways PagSeguro/MercadoPago/Stripe) | Proteção em chamadas a IA (Spring), publicação RabbitMQ e gateways de pagamento. |
-| **Análise estática / Sonar-like** | spring-saas-core | **Qodana** (JetBrains) em `.github/workflows/qodana_code_quality.yml` + `qodana.yaml` — análise JVM/Java. Não é SonarQube/SonarCloud, mas cumpre papel de qualidade estática em um dos repos. |
+| **Análise estática / Sonar-like** | spring-saas-core | Sem ferramenta dedicada de análise estática Sonar-like neste momento; qualidade garantida por validações de CI (build, testes e formatação). |
 
-Ou seja: **Rabbit, Redis, métricas, Grafana, circuit breaker e análise estática (Qodana) já são usados.** Não estão “faltando” em termos de conceito; parte deles pode estar pouco visível (ex.: Grafana só sobe no compose completo ou em deploy com monitoring).
+Ou seja: **Rabbit, Redis, métricas, Grafana e circuit breaker já são usados.** Não estão “faltando” em termos de conceito; parte deles pode estar pouco visível (ex.: Grafana só sobe no compose completo ou em deploy com monitoring).
 
 ---
 
@@ -25,7 +25,7 @@ Ou seja: **Rabbit, Redis, métricas, Grafana, circuit breaker e análise estáti
 |------------|----------|
 | **Kafka** | Escolha de arquitetura: RabbitMQ + outbox atende o volume e o modelo atual (eventos entre 3 serviços). Kafka faria sentido para log de eventos muito grande, replay longo ou muitos consumidores independentes. Pode ser evolução futura se o volume ou os casos de uso justificarem. |
 | **NoSQL para retenção pro front** | Hoje: PostgreSQL (fonte de verdade) + Redis (cache/rate limit/idempotência). Não há um NoSQL (ex.: MongoDB) dedicado a “retenção de infos pro front”. Dá para evoluir: cache de respostas de API no Redis com TTL, ou uma camada de leitura (ex.: materialized views / cache) para dashboards e listagens pesadas. |
-| **SonarQube / SonarCloud** | Só o spring-saas-core tem Qodana (análise estática). **Falta:** rodar Sonar (ou manter Qodana) nos outros repos (node-b2b-orders, py-payments-ledger, fluxe-b2b-suite) e expor qualidade no CI. |
+| **SonarQube / SonarCloud** | Não há SonarQube/SonarCloud padronizado nos backends no momento. **Falta:** padronizar uma solução de análise estática nos repos (spring-saas-core, node-b2b-orders, py-payments-ledger, fluxe-b2b-suite) e expor qualidade no CI. |
 | **Métricas no front** | Os backends expõem Prometheus; o front (Angular) não envia métricas para um backend de métricas. Dá para adicionar: enviar eventos (ex.: Web Vitals, erros) para um endpoint que grave em Prometheus/backend ou para um serviço de APM. |
 
 ---

@@ -14,6 +14,13 @@
 | [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) | Deploy no Railway: serviços, variáveis, migrations, seed (staging vs produção), domínio customizado e SSL |
 | [URLS-AMBIENTES.md](URLS-AMBIENTES.md) | URLs de staging e production (fronts e APIs) e usuário inicial nos 3 fronts |
 | [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Pipeline, esteiras develop/master, release e tags, protocolos (Git Flow, qualidade, testes, CI/CD, docs) |
+| [CHECKLIST-PROMOCAO-DEVELOP-MASTER.md](CHECKLIST-PROMOCAO-DEVELOP-MASTER.md) | Checklist único antes de promover `develop` → `master` |
+| [POLITICA-FREEZE-RELEASE.md](POLITICA-FREEZE-RELEASE.md) | Política de freeze por risco (P0/P1) em release |
+| [TEMPLATE-RELEASE-NOTES.md](TEMPLATE-RELEASE-NOTES.md) | Template de release notes multi-repo |
+| [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md) | Runbook enxuto de rollback por serviço |
+| [ANALISE-ESTATICA.md](ANALISE-ESTATICA.md) | Decisão Semgrep + linters (substituto Sonar-like) |
+| [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md) | Thresholds p95/5xx/filas e mapeamento de alertas |
+| [BACKLOG-MELHORIA-SISTEMICA-2026-03.md](BACKLOG-MELHORIA-SISTEMICA-2026-03.md) | Backlog executável EPIC A–D (estado de execução) |
 | [FLUXO-PR-FEATURE.md](FLUXO-PR-FEATURE.md) | Fluxo resumido: feature branch → PR → merge → apagar branch |
 | [BRANCHES-E-WORKFLOWS.md](BRANCHES-E-WORKFLOWS.md) | **Matriz factual:** que ramos disparam que workflows (sem suposições sobre ambientes) |
 | [DEPLOY-GITHUB.md](DEPLOY-GITHUB.md) | Deploy via GitHub Actions (CI, Cloudflare Pages, VPS) |

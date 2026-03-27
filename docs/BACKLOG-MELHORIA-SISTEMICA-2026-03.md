@@ -2,7 +2,7 @@
 
 Backlog derivado da proposta em `docs/PROPOSTA-MELHORIA-SISTEMICA-2026-03.md`, organizado para execucao por epicos, com ordem, dependencias, criterio de aceite e dono sugerido por repositorio.
 
-**Estado de execucao (revisao 2026-03-27):** a coluna **Estado** indica o que ja esta implementado no repositorio ou em CI. Itens **Parcial** cumprem parte do criterio de aceite; **Pendente** ainda nao.
+**Estado de execucao (revisao 2026-03-27):** a coluna **Estado** indica o que ja esta implementado no repositorio ou em CI. Itens **Parcial** cumprem parte do criterio de aceite; **Pendente** ainda nao. EPICs B–D deste backlog estao **concluidos** no que respeita a B-04, C-04/C-05, D-01–D-04 (ver entregas referenciadas em cada item).
 
 ---
 
@@ -79,8 +79,9 @@ Objetivo: bloquear regressao de contrato entre Core, Orders e Payments.
   - Entrega: `scripts/check-contract-drift.sh`, `pnpm verify:contracts`, workflow `contracts-drift.yml` (com PAT opcional).
   - Dependencia: B-02.
 
-- **Estado: Pendente** — B-04 | `spring-saas-core` + consumidores | Politica de versao de contrato
+- **Estado: Concluído** — B-04 | `spring-saas-core` + consumidores | Politica de versao de contrato
   - Escopo: definir regra de alteracao minor/major e janela de compatibilidade.
+  - Entrega: `spring-saas-core/docs/contracts/POLITICA-VERSAO-CONTRATO.md` (canonico); apontadores em `node-b2b-orders` e `py-payments-ledger` (`docs/contracts/POLITICA-VERSAO-CONTRATO.md`). O validador `check-contract-drift` compara apenas espelhos de contrato (`events`, `headers`, `identity`, schemas); a politica e doc de processo e nao entra no `cmp`.
   - Dependencia: B-03.
 
 ## EPIC-C - Runtime e resiliencia (P1)
@@ -102,43 +103,40 @@ Objetivo: detectar quebra funcional cedo em staging e reduzir MTTR.
   - Pendencia opcional: settle basico e evidencia de fila/evento (ampliacao futura).
   - Dependencia: A-04.
 
-- **Estado: Parcial** — C-04 | `fluxe-b2b-suite` | Definir thresholds de monitoramento
-  - Entrega: `docs/MONITORING-THRESHOLDS.md`; referencia no `PIPELINE-ESTEIRAS.md`.
-  - Pendencia: mapear alertas em Grafana/Railway com esses valores (operacao).
+- **Estado: Concluído** — C-04 | `fluxe-b2b-suite` | Definir thresholds de monitoramento
+  - Entrega: `docs/MONITORING-THRESHOLDS.md` (thresholds + secao **Mapeamento de alertas (operacao)** para Railway/Grafana/logs); referencia no `PIPELINE-ESTEIRAS.md`.
   - Dependencia: C-01..C-03.
 
-- **Estado: Pendente** — C-05 | Todos os repos | Runbook de rollback enxuto
-  - Nota: tags e rollback por imagem ja descritos em `PIPELINE-ESTEIRAS.md`; falta runbook unificado por servico.
+- **Estado: Concluído** — C-05 | Todos os repos | Runbook de rollback enxuto
+  - Entrega: `docs/RUNBOOK-ROLLBACK.md` (por servico; alinhado a tags/imagem em `PIPELINE-ESTEIRAS.md`).
   - Dependencia: C-04.
 
 ## EPIC-D - Governanca de release e qualidade estatica (P2)
 
 Objetivo: fechar lacunas de processo e garantir trilha de release.
 
-- **Estado: Parcial** — D-01 | `fluxe-b2b-suite` | Checklist unico de promocao `develop -> master`
-  - Entrega atual: `PIPELINE-ESTEIRAS.md`, `GO-LIVE-VENDA.md`, gates de qualidade e contrato.
-  - Pendencia: checklist unico nomeado num unico ficheiro (opcional).
+- **Estado: Concluído** — D-01 | `fluxe-b2b-suite` | Checklist unico de promocao `develop -> master`
+  - Entrega: `docs/CHECKLIST-PROMOCAO-DEVELOP-MASTER.md`; contexto em `PIPELINE-ESTEIRAS.md`, `GO-LIVE-VENDA.md`.
   - Dependencia: EPIC-A, EPIC-B, EPIC-C.
 
-- **Estado: Pendente** — D-02 | Todos os repos | Politica de freeze por risco
+- **Estado: Concluído** — D-02 | Todos os repos | Politica de freeze por risco
+  - Entrega: `docs/POLITICA-FREEZE-RELEASE.md`.
   - Dependencia: D-01.
 
-- **Estado: Parcial** — D-03 | Todos os repos | Padrao de changelog cross-repo
-  - Entrega atual: `CHANGELOG.md` por repo e referencia no pipeline para tags.
-  - Pendencia: template padronizado de release notes multi-servico.
+- **Estado: Concluído** — D-03 | Todos os repos | Padrao de changelog cross-repo
+  - Entrega: `CHANGELOG.md` por repo; template multi-servico em `docs/TEMPLATE-RELEASE-NOTES.md`.
   - Dependencia: D-01.
 
-- **Estado: Parcial** — D-04 | `spring-saas-core` + demais repos | Definir substituto de analise estatica Sonar-like
-  - Entrega atual: Semgrep (`codeql.yml` / analise estatica) nos repos.
-  - Pendencia: decisao formal se basta ou ferramenta adicional unificada.
+- **Estado: Concluído** — D-04 | `spring-saas-core` + demais repos | Definir substituto de analise estatica Sonar-like
+  - Entrega: Semgrep + linters por stack; decisao formal em `docs/ANALISE-ESTATICA.md`; politica operacional em `docs/POLITICA-QUALIDADE-ESTATICA.md`.
   - Dependencia: D-01.
 
 ## Sprint sugerida (execucao pratica)
 
 - Sprint 1: A-01..A-06 (baseline de qualidade e bloqueio de quebra) — **concluido**
-- Sprint 2: B-01..B-04 (contrato e compatibilidade) — **B-04 pendente**
-- Sprint 3: C-01..C-05 (smoke e resiliencia) — **C-05 pendente**; C-02/C-03/C-04 parciais opcionais
-- Sprint 4: D-01..D-04 (governanca de release) — **em aberto (P2)**
+- Sprint 2: B-01..B-04 (contrato e compatibilidade) — **concluido**
+- Sprint 3: C-01..C-05 (smoke e resiliencia) — **concluido** (C-02/C-03 com ampliacoes opcionais futuras)
+- Sprint 4: D-01..D-04 (governanca de release) — **concluido (P2)**
 
 ## Definition of Done global
 
@@ -147,4 +145,4 @@ Objetivo: fechar lacunas de processo e garantir trilha de release.
 | Baseline de qualidade executavel local + CI em todos os repos | **OK** (`verify:all`, CI por repo) |
 | Validacao contratual automatica em PR para `develop` | **OK** (`contracts-drift` + `verify:contracts` local) |
 | Smoke pos-merge implantado para os 3 backends | **OK** (HTTP + secrets staging) |
-| Checklist de release ativo e usado em promocao real | **Parcial** (docs existentes; checklist unico opcional — D-01) |
+| Checklist de release ativo e usado em promocao real | **OK** (`CHECKLIST-PROMOCAO-DEVELOP-MASTER.md`, freeze, template, runbook) |

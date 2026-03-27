@@ -104,6 +104,6 @@ Os arquivos de configuração do Prometheus/Grafana e desta doc ficam no reposit
 
 ## Implementação aplicada
 
-- **spring-saas-core:** `RedisCacheConfig` (cache `frontTenants`, TTL 120s), `@Cacheable` em `TenantUseCase.searchCursor`, `@CacheEvict` em create/update/softDelete. Listagem GET /v1/tenants.
+- **spring-saas-core:** `RedisCacheConfig` expõe apenas `ConcurrentMapCacheManager` (lista GET /v1/tenants não é cacheada em Redis — evita falhas de serialização de `List<Tenant>`).
 - **node-b2b-orders:** cache em `OrdersService.listOrders` com chave `front:cache:orders:v1/orders:{tenantId}:{queryHash}`, TTL 30s.
 - **py-payments-ledger:** cache em `list_all` (GET /v1/payment-intents) com chave `front:cache:payments:v1/payment-intents:{tenant_id}:{query_hash}`, TTL 60s.

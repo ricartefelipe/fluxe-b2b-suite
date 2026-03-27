@@ -1,0 +1,43 @@
+name: Contracts Drift
+
+on:
+  pull_request:
+    branches: [develop, master]
+  push:
+    branches: [develop]
+  workflow_dispatch:
+
+jobs:
+  drift-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout fluxe-b2b-suite
+        uses: actions/checkout@v4
+
+      - name: Checkout spring-saas-core (contracts source)
+        uses: actions/checkout@v4
+        with:
+          repository: ricartefelipe/spring-saas-core
+          ref: develop
+          path: deps/spring-saas-core
+
+      - name: Checkout node-b2b-orders (contracts target)
+        uses: actions/checkout@v4
+        with:
+          repository: ricartefelipe/node-b2b-orders
+          ref: develop
+          path: deps/node-b2b-orders
+
+      - name: Checkout py-payments-ledger (contracts target)
+        uses: actions/checkout@v4
+        with:
+          repository: ricartefelipe/py-payments-ledger
+          ref: develop
+          path: deps/py-payments-ledger
+
+      - name: Check contract drift
+        run: |
+          CORE_BASE_DIR="$GITHUB_WORKSPACE/deps/spring-saas-core" \
+          ORDERS_BASE_DIR="$GITHUB_WORKSPACE/deps/node-b2b-orders" \
+          PAYMENTS_BASE_DIR="$GITHUB_WORKSPACE/deps/py-payments-ledger" \
+          ./scripts/check-contract-drift.sh

@@ -10,32 +10,50 @@ on:
 jobs:
   drift-check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout fluxe-b2b-suite
         uses: actions/checkout@v4
 
+      - name: Validate cross-repo token
+        env:
+          CROSS_REPO_READ_TOKEN: ${{ secrets.CROSS_REPO_READ_TOKEN }}
+        run: |
+          if [ -z "${CROSS_REPO_READ_TOKEN}" ]; then
+            echo "CROSS_REPO_READ_TOKEN ausente. Drift check cross-repo será marcado como skip."
+            exit 0
+          fi
+
       - name: Checkout spring-saas-core (contracts source)
+        if: ${{ secrets.CROSS_REPO_READ_TOKEN != '' }}
         uses: actions/checkout@v4
         with:
           repository: ricartefelipe/spring-saas-core
           ref: develop
           path: deps/spring-saas-core
+          token: ${{ secrets.CROSS_REPO_READ_TOKEN }}
 
       - name: Checkout node-b2b-orders (contracts target)
+        if: ${{ secrets.CROSS_REPO_READ_TOKEN != '' }}
         uses: actions/checkout@v4
         with:
           repository: ricartefelipe/node-b2b-orders
           ref: develop
           path: deps/node-b2b-orders
+          token: ${{ secrets.CROSS_REPO_READ_TOKEN }}
 
       - name: Checkout py-payments-ledger (contracts target)
+        if: ${{ secrets.CROSS_REPO_READ_TOKEN != '' }}
         uses: actions/checkout@v4
         with:
           repository: ricartefelipe/py-payments-ledger
           ref: develop
           path: deps/py-payments-ledger
+          token: ${{ secrets.CROSS_REPO_READ_TOKEN }}
 
       - name: Check contract drift
+        if: ${{ secrets.CROSS_REPO_READ_TOKEN != '' }}
         run: |
           CORE_BASE_DIR="$GITHUB_WORKSPACE/deps/spring-saas-core" \
           ORDERS_BASE_DIR="$GITHUB_WORKSPACE/deps/node-b2b-orders" \

@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { AuthStore } from '@saas-suite/shared/auth';
 import { shopAuthGuard } from './shop-auth.guard';
-import { describe, it, beforeEach, expect, vi } from 'vitest';
+import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest';
 
 describe('shopAuthGuard', () => {
   let mockAuthStore: { isAuthenticated: ReturnType<typeof vi.fn> };
@@ -13,6 +13,7 @@ describe('shopAuthGuard', () => {
   let mockUrlTree: UrlTree;
 
   beforeEach(() => {
+    TestBed.resetTestingModule();
     mockUrlTree = { toString: () => '/products' } as unknown as UrlTree;
 
     mockAuthStore = {
@@ -32,6 +33,10 @@ describe('shopAuthGuard', () => {
         { provide: Router, useValue: mockRouter },
       ],
     });
+  });
+
+  afterEach(() => {
+    TestBed.resetTestingModule();
   });
 
   it('should allow access when user is authenticated', () => {

@@ -50,7 +50,14 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 **Qualidade estática (Sonar-like):**
 
 - Workflow `codeql.yml` (job Semgrep) obrigatório em PR/push para `develop` e `master`
-- Política unificada em `docs/POLITICA-QUALIDADE-ESTATICA.md`
+- Política unificada em [POLITICA-QUALIDADE-ESTATICA.md](POLITICA-QUALIDADE-ESTATICA.md); decisão formal em [ANALISE-ESTATICA.md](ANALISE-ESTATICA.md)
+
+**Governação de release (P2):**
+
+- [CHECKLIST-PROMOCAO-DEVELOP-MASTER.md](CHECKLIST-PROMOCAO-DEVELOP-MASTER.md) — checklist único antes de `develop` → `master`
+- [POLITICA-FREEZE-RELEASE.md](POLITICA-FREEZE-RELEASE.md) — freeze por risco P0/P1
+- [TEMPLATE-RELEASE-NOTES.md](TEMPLATE-RELEASE-NOTES.md) — modelo de notas multi-repo
+- [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md) — rollback por serviço
 
 ### 3. Testes
 

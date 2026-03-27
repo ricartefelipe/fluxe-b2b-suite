@@ -35,7 +35,7 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 **Gate de contratos cross-repo:**
 
-- Executar `./scripts/check-contract-drift.sh` para validar sincronização de contratos entre Core, Orders e Payments
+- Executar `./scripts/check-contract-drift.sh` (ou `pnpm verify:contracts`) para validar sincronização de contratos entre Core, Orders e Payments — inclui os `.json` em `docs/contracts/schemas/` definidos no Core
 - Se houver drift em `events.md`, `headers.md` ou `identity.md`, bloquear merge até sincronizar
 - CI obrigatório no `fluxe-b2b-suite`: workflow `contracts-drift.yml`
 - Para CI cross-repo privado: configurar secret `CROSS_REPO_READ_TOKEN` (PAT com `repo:read`)

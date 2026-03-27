@@ -13,6 +13,7 @@ Este arquivo define regras e preferências para assistentes de código que traba
 ### Papel do agente e delegação (autorização explícita)
 
 - O utilizador pode delegar a **execução técnica completa** no repositório: branches, implementação, testes, lint, format, commit, push, PR e merge em `develop` quando o CI estiver verde, mais docs alinhadas com o código quando o contrato mudar.
+- **Arquiteto (autorização contínua):** em modo arquiteto, o agente **não precisa** de confirmação explícita **por tarefa** para abrir PR, fazer merge em `develop` após CI verde, ou concluir o fluxo Git habitual; deve **avisar** o utilizador ao terminar (resumo, links do PR, estado do CI). Continua a valer: nunca referências a nomes comerciais de IDEs ou de produtos de assistência a código em commits, merges, PRs ou documentação do repositório.
 - **Expectativa:** o agente **confirma explicitamente** quando está tudo **correto e verificado** (o que correu, resultado dos comandos), sem exigir que o utilizador repita passos que o próprio agente pode fazer no workspace.
 - **Limites fora do repo:** o agente **não** acede a contas de terceiros (Railway, Resend, DNS, login GitHub no browser), nem executa `sudo` na máquina do utilizador. Aí apenas **prepara** variáveis, diffs, PRs e checklists; o que exige painel ou credenciais humanas fica indicado de forma mínima.
 

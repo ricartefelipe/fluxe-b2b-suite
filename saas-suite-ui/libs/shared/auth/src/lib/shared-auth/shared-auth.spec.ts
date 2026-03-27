@@ -216,16 +216,21 @@ describe('AuthStore', () => {
 
 // ---------- authGuard ----------
 
+function routerState(url: string): RouterStateSnapshot {
+  return { url } as RouterStateSnapshot;
+}
+
 describe('authGuard', () => {
   const route = {} as ActivatedRouteSnapshot;
-  const state = {} as RouterStateSnapshot;
 
   it('returns true when authenticated', async () => {
     const { authGuard } = await import('../guards/auth.guard');
     const store = TestBed.inject(AuthStore);
     store.setSession(validSession());
 
-    const result = TestBed.runInInjectionContext(() => authGuard(route, state));
+    const result = TestBed.runInInjectionContext(() =>
+      authGuard(route, routerState('/dashboard')),
+    );
     expect(result).toBe(true);
   });
 
@@ -234,9 +239,45 @@ describe('authGuard', () => {
     const store = TestBed.inject(AuthStore);
     store.clearSession();
 
-    const result = TestBed.runInInjectionContext(() => authGuard(route, state));
+    const result = TestBed.runInInjectionContext(() =>
+      authGuard(route, routerState('/dashboard')),
+    );
     expect(result).not.toBe(true);
     expect(result.toString()).toBe('/login');
+  });
+
+  it('allows navigation to /change-password when mustChangePassword (uses target URL)', async () => {
+    const { authGuard } = await import('../guards/auth.guard');
+    const store = TestBed.inject(AuthStore);
+    store.setSession(validSession({ mustChangePassword: true }));
+
+    const result = TestBed.runInInjectionContext(() =>
+      authGuard(route, routerState('/change-password')),
+    );
+    expect(result).toBe(true);
+  });
+
+  it('allows account/password when mustChangePassword', async () => {
+    const { authGuard } = await import('../guards/auth.guard');
+    const store = TestBed.inject(AuthStore);
+    store.setSession(validSession({ mustChangePassword: true }));
+
+    const result = TestBed.runInInjectionContext(() =>
+      authGuard(route, routerState('/account/password')),
+    );
+    expect(result).toBe(true);
+  });
+
+  it('redirects to /change-password when mustChangePassword and target is elsewhere', async () => {
+    const { authGuard } = await import('../guards/auth.guard');
+    const store = TestBed.inject(AuthStore);
+    store.setSession(validSession({ mustChangePassword: true }));
+
+    const result = TestBed.runInInjectionContext(() =>
+      authGuard(route, routerState('/tenants')),
+    );
+    expect(result).not.toBe(true);
+    expect(result.toString()).toBe('/change-password');
   });
 });
 

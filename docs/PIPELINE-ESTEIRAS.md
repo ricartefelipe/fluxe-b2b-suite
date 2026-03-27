@@ -26,6 +26,17 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 | node-b2b-orders | ESLint, Prisma | `lint`, `test`, `build` |
 | py-payments-ledger | Ruff, Black, Mypy | `ruff check`, `black --check`, `mypy`, `pytest` |
 
+**Gate local unificado (obrigatório antes de PR para `develop`):**
+
+- Executar `./scripts/pre-merge-checks.sh` na raiz do `fluxe-b2b-suite`
+- Para validação parcial: `./scripts/pre-merge-checks.sh core` (ou `orders`, `payments`, `suite`)
+- Merge só com todos os checks selecionados em verde
+
+**Gate de contratos cross-repo:**
+
+- Executar `./scripts/check-contract-drift.sh` para validar sincronização de contratos entre Core, Orders e Payments
+- Se houver drift em `events.md`, `headers.md` ou `identity.md`, bloquear merge até sincronizar
+
 ### 3. Testes
 
 | Tipo | Quando rodar | Responsabilidade |

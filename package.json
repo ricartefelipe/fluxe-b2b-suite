@@ -8,7 +8,8 @@
     "dev:shop": "cd saas-suite-ui && pnpm nx serve shop",
     "dev:admin": "cd saas-suite-ui && pnpm nx serve admin-console",
     "install:ui": "cd saas-suite-ui && pnpm install",
-    "verify:all": "bash scripts/pre-merge-checks.sh"
+    "verify:all": "bash scripts/pre-merge-checks.sh",
+    "verify:contracts": "bash scripts/check-contract-drift.sh"
   },
   "repository": {
     "type": "git",

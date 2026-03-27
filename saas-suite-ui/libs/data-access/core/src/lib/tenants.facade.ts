@@ -1,8 +1,11 @@
 import { Injectable, inject, signal } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, timeout } from 'rxjs';
 import { CoreApiClient } from './core-api.client';
 import { Tenant, CreateTenantRequest, UpdateTenantRequest, TenantListParams } from './models/tenant.model';
 import { LoggerService } from '@saas-suite/shared/telemetry';
+
+/** Evita spinner infinito quando o Core não responde (URL/CORS/rede). */
+const LIST_TENANTS_TIMEOUT_MS = 30_000;
 
 @Injectable({ providedIn: 'root' })
 export class TenantsFacade {
@@ -22,7 +25,9 @@ export class TenantsFacade {
   async loadTenants(params?: TenantListParams): Promise<void> {
     this._loading.set(true); this._error.set(null);
     try {
-      const r = await firstValueFrom(this.api.listTenants(params));
+      const r = await firstValueFrom(
+        this.api.listTenants(params).pipe(timeout(LIST_TENANTS_TIMEOUT_MS))
+      );
       this._tenants.set(r.data); this._total.set(r.total);
     } catch (e) {
       this._tenants.set([]);

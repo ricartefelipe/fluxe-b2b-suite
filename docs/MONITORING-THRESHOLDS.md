@@ -31,4 +31,14 @@ Referencia inicial para alertas em staging/producao (Grafana, Railway health, lo
 | Scripts `smoke-post-merge.sh` por servico | Apos merge em `develop` (GitHub Actions), com secrets `*_SMOKE_URL` |
 | Suite local `scripts/smoke-suite.sh` | Manual com stack Docker |
 
+## Mapeamento de alertas (operacao)
+
+| Onde | O que configurar | Ligacao aos thresholds |
+|------|------------------|-------------------------|
+| **Railway** | Health check do servico (path `/healthz` ou equivalente), restart policy | Falha consecutiva = investigar antes de novo deploy |
+| **Grafana** (Core: Prometheus) | Alert rules sobre `http_server_requests_seconds` p95, taxa 5xx derivada de metricas | Usar colunas deste doc como valores iniciais |
+| **Logs** | Filtro por `level=ERROR` e correlation id | Picos correlacionados com 5xx |
+
+Checklist: criar pelo menos um alerta por servico para **disponibilidade** (health) e um para **erros** (5xx ou log pattern) em staging antes de replicar criterios em producao.
+
 Valores sao **pontos de partida**; o dono do servico deve confirmar SLO com dados reais de staging.

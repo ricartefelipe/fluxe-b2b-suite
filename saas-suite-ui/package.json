@@ -13,6 +13,7 @@
     "test": "nx run-many -t test,vite:test",
     "build": "nx run-many -t build",
     "e2e": "nx run-many -t e2e",
+    "e2e:local": "bash ../scripts/run-e2e-local.sh",
     "serve:shop": "nx serve shop",
     "serve:api": "nx serve api",
     "serve:ops-portal": "nx serve ops-portal",

@@ -7,7 +7,8 @@
     "dev": "cd saas-suite-ui && pnpm nx serve ops-portal",
     "dev:shop": "cd saas-suite-ui && pnpm nx serve shop",
     "dev:admin": "cd saas-suite-ui && pnpm nx serve admin-console",
-    "install:ui": "cd saas-suite-ui && pnpm install"
+    "install:ui": "cd saas-suite-ui && pnpm install",
+    "e2e:local": "bash scripts/run-e2e-local.sh"
   },
   "repository": {
     "type": "git",

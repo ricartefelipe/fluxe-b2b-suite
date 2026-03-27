@@ -5,6 +5,7 @@
     "outDir": "../../dist/out-tsc",
     "sourceMap": false,
     "module": "commonjs",
+    "moduleResolution": "node",
     "strict": true,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,

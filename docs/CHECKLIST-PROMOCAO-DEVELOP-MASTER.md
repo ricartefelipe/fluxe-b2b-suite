@@ -1,42 +1,38 @@
-# Checklist de promocao `develop -> master`
+# Checklist — promoção `develop` → `master` (produção)
 
-Checklist unico para promover release com seguranca nos repositorios da suite.
+Usar antes de mergear o PR `develop` → `master` e deploy de produção. Complementa [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) e [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md).
 
-## 1) Gate tecnico obrigatorio
+## Qualidade e CI
 
-- [ ] `fluxe-b2b-suite`: `./scripts/pre-merge-checks.sh suite`
-- [ ] `spring-saas-core`: `./mvnw spotless:check test`
-- [ ] `node-b2b-orders`: `npm run lint && npm run build && npm test`
-- [ ] `py-payments-ledger`: `.venv/bin/ruff check . && .venv/bin/black --check . && .venv/bin/mypy src && .venv/bin/pytest -q`
-- [ ] Contratos sem drift: `./scripts/check-contract-drift.sh`
+- [ ] Todos os PRs integrados em `develop` passaram CI (lint, test, build) nos repositórios tocados.
+- [ ] Opcional local: `pnpm verify:all` na raiz do `fluxe-b2b-suite` (workspace com os quatro repos).
+- [ ] `pnpm verify:contracts` sem drift (com PAT se usar checkout multi-repo no CI).
 
-## 2) Gate de CI/CD
+## Staging
 
-- [ ] PRs para `develop` dos repos envolvidos com CI verde
-- [ ] Imagens/tag de `develop` geradas sem erro (quando aplicavel)
-- [ ] Nenhum alerta bloqueante de seguranca aberto para a release
+- [ ] Deploy de `develop` em Railway staging concluído e saudável.
+- [ ] Smoke HTTP pós-merge (secrets `*_SMOKE_URL`) ou verificação manual: health + fluxo crítico de negócio.
+- [ ] Sem itens **P0/P1** abertos para esta release ([POLITICA-FREEZE-RELEASE.md](POLITICA-FREEZE-RELEASE.md)).
 
-## 3) Gate funcional minimo
+## Contratos e dados
 
-- [ ] Smoke de `spring-saas-core` executado
-- [ ] Smoke de `node-b2b-orders` executado
-- [ ] Smoke de `py-payments-ledger` executado
-- [ ] Fluxo principal validado no frontend (login + operacao critica)
+- [ ] Contratos espelhados alinhados ao Core (drift zero).
+- [ ] Migrações aplicadas em staging; plano para produção (backup se operação arriscada).
 
-## 4) Gate de observabilidade
+## Observabilidade
 
-- [ ] Health endpoints respondendo 200 nos servicos
-- [ ] Sem backlog anormal em filas criticas RabbitMQ
-- [ ] Sem taxa de erro 5xx acima do baseline da ultima release
+- [ ] Thresholds conhecidos ([MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md)); alertas críticos não silenciados sem motivo.
 
-## 5) Gate de governanca
+## Release notes e versão
 
-- [ ] Changelog/release notes atualizados para os repos alterados
-- [ ] Plano de rollback da release revisado
-- [ ] Responsavel pelo merge `develop -> master` definido
+- [ ] `CHANGELOG.md` atualizado nos repos alterados ([TEMPLATE-RELEASE-NOTES.md](TEMPLATE-RELEASE-NOTES.md)).
+- [ ] Versão SemVer acordada para tag ([PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) — Release e tags).
 
-## 6) Fechamento
+## Rollback
 
-- [ ] Merge de release realizado
-- [ ] Tag de release criada (semver)
-- [ ] Registro pos-release preenchido (status + incidentes + acao corretiva)
+- [ ] Equipa sabe qual imagem/tag anterior é segura ([RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md)).
+
+## Após merge em `master`
+
+- [ ] Tags criadas e push (`vX.Y.Z`) nos repos relevantes.
+- [ ] Verificar deploy produção e smoke mínimo em URLs de produção.

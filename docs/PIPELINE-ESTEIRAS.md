@@ -36,6 +36,13 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 - Executar `./scripts/check-contract-drift.sh` para validar sincronização de contratos entre Core, Orders e Payments
 - Se houver drift em `events.md`, `headers.md` ou `identity.md`, bloquear merge até sincronizar
+- CI obrigatório no `fluxe-b2b-suite`: workflow `contracts-drift.yml`
+- Para CI cross-repo privado: configurar secret `CROSS_REPO_READ_TOKEN` (PAT com `repo:read`)
+
+**Qualidade estática (Sonar-like):**
+
+- Workflow `codeql.yml` (job Semgrep) obrigatório em PR/push para `develop` e `master`
+- Política unificada em `docs/POLITICA-QUALIDADE-ESTATICA.md`
 
 ### 3. Testes
 
@@ -88,6 +95,8 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 | deploy.yml         | push develop/master  | CI: lint, test, typecheck, build, E2E Playwright |
 | deploy-frontend.yml| push **master** (paths `saas-suite-ui/**`) | Build + `config.json` + **Cloudflare Pages** (produção) |
 | deploy-prod.yml    | push master (paths)   | Deploy VPS via SSH (docker-compose.prod)       |
+| contracts-drift.yml| PR/push develop/master | Valida drift de contratos entre core/orders/payments |
+| codeql.yml         | PR/push develop/master | Análise estática com Semgrep (OWASP Top Ten) |
 
 **Railway:** 3 serviços (shop, ops-portal, admin-console) conectados ao repo.  
 Cada um com branch configurada no dashboard:
@@ -102,6 +111,8 @@ Cada um com branch configurada no dashboard:
 |--------------|--------------------|-------------------------------|
 | ci.yml       | push develop/master| Build + Spotless + OpenAPI    |
 | build-push.yml| push develop/master| Test → build image → push GHCR|
+| post-merge-smoke.yml | push develop | Smoke pós-merge padronizado |
+| codeql.yml | PR/push develop/master | Análise estática com Semgrep |
 
 **Railway:** 1 serviço. Branch no dashboard:
 - Staging: `develop`
@@ -118,6 +129,8 @@ Cada um com branch configurada no dashboard:
 |--------------|--------------------|-------------------------------|
 | ci.yml       | push develop/master| Lint, test, build, Trivy      |
 | build-push.yml| push develop/master| Build api+worker → push GHCR  |
+| post-merge-smoke.yml | push develop | Smoke pós-merge padronizado |
+| codeql.yml | PR/push develop/master | Análise estática com Semgrep |
 
 **Railway:** 2 serviços (api, worker). Branch no dashboard conforme ambiente.
 
@@ -132,6 +145,8 @@ Cada um com branch configurada no dashboard:
 |--------------|--------------------|-------------------------------|
 | ci.yml       | push develop/master| Lint, test, build, Trivy      |
 | build-push.yml| push develop/master| Build api+worker → push GHCR  |
+| post-merge-smoke.yml | push develop | Smoke pós-merge padronizado |
+| codeql.yml | PR/push develop/master | Análise estática com Semgrep |
 
 **Railway:** 2 serviços (api, worker). Branch no dashboard conforme ambiente.
 

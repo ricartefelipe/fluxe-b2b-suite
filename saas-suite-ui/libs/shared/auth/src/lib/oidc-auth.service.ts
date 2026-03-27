@@ -17,6 +17,9 @@ export class OidcAuthService implements OnDestroy {
   private readonly zone = inject(NgZone);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
+  /** Evita bootstrap preso se o issuer OIDC não responder. */
+  private static readonly OIDC_DISCOVERY_TIMEOUT_MS = 45_000;
+
   private eventsSub: Subscription | null = null;
 
   private get origin(): string {
@@ -45,7 +48,20 @@ export class OidcAuthService implements OnDestroy {
 
     this.subscribeToTokenEvents();
 
-    await this.oauth.loadDiscoveryDocumentAndTryLogin();
+    try {
+      await Promise.race([
+        this.oauth.loadDiscoveryDocumentAndTryLogin(),
+        new Promise<never>((_, reject) => {
+          setTimeout(
+            () => reject(new Error('OIDC discovery timeout')),
+            OidcAuthService.OIDC_DISCOVERY_TIMEOUT_MS
+          );
+        }),
+      ]);
+    } catch (e) {
+      console.error('[Auth] OIDC discovery/login failed', e);
+      return false;
+    }
 
     if (this.oauth.hasValidAccessToken()) {
       this.applySession();

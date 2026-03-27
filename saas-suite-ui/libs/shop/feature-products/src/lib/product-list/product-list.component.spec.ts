@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { of, Subject } from 'rxjs';
 import { ProductListComponent } from './product-list.component';
 import { ProductsService, CartService } from '@union.solutions/shop/data';
+import type { Signal } from '@angular/core';
 import { Product, PaginatedResponse } from '@union.solutions/models';
 import { MESSAGES, PT_BR_MESSAGES } from '@saas-suite/shared/i18n';
 import { describe, it, beforeEach, expect, vi } from 'vitest';
@@ -11,6 +12,8 @@ describe('ProductListComponent', () => {
   let component: ProductListComponent;
   let fixture: ComponentFixture<ProductListComponent>;
   let mockProductsService: Partial<ProductsService>;
+  let getProductsMock: ReturnType<typeof vi.fn>;
+  let getCategoriesMock: ReturnType<typeof vi.fn>;
   let mockCartService: Partial<CartService>;
   let mockRouter: Partial<Router>;
 
@@ -56,11 +59,15 @@ describe('ProductListComponent', () => {
   };
 
   beforeEach(async () => {
+    const loadingFalse = () => false;
+    const errorNull = (): string | null => null;
+    getProductsMock = vi.fn().mockReturnValue(of(emptyResponse));
+    getCategoriesMock = vi.fn().mockReturnValue(of([]));
     mockProductsService = {
-      getProducts: vi.fn().mockReturnValue(of(emptyResponse)),
-      getCategories: vi.fn().mockReturnValue(of([])),
-      loading: vi.fn().mockReturnValue(false) as any,
-      error: vi.fn().mockReturnValue(null) as any,
+      getProducts: getProductsMock,
+      getCategories: getCategoriesMock,
+      loading: loadingFalse as unknown as Signal<boolean> & ProductsService['loading'],
+      error: errorNull as unknown as Signal<string | null> & ProductsService['error'],
     };
 
     mockCartService = {
@@ -90,19 +97,19 @@ describe('ProductListComponent', () => {
   });
 
   it('should load products and categories on init', () => {
-    mockProductsService.getProducts!.mockReturnValue(of(loadedResponse));
-    mockProductsService.getCategories!.mockReturnValue(of(['Electronics', 'Clothing']));
+    getProductsMock.mockReturnValue(of(loadedResponse));
+    getCategoriesMock.mockReturnValue(of(['Electronics', 'Clothing']));
 
     component.ngOnInit();
 
-    expect(mockProductsService.getProducts).toHaveBeenCalled();
-    expect(mockProductsService.getCategories).toHaveBeenCalled();
+    expect(getProductsMock).toHaveBeenCalled();
+    expect(getCategoriesMock).toHaveBeenCalled();
     expect(component.products()).toEqual(mockProducts);
   });
 
   it('should render product grid when products are loaded', () => {
-    mockProductsService.getProducts!.mockReturnValue(of(loadedResponse));
-    mockProductsService.getCategories!.mockReturnValue(of(['Electronics', 'Clothing']));
+    getProductsMock.mockReturnValue(of(loadedResponse));
+    getCategoriesMock.mockReturnValue(of(['Electronics', 'Clothing']));
 
     component.ngOnInit();
     fixture.detectChanges();
@@ -116,8 +123,8 @@ describe('ProductListComponent', () => {
 
   it('should show loading state initially', () => {
     const subject = new Subject<PaginatedResponse<Product>>();
-    mockProductsService.getProducts!.mockReturnValue(subject.asObservable());
-    mockProductsService.getCategories!.mockReturnValue(of([]));
+    getProductsMock.mockReturnValue(subject.asObservable());
+    getCategoriesMock.mockReturnValue(of([]));
 
     component.ngOnInit();
     fixture.detectChanges();
@@ -139,21 +146,21 @@ describe('ProductListComponent', () => {
 
   // Vitest não fornece Zone.js; fakeAsync/tick não funcionam. Debounce é testado em e2e.
   it.skip('should debounce search input by 300ms', fakeAsync(() => {
-    mockProductsService.getProducts!.mockReturnValue(of(loadedResponse));
-    mockProductsService.getCategories!.mockReturnValue(of([]));
+    getProductsMock.mockReturnValue(of(loadedResponse));
+    getCategoriesMock.mockReturnValue(of([]));
 
     component.ngOnInit();
     fixture.detectChanges();
-    vi.mocked(mockProductsService.getProducts!).mockClear();
+    getProductsMock.mockClear();
 
     component.searchTerm = 'laptop';
     component.searchSubject.next('laptop');
 
     tick(200);
-    expect(mockProductsService.getProducts).not.toHaveBeenCalled();
+    expect(getProductsMock).not.toHaveBeenCalled();
 
     tick(100);
-    expect(mockProductsService.getProducts).toHaveBeenCalledWith(
+    expect(getProductsMock).toHaveBeenCalledWith(
       expect.objectContaining({ searchTerm: 'laptop' }),
       1,
       20
@@ -161,17 +168,17 @@ describe('ProductListComponent', () => {
   }));
 
   it('should apply filters when category changes', () => {
-    mockProductsService.getProducts!.mockReturnValue(of(loadedResponse));
-    mockProductsService.getCategories!.mockReturnValue(of([]));
+    getProductsMock.mockReturnValue(of(loadedResponse));
+    getCategoriesMock.mockReturnValue(of([]));
 
     component.ngOnInit();
-    vi.mocked(mockProductsService.getProducts!).mockClear();
-    mockProductsService.getProducts!.mockReturnValue(of(loadedResponse));
+    getProductsMock.mockClear();
+    getProductsMock.mockReturnValue(of(loadedResponse));
 
     component.selectedCategory = 'Electronics';
     component.onFilterChange();
 
-    expect(mockProductsService.getProducts).toHaveBeenCalledWith(
+    expect(getProductsMock).toHaveBeenCalledWith(
       expect.objectContaining({ category: 'Electronics' }),
       1,
       20
@@ -179,8 +186,8 @@ describe('ProductListComponent', () => {
   });
 
   it('should reset to page 1 when filters change', () => {
-    mockProductsService.getProducts!.mockReturnValue(of(loadedResponse));
-    mockProductsService.getCategories!.mockReturnValue(of([]));
+    getProductsMock.mockReturnValue(of(loadedResponse));
+    getCategoriesMock.mockReturnValue(of([]));
 
     component.ngOnInit();
     component.currentPage.set(3);
@@ -203,7 +210,7 @@ describe('ProductListComponent', () => {
     component.minPrice = 10;
     component.maxPrice = 100;
 
-    mockProductsService.getProducts!.mockReturnValue(of(emptyResponse));
+    getProductsMock.mockReturnValue(of(emptyResponse));
     component.clearAllFilters();
 
     expect(component.searchTerm).toBe('');

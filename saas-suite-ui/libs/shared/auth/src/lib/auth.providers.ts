@@ -20,20 +20,24 @@ async function authInitializer(
   config: RuntimeConfigService,
   oidcAuth: OidcAuthService
 ): Promise<void> {
-  await config.load();
+  try {
+    await config.load();
 
-  if (config.get('authMode') === 'dev' && !isDevMode()) {
-    console.error(
-      '[Auth] SECURITY: authMode is "dev" but the app is running in production mode. ' +
-      'Falling back to OIDC. Set authMode to "oidc" in config.json for production deployments.'
-    );
-    await oidcAuth.configureAndTryLogin();
-    return;
-  }
+    if (config.get('authMode') === 'dev' && !isDevMode()) {
+      console.error(
+        '[Auth] SECURITY: authMode is "dev" but the app is running in production mode. ' +
+          'Falling back to OIDC. Set authMode to "oidc" in config.json for production deployments.'
+      );
+      await oidcAuth.configureAndTryLogin();
+      return;
+    }
 
-  if (config.get('authMode') === 'oidc') {
-    await oidcAuth.configureAndTryLogin();
-  } else {
-    await auth.restoreSession();
+    if (config.get('authMode') === 'oidc') {
+      await oidcAuth.configureAndTryLogin();
+    } else {
+      await auth.restoreSession();
+    }
+  } catch (e) {
+    console.error('[Auth] Initializer failed — app may run without session', e);
   }
 }

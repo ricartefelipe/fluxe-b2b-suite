@@ -3,11 +3,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-import { OnboardingChecklistStore } from '@saas-suite/domains/admin';
 import { I18nService } from '@saas-suite/shared/i18n';
+import { OnboardingChecklistStore } from './onboarding-checklist.store';
 
 @Component({
-  selector: 'saas-onboarding-checklist[mainTop]',
+  selector: 'lib-onboarding-checklist[mainTop]',
   standalone: true,
   imports: [MatCardModule, MatButtonModule, MatIconModule, RouterLink],
   template: `

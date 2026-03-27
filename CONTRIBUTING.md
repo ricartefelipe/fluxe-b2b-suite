@@ -14,6 +14,10 @@ Siga os protocolos definidos em **[docs/PIPELINE-ESTEIRAS.md](docs/PIPELINE-ESTE
 | **CI/CD** | develop → staging; master → production |
 | **Documentação** | Atualizar contratos, API, variáveis e guias conforme mudanças |
 
+### E2E (Playwright) na máquina local (Linux)
+
+Se os testes E2E falharem por dependências de browser no sistema, instalar as libs do host: `pnpm exec playwright install-deps` (a partir de `saas-suite-ui`, com permissões adequadas) ou seguir a mensagem do Playwright após `pnpm exec playwright install`.
+
 ---
 
 ## Links

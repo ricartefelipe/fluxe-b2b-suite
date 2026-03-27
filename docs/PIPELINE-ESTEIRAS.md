@@ -40,6 +40,13 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 - CI obrigatório no `fluxe-b2b-suite`: workflow `contracts-drift.yml`
 - Para CI cross-repo privado: configurar secret `CROSS_REPO_READ_TOKEN` (PAT com `repo:read`)
 
+**Smoke HTTP pós-merge (staging):**
+
+- Cada backend tem `scripts/smoke-post-merge.sh` que faz `curl` em health + OpenAPI quando a URL pública está definida.
+- Secrets no GitHub (por repositório): `CORE_SMOKE_URL`, `ORDERS_SMOKE_URL`, `PAYMENTS_SMOKE_URL` — URL base do serviço em Railway/staging (sem barra final). Se o secret estiver vazio, o job termina com sucesso (skip).
+- Local (workspace com os quatro repos): `pnpm smoke:staging` na raiz do `fluxe-b2b-suite` (exportar as mesmas variáveis antes, se necessário).
+- Thresholds sugeridos para alertas: [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md).
+
 **Qualidade estática (Sonar-like):**
 
 - Workflow `codeql.yml` (job Semgrep) obrigatório em PR/push para `develop` e `master`

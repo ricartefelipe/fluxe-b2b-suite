@@ -28,7 +28,8 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 **Gate local unificado (obrigatório antes de PR para `develop`):**
 
-- Executar `./scripts/pre-merge-checks.sh` na raiz do `fluxe-b2b-suite`
+- Executar `./scripts/pre-merge-checks.sh` na raiz do `fluxe-b2b-suite` (ou `pnpm verify:all`)
+- Se o Maven falhar ao criar o repositório local, definir `MAVEN_REPO_LOCAL=$HOME/.m2/repository` (é o default do script)
 - Para validação parcial: `./scripts/pre-merge-checks.sh core` (ou `orders`, `payments`, `suite`)
 - Merge só com todos os checks selecionados em verde
 

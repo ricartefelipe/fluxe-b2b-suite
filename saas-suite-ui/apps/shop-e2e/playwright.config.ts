@@ -12,10 +12,11 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: 'npx nx run shop:serve',
+    command: 'pnpm exec nx run shop:serve',
     url: 'http://localhost:4200',
     reuseExistingServer: !isCI,
     cwd: workspaceRoot,
+    timeout: isCI ? 180000 : 60000,
   },
   projects: [
     {

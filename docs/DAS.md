@@ -976,8 +976,9 @@ Todos os eventos seguem um envelope padronizado:
 |---|---|
 | Contrato JWT/Identidade | `docs/contracts/identity.md` (cada repositório) |
 | Contrato de Headers | `docs/contracts/headers.md` (cada repositório) |
-| Contrato de Eventos | `docs/contracts/events.md` (cada repositório) |
-| JSON Schemas de Eventos | `docs/contracts/schemas/` (cada repositório) |
+| Contrato de Eventos | `docs/contracts/events.md` — canónico em **spring-saas-core**; réplicas em node-b2b-orders e py-payments-ledger |
+| JSON Schemas de Eventos (tenant/policy/flag) | **spring-saas-core** `docs/contracts/schemas/` |
+| JSON Schemas adicionais (orders/inventory) | **node-b2b-orders** `docs/contracts/schemas/` (ver SCHEMA_REGISTRY) |
 | Prompt de Evolução | `docs/PROMPT-EVOLUCAO.md` (core) |
 | Backlog de Evolução | `docs/BACKLOG-EVOLUCAO.md` (cada repositório) |
 | Compliance/Auditoria | `docs/compliance.md` (cada repositório) |

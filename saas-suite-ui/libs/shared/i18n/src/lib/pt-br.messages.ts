@@ -650,7 +650,8 @@ export const PT_BR_MESSAGES: Messages = {
     confirmDeleteUser: 'Tem certeza que deseja remover este usuário?',
     userDeleted: 'Usuário removido',
     inviteSent: 'Convite enviado',
-    inviteCreatedNoEmail: 'Convite criado — nenhum e-mail foi enviado (modo log). Use a senha exibida.',
+    inviteCreatedNoEmail:
+      'Convite criado — use a senha exibida. O e-mail pode não ter sido enviado (modo log ou falha no envio).',
     inviteTemporaryPasswordTitle: 'Senha temporária',
     inviteTemporaryPasswordHint:
       'Nenhum e-mail foi enviado neste ambiente (EMAIL_PROVIDER=log). Copie a senha e envie ao usuário por um canal seguro.',
@@ -667,6 +668,13 @@ export const PT_BR_MESSAGES: Messages = {
     ctaStart: 'Começar Grátis',
     ctaDemo: 'Ver Funcionalidades',
     ctaContact: 'Falar com Vendas',
+    pitchTitle: 'Uma plataforma, governança e operações alinhadas',
+    pitchBody:
+      'Substitua integrações frágeis por um control plane com identidade, políticas ABAC e auditoria; pedidos e pagamentos com contratos estáveis — ideal para B2B que precisa escalar com segurança e previsibilidade.',
+    trustTitle: 'Por que equipes técnicas e negócio confiam',
+    trust1: 'Multi-tenant com isolamento e feature flags por organização',
+    trust2: 'Auditoria e trilha de acesso — não só “login e pronto”',
+    trust3: 'Stack moderna (APIs, eventos, métricas) pronta para evoluir',
     featuresTitle: 'Tudo que você precisa',
     feat1Title: 'Gestão de Pedidos',
     feat1Desc: 'Ciclo completo: do catálogo ao pagamento, com rastreamento em tempo real.',

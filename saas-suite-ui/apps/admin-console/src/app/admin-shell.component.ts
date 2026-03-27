@@ -1,10 +1,10 @@
 import { Component, inject, computed, OnInit } from '@angular/core';
-import { ShellComponent, NavItem, OnboardingChecklistComponent } from '@saas-suite/shared/ui';
+import { ShellComponent, NavItem } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
 import { AuthStore } from '@saas-suite/shared/auth';
 import { Tenant } from '@saas-suite/data-access/core';
-import { OnboardingChecklistStore } from '@saas-suite/domains/admin';
+import { OnboardingChecklistComponent, OnboardingChecklistStore } from '@saas-suite/domains/admin';
 import { CoreApiClient } from '@saas-suite/data-access/core';
 import { firstValueFrom } from 'rxjs';
 
@@ -14,7 +14,7 @@ import { firstValueFrom } from 'rxjs';
   imports: [ShellComponent, OnboardingChecklistComponent],
   template: `
     <saas-shell [navItems]="navItems()" [appTitle]="appTitle()">
-      <saas-onboarding-checklist mainTop />
+      <lib-onboarding-checklist mainTop />
     </saas-shell>
   `,
 })

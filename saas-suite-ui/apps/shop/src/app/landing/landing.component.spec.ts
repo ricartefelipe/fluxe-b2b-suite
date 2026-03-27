@@ -28,4 +28,8 @@ describe('LandingComponent', () => {
     expect(fixture.componentInstance.features).toHaveLength(4);
   });
 
+  it('should have 3 trust bullets', () => {
+    const fixture = TestBed.createComponent(LandingComponent);
+    expect(fixture.componentInstance.trustItems).toHaveLength(3);
+  });
 });

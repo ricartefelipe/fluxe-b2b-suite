@@ -39,7 +39,8 @@ jobs:
       # Nx Cloud: distribui lint/test/build/typecheck; E2E fica sequencial (porta 4200 partilhada)
       - run: pnpm nx start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="typecheck"
 
-      - run: pnpm exec playwright install --only-shell
+      # Browser + deps do SO (Ubuntu runner), alinhado a deploy.yml — evita falhas intermitentes do E2E
+      - run: pnpm exec playwright install --with-deps chromium
 
       - run: pnpm nx record -- echo Hello World
       - run: pnpm nx run-many -t lint test build typecheck

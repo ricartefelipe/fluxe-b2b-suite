@@ -1,7 +1,10 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, timeout } from 'rxjs';
 import { AppConfig, DEFAULT_CONFIG } from './app-config.model';
+
+/** Evita APP_INITIALIZER preso indefinidamente se /assets/config.json não responder. */
+const CONFIG_LOAD_TIMEOUT_MS = 10_000;
 
 @Injectable({ providedIn: 'root' })
 export class RuntimeConfigService {
@@ -12,7 +15,9 @@ export class RuntimeConfigService {
 
   async load(): Promise<void> {
     try {
-      const cfg = await firstValueFrom(this.http.get<Record<string, unknown>>('/assets/config.json'));
+      const cfg = await firstValueFrom(
+        this.http.get<Record<string, unknown>>('/assets/config.json').pipe(timeout(CONFIG_LOAD_TIMEOUT_MS))
+      );
       const merged = { ...DEFAULT_CONFIG, ...cfg } as AppConfig;
       const r = cfg as Record<string, unknown>;
       if (merged.coreApiBaseUrl === DEFAULT_CONFIG.coreApiBaseUrl && typeof r['coreApiUrl'] === 'string') {

@@ -5,11 +5,14 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 WORKSPACE_DIR="$(cd "${ROOT_DIR}/.." && pwd)"
-CORE_CONTRACTS_DIR="${WORKSPACE_DIR}/spring-saas-core/docs/contracts"
+CORE_BASE_DIR="${CORE_BASE_DIR:-${WORKSPACE_DIR}/spring-saas-core}"
+ORDERS_BASE_DIR="${ORDERS_BASE_DIR:-${WORKSPACE_DIR}/node-b2b-orders}"
+PAYMENTS_BASE_DIR="${PAYMENTS_BASE_DIR:-${WORKSPACE_DIR}/py-payments-ledger}"
+CORE_CONTRACTS_DIR="${CORE_BASE_DIR}/docs/contracts"
 
 TARGETS=(
-  "${WORKSPACE_DIR}/node-b2b-orders/docs/contracts"
-  "${WORKSPACE_DIR}/py-payments-ledger/docs/contracts"
+  "${ORDERS_BASE_DIR}/docs/contracts"
+  "${PAYMENTS_BASE_DIR}/docs/contracts"
 )
 
 FILES_TO_COMPARE=(

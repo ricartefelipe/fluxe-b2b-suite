@@ -7,6 +7,7 @@ Este arquivo define regras e preferências para assistentes de código que traba
 ## Regras imutáveis (o agente aprende e aplica sempre)
 
 - **Git Flow:** toda alteração via branch `feature/*` ou `fix/*` a partir de `develop` → PR → merge; nunca commit direto em `develop` ou `master`.
+- **Base das branches:** antes de criar `feature/*` ou `fix/*`, atualizar `develop` (`git fetch origin && git checkout develop && git pull origin develop`) e só então `git checkout -b feature/...` ou `fix/...`. Nunca abrir trabalho novo a partir de `master` ou de outra feature sem alinhamento explícito.
 - **Sem marcas de ferramentas em artefactos Git ou docs:** não incluir nomes comerciais de IDEs ou assistentes em commits, merges, títulos de PR nem em documentação do repositório (incluindo rodapés automáticos de ferramentas).
 - **Ao concluir:** fazer o processo de subida completo (branch, commit, push, PR, CI verde, merge em `develop`). **Release para produção** (`develop` → `master`) é da responsabilidade do utilizador; o agente só executa quando o utilizador pedir e seguindo as preferências dele (ver secção "Release para produção").
 

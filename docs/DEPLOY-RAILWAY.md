@@ -128,6 +128,8 @@ Variáveis para **todos** os frontends (ver `saas-suite-ui/railway.prod.env.exam
 
 Para **ops-portal** e **admin-console** use sempre **URLs absolutas** (ex.: `https://spring-saas-core-xxx.up.railway.app`). URLs relativas (`/api/core`) só funcionam com proxy reverso; no Railway cada app é um serviço separado.
 
+**Assistente IA (Admin):** no serviço **spring-saas-core**, define `OPENAI_API_KEY` (e mantém `AI_ENABLED=true` em staging, ou `AI_ENABLED=true` em prod se quiseres LLM). Sem chave, o assistente usa só o motor de regras. Detalhes: [spring-saas-core — IA-ASSISTENTE-ADMIN.md](https://github.com/ricartefelipe/spring-saas-core/blob/develop/docs/IA-ASSISTENTE-ADMIN.md) (repo irmão).
+
 **Shop (opcional):** `SUPPORT_EMAIL` (e-mail da página Fale conosco) e `SUPPORT_DOCS_URL` (URL do help center; se definida, o link "Ajuda" no rodapé abre essa URL).
 
 ### 5.1 CORS nos backends

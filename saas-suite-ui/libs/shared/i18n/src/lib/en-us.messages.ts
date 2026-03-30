@@ -72,6 +72,22 @@ export const EN_US_MESSAGES: Messages = {
     confirmNewPassword: 'Confirm new password',
     confirmPasswordMismatch: 'New password and confirmation do not match.',
     changePasswordButton: 'Change password',
+    forgotPasswordTitle: 'Reset password',
+    forgotPasswordSubtitle:
+      'Enter your account email. If it is registered, we will send a link to set a new password.',
+    forgotPasswordSent:
+      'If an account exists for this email, you will receive instructions shortly. Check your spam folder too.',
+    forgotPasswordSubmit: 'Send reset link',
+    backToLogin: 'Back to sign in',
+    resetPasswordTitle: 'Set new password',
+    resetPasswordSubtitle: 'Choose a strong password with at least 8 characters.',
+    resetPasswordSubmit: 'Save password',
+    resetPasswordSuccess: 'Your password was updated. You can sign in with your new password.',
+    resetPasswordInvalidLink:
+      'This link is invalid or has expired. Request a new reset email.',
+    passwordMinHint: 'At least 8 characters',
+    requestResetError: 'Could not send the email. Please try again.',
+    loginSubtitleProd: 'Sign in with your work email and password.',
   },
   tenant: {
     selectTenant: 'Select a Tenant',

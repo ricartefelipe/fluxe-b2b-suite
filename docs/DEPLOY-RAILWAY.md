@@ -128,6 +128,8 @@ Variáveis para **todos** os frontends (ver `saas-suite-ui/railway.prod.env.exam
 
 Para **ops-portal** e **admin-console** use sempre **URLs absolutas** (ex.: `https://spring-saas-core-xxx.up.railway.app`). URLs relativas (`/api/core`) só funcionam com proxy reverso; no Railway cada app é um serviço separado.
 
+**Assistente IA (Admin):** no serviço **spring-saas-core**, define `OPENAI_API_KEY` (e mantém `AI_ENABLED=true` em staging, ou `AI_ENABLED=true` em prod se quiseres LLM). Sem chave, o assistente usa só o motor de regras. Detalhes: [spring-saas-core — IA-ASSISTENTE-ADMIN.md](https://github.com/ricartefelipe/spring-saas-core/blob/develop/docs/IA-ASSISTENTE-ADMIN.md) (repo irmão).
+
 **Shop (opcional):** `SUPPORT_EMAIL` (e-mail da página Fale conosco) e `SUPPORT_DOCS_URL` (URL do help center; se definida, o link "Ajuda" no rodapé abre essa URL).
 
 ### 5.1 CORS nos backends
@@ -260,5 +262,5 @@ Exemplo de mapeamento:
 3. **Testar `GET /v1/tenants` diretamente:** Com um JWT válido, faça `curl -H "Authorization: Bearer <token>" https://<core-url>/v1/tenants`. Deve retornar 200 com `{ items: [...] }`.
 4. **Policies no Spring:** O Liquibase changeset `008-essential-seed-all-envs.yaml` insere `tenants:read` e `tenants:write`. Se a tabela `policies` estiver vazia, o ABAC bloqueia. Em staging: `SPRING_PROFILES_ACTIVE=staging` e seed (`./scripts/staging-seed.sh railway`). Em prod: o 008 roda no startup e popula as políticas essenciais.
 5. **CORS:** O Spring deve ter `CORS_ALLOWED_ORIGINS` com a origem do admin-console (ex.: `https://admin-console-xxx.up.railway.app`).
-6. **Erro de deserialização no Redis:** Se o 500 mostrar `SerializationException` ou similar no campo `detail`, o cache Redis está com dados incompatíveis. No Railway, defina `CACHE_FRONT_TENANTS_ENABLED=false` no spring-saas-core para desativar o cache de tenants (usa memória). Ou reinicie o Redis para limpar.
+6. **Erro antigo de cache de tenants no Redis:** Versões anteriores cacheavam GET /v1/tenants no Redis; isso foi removido no Core (lista vai sempre à BD). Se ainda vires 500 por `SerializationException` em `/v1/tenants`, faz deploy da versão atual do Core e confirma que não há proxy a servir resposta em cache.
 7. **URL da API no Admin:** No Railway, o serviço **admin-console** precisa de `CORE_API_BASE_URL` apontando para o Spring (ex.: `https://spring-saas-core-xxx.up.railway.app`). Se vazio, o front chama URLs quebradas.

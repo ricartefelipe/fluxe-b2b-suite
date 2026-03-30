@@ -14,6 +14,9 @@ test.describe('Admin Console Navigation', () => {
       'policies',
       'flags',
       'audit',
+      'users',
+      'billing',
+      'ai',
       'onboarding',
     ]) {
       await page.goto(`/${section}`);

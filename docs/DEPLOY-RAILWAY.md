@@ -97,6 +97,16 @@ Variáveis (ver `railway.prod.env.example`):
 - `JWT_SECRET` → **mesmo** valor do spring-saas-core
 - `JWT_ISSUER=spring-saas-core`
 
+**Worker (obrigatório para CREATED → RESERVED):** o outbox e a reserva de stock correm no processo `node dist/src/worker/main.js` (`docker/worker.Dockerfile`). Faça um **segundo serviço** no mesmo projeto Railway com o **mesmo repositório** `node-b2b-orders`, por exemplo `node-b2b-orders-worker`. No serviço worker, em **Settings → Build → Config as code**, aponte para o ficheiro **`railway.worker.toml`** na raiz do repo (não use o `railway.toml` da API, que referencia `docker/api.Dockerfile`). Copie as variáveis da API para o worker (sobretudo `DATABASE_URL`, `REDIS_URL`, `JWT_*`, `RABBITMQ_URL`):
+
+```bash
+cd node-b2b-orders
+chmod +x scripts/railway-sync-worker-env.sh
+./scripts/railway-sync-worker-env.sh 'amqp://USER:PASS@HOST/VHOST'
+```
+
+O URL AMQP deve ser o mesmo na **API** e no **worker** (ex.: [CloudAMQP](https://www.cloudamqp.com/)). Sem `RABBITMQ_URL`, o worker não mantém filas nem conclui o fluxo até `RESERVED`.
+
 #### py-payments-ledger
 ```bash
 cd py-payments-ledger

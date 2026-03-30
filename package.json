@@ -11,7 +11,8 @@
     "verify:all": "bash scripts/pre-merge-checks.sh",
     "verify:contracts": "bash scripts/check-contract-drift.sh",
     "smoke:staging": "bash scripts/smoke-staging.sh",
-    "smoke:order-staging": "bash scripts/smoke-order-staging.sh"
+    "smoke:order-staging": "bash scripts/smoke-order-staging.sh",
+    "smoke:order-staging:paid": "env SMOKE_PAYMENT_PAID=1 bash scripts/smoke-order-staging.sh"
   },
   "repository": {
     "type": "git",

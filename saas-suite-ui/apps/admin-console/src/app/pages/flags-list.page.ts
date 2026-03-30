@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, AfterViewInit, effect, untracked, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ViewChild, AfterViewInit, effect, untracked, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -93,11 +93,12 @@ import { I18nService } from '@saas-suite/shared/i18n';
   `],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FlagsListPage implements OnInit, AfterViewInit {
+export class FlagsListPage implements AfterViewInit {
   protected facade = inject(FlagsFacade);
   protected tenantStore = inject(TenantContextStore);
   protected i18n = inject(I18nService);
   private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -111,6 +112,7 @@ export class FlagsListPage implements OnInit, AfterViewInit {
   constructor() {
     effect(() => {
       this.dataSource.data = this.facade.flags();
+      this.cdr.markForCheck();
     });
     effect(() => {
       const tid = this.tenantStore.activeTenantId();
@@ -123,11 +125,6 @@ export class FlagsListPage implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     if (this.sort) this.dataSource.sort = this.sort;
     if (this.paginator) this.dataSource.paginator = this.paginator;
-  }
-
-  async ngOnInit(): Promise<void> {
-    const tid = this.tenantStore.activeTenantId();
-    if (tid) await this.facade.loadFlags(tid);
   }
 
   async create(): Promise<void> {

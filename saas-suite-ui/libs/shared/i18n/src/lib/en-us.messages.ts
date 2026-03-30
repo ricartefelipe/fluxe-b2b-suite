@@ -625,6 +625,13 @@ export const EN_US_MESSAGES: Messages = {
     insights: 'Insights',
     insightsDesc: 'Fluxe B2B Suite health indicators and opportunities',
     aiError: 'Error querying AI. Check if the backend is running.',
+    aiActionError:
+      'Could not complete this action. Check permissions, network, and Core availability.',
+    aiNetworkError: 'Cannot reach Core. Check network, VPN, and API URL.',
+    aiForbiddenError: 'No permission for this feature (e.g. analytics:read).',
+    aiOpenAiKeyMissing:
+      'Core has no OPENAI_API_KEY — chat uses the rule engine only.',
+    aiDismissError: 'Dismiss',
     actor: 'Actor',
     rollout: 'Rollout',
     suspend: 'Suspend',

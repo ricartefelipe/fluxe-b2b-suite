@@ -4,12 +4,13 @@ Objetivo: **repetir em staging** o fluxo **token → criar pedido → RESERVED �
 
 ## Prerequisitos
 
-1. API **node-b2b-orders** deployada em staging (ex.: Railway) com **mesmo** `JWT_SECRET` / issuer alinhado ao seed, ou auth local da propria API (`POST /v1/auth/token`).
-2. Base URL publica (sem barra final), ex.: `https://orders-api-staging.example.railway.app`.
-3. Utilizador e tenant **existentes na base de staging** (apos `seed` ou migracao). Os defaults do script assumem o seed de desenvolvimento:
+1. **Migracoes Prisma aplicadas** na base PostgreSQL de staging (`npx prisma migrate deploy` via CI, startup ou `railway run` no servico orders). Se faltar tabela (ex.: `OutboxEvent`), o `POST /v1/orders` devolve 500 com detalhe no corpo — ver [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md).
+2. API **node-b2b-orders** deployada em staging (ex.: Railway) com **mesmo** `JWT_SECRET` / issuer alinhado ao seed, ou auth local da propria API (`POST /v1/auth/token`).
+3. Base URL publica (sem barra final). Nome esperado na doc de pipeline: `https://node-b2b-orders-staging.up.railway.app` (ajuste se o teu projeto usar outro host).
+4. Utilizador e tenant **existentes na base de staging** (apos `seed` ou migracao). Os defaults do script assumem o seed de desenvolvimento:
    - `ops@demo.example.com` / `ops123` / `tenant_demo`  
    Se o teu staging usar outros dados, define `OPS_EMAIL`, `OPS_PASSWORD`, `OPS_TENANT`.
-4. **Worker** e **RabbitMQ** ativos — sem worker o pedido pode ficar em `CREATED` e nunca chegar a `RESERVED`.
+5. **Worker** e **RabbitMQ** ativos — sem worker o pedido pode ficar em `CREATED` e nunca chegar a `RESERVED`.
 
 ## Execucao automatica (recomendado)
 

@@ -27,13 +27,28 @@ json_get () {
   node -e "const obj=JSON.parse(process.argv[1]); const path=process.argv[2].split('.'); let cur=obj; for (const p of path){cur=cur[p];} console.log(cur);" "$1" "$2"
 }
 
+# curl com corpo em stdout; em HTTP != 2xx imprime corpo (ex.: detalhe Prisma) e sai com 1
+http_expect_2xx () {
+  local out code
+  out=$(mktemp)
+  code=$(curl -sS -o "$out" -w '%{http_code}' "$@") || true
+  if [[ "$code" != 2* ]]; then
+    echo "[smoke-order] HTTP $code" >&2
+    cat "$out" >&2
+    rm -f "$out"
+    exit 1
+  fi
+  cat "$out"
+  rm -f "$out"
+}
+
 echo "[smoke-order] Base: $BASE_URL"
 echo "[smoke-order] Tenant: $TENANT / utilizador: $OPS_EMAIL"
 
-curl -sfS --max-time 25 "$BASE_URL/v1/healthz" >/dev/null
+http_expect_2xx --max-time 25 "$BASE_URL/v1/healthz" >/dev/null
 echo "[smoke-order] OK GET /v1/healthz"
 
-TOKEN_JSON=$(curl -sfS --max-time 25 -X POST "$BASE_URL/v1/auth/token" \
+TOKEN_JSON=$(http_expect_2xx --max-time 25 -X POST "$BASE_URL/v1/auth/token" \
   -H 'Content-Type: application/json' \
   -d "{\"email\":\"$OPS_EMAIL\",\"password\":\"$OPS_PASSWORD\",\"tenantId\":\"$TENANT\"}")
 TOKEN=$(json_get "$TOKEN_JSON" "access_token")
@@ -44,7 +59,7 @@ fi
 echo "[smoke-order] OK POST /v1/auth/token"
 
 IDEM="suite-smoke-$(date +%s)-$RANDOM"
-ORDER_JSON=$(curl -sfS --max-time 30 -X POST "$BASE_URL/v1/orders" \
+ORDER_JSON=$(http_expect_2xx --max-time 30 -X POST "$BASE_URL/v1/orders" \
   -H "Authorization: Bearer $TOKEN" \
   -H "X-Tenant-Id: $TENANT" \
   -H "Idempotency-Key: $IDEM" \
@@ -61,7 +76,7 @@ echo "[smoke-order] OK POST /v1/orders id=$ORDER_ID"
 echo "[smoke-order] Aguardar worker (reserva de stock)..."
 sleep 4
 
-ORDER_AFTER=$(curl -sfS --max-time 25 "$BASE_URL/v1/orders/$ORDER_ID" \
+ORDER_AFTER=$(http_expect_2xx --max-time 25 "$BASE_URL/v1/orders/$ORDER_ID" \
   -H "Authorization: Bearer $TOKEN" \
   -H "X-Tenant-Id: $TENANT")
 RSV=$(json_get "$ORDER_AFTER" "status")
@@ -71,7 +86,7 @@ if [[ "$RSV" != "RESERVED" ]]; then
 fi
 echo "[smoke-order] OK GET /v1/orders/:id -> RESERVED"
 
-CONFIRM_JSON=$(curl -sfS --max-time 30 -X POST "$BASE_URL/v1/orders/$ORDER_ID/confirm" \
+CONFIRM_JSON=$(http_expect_2xx --max-time 30 -X POST "$BASE_URL/v1/orders/$ORDER_ID/confirm" \
   -H "Authorization: Bearer $TOKEN" \
   -H "X-Tenant-Id: $TENANT" \
   -H "Idempotency-Key: confirm-$IDEM" \

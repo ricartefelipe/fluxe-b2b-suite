@@ -72,6 +72,22 @@ export const PT_BR_MESSAGES: Messages = {
     confirmNewPassword: 'Confirmar nova senha',
     confirmPasswordMismatch: 'Nova senha e confirmação não conferem.',
     changePasswordButton: 'Alterar senha',
+    forgotPasswordTitle: 'Recuperar senha',
+    forgotPasswordSubtitle:
+      'Informe o e-mail da sua conta. Se ele estiver cadastrado, enviaremos um link para definir uma nova senha.',
+    forgotPasswordSent:
+      'Se existir uma conta para este e-mail, você receberá as instruções em instantes. Verifique também o spam.',
+    forgotPasswordSubmit: 'Enviar link por e-mail',
+    backToLogin: 'Voltar ao login',
+    resetPasswordTitle: 'Definir nova senha',
+    resetPasswordSubtitle: 'Escolha uma senha segura com pelo menos 8 caracteres.',
+    resetPasswordSubmit: 'Salvar senha',
+    resetPasswordSuccess: 'Senha alterada. Você já pode entrar com a nova senha.',
+    resetPasswordInvalidLink:
+      'Este link não é válido ou expirou. Peça um novo e-mail na recuperação de senha.',
+    passwordMinHint: 'Mínimo de 8 caracteres',
+    requestResetError: 'Não foi possível enviar o e-mail. Tente novamente.',
+    loginSubtitleProd: 'Use o e-mail corporativo e a senha da sua conta.',
   },
   tenant: {
     selectTenant: 'Selecione um Tenant',

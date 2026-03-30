@@ -72,6 +72,19 @@ export interface Messages {
     confirmNewPassword: string;
     confirmPasswordMismatch: string;
     changePasswordButton: string;
+    forgotPasswordTitle: string;
+    forgotPasswordSubtitle: string;
+    forgotPasswordSent: string;
+    forgotPasswordSubmit: string;
+    backToLogin: string;
+    resetPasswordTitle: string;
+    resetPasswordSubtitle: string;
+    resetPasswordSubmit: string;
+    resetPasswordSuccess: string;
+    resetPasswordInvalidLink: string;
+    passwordMinHint: string;
+    requestResetError: string;
+    loginSubtitleProd: string;
   };
   tenant: {
     selectTenant: string;

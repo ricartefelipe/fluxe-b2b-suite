@@ -7,6 +7,16 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('@saas-suite/shared/auth').then(m => m.LoginPageComponent),
   },
   {
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('@saas-suite/shared/auth').then(m => m.ForgotPasswordPageComponent),
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('@saas-suite/shared/auth').then(m => m.ResetPasswordPageComponent),
+  },
+  {
     path: 'signup',
     loadComponent: () => import('@saas-suite/shared/auth').then(m => m.SignupPageComponent),
   },

@@ -11,6 +11,7 @@
 | [README.md](README.md) | Este índice |
 | [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md) | Configuração dos 3 ambientes: local, staging, produção (inclui como alimentar staging com dados) |
 | [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md) | Checklist completo go-live para venda (produção, Stripe, Resend, domínio, OIDC, migrations, termos) |
+| [EXECUCAO-VENDA-MONITORIZACAO.md](EXECUCAO-VENDA-MONITORIZACAO.md) | Playbook único: staging, smoke pedido/PAID, monitorização, promoção e produção |
 | [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) | Deploy no Railway: serviços, variáveis, migrations, seed (staging vs produção), domínio customizado e SSL |
 | [URLS-AMBIENTES.md](URLS-AMBIENTES.md) | URLs de staging e production (fronts e APIs) e usuário inicial nos 3 fronts |
 | [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Pipeline, esteiras develop/master, release e tags, protocolos (Git Flow, qualidade, testes, CI/CD, docs) |

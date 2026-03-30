@@ -1,6 +1,6 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient, HttpContext } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { firstValueFrom, timeout, catchError, of } from 'rxjs';
 import { AuthStore } from './auth.store';
@@ -202,5 +202,67 @@ export class AuthService {
     }
     if (this.isBrowser) sessionStorage.removeItem('dev_token');
     await this.router.navigate(['/login']);
+  }
+
+  async requestPasswordReset(email: string): Promise<void> {
+    const baseUrl = this.config.get('coreApiBaseUrl');
+    const ctx = new HttpContext()
+      .set(SKIP_AUTH, true)
+      .set(SKIP_TENANT_HEADER, true);
+    try {
+      await firstValueFrom(
+        this.http
+          .post(`${baseUrl}/v1/auth/password-reset/request`, { email }, { context: ctx })
+          .pipe(timeout(15_000)),
+      );
+    } catch (e: unknown) {
+      throw this.mapAuthHttpError(e, 'Não foi possível enviar o e-mail. Tente novamente.');
+    }
+  }
+
+  async confirmPasswordReset(
+    tokenId: string,
+    token: string,
+    newPassword: string,
+  ): Promise<void> {
+    const baseUrl = this.config.get('coreApiBaseUrl');
+    const ctx = new HttpContext()
+      .set(SKIP_AUTH, true)
+      .set(SKIP_TENANT_HEADER, true);
+    try {
+      await firstValueFrom(
+        this.http
+          .post(
+            `${baseUrl}/v1/auth/password-reset/confirm`,
+            { tokenId, token, newPassword },
+            { context: ctx },
+          )
+          .pipe(timeout(15_000)),
+      );
+    } catch (e: unknown) {
+      throw this.mapAuthHttpError(
+        e,
+        'Link inválido ou expirado. Solicite um novo e-mail de recuperação.',
+      );
+    }
+  }
+
+  private mapAuthHttpError(err: unknown, fallback: string): Error {
+    if (err instanceof HttpErrorResponse) {
+      const body = err.error;
+      if (body && typeof body === 'object') {
+        const detail = (body as Record<string, unknown>)['detail'];
+        if (typeof detail === 'string' && detail.length > 0) {
+          return new Error(detail);
+        }
+      }
+      if (err.status === 0) {
+        return new Error('Sem conexão. Verifique sua rede.');
+      }
+    }
+    if (err instanceof Error) {
+      return err;
+    }
+    return new Error(fallback);
   }
 }

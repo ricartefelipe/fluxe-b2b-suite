@@ -9,8 +9,9 @@ set -euo pipefail
 #   ./scripts/smoke-order-staging.sh
 #
 # Opcional: OPS_EMAIL, OPS_PASSWORD, OPS_TENANT (defaults = seed local/demo)
-# Opcional ate PAID: SMOKE_PAYMENT_PAID=1 e RABBITMQ_URL (mesmo broker da API/worker em staging).
-#   Requer repo node-b2b-orders clonado ao lado de fluxe-b2b-suite (usa scripts/publish-payment-settled.js + amqplib).
+# Opcional ate PAID (duas formas):
+#   A) SMOKE_PAYMENT_PAID=1 + RABBITMQ_URL — publica payment.settled manualmente (repo node-b2b-orders ao lado).
+#   B) SMOKE_SAGA_PAID_LEDGER=1 — sem publicar; faz poll ate PAID (exige py-payments worker + orders worker no mesmo broker).
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WKS="$(cd "$SCRIPT_DIR/../.." && pwd)"
@@ -102,7 +103,30 @@ if [[ "$CF" != "CONFIRMED" ]]; then
 fi
 echo "[smoke-order] OK POST /v1/orders/:id/confirm -> CONFIRMED"
 
+poll_until_paid () {
+  local max="${1:-25}"
+  local label="${2:-aguardando PAID}"
+  echo "[smoke-order] $label"
+  PAID_OK=0
+  for _ in $(seq 1 "$max"); do
+    O=$(http_expect_2xx --max-time 25 "$BASE_URL/v1/orders/$ORDER_ID" \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "X-Tenant-Id: $TENANT")
+    ST=$(json_get "$O" "status")
+    if [[ "$ST" == "PAID" ]]; then PAID_OK=1; break; fi
+    sleep 1
+  done
+  if [[ "$PAID_OK" != "1" ]]; then
+    return 1
+  fi
+  return 0
+}
+
 if [[ "${SMOKE_PAYMENT_PAID:-0}" == "1" ]]; then
+  if [[ "${SMOKE_SAGA_PAID_LEDGER:-0}" == "1" ]]; then
+    echo "[smoke-order] Use apenas um modo: SMOKE_PAYMENT_PAID ou SMOKE_SAGA_PAID_LEDGER."
+    exit 1
+  fi
   if [[ -z "${RABBITMQ_URL:-}" ]]; then
     echo "[smoke-order] SMOKE_PAYMENT_PAID=1 exige RABBITMQ_URL (mesmo broker que API e worker em staging)."
     exit 1
@@ -114,23 +138,30 @@ if [[ "${SMOKE_PAYMENT_PAID:-0}" == "1" ]]; then
   fi
   echo "[smoke-order] Publicando payment.settled (simula py-payments-ledger)..."
   (cd "${WKS}/node-b2b-orders" && RABBITMQ_URL="$RABBITMQ_URL" node scripts/publish-payment-settled.js "$ORDER_ID" "$TENANT")
-  echo "[smoke-order] Aguardando worker consumir payment.settled..."
-  PAID_OK=0
-  for _ in $(seq 1 25); do
-    O=$(http_expect_2xx --max-time 25 "$BASE_URL/v1/orders/$ORDER_ID" \
-      -H "Authorization: Bearer $TOKEN" \
-      -H "X-Tenant-Id: $TENANT")
-    ST=$(json_get "$O" "status")
-    if [[ "$ST" == "PAID" ]]; then PAID_OK=1; break; fi
-    sleep 1
-  done
-  if [[ "$PAID_OK" != "1" ]]; then
-    echo "[smoke-order] FALHA: status PAID nao atingido apos payment.settled (worker, fila ou exchange PAYMENTS_EXCHANGE)."
+  if ! poll_until_paid 25 "Aguardando worker orders consumir payment.settled..."; then
+    echo "[smoke-order] FALHA: status PAID nao atingido (worker orders, fila ou PAYMENTS_EXCHANGE)."
     exit 1
   fi
   echo "[smoke-order] OK GET /v1/orders/:id -> PAID"
-  echo "[smoke-order] Fluxo minimo concluido com sucesso (ate PAID)."
+  echo "[smoke-order] Fluxo minimo concluido com sucesso (ate PAID, publicacao manual)."
+elif [[ "${SMOKE_SAGA_PAID_LEDGER:-0}" == "1" ]]; then
+  PAYMENTS_BASE="${PAYMENTS_SMOKE_URL:-${SMOKE_PAYMENTS_BASE:-}}"
+  if [[ -n "$PAYMENTS_BASE" ]]; then
+    PAYMENTS_BASE="${PAYMENTS_BASE%/}"
+    if curl -sfS --max-time 15 "$PAYMENTS_BASE/healthz" >/dev/null; then
+      echo "[smoke-order] OK GET payments $PAYMENTS_BASE/healthz"
+    else
+      echo "[smoke-order] aviso: payments health falhou — continua mesmo assim (opcional)"
+    fi
+  fi
+  echo "[smoke-order] Modo saga: ledger deve consumir order.confirmed/charge, emitir payment.settled (py-payments worker + orders worker)."
+  if ! poll_until_paid 90 "Aguardando PAID via ledger (ate 90s)..."; then
+    echo "[smoke-order] FALHA: PAID nao atingido. Verifique py-payments worker, ORDERS_INTEGRATION_ENABLED, gateway (fake/stripe) e filas."
+    exit 1
+  fi
+  echo "[smoke-order] OK GET /v1/orders/:id -> PAID"
+  echo "[smoke-order] Fluxo saga concluido com sucesso (ate PAID via py-payments-ledger)."
 else
   echo "[smoke-order] Fluxo minimo concluido com sucesso (ate CONFIRMED)."
-  echo "[smoke-order] Para validar ate PAID: SMOKE_PAYMENT_PAID=1 e RABBITMQ_URL (ver CHECKLIST-PEDIDO-STAGING.md)."
+  echo "[smoke-order] PAID: SMOKE_PAYMENT_PAID=1+RABBITMQ_URL ou SMOKE_SAGA_PAID_LEDGER=1 (ver CHECKLIST-PEDIDO-STAGING.md)."
 fi

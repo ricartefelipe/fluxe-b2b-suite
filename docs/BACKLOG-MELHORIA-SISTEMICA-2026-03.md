@@ -93,9 +93,8 @@ Objetivo: detectar quebra funcional cedo em staging e reduzir MTTR.
   - Entrega: `scripts/smoke-post-merge.sh`, workflow, secret `CORE_SMOKE_URL`.
   - Dependencia: A-02.
 
-- **Estado: Parcial** — C-02 | `node-b2b-orders` | Criar smoke pos-merge em `develop`
-  - Entrega atual: `/v1/healthz` + `/v1/docs-json` em staging (secret `ORDERS_SMOKE_URL`).
-  - Complemento suite: checklist + script `pnpm smoke:order-staging` em `fluxe-b2b-suite` ([CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md)) — fluxo minimo ate CONFIRMED com curl.
+- **Estado: Concluído** — C-02 | `node-b2b-orders` | Criar smoke pos-merge em `develop`
+  - Entrega: `/v1/healthz` + `/v1/docs-json` em staging (secret `ORDERS_SMOKE_URL`); complemento na suite `pnpm smoke:order-staging` ([CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md)); CI `npm audit --audit-level=high` verde com `overrides` (`path-to-regexp@8.4.0`) no servico.
   - Pendencia opcional: validacao de evento publicado / PAID end-to-end (ampliacao futura).
   - Dependencia: A-03.
 

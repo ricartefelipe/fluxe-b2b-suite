@@ -94,12 +94,55 @@ export async function installCoreE2eMocks(page: Page): Promise<void> {
     });
   });
 
+  /**
+   * Tenants: lista, detalhe, health, export e flags — evita responder `emptyPage` em sub-rotas.
+   */
   await page.route('**/api/core/v1/tenants**', async (route) => {
-    if (route.request().method() !== 'GET') {
+    const url = new URL(route.request().url());
+    const pathname = url.pathname.replace(/\/$/, '');
+    const method = route.request().method();
+    const parts = pathname.split('/').filter(Boolean);
+    const ti = parts.indexOf('tenants');
+    const tail = ti >= 0 ? parts.slice(ti + 1) : [];
+
+    if (method === 'GET' && tail.length === 0) {
+      await fulfillJson(route, emptyPage);
+      return;
+    }
+    if (method === 'GET' && tail.length === 2 && tail[1] === 'health') {
+      await fulfillJson(route, {
+        tenantId: tail[0],
+        lastActivityAt: null,
+        activeUsersCount: 0,
+      });
+      return;
+    }
+    if (method === 'GET' && tail.length === 2 && tail[1] === 'export') {
+      await fulfillJson(route, { mock: 'e2e-tenant-export' });
+      return;
+    }
+    if (tail.length >= 2 && tail[1] === 'flags') {
+      if (method === 'GET' && tail.length === 2) {
+        await fulfillJson(route, []);
+        return;
+      }
       await route.continue();
       return;
     }
-    await fulfillJson(route, emptyPage);
+    if (method === 'GET' && tail.length === 1) {
+      const id = tail[0];
+      await fulfillJson(route, {
+        id,
+        name: 'Tenant E2E',
+        plan: 'starter',
+        region: 'us-east-1',
+        status: 'ACTIVE',
+        createdAt: '2025-01-01T00:00:00.000Z',
+        updatedAt: '2025-01-01T00:00:00.000Z',
+      });
+      return;
+    }
+    await route.continue();
   });
 
   await page.route('**/api/core/v1/policies**', async (route) => {
@@ -141,6 +184,42 @@ export async function installCoreE2eMocks(page: Page): Promise<void> {
       return;
     }
     await fulfillJson(route, mockSubscriptionCurrent);
+  });
+
+  await page.route('**/api/core/v1/billing/portal-session**', async (route) => {
+    if (route.request().method() !== 'POST') {
+      await route.continue();
+      return;
+    }
+    await fulfillJson(route, { url: '/billing' });
+  });
+
+  await page.route('**/api/core/v1/subscriptions/trial**', async (route) => {
+    if (route.request().method() !== 'POST') {
+      await route.continue();
+      return;
+    }
+    await fulfillJson(route, {
+      ...mockSubscriptionCurrent,
+      status: 'TRIAL',
+      trialEndsAt: '2030-12-31T23:59:59.000Z',
+    });
+  });
+
+  await page.route('**/api/core/v1/subscriptions/schedule-cancel**', async (route) => {
+    if (route.request().method() !== 'POST') {
+      await route.continue();
+      return;
+    }
+    await fulfillJson(route, { ...mockSubscriptionCurrent, cancelAtPeriodEnd: true });
+  });
+
+  await page.route('**/api/core/v1/subscriptions/undo-schedule-cancel**', async (route) => {
+    if (route.request().method() !== 'POST') {
+      await route.continue();
+      return;
+    }
+    await fulfillJson(route, { ...mockSubscriptionCurrent, cancelAtPeriodEnd: false });
   });
 
   /** Assistente IA — sem Core real, evita falhas e permite smoke E2E. */

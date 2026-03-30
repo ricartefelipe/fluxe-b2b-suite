@@ -114,4 +114,69 @@ export async function installCoreE2eMocks(page: Page): Promise<void> {
     }
     await fulfillJson(route, mockBillingPlans);
   });
+
+  /** Assistente IA — sem Core real, evita falhas e permite smoke E2E. */
+  await page.route('**/api/core/v1/ai/**', async (route) => {
+    const url = route.request().url();
+    const method = route.request().method();
+    if (url.includes('/v1/ai/status') && method === 'GET') {
+      await fulfillJson(route, {
+        engine: 'rule-engine',
+        provider: 'built-in',
+        model: 'rule-based-v1',
+        capabilities: [
+          'audit-analysis',
+          'governance-recommendations',
+          'chat-assistant',
+          'system-insights',
+          'anomaly-detection',
+        ],
+        aiEnabledProperty: false,
+        openaiKeyConfigured: true,
+      });
+      return;
+    }
+    if (url.includes('/v1/ai/chat') && method === 'POST') {
+      await fulfillJson(route, {
+        answer: 'Resposta mock E2E — Core não está em execução.',
+        intent: 'rule-engine',
+        suggestions: [] as string[],
+      });
+      return;
+    }
+    if (url.includes('/v1/ai/analyze-audit') && method === 'POST') {
+      await fulfillJson(route, {
+        engine: 'rule-engine',
+        content: '## Análise de auditoria (mock E2E)\nMotor de regras.',
+        context: {} as Record<string, unknown>,
+      });
+      return;
+    }
+    if (url.includes('/v1/ai/recommendations') && method === 'POST') {
+      await fulfillJson(route, {
+        engine: 'rule-engine',
+        content: '## Recomendações (mock E2E)',
+        context: {} as Record<string, unknown>,
+      });
+      return;
+    }
+    if (url.includes('/v1/ai/insights') && method === 'GET') {
+      await fulfillJson(route, {
+        engine: 'rule-engine',
+        content: null,
+        context: {
+          insights: [
+            {
+              severity: 'info',
+              title: 'Mock E2E',
+              description: 'Insight de teste sem spring-saas-core.',
+            },
+          ],
+          generatedAt: new Date().toISOString(),
+        },
+      });
+      return;
+    }
+    await route.continue();
+  });
 }

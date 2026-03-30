@@ -12,6 +12,7 @@ Usar antes de mergear o PR `develop` → `master` e deploy de produção. Comple
 
 - [ ] Deploy de `develop` em Railway staging concluído e saudável.
 - [ ] Smoke HTTP pós-merge (secrets `*_SMOKE_URL`) ou verificação manual: health + fluxo crítico de negócio.
+- [ ] (Recomendado) Pedido staging até **CONFIRMED** (`pnpm smoke:order-staging`) e, se vendes fluxo com pagamento, até **PAID** (`pnpm smoke:order-staging:saga` ou `:paid` — [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md)).
 - [ ] Sem itens **P0/P1** abertos para esta release ([POLITICA-FREEZE-RELEASE.md](POLITICA-FREEZE-RELEASE.md)).
 
 ## Contratos e dados

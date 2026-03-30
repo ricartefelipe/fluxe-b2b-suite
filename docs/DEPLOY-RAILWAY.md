@@ -1,7 +1,7 @@
 # Deploy no Railway — Fluxe B2B Suite
 
 > **Ambientes:** Para configuração completa de local, staging e produção (dados, seed, variáveis), veja [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md).  
-> **Go-live para venda:** Use o checklist completo em [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md).
+> **Go-live para venda:** Use o checklist completo em [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md). **Ordem operacional (staging → métricas → produção):** [EXECUCAO-VENDA-MONITORIZACAO.md](EXECUCAO-VENDA-MONITORIZACAO.md).
 
 ## Visão Geral
 
@@ -201,6 +201,7 @@ Ver checklist completo em [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md). Resumo:
 - [ ] CORS: nos 3 backends, variável `CORS_ORIGINS` ou `CORS_ALLOWED_ORIGINS` com as origens dos frontends (vírgula), incluindo domínio customizado se usado
 - [ ] Frontends (ops-portal, admin-console): `CORE_API_BASE_URL`, `ORDERS_API_BASE_URL`, `PAYMENTS_API_BASE_URL` com URLs absolutas
 - [ ] (Opcional) Métricas: Prometheus/Grafana configurados (ver seção abaixo)
+- [ ] (Opcional) Validar integração **pedido → PAID** em staging com [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md) (`pnpm smoke:order-staging:saga` ou `:paid`)
 
 ## Métricas e Grafana no deploy
 

@@ -37,6 +37,17 @@ async function fulfillJson(route: Route, body: unknown): Promise<void> {
  */
 const emptyPage = { data: [] as unknown[], total: 0, page: 0, pageSize: 0 };
 
+/** Alinhado a `Subscription` em libs/data-access/core (billing.model). */
+const mockSubscriptionCurrent = {
+  id: 'sub-e2e-mock',
+  tenantId: '00000000-0000-0000-0000-000000000001',
+  planSlug: 'starter',
+  status: 'ACTIVE',
+  currentPeriodStart: '2025-01-01T00:00:00.000Z',
+  currentPeriodEnd: '2030-12-31T23:59:59.000Z',
+  createdAt: '2025-01-01T00:00:00.000Z',
+};
+
 const mockBillingPlans = [
   {
     id: 'plan-e2e-1',
@@ -113,6 +124,23 @@ export async function installCoreE2eMocks(page: Page): Promise<void> {
       return;
     }
     await fulfillJson(route, mockBillingPlans);
+  });
+
+  /** Utilizadores e subscrição — chamados após login (header / billing). */
+  await page.route('**/api/core/v1/users**', async (route) => {
+    if (route.request().method() !== 'GET') {
+      await route.continue();
+      return;
+    }
+    await fulfillJson(route, [] as Array<{ id: string }>);
+  });
+
+  await page.route('**/api/core/v1/subscriptions/current**', async (route) => {
+    if (route.request().method() !== 'GET') {
+      await route.continue();
+      return;
+    }
+    await fulfillJson(route, mockSubscriptionCurrent);
   });
 
   /** Assistente IA — sem Core real, evita falhas e permite smoke E2E. */

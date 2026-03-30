@@ -591,6 +591,11 @@ export interface Messages {
     insights: string;
     insightsDesc: string;
     aiError: string;
+    aiActionError: string;
+    aiNetworkError: string;
+    aiForbiddenError: string;
+    aiOpenAiKeyMissing: string;
+    aiDismissError: string;
     actor: string;
     rollout: string;
     suspend: string;

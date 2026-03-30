@@ -1,5 +1,5 @@
 import { Component, inject, signal, OnInit, ChangeDetectionStrategy, SecurityContext } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { UpperCasePipe } from '@angular/common';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -31,6 +31,9 @@ interface AiStatus {
   provider: string;
   model: string;
   capabilities: string[];
+  /** GET /v1/ai/status — optional; helps explain badge vs runtime */
+  aiEnabledProperty?: boolean;
+  openaiKeyConfigured?: boolean;
 }
 
 interface Insight {
@@ -57,12 +60,31 @@ interface Insight {
           </h1>
           <p class="subtitle">{{ i18n.messages().admin.aiSubtitle }}</p>
         </div>
-        <div class="engine-badge" [class.llm]="status()?.engine === 'llm'">
-          <mat-icon>{{ status()?.engine === 'llm' ? 'psychology' : 'rule' }}</mat-icon>
-          {{ status()?.engine === 'llm' ? 'LLM: ' + status()?.model : 'Rule Engine' }}
+        <div class="engine-block">
+          <div class="engine-badge" [class.llm]="status()?.engine === 'llm'">
+            <mat-icon>{{ status()?.engine === 'llm' ? 'psychology' : 'rule' }}</mat-icon>
+            {{ status()?.engine === 'llm' ? 'LLM: ' + status()?.model : 'Rule Engine' }}
+          </div>
+          @if (status()?.openaiKeyConfigured === false) {
+            <p class="status-hint">{{ i18n.messages().admin.aiOpenAiKeyMissing }}</p>
+          }
         </div>
       </div>
     </div>
+
+    @if (actionError()) {
+      <div class="action-error-banner" role="alert">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ actionError() }}</span>
+        <button
+          mat-icon-button
+          type="button"
+          (click)="dismissActionError()"
+          [attr.aria-label]="i18n.messages().admin.aiDismissError">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    }
 
     <div class="ai-grid">
       <!-- Chat -->
@@ -173,6 +195,20 @@ interface Insight {
     .engine-badge.llm { background: rgba(66,165,245,0.15); color: #42a5f5; }
     .engine-badge mat-icon { font-size: 18px; width: 18px; height: 18px; }
 
+    .engine-block { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; max-width: 360px; text-align: right; }
+    .status-hint { margin: 0; font-size: 12px; line-height: 1.35; color: #fbbf24; }
+
+    .action-error-banner {
+      display: flex; align-items: flex-start; gap: 10px;
+      margin-bottom: 16px; padding: 12px 8px 12px 14px;
+      border-radius: 8px;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #fecaca; font-size: 14px; line-height: 1.45;
+    }
+    .action-error-banner mat-icon:first-child { flex-shrink: 0; margin-top: 2px; color: #f87171; }
+    .action-error-banner span { flex: 1; }
+
     .ai-grid { display: grid; grid-template-columns: 1fr 320px; gap: 24px; margin-bottom: 24px; }
 
     .chat-card { height: 480px; display: flex; flex-direction: column; }
@@ -232,6 +268,8 @@ export class AiPage implements OnInit {
   protected readonly i18n = inject(I18nService);
 
   status = signal<AiStatus | null>(null);
+  /** Erro das ações Analisar / Recomendações / Insights (antes falhavam em silêncio). */
+  actionError = signal<string | null>(null);
   chatHistory = signal<{ role: string; text: string }[]>([]);
   chatMessage = '';
   chatLoading = signal(false);
@@ -270,8 +308,11 @@ export class AiPage implements OnInit {
         }
         this.chatLoading.set(false);
       },
-      error: () => {
-        this.chatHistory.update(h => [...h, { role: 'ai', text: this.i18n.messages().admin.aiError }]);
+      error: (err: HttpErrorResponse) => {
+        this.chatHistory.update(h => [
+          ...h,
+          { role: 'ai', text: this.formatChatHttpError(err) },
+        ]);
         this.chatLoading.set(false);
       },
     });
@@ -279,6 +320,7 @@ export class AiPage implements OnInit {
 
   analyzeAudit(): void {
     this.auditLoading.set(true);
+    this.actionError.set(null);
     this.http.post<AiResponse>(`${this.baseUrl}/v1/ai/analyze-audit?hoursBack=24`, {}).subscribe({
       next: resp => {
         this.analysisResult.set(resp);
@@ -286,12 +328,16 @@ export class AiPage implements OnInit {
         this.resultIcon.set('security');
         this.auditLoading.set(false);
       },
-      error: () => this.auditLoading.set(false),
+      error: (err: HttpErrorResponse) => {
+        this.actionError.set(this.formatActionHttpError(err));
+        this.auditLoading.set(false);
+      },
     });
   }
 
   getRecommendations(): void {
     this.recsLoading.set(true);
+    this.actionError.set(null);
     this.http.post<AiResponse>(`${this.baseUrl}/v1/ai/recommendations`, {}).subscribe({
       next: resp => {
         this.analysisResult.set(resp);
@@ -299,20 +345,43 @@ export class AiPage implements OnInit {
         this.resultIcon.set('lightbulb');
         this.recsLoading.set(false);
       },
-      error: () => this.recsLoading.set(false),
+      error: (err: HttpErrorResponse) => {
+        this.actionError.set(this.formatActionHttpError(err));
+        this.recsLoading.set(false);
+      },
     });
   }
 
   getInsights(): void {
     this.insightsLoading.set(true);
+    this.actionError.set(null);
     this.http.get<AiResponse>(`${this.baseUrl}/v1/ai/insights`).subscribe({
       next: resp => {
         const data = resp.context?.['insights'] as Insight[] ?? [];
         this.insights.set(data);
         this.insightsLoading.set(false);
       },
-      error: () => this.insightsLoading.set(false),
+      error: (err: HttpErrorResponse) => {
+        this.actionError.set(this.formatActionHttpError(err));
+        this.insightsLoading.set(false);
+      },
     });
+  }
+
+  dismissActionError(): void {
+    this.actionError.set(null);
+  }
+
+  private formatActionHttpError(err: HttpErrorResponse): string {
+    if (err.status === 0) return this.i18n.messages().admin.aiNetworkError;
+    if (err.status === 403) return this.i18n.messages().admin.aiForbiddenError;
+    return this.i18n.messages().admin.aiActionError;
+  }
+
+  private formatChatHttpError(err: HttpErrorResponse): string {
+    if (err.status === 0) return this.i18n.messages().admin.aiNetworkError;
+    if (err.status === 403) return this.i18n.messages().admin.aiForbiddenError;
+    return this.i18n.messages().admin.aiError;
   }
 
   sanitize(html: string): string {

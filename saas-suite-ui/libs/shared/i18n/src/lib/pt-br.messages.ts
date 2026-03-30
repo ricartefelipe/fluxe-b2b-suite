@@ -625,6 +625,13 @@ export const PT_BR_MESSAGES: Messages = {
     insights: 'Insights',
     insightsDesc: 'Indicadores de saúde e oportunidades do Fluxe B2B Suite',
     aiError: 'Erro ao consultar a IA. Verifique se o backend está rodando.',
+    aiActionError:
+      'Não foi possível concluir esta ação. Verifica permissões, rede e se o Core está disponível.',
+    aiNetworkError: 'Sem ligação ao Core. Verifica rede, VPN e a URL da API.',
+    aiForbiddenError: 'Sem permissão para esta função (ex.: analytics:read).',
+    aiOpenAiKeyMissing:
+      'No Core, OPENAI_API_KEY não está configurada — o chat usa só o motor de regras.',
+    aiDismissError: 'Fechar',
     actor: 'Ator',
     rollout: 'Rollout',
     suspend: 'Suspender',

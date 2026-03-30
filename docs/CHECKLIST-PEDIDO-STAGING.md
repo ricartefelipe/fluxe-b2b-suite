@@ -38,9 +38,23 @@ pnpm smoke:order-staging:paid
 
 Publica `payment.settled` (como o **py-payments-ledger** faria) e verifica `GET /v1/orders/:id` ate **PAID**.
 
+### Ate PAID via saga (ledger + orders, sem publicar manualmente)
+
+Requer **py-payments-ledger** e **node-b2b-orders** com workers ativos, **mesmo** `RABBITMQ_URL`, integração orders↔Rabbit (`ORDERS_INTEGRATION_ENABLED=true` ou equivalente) e gateway de pagamento que autorize o charge em staging.
+
+```bash
+export ORDERS_SMOKE_URL="https://node-b2b-orders-staging.up.railway.app"
+export RABBITMQ_URL="amqps://..."   # mesma URL na API/worker/ledger
+# opcional: health do ledger — PAYMENTS_SMOKE_URL ou SMOKE_PAYMENTS_BASE
+pnpm smoke:order-staging:saga
+# ou: SMOKE_SAGA_PAID_LEDGER=1 bash scripts/smoke-order-staging.sh
+```
+
+O script **não** chama `publish-payment-settled.js`; faz poll do pedido ate **PAID** (timeout maior). Não combine com `SMOKE_PAYMENT_PAID=1` no mesmo run.
+
 ## O que nao cobre sem a opcao acima
 
-- Estado **PAID** sem publicar evento na fila: use `pnpm smoke:order-staging:paid` ou stack local `node-b2b-orders/scripts/smoke.sh`.
+- Estado **PAID** sem publicar evento na fila: use `pnpm smoke:order-staging:paid` (publicação manual), `pnpm smoke:order-staging:saga` (stack completa) ou stack local `node-b2b-orders/scripts/smoke.sh`.
 
 ## Referencias
 

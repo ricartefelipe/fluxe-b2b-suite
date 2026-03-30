@@ -14,6 +14,7 @@ test.describe('Admin Console Navigation', () => {
       'policies',
       'flags',
       'audit',
+      'billing',
       'ai',
       'onboarding',
     ]) {

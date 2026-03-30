@@ -10,7 +10,8 @@
     "install:ui": "cd saas-suite-ui && pnpm install",
     "verify:all": "bash scripts/pre-merge-checks.sh",
     "verify:contracts": "bash scripts/check-contract-drift.sh",
-    "smoke:staging": "bash scripts/smoke-staging.sh"
+    "smoke:staging": "bash scripts/smoke-staging.sh",
+    "smoke:order-staging": "bash scripts/smoke-order-staging.sh"
   },
   "repository": {
     "type": "git",

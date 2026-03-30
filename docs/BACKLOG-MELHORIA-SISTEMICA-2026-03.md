@@ -95,7 +95,8 @@ Objetivo: detectar quebra funcional cedo em staging e reduzir MTTR.
 
 - **Estado: Parcial** — C-02 | `node-b2b-orders` | Criar smoke pos-merge em `develop`
   - Entrega atual: `/v1/healthz` + `/v1/docs-json` em staging (secret `ORDERS_SMOKE_URL`).
-  - Pendencia opcional: fluxo minimo de pedido e validacao de evento publicado (ampliacao futura).
+  - Complemento suite: checklist + script `pnpm smoke:order-staging` em `fluxe-b2b-suite` ([CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md)) — fluxo minimo ate CONFIRMED com curl.
+  - Pendencia opcional: validacao de evento publicado / PAID end-to-end (ampliacao futura).
   - Dependencia: A-03.
 
 - **Estado: Parcial** — C-03 | `py-payments-ledger` | Criar smoke pos-merge em `develop`

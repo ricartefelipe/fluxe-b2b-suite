@@ -132,7 +132,11 @@ const DEV_PROFILES: DevProfile[] = [
         <div class="login-card">
           <div class="login-card-header">
             <h2>Bem-vindo de volta</h2>
-            <p class="subtitle">{{ isDevMode ? 'Entre com suas credenciais ou selecione um perfil rápido' : 'Acesse sua conta para continuar' }}</p>
+            <p class="subtitle">{{
+              isDevMode
+                ? 'Entre com suas credenciais ou selecione um perfil rápido'
+                : i18n.messages().auth.loginSubtitleProd
+            }}</p>
           </div>
 
           @if (isDevMode) {
@@ -227,6 +231,12 @@ const DEV_PROFILES: DevProfile[] = [
                 <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
               </button>
             </mat-form-field>
+
+            @if (showForgotPassword) {
+              <div class="forgot-row">
+                <a routerLink="/forgot-password">{{ i18n.messages().auth.forgotPassword }}</a>
+              </div>
+            }
 
             @if (isDevMode) {
               <div class="credentials-hint">
@@ -607,6 +617,21 @@ const DEV_PROFILES: DevProfile[] = [
       text-decoration: underline;
     }
 
+    .forgot-row {
+      text-align: right;
+      margin: -4px 0 18px;
+    }
+    .forgot-row a {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1565c0;
+      text-decoration: none;
+    }
+    .forgot-row a:hover {
+      text-decoration: underline;
+      color: #0d47a1;
+    }
+
     .login-footer {
       text-align: center;
       margin-top: 32px;
@@ -643,6 +668,8 @@ export class DevLoginComponent {
 
   showSignupLink = this.route?.snapshot?.data?.['showSignupLink'] !== false;
   isDevMode = this.config.get('authMode') === 'dev';
+  /** Recuperação de senha via Core (HS256/dev); em OIDC o IdP cuida do fluxo. */
+  showForgotPassword = this.config.get('authMode') !== 'oidc';
   currentYear = new Date().getFullYear();
   profiles = DEV_PROFILES;
   selectedProfile = signal<DevProfile | null>(null);

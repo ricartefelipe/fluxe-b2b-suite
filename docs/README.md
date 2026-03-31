@@ -20,6 +20,7 @@
 | [CHECKLIST-AMBIENTES-EVIDENCIAS.md](CHECKLIST-AMBIENTES-EVIDENCIAS.md) | Checklist preenchível por rodada para validar staging/produção (branch, deploy, health e evidências) |
 | [POLITICA-FREEZE-RELEASE.md](POLITICA-FREEZE-RELEASE.md) | Política de freeze por risco (P0/P1) em release |
 | [TEMPLATE-RELEASE-NOTES.md](TEMPLATE-RELEASE-NOTES.md) | Template de release notes multi-repo |
+| [RASCUNHO-RELEASE-NOTES-v1.3.0.md](RASCUNHO-RELEASE-NOTES-v1.3.0.md) | Rascunho de release notes v1.3.0 (multi-repo) |
 | [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md) | Runbook enxuto de rollback por serviço |
 | [ANALISE-ESTATICA.md](ANALISE-ESTATICA.md) | Decisão Semgrep + linters (substituto Sonar-like) |
 | [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md) | Thresholds p95/5xx/filas e mapeamento de alertas |

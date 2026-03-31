@@ -88,6 +88,7 @@ export const EN_US_MESSAGES: Messages = {
     passwordMinHint: 'At least 8 characters',
     requestResetError: 'Could not send the email. Please try again.',
     loginSubtitleProd: 'Sign in with your work email and password.',
+    oidcRedirecting: 'Redirecting to the identity provider…',
   },
   tenant: {
     selectTenant: 'Select a Tenant',

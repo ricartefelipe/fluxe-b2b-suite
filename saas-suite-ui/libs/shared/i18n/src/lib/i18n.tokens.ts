@@ -498,6 +498,7 @@ export interface Messages {
   };
   adminNav: {
     appTitle: string;
+    home: string;
     tenants: string;
     newTenant: string;
     policies: string;
@@ -507,6 +508,18 @@ export interface Messages {
     help: string;
     auditLog: string;
     aiAssistant: string;
+  };
+  adminHome: {
+    heroTitle: string;
+    heroSubtitle: string;
+    quickLinksTitle: string;
+    cardTenantsDesc: string;
+    cardOnboardingDesc: string;
+    cardBillingDesc: string;
+    cardUsersDesc: string;
+    cardHelpDesc: string;
+    cardPoliciesDesc: string;
+    cardAuditDesc: string;
   };
   billing: {
     title: string;

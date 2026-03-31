@@ -287,7 +287,7 @@ Exemplo de mapeamento:
 ### shop-frontend (Railway): alinhar ao admin-console
 
 1. **Root Directory** do serviço = `saas-suite-ui` (igual aos outros fronts).
-2. **Config as code:** em **Settings** do serviço, apontar o ficheiro de config para `apps/shop/railway.toml` (como em `apps/admin-console/railway.toml` e `apps/ops-portal/railway.toml`), **ou** confiar no repositório: o manifesto canónico está em **`saas-suite-ui/railway.toml`** (ficheiro real na raiz do workspace); `apps/shop/railway.toml` é um **symlink** para `../../railway.toml`, para o mesmo conteúdo em ambos os caminhos (o Railway valida melhor ficheiros reais na raiz do que symlinks invertidos).
+2. **Config as code:** em **Settings** do serviço, apontar o ficheiro de config para `apps/shop/railway.toml` (como em `apps/admin-console/railway.toml` e `apps/ops-portal/railway.toml`), **ou** confiar no repositório: existem **dois ficheiros com o mesmo conteúdo** — `saas-suite-ui/railway.toml` (procura por defeito na raiz do **Root Directory**) e `apps/shop/railway.toml` (caminho explícito). **Não usar symlink** em `apps/shop/railway.toml`: o validador do Railway pode falhar com `config file railway.toml does not exist`.
 3. **`watchPatterns`** em `apps/shop/railway.toml` limitam redeploy a alterações sob `saas-suite-ui` relevantes para o build (ex.: não disparam só por mudanças em `docs/` na raiz do monorepo).
 
 ### Tenants não listam no Admin Console

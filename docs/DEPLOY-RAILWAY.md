@@ -29,6 +29,18 @@ A stack completa requer **7 serviços** no Railway:
 
 Configure cada projeto Railway com **Production Branch** = `develop` (staging) ou `master` (produção) conforme o ambiente.
 
+**Recomendação operacional:** usar **dois projetos Railway** (um só para staging, outro só para produção). Assim cada ambiente mantém a branch correta sem efeitos colaterais ao alterar serviços; evita o problema em que o mesmo serviço partilha configuração de branch entre ambientes.
+
+## Manutenção contínua (evitar deriva entre ambientes)
+
+Checklist curto para não repetir inconsistências após clones de template, novos serviços ou alterações pontuais:
+
+1. **Um projeto por ambiente** — Staging e produção isolados; em cada um, branch fixa (`develop` / `master`). Evitar “ajustes rápidos” que só existem num lado.
+2. **Fonte de verdade das variáveis** — Após clonar ou recriar serviços, validar na hora `DATABASE_URL`, `POSTGRES_*`, `PG*`, `REDIS_URL` / `REDIS_PASSWORD` e alinhar **todos** os consumidores (core, orders, worker, payments). No Spring Boot, não deixar variáveis `SPRING_*` / `MANAGEMENT_*` com valor vazio (string vazia falha o bind para boolean); ou define valor válido ou remove a variável.
+3. **Build por serviço** — API, worker e cada frontend com Dockerfile / `railway.toml` explícitos no repositório certo; após deploy, confirmar no manifest que o `dockerfilePath` é o esperado. O **worker** não deve herdar o `railway.toml` da API — usar `railway.worker.toml` (repo `node-b2b-orders` ou `railway.worker.toml` em `fluxe-b2b-suite` conforme a secção Worker acima).
+4. **Migrações e bases já existentes** — Se a base já tem schema, combinar Liquibase / Prisma / Alembic com política clara (migrações idempotentes, baseline ou desativação controlada do Liquibase onde acordado) para não ficar preso a erros do tipo “relação já existe”.
+5. **Verificação pós-deploy (cerca de 5 minutos)** — Health dos serviços e smoke mínimo; confirmar que staging usa URLs de staging (ex.: `SAAS_CORE_URL`, `CORE_API_BASE_URL`) e não hostnames de produção.
+
 ## Custo Estimado
 
 | Cenário | Custo/mês |

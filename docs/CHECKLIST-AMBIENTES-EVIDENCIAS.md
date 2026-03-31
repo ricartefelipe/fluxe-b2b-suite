@@ -13,10 +13,10 @@ Referencias:
 
 ## Dados da rodada
 
-- Data/hora: `2026-03-31T05:59:07-03:00`
-- Responsavel: IA (execucao tecnica) + Felipe (validacao painel)
-- Versao/release: alinhamento pos-release (`develop == master` nos 4 repos)
-- Observacoes: coleta via Railway CLI (`railway status --json`) e health checks HTTP de staging.
+- Data/hora: `2026-03-31T18:15:00-03:00` (validação técnica automatizada)
+- Responsavel: IA (execucao tecnica) + Felipe (validacao painel / negocio)
+- Versao/release: `develop` em fluxe-b2b-suite (pós-merge docs); backends com tags até `v1.2.0` / core `v1.3.0`
+- Observacoes: Railway CLI (`railway status --json`, serviço `Postgres` para variáveis), `curl` staging conforme `URLS-STAGING.md`.
 
 ---
 
@@ -55,10 +55,10 @@ Referencias:
 | Servico | Status ultimo deploy | Horario | Link/evidencia | OK |
 |---|---|---|---|---|
 | spring-saas-core | `SUCCESS` | - | `railway status --json` (env staging) | [x] |
-| node-b2b-orders (api) | `FAILED` (latest, apos redeploy) | - | `railway status --json` (env staging) | [ ] |
+| node-b2b-orders (api) | `SUCCESS` | - | `railway status --json` (env staging, 2026-03-31) | [x] |
 | node-b2b-orders-worker | `SUCCESS` | - | `railway status --json` (env staging) | [x] |
-| py-payments-ledger | `FAILED` (latest, apos redeploy) | - | `railway status --json` (env staging) | [ ] |
-| shop | `SUCCESS` | - | `railway status --json` (env staging) | [x] |
+| py-payments-ledger | `SUCCESS` | - | `railway status --json` (env staging, 2026-03-31) | [x] |
+| shop-frontend | `FAILED` (ultimo deploy Railway) | - | Ver nota: URL publica responde 200 — possivel deploy anterior ativo | [ ] |
 | admin-console | `SUCCESS` | - | `railway status --json` (env staging) | [x] |
 | ops-portal | `SUCCESS` | - | `railway status --json` (env staging) | [x] |
 
@@ -87,13 +87,14 @@ Referencias:
 Evidencias (colar resposta curta/log):
 
 ```txt
-core:
-`{"status":"UP","groups":["liveness","readiness"]}`
+core (liveness 200):
+`{"status":"UP","components":{"livenessState":{"status":"UP"}}}`
 orders:
 `{"status":"ok"}`
 payments:
 `{"status":"ok"}`
 ```
+Rodada `2026-03-31`: `curl -sS -o /dev/null -w "%{http_code}"` → 200 nos tres endpoints em `URLS-STAGING.md`.
 
 ### Producao
 
@@ -118,8 +119,7 @@ payments:
 
 ### Staging
 
-- [ ] Fronts carregam (shop/admin/ops)
-- [x] Fronts carregam (shop/admin/ops)
+- [x] Fronts carregam (shop/admin/ops) — HTTP 200 em `admin-console-staging-b1ab`, `ops-portal-staging`, `shop-frontend-staging` (2026-03-31)
 - [ ] Login funciona
 - [ ] Fluxo de pedido minimo ate `CONFIRMED`
 - [ ] (Recomendado) fluxo ate `PAID`
@@ -132,22 +132,31 @@ payments:
 
 Evidencias (link para print/video/log):
 
-- Staging:
-- `curl` em `admin-console`, `ops-portal`, `shop` retornou HTTP 200 (HTML carregado).
-- Producao:
+- Staging: `curl` em admin-console, ops-portal, shop → HTTP 200 (HTML), 2026-03-31.
+- Producao: nao revalidado nesta rodada (foco staging).
 
 ---
 
-## 5) Fecho da rodada
+## 5) Postgres (Railway) — limpeza de variáveis
+
+Projeto **Fluxe B2B Suite - Staging**, serviço **Postgres**, `railway variables` (2026-03-31):
+
+- [x] **`TEST_VAR`** — ausente (removida ou nunca existiu neste serviço).
+- [x] **`SSL_CERT_DAYS`** — ausente idem.
+- Variáveis listadas: credenciais Postgres, `DATABASE_*`, metadados Railway, referências `RAILWAY_SERVICE_*_URL` para URLs publicas dos backends.
+
+---
+
+## 6) Fecho da rodada
 
 - [ ] Checklist completo sem bloqueio aberto
-- [ ] Bloqueios remanescentes documentados e com owner
-- [ ] Status final: `OK para operacao` ou `NAO OK`
+- [x] Bloqueios remanescentes documentados e com owner (ver abaixo)
+- [ ] Status final: `OK para operacao` ou `NAO OK` — **parcial OK staging**; ver bloqueios
 
 Bloqueios/acoes:
 
-- [ ] **Branch em producao ainda em `develop`** (esperado: `master`) em core/orders/payments/fronts. Owner: Felipe (ajuste no Railway Settings > Source).
-- [ ] **Branch em producao ainda em `develop`** (esperado: `master`) em core/orders/payments/fronts. Owner: Felipe (ajuste no Railway Settings > Source).
+- [ ] **Branch em producao ainda em `develop`** (esperado: `master`) nos serviços do projeto Production no Railway. Owner: Felipe (Settings → Source por serviço).
 - [x] **Core production health endpoint agregado** corrigido para `200/UP` (`/actuator/health`).
 - [ ] **Worker nao listado em production** (`node-b2b-orders-worker`). Owner: Felipe (confirmar se existe servico dedicado no env production).
+- [ ] **shop-frontend (staging): ultimo deploy `FAILED`** no Railway; URL publica ainda responde 200. Owner: Felipe (redeploy ou corrigir build; confirmar se o tráfego usa imagem antiga).
 

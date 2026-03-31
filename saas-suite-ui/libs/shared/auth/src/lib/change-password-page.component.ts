@@ -2,9 +2,9 @@ import { Component, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from './auth.service';
 import { I18nService } from '@saas-suite/shared/i18n';
@@ -15,85 +15,94 @@ import { I18nService } from '@saas-suite/shared/i18n';
   imports: [
     FormsModule,
     MatButtonModule,
-    MatCardModule,
     MatFormFieldModule,
     MatInputModule,
+    MatIconModule,
     MatProgressSpinnerModule,
   ],
   template: `
-    <div class="page" [class.page--embedded]="!fullPage()">
-      <mat-card class="card">
-        <mat-card-header>
-          <mat-card-title>{{ i18n.messages().auth.changePasswordTitle }}</mat-card-title>
-          <mat-card-subtitle>{{ subtitle() }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          @if (error()) {
-            <div class="error-msg">
-              {{ error() }}
-            </div>
-          }
-          <form (ngSubmit)="submit()">
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ i18n.messages().auth.currentPassword }}</mat-label>
-              <input matInput type="password" [(ngModel)]="currentPassword" name="currentPassword" required minlength="8" />
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ i18n.messages().auth.newPassword }}</mat-label>
-              <input matInput type="password" [(ngModel)]="newPassword" name="newPassword" required minlength="8" />
-            </mat-form-field>
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ i18n.messages().auth.confirmNewPassword }}</mat-label>
-              <input matInput type="password" [(ngModel)]="confirmNewPassword" name="confirmNewPassword" required minlength="8" />
-            </mat-form-field>
-            <button mat-flat-button color="primary" type="submit" [disabled]="loading() || !currentPassword || !newPassword || newPassword.length < 8 || newPassword !== confirmNewPassword">
-              @if (loading()) {
-                <mat-spinner diameter="20" />
-              } @else {
-                {{ i18n.messages().auth.changePasswordButton }}
-              }
-            </button>
-          </form>
-        </mat-card-content>
-      </mat-card>
+    <div class="auth-premium auth-premium--isolated" [class.page--embedded]="!fullPage()">
+      <div class="auth-isolated-panel">
+        <div class="flow-header">
+          <div class="flow-icon" aria-hidden="true">
+            <mat-icon>vpn_key</mat-icon>
+          </div>
+          <h1>{{ i18n.messages().auth.changePasswordTitle }}</h1>
+          <p class="lead">{{ subtitle() }}</p>
+        </div>
+
+        @if (error()) {
+          <div class="alert error" role="alert">
+            <mat-icon>error_outline</mat-icon>
+            {{ error() }}
+          </div>
+        }
+
+        <form (ngSubmit)="submit()">
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>{{ i18n.messages().auth.currentPassword }}</mat-label>
+            <input
+              matInput
+              type="password"
+              [(ngModel)]="currentPassword"
+              name="currentPassword"
+              required
+              minlength="8"
+              autocomplete="current-password"
+            />
+            <mat-icon matPrefix class="prefix-icon">lock</mat-icon>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>{{ i18n.messages().auth.newPassword }}</mat-label>
+            <input
+              matInput
+              type="password"
+              [(ngModel)]="newPassword"
+              name="newPassword"
+              required
+              minlength="8"
+              autocomplete="new-password"
+            />
+            <mat-icon matPrefix class="prefix-icon">lock_reset</mat-icon>
+            <mat-hint>{{ i18n.messages().auth.passwordMinHint }}</mat-hint>
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full">
+            <mat-label>{{ i18n.messages().auth.confirmNewPassword }}</mat-label>
+            <input
+              matInput
+              type="password"
+              [(ngModel)]="confirmNewPassword"
+              name="confirmNewPassword"
+              required
+              minlength="8"
+              autocomplete="new-password"
+            />
+            <mat-icon matPrefix class="prefix-icon">lock_outline</mat-icon>
+          </mat-form-field>
+          <button
+            mat-flat-button
+            color="primary"
+            class="submit-btn"
+            type="submit"
+            [disabled]="
+              loading() ||
+              !currentPassword ||
+              !newPassword ||
+              newPassword.length < 8 ||
+              newPassword !== confirmNewPassword
+            "
+          >
+            @if (loading()) {
+              <mat-spinner diameter="22" />
+            } @else {
+              {{ i18n.messages().auth.changePasswordButton }}
+            }
+          </button>
+        </form>
+      </div>
     </div>
   `,
-  styles: [
-    `
-      .page {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 24px;
-        background: #f4f6f9;
-      }
-      .page--embedded {
-        min-height: 0;
-        padding: 0;
-        background: transparent;
-        display: block;
-      }
-      .page--embedded .card {
-        max-width: 420px;
-      }
-      .card {
-        max-width: 400px;
-        width: 100%;
-      }
-      .full-width { width: 100%; }
-      .error-msg {
-        color: #c62828;
-        margin-bottom: 16px;
-        font-size: 14px;
-      }
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-    `,
-  ],
+  styleUrls: ['./styles/auth-premium.scss'],
 })
 export class ChangePasswordPageComponent {
   private readonly authService = inject(AuthService);

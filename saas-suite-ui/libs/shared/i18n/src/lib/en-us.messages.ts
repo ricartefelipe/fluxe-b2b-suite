@@ -72,6 +72,23 @@ export const EN_US_MESSAGES: Messages = {
     confirmNewPassword: 'Confirm new password',
     confirmPasswordMismatch: 'New password and confirmation do not match.',
     changePasswordButton: 'Change password',
+    forgotPasswordTitle: 'Reset password',
+    forgotPasswordSubtitle:
+      'Enter your account email. If it is registered, we will send a link to set a new password.',
+    forgotPasswordSent:
+      'If an account exists for this email, you will receive instructions shortly. Check your spam folder too.',
+    forgotPasswordSubmit: 'Send reset link',
+    backToLogin: 'Back to sign in',
+    resetPasswordTitle: 'Set new password',
+    resetPasswordSubtitle: 'Choose a strong password with at least 8 characters.',
+    resetPasswordSubmit: 'Save password',
+    resetPasswordSuccess: 'Your password was updated. You can sign in with your new password.',
+    resetPasswordInvalidLink:
+      'This link is invalid or has expired. Request a new reset email.',
+    passwordMinHint: 'At least 8 characters',
+    requestResetError: 'Could not send the email. Please try again.',
+    loginSubtitleProd: 'Sign in with your work email and password.',
+    oidcRedirecting: 'Redirecting to the identity provider…',
   },
   tenant: {
     selectTenant: 'Select a Tenant',
@@ -518,6 +535,7 @@ export const EN_US_MESSAGES: Messages = {
   },
   adminNav: {
     appTitle: 'Admin Console',
+    home: 'Home',
     tenants: 'Tenants',
     newTenant: 'New Tenant',
     policies: 'Policies',
@@ -527,6 +545,19 @@ export const EN_US_MESSAGES: Messages = {
     help: 'Help',
     auditLog: 'Audit Log',
     aiAssistant: 'AI Assistant',
+  },
+  adminHome: {
+    heroTitle: 'Welcome to the console',
+    heroSubtitle:
+      'Manage organizations, policies, users, and billing in one place. Use the shortcuts below or the sidebar.',
+    quickLinksTitle: 'Shortcuts',
+    cardTenantsDesc: 'Browse and filter organizations, plans, and status.',
+    cardOnboardingDesc: 'Create a new organization (tenant) and set up essentials.',
+    cardBillingDesc: 'View plan, trial, and open the billing portal.',
+    cardUsersDesc: 'Invite and manage platform users.',
+    cardHelpDesc: 'FAQ and next steps.',
+    cardPoliciesDesc: 'ABAC rules and per-tenant permissions.',
+    cardAuditDesc: 'Action history for compliance.',
   },
   billing: {
     title: 'Billing',
@@ -549,6 +580,9 @@ export const EN_US_MESSAGES: Messages = {
     currentPlanBadge: 'Current',
     noSubscription: 'No active subscription. Choose a plan to get started.',
     trialBannerMessage: 'Your trial ends in {{days}} days. Add a card to keep access.',
+    shellBannerPastDue:
+      'Payment is past due. Update your payment method in billing to avoid service interruption.',
+    shellBannerViewBilling: 'View billing',
     trialCtaAddCard: 'Add card',
     scheduleCancel: 'Schedule cancellation',
     undoScheduleCancel: 'Undo schedule',
@@ -625,6 +659,13 @@ export const EN_US_MESSAGES: Messages = {
     insights: 'Insights',
     insightsDesc: 'Fluxe B2B Suite health indicators and opportunities',
     aiError: 'Error querying AI. Check if the backend is running.',
+    aiActionError:
+      'Could not complete this action. Check permissions, network, and Core availability.',
+    aiNetworkError: 'Cannot reach Core. Check network, VPN, and API URL.',
+    aiForbiddenError: 'No permission for this feature (e.g. analytics:read).',
+    aiOpenAiKeyMissing:
+      'Core has no OPENAI_API_KEY — chat uses the rule engine only.',
+    aiDismissError: 'Dismiss',
     actor: 'Actor',
     rollout: 'Rollout',
     suspend: 'Suspend',
@@ -723,6 +764,16 @@ export const EN_US_MESSAGES: Messages = {
     faq2Answer: 'In Billing you see your current plan and can open the billing portal to update payment method or switch plans.',
     faq3Question: 'How do I configure access policies?',
     faq3Answer: 'In Policies (ABAC/RBAC) you create rules by permission code (e.g. resource:action) and associate them with plans and regions. Policies are evaluated at login and on application actions.',
+    docsSectionTitle: 'API and documentation',
+    docsSectionIntro:
+      'The links below use the same API base URLs configured for this environment (proxy or absolute URL). Authentication: Core Bearer JWT; for domain services, send the tenant headers required by each API.',
+    linkCoreSwagger: 'Control plane (Core) — Swagger UI',
+    linkCoreOpenApi: 'Control plane — OpenAPI (JSON)',
+    linkOrdersDocs: 'Orders — Swagger docs',
+    linkPaymentsDocs: 'Payments (ledger) — interactive docs',
+    linkPaymentsOpenApi: 'Payments — OpenAPI (JSON)',
+    linkPlatformDocs: 'Platform documentation (contracts and operations)',
+    opensInNewTabHint: 'Opens in a new tab',
     dataSectionTitle: 'Data & privacy',
     exportLinkHint: 'Download your data as JSON (tenant, users, policies and feature flags) from the Billing page.',
   },

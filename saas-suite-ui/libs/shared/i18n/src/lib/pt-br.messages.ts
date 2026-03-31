@@ -534,6 +534,7 @@ export const PT_BR_MESSAGES: Messages = {
   },
   adminNav: {
     appTitle: 'Console Admin',
+    home: 'Início',
     tenants: 'Tenants',
     newTenant: 'Novo Tenant',
     policies: 'Políticas',
@@ -543,6 +544,19 @@ export const PT_BR_MESSAGES: Messages = {
     help: 'Ajuda',
     auditLog: 'Log de Auditoria',
     aiAssistant: 'Assistente IA',
+  },
+  adminHome: {
+    heroTitle: 'Bem-vindo ao console',
+    heroSubtitle:
+      'Gerencie organizações, políticas, usuários e faturamento num só lugar. Use os atalhos abaixo ou o menu lateral.',
+    quickLinksTitle: 'Atalhos',
+    cardTenantsDesc: 'Listar e filtrar organizações, planos e status.',
+    cardOnboardingDesc: 'Criar uma nova organização (tenant) e configurar o essencial.',
+    cardBillingDesc: 'Ver plano, trial e abrir o portal de pagamentos.',
+    cardUsersDesc: 'Convidar e administrar usuários da plataforma.',
+    cardHelpDesc: 'Perguntas frequentes e próximos passos.',
+    cardPoliciesDesc: 'Regras ABAC e permissões por tenant.',
+    cardAuditDesc: 'Histórico de ações para compliance.',
   },
   billing: {
     title: 'Faturamento',

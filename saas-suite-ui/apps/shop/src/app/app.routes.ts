@@ -27,6 +27,18 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('@saas-suite/shared/auth').then(m => m.LoginPageComponent),
   },
   {
+    path: 'forgot-password',
+    title: 'Recuperar senha | Fluxe Shop',
+    loadComponent: () =>
+      import('@saas-suite/shared/auth').then(m => m.ForgotPasswordPageComponent),
+  },
+  {
+    path: 'reset-password',
+    title: 'Nova senha | Fluxe Shop',
+    loadComponent: () =>
+      import('@saas-suite/shared/auth').then(m => m.ResetPasswordPageComponent),
+  },
+  {
     path: '',
     loadComponent: () => import('./shop-shell.component').then(m => m.ShopShellComponent),
     canActivate: [shopAuthGuard],

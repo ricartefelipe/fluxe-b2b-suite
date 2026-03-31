@@ -1,7 +1,7 @@
 # Deploy no Railway — Fluxe B2B Suite
 
 > **Ambientes:** Para configuração completa de local, staging e produção (dados, seed, variáveis), veja [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md).  
-> **Go-live para venda:** Use o checklist completo em [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md).
+> **Go-live para venda:** Use o checklist completo em [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md). **Ordem operacional (staging → métricas → produção):** [EXECUCAO-VENDA-MONITORIZACAO.md](EXECUCAO-VENDA-MONITORIZACAO.md).
 
 ## Visão Geral
 
@@ -97,6 +97,21 @@ Variáveis (ver `railway.prod.env.example`):
 - `JWT_SECRET` → **mesmo** valor do spring-saas-core
 - `JWT_ISSUER=spring-saas-core`
 
+**Worker (obrigatório para CREATED → RESERVED):** o outbox e a reserva de stock correm no processo `node dist/src/worker/main.js`. Faça um **segundo serviço** no mesmo projeto Railway, por exemplo `node-b2b-orders-worker`.
+
+- **Repo Git = `node-b2b-orders` (recomendado):** em **Settings → Build → Config as code**, use **`railway.worker.toml`** na raiz desse repo (referencia `docker/worker.Dockerfile`; não use o `railway.toml` da API).
+- **Repo Git = `fluxe-b2b-suite` (mesmo projeto que os frontends):** o ficheiro **`railway.worker.toml`** na raiz deste repositório já existe e usa a imagem `ghcr.io/ricartefelipe/node-b2b-orders-worker:develop` (CI do repo `node-b2b-orders`). Aponte **Config as code** para esse ficheiro. Se o GitHub Container Registry for **privado**, configure credenciais de registry no Railway (token com `read:packages`). Erro `config file railway.worker.toml does not exist` costuma ser repo errado ou branch sem o ficheiro.
+
+Copie as variáveis da API para o worker (sobretudo `DATABASE_URL`, `REDIS_URL`, `JWT_*`, `RABBITMQ_URL`):
+
+```bash
+cd node-b2b-orders
+chmod +x scripts/railway-sync-worker-env.sh
+./scripts/railway-sync-worker-env.sh 'amqp://USER:PASS@HOST/VHOST'
+```
+
+O URL AMQP deve ser o mesmo na **API** e no **worker** (ex.: [CloudAMQP](https://www.cloudamqp.com/)). Sem `RABBITMQ_URL`, o worker não mantém filas nem conclui o fluxo até `RESERVED`.
+
 #### py-payments-ledger
 ```bash
 cd py-payments-ledger
@@ -186,6 +201,7 @@ Ver checklist completo em [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md). Resumo:
 - [ ] CORS: nos 3 backends, variável `CORS_ORIGINS` ou `CORS_ALLOWED_ORIGINS` com as origens dos frontends (vírgula), incluindo domínio customizado se usado
 - [ ] Frontends (ops-portal, admin-console): `CORE_API_BASE_URL`, `ORDERS_API_BASE_URL`, `PAYMENTS_API_BASE_URL` com URLs absolutas
 - [ ] (Opcional) Métricas: Prometheus/Grafana configurados (ver seção abaixo)
+- [ ] (Opcional) Validar integração **pedido → PAID** em staging com [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md) (`pnpm smoke:order-staging:saga` ou `:paid`)
 
 ## Métricas e Grafana no deploy
 

@@ -9,3 +9,5 @@ export * from './lib/login-page.component';
 export * from './lib/oidc-auth.service';
 export * from './lib/signup/signup-page.component';
 export * from './lib/change-password-page.component';
+export * from './lib/password-reset/forgot-password-page.component';
+export * from './lib/password-reset/reset-password-page.component';

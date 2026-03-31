@@ -299,7 +299,9 @@ Isto indica que o **serviço no painel** não está a resolver o manifesto (não
 3. **Build → Config file** (ou equivalente): igual ao admin, mas com `apps/shop/railway.toml`. Se o campo estiver vazio, o Railway procura `railway.toml` na raiz do Root Directory — nesse caso o ficheiro `saas-suite-ui/railway.toml` no repositório deve ser encontrado; se o painel tiver um caminho antigo/errado, **limpe** ou **corrija** para um dos dois ficheiros válidos acima.
 4. Guarde e faça **Redeploy** do serviço (ou um push que toque em `saas-suite-ui` conforme `watchPatterns`).
 
-O CLI **não** expõe hoje alteração destes campos; é preciso o painel (ou API GraphQL com token e permissões).
+O CLI **não** expõe hoje alteração destes campos no `railway` padrão; use o **painel** ou a **Public API** com token de conta (não o token de sessão `rw_Fe26...` do ficheiro local).
+
+**Automático (recomendado):** no repositório existe [`scripts/railway-fix-shop-service-instance.py`](../scripts/railway-fix-shop-service-instance.py). Crie um token em [railway.com/account/tokens](https://railway.com/account/tokens), exporte `RAILWAY_API_TOKEN`, e execute o script — lê `rootDirectory` do **admin-console** e aplica `railwayConfigFile` `/saas-suite-ui/apps/shop/railway.toml` ao **shop-frontend**. Opção `--redeploy` para disparar redeploy via CLI após a mutação.
 
 ### Tenants não listam no Admin Console
 

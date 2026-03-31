@@ -72,6 +72,23 @@ export const PT_BR_MESSAGES: Messages = {
     confirmNewPassword: 'Confirmar nova senha',
     confirmPasswordMismatch: 'Nova senha e confirmação não conferem.',
     changePasswordButton: 'Alterar senha',
+    forgotPasswordTitle: 'Recuperar senha',
+    forgotPasswordSubtitle:
+      'Informe o e-mail da sua conta. Se ele estiver cadastrado, enviaremos um link para definir uma nova senha.',
+    forgotPasswordSent:
+      'Se existir uma conta para este e-mail, você receberá as instruções em instantes. Verifique também o spam.',
+    forgotPasswordSubmit: 'Enviar link por e-mail',
+    backToLogin: 'Voltar ao login',
+    resetPasswordTitle: 'Definir nova senha',
+    resetPasswordSubtitle: 'Escolha uma senha segura com pelo menos 8 caracteres.',
+    resetPasswordSubmit: 'Salvar senha',
+    resetPasswordSuccess: 'Senha alterada. Você já pode entrar com a nova senha.',
+    resetPasswordInvalidLink:
+      'Este link não é válido ou expirou. Peça um novo e-mail na recuperação de senha.',
+    passwordMinHint: 'Mínimo de 8 caracteres',
+    requestResetError: 'Não foi possível enviar o e-mail. Tente novamente.',
+    loginSubtitleProd: 'Use o e-mail corporativo e a senha da sua conta.',
+    oidcRedirecting: 'A redirecionar para o fornecedor de identidade…',
   },
   tenant: {
     selectTenant: 'Selecione um Tenant',
@@ -518,6 +535,7 @@ export const PT_BR_MESSAGES: Messages = {
   },
   adminNav: {
     appTitle: 'Console Admin',
+    home: 'Início',
     tenants: 'Tenants',
     newTenant: 'Novo Tenant',
     policies: 'Políticas',
@@ -527,6 +545,19 @@ export const PT_BR_MESSAGES: Messages = {
     help: 'Ajuda',
     auditLog: 'Log de Auditoria',
     aiAssistant: 'Assistente IA',
+  },
+  adminHome: {
+    heroTitle: 'Bem-vindo ao console',
+    heroSubtitle:
+      'Gerencie organizações, políticas, usuários e faturamento num só lugar. Use os atalhos abaixo ou o menu lateral.',
+    quickLinksTitle: 'Atalhos',
+    cardTenantsDesc: 'Listar e filtrar organizações, planos e status.',
+    cardOnboardingDesc: 'Criar uma nova organização (tenant) e configurar o essencial.',
+    cardBillingDesc: 'Ver plano, trial e abrir o portal de pagamentos.',
+    cardUsersDesc: 'Convidar e administrar usuários da plataforma.',
+    cardHelpDesc: 'Perguntas frequentes e próximos passos.',
+    cardPoliciesDesc: 'Regras ABAC e permissões por tenant.',
+    cardAuditDesc: 'Histórico de ações para compliance.',
   },
   billing: {
     title: 'Faturamento',
@@ -549,6 +580,9 @@ export const PT_BR_MESSAGES: Messages = {
     currentPlanBadge: 'Atual',
     noSubscription: 'Nenhuma assinatura ativa. Escolha um plano para começar.',
     trialBannerMessage: 'Seu trial termina em {{days}} dias. Adicione um cartão para não perder acesso.',
+    shellBannerPastDue:
+      'Pagamento em atraso. Atualize o método de pagamento na área de faturamento para evitar interrupção do serviço.',
+    shellBannerViewBilling: 'Ver faturamento',
     trialCtaAddCard: 'Adicionar cartão',
     scheduleCancel: 'Agendar cancelamento',
     undoScheduleCancel: 'Desfazer agendamento',
@@ -730,6 +764,16 @@ export const PT_BR_MESSAGES: Messages = {
     faq2Answer: 'Em Faturamento você vê o plano atual e pode abrir o portal de cobrança para atualizar forma de pagamento ou trocar de plano.',
     faq3Question: 'Como configuro políticas de acesso?',
     faq3Answer: 'Em Políticas (ABAC/RBAC) você cria regras por código de permissão (ex: resource:action) e associa a planos e regiões. As políticas são avaliadas no login e nas ações da aplicação.',
+    docsSectionTitle: 'API e documentação',
+    docsSectionIntro:
+      'Os links abaixo usam as mesmas bases de API configuradas para este ambiente (proxy ou URL absoluta). Autenticação: Bearer JWT do Core; em chamadas aos serviços de domínio, use os headers de tenant exigidos por cada API.',
+    linkCoreSwagger: 'Control plane (Core) — Swagger UI',
+    linkCoreOpenApi: 'Control plane — OpenAPI (JSON)',
+    linkOrdersDocs: 'Pedidos (Orders) — documentação Swagger',
+    linkPaymentsDocs: 'Pagamentos (Ledger) — documentação interativa',
+    linkPaymentsOpenApi: 'Pagamentos — OpenAPI (JSON)',
+    linkPlatformDocs: 'Documentação da plataforma (contratos e operação)',
+    opensInNewTabHint: 'Abre num novo separador',
     dataSectionTitle: 'Dados e privacidade',
     exportLinkHint: 'Baixe seus dados em JSON (tenant, usuários, políticas e feature flags) na página Faturamento.',
   },

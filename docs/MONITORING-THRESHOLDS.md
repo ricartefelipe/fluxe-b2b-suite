@@ -22,6 +22,8 @@ Referencia inicial para alertas em staging/producao (Grafana, Railway health, lo
 | Recurso        | Threshold | Nota |
 |----------------|-----------|------|
 | RabbitMQ: fila `outbox` (por servico) | crescimento > 10k msgs / 10 min | Worker ou broker |
+| RabbitMQ: fila **`orders.payments`** (node-b2b-orders) | crescimento sustentado ou > 1k msgs paradas | Worker de orders inativo ou `payment.settled` nao a chegar — ver saga em [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md) |
+| RabbitMQ: fila interna de eventos do **py-payments-ledger** (`payments.events` ou nome configurado) | crescimento anomalo | Worker Python, DB ou gateway; `payment.settled` publicado pelo outbox nao deve bloquear esta fila de forma prolongada |
 | DLQ | > 0 mensagens | Inspecionar payload e reprocessar |
 
 ## Smoke pos-deploy
@@ -30,6 +32,7 @@ Referencia inicial para alertas em staging/producao (Grafana, Railway health, lo
 |-------|------------|
 | Scripts `smoke-post-merge.sh` por servico | Apos merge em `develop` (GitHub Actions), com secrets `*_SMOKE_URL` |
 | Suite local `scripts/smoke-suite.sh` | Manual com stack Docker |
+| Pedido ate **PAID** (staging) | `pnpm smoke:order-staging:saga` ou `:paid` na suite — [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md) |
 
 ## Mapeamento de alertas (operacao)
 

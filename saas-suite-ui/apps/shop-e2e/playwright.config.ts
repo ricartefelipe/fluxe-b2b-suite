@@ -4,6 +4,7 @@ import { workspaceRoot } from '@nx/devkit';
 
 const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
 const isCI = !!process.env['CI'];
+const skipWebServer = process.env['E2E_SKIP_WEBSERVER'] === '1';
 
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src' }),
@@ -11,13 +12,17 @@ export default defineConfig({
     baseURL,
     trace: 'on-first-retry',
   },
-  webServer: {
-    command: 'pnpm exec nx run shop:serve',
-    url: 'http://localhost:4200',
-    reuseExistingServer: !isCI,
-    cwd: workspaceRoot,
-    timeout: isCI ? 180000 : 60000,
-  },
+  ...(skipWebServer
+    ? {}
+    : {
+        webServer: {
+          command: 'pnpm exec nx run shop:serve',
+          url: 'http://localhost:4200',
+          reuseExistingServer: !isCI,
+          cwd: workspaceRoot,
+          timeout: isCI ? 180000 : 60000,
+        },
+      }),
   projects: [
     {
       name: 'chromium',

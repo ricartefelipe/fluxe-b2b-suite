@@ -14,6 +14,10 @@ Legenda de status:
 
 ### 2026-03-31
 
+- [x] **Investigação shop staging + rascunho release v1.3.0** (`concluida`)
+  - Escopo: linha de troubleshooting em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) (deploy FAILED vs tráfego 200); [RASCUNHO-RELEASE-NOTES-v1.3.0.md](RASCUNHO-RELEASE-NOTES-v1.3.0.md); lista de deployments via `railway deployment list -s shop-frontend`.
+  - Evidência: CLI Railway 2026-03-31 (últimos deploys FAILED após merges só em docs; último SUCCESS anterior operacional para URL pública).
+
 - [x] **Checklist de ambientes (evidências), Postgres e plano comercial 30 dias** (`concluida`)
   - Escopo: atualização de [CHECKLIST-AMBIENTES-EVIDENCIAS.md](CHECKLIST-AMBIENTES-EVIDENCIAS.md) (Railway, `curl` staging, variáveis `TEST_VAR`/`SSL_CERT_DAYS` ausentes no Postgres), novo [PLANO-COMERCIAL-30-DIAS.md](PLANO-COMERCIAL-30-DIAS.md); estado das tags documentado na fila.
   - Evidência: execução técnica `2026-03-31` (CLI + HTTP).
@@ -52,7 +56,7 @@ Legenda de status:
   - Aceite:
     - [x] Definir versão — baseline atual: `v1.2.0` (fluxe-b2b-suite, node-b2b-orders, py-payments-ledger); `v1.3.0` (spring-saas-core). Próximo alinhamento: decidir se todos sobem para `v1.3.0` na mesma janela de release.
     - [ ] Criar tags nos repos tocados — pendente apenas se a versão alvo for nova em relação às tags existentes
-    - [ ] Publicar release notes com links dos PRs — usar [TEMPLATE-RELEASE-NOTES.md](TEMPLATE-RELEASE-NOTES.md) e GitHub Releases por repo
+    - [ ] Publicar release notes com links dos PRs — base em [RASCUNHO-RELEASE-NOTES-v1.3.0.md](RASCUNHO-RELEASE-NOTES-v1.3.0.md) e [TEMPLATE-RELEASE-NOTES.md](TEMPLATE-RELEASE-NOTES.md); GitHub Releases por repo
 
 - [x] **Plano comercial de 30 dias (conversão e retenção)** (`concluida` — documento base)
   - Aceite:

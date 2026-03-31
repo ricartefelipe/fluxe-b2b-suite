@@ -32,6 +32,7 @@ export class AdminShellComponent implements OnInit {
       const m = this.i18n.messages()?.adminNav;
       if (!m) return [];
       return [
+      { label: m.home, route: '/home', icon: 'home' },
       { label: m.tenants, route: '/tenants', icon: 'business', permission: 'tenants:read' },
       { label: m.newTenant, route: '/onboarding', icon: 'add_business', permission: 'tenants:write' },
       { label: m.policies, route: '/policies', icon: 'policy', permission: 'policies:read' },

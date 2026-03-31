@@ -9,5 +9,6 @@
     "scope": "${OIDC_SCOPE}"
   },
   "logLevel": "${LOG_LEVEL}",
-  "version": "${APP_VERSION}"
+  "version": "${APP_VERSION}",
+  "platformDocsUrl": "${PLATFORM_DOCS_URL}"
 }

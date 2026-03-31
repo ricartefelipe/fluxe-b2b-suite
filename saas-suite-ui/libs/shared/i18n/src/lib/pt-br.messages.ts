@@ -565,6 +565,9 @@ export const PT_BR_MESSAGES: Messages = {
     currentPlanBadge: 'Atual',
     noSubscription: 'Nenhuma assinatura ativa. Escolha um plano para começar.',
     trialBannerMessage: 'Seu trial termina em {{days}} dias. Adicione um cartão para não perder acesso.',
+    shellBannerPastDue:
+      'Pagamento em atraso. Atualize o método de pagamento na área de faturamento para evitar interrupção do serviço.',
+    shellBannerViewBilling: 'Ver faturamento',
     trialCtaAddCard: 'Adicionar cartão',
     scheduleCancel: 'Agendar cancelamento',
     undoScheduleCancel: 'Desfazer agendamento',

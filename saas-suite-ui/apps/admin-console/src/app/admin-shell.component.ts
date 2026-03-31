@@ -7,13 +7,15 @@ import { Tenant } from '@saas-suite/data-access/core';
 import { OnboardingChecklistComponent, OnboardingChecklistStore } from '@saas-suite/domains/admin';
 import { CoreApiClient } from '@saas-suite/data-access/core';
 import { firstValueFrom } from 'rxjs';
+import { SubscriptionShellBannerComponent } from './subscription-shell-banner.component';
 
 @Component({
   selector: 'app-admin-shell',
   standalone: true,
-  imports: [ShellComponent, OnboardingChecklistComponent],
+  imports: [ShellComponent, SubscriptionShellBannerComponent, OnboardingChecklistComponent],
   template: `
     <saas-shell [navItems]="navItems()" [appTitle]="appTitle()">
+      <app-subscription-shell-banner mainTop />
       <lib-onboarding-checklist mainTop />
     </saas-shell>
   `,
@@ -32,6 +34,7 @@ export class AdminShellComponent implements OnInit {
       const m = this.i18n.messages()?.adminNav;
       if (!m) return [];
       return [
+      { label: m.home, route: '/home', icon: 'home' },
       { label: m.tenants, route: '/tenants', icon: 'business', permission: 'tenants:read' },
       { label: m.newTenant, route: '/onboarding', icon: 'add_business', permission: 'tenants:write' },
       { label: m.policies, route: '/policies', icon: 'policy', permission: 'policies:read' },

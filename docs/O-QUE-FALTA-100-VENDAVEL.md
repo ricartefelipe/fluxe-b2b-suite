@@ -72,3 +72,7 @@ Todos os itens acima estão implementados ou documentados. O produto está **100
 - **Config e CORS:** DEPLOY-RAILWAY (URLs absolutas para ops/admin; tabela CORS nos backends).
 - **Legal e suporte:** Termos, Privacidade, Fale conosco, banner de cookies, link Ajuda configurável (SUPPORT_DOCS_URL).
 - **E-mail de suporte:** Configurável via SUPPORT_EMAIL no Shop ou via i18n.
+
+### Depois do “100% vendável”: vender e monitorizar
+
+Para uma **sequência única** (staging → observabilidade → promoção → produção → hábitos), usar [EXECUCAO-VENDA-MONITORIZACAO.md](EXECUCAO-VENDA-MONITORIZACAO.md) em conjunto com [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md) e [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md).

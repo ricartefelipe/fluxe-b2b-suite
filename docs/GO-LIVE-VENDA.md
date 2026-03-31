@@ -106,6 +106,8 @@ Ver [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md) e [MANUAL-SISTEMA.m
 - [ ] JWT_SECRET é o **mesmo** nos 3 backends
 - [ ] `APP_DEV_TOKEN_ENDPOINT_ENABLED=false` em produção
 - [ ] CORS configurado com os domínios corretos dos frontends
+- [ ] (Recomendado em **staging** antes de produção) Fluxo pedido até **PAID** validado com a stack real: ver [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md) — `pnpm smoke:order-staging:saga` ou `pnpm smoke:order-staging:paid` conforme o ambiente
+- [ ] (Produção, opcional) Após go-live, confirmar métricas e filas Rabbit sem anomalia — [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md); playbook único [EXECUCAO-VENDA-MONITORIZACAO.md](EXECUCAO-VENDA-MONITORIZACAO.md)
 
 ---
 
@@ -129,6 +131,7 @@ Ver referência em [docs/TERMOS-PRIVACIDADE.md](TERMOS-PRIVACIDADE.md).
 | [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Git Flow, release e tags, CI/CD |
 | [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md) | Todas as variáveis por serviço |
 | [GUIA-DO-SISTEMA.md](GUIA-DO-SISTEMA.md) | Visão geral do sistema e operação |
+| [EXECUCAO-VENDA-MONITORIZACAO.md](EXECUCAO-VENDA-MONITORIZACAO.md) | Playbook único: staging → monitorização → promoção → produção |
 
 ---
 

@@ -704,6 +704,15 @@ export interface Messages {
     faq2Answer: string;
     faq3Question: string;
     faq3Answer: string;
+    docsSectionTitle: string;
+    docsSectionIntro: string;
+    linkCoreSwagger: string;
+    linkCoreOpenApi: string;
+    linkOrdersDocs: string;
+    linkPaymentsDocs: string;
+    linkPaymentsOpenApi: string;
+    linkPlatformDocs: string;
+    opensInNewTabHint: string;
     dataSectionTitle: string;
     exportLinkHint: string;
   };

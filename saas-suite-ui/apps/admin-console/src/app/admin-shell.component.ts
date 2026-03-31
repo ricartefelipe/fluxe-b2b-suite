@@ -7,13 +7,15 @@ import { Tenant } from '@saas-suite/data-access/core';
 import { OnboardingChecklistComponent, OnboardingChecklistStore } from '@saas-suite/domains/admin';
 import { CoreApiClient } from '@saas-suite/data-access/core';
 import { firstValueFrom } from 'rxjs';
+import { SubscriptionShellBannerComponent } from './subscription-shell-banner.component';
 
 @Component({
   selector: 'app-admin-shell',
   standalone: true,
-  imports: [ShellComponent, OnboardingChecklistComponent],
+  imports: [ShellComponent, SubscriptionShellBannerComponent, OnboardingChecklistComponent],
   template: `
     <saas-shell [navItems]="navItems()" [appTitle]="appTitle()">
+      <app-subscription-shell-banner mainTop />
       <lib-onboarding-checklist mainTop />
     </saas-shell>
   `,

@@ -10,10 +10,14 @@ test.describe('Admin Console Navigation', () => {
 
   test('should navigate between admin sections', async ({ page }) => {
     for (const section of [
+      'home',
       'tenants',
       'policies',
       'flags',
       'audit',
+      'users',
+      'billing',
+      'ai',
       'onboarding',
     ]) {
       await page.goto(`/${section}`);

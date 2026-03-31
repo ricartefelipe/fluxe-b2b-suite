@@ -1,7 +1,7 @@
 # Deploy no Railway — Fluxe B2B Suite
 
 > **Ambientes:** Para configuração completa de local, staging e produção (dados, seed, variáveis), veja [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md).  
-> **Go-live para venda:** Use o checklist completo em [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md).
+> **Go-live para venda:** Use o checklist completo em [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md). **Ordem operacional (staging → métricas → produção):** [EXECUCAO-VENDA-MONITORIZACAO.md](EXECUCAO-VENDA-MONITORIZACAO.md).
 
 ## Visão Geral
 
@@ -97,6 +97,21 @@ Variáveis (ver `railway.prod.env.example`):
 - `JWT_SECRET` → **mesmo** valor do spring-saas-core
 - `JWT_ISSUER=spring-saas-core`
 
+**Worker (obrigatório para CREATED → RESERVED):** o outbox e a reserva de stock correm no processo `node dist/src/worker/main.js`. Faça um **segundo serviço** no mesmo projeto Railway, por exemplo `node-b2b-orders-worker`.
+
+- **Repo Git = `node-b2b-orders` (recomendado):** em **Settings → Build → Config as code**, use **`railway.worker.toml`** na raiz desse repo (referencia `docker/worker.Dockerfile`; não use o `railway.toml` da API).
+- **Repo Git = `fluxe-b2b-suite` (mesmo projeto que os frontends):** o ficheiro **`railway.worker.toml`** na raiz deste repositório já existe e usa a imagem `ghcr.io/ricartefelipe/node-b2b-orders-worker:develop` (CI do repo `node-b2b-orders`). Aponte **Config as code** para esse ficheiro. Se o GitHub Container Registry for **privado**, configure credenciais de registry no Railway (token com `read:packages`). Erro `config file railway.worker.toml does not exist` costuma ser repo errado ou branch sem o ficheiro.
+
+Copie as variáveis da API para o worker (sobretudo `DATABASE_URL`, `REDIS_URL`, `JWT_*`, `RABBITMQ_URL`):
+
+```bash
+cd node-b2b-orders
+chmod +x scripts/railway-sync-worker-env.sh
+./scripts/railway-sync-worker-env.sh 'amqp://USER:PASS@HOST/VHOST'
+```
+
+O URL AMQP deve ser o mesmo na **API** e no **worker** (ex.: [CloudAMQP](https://www.cloudamqp.com/)). Sem `RABBITMQ_URL`, o worker não mantém filas nem conclui o fluxo até `RESERVED`.
+
 #### py-payments-ledger
 ```bash
 cd py-payments-ledger
@@ -127,6 +142,8 @@ Variáveis para **todos** os frontends (ver `saas-suite-ui/railway.prod.env.exam
 - Em produção, configurar `OIDC_ISSUER`, `OIDC_CLIENT_ID`, `OIDC_SCOPE` conforme [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md)
 
 Para **ops-portal** e **admin-console** use sempre **URLs absolutas** (ex.: `https://spring-saas-core-xxx.up.railway.app`). URLs relativas (`/api/core`) só funcionam com proxy reverso; no Railway cada app é um serviço separado.
+
+**Assistente IA (Admin):** no serviço **spring-saas-core**, define `OPENAI_API_KEY` (e mantém `AI_ENABLED=true` em staging, ou `AI_ENABLED=true` em prod se quiseres LLM). Sem chave, o assistente usa só o motor de regras. Detalhes: [spring-saas-core — IA-ASSISTENTE-ADMIN.md](https://github.com/ricartefelipe/spring-saas-core/blob/develop/docs/IA-ASSISTENTE-ADMIN.md) (repo irmão).
 
 **Shop (opcional):** `SUPPORT_EMAIL` (e-mail da página Fale conosco) e `SUPPORT_DOCS_URL` (URL do help center; se definida, o link "Ajuda" no rodapé abre essa URL).
 
@@ -184,6 +201,7 @@ Ver checklist completo em [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md). Resumo:
 - [ ] CORS: nos 3 backends, variável `CORS_ORIGINS` ou `CORS_ALLOWED_ORIGINS` com as origens dos frontends (vírgula), incluindo domínio customizado se usado
 - [ ] Frontends (ops-portal, admin-console): `CORE_API_BASE_URL`, `ORDERS_API_BASE_URL`, `PAYMENTS_API_BASE_URL` com URLs absolutas
 - [ ] (Opcional) Métricas: Prometheus/Grafana configurados (ver seção abaixo)
+- [ ] (Opcional) Validar integração **pedido → PAID** em staging com [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md) (`pnpm smoke:order-staging:saga` ou `:paid`)
 
 ## Métricas e Grafana no deploy
 
@@ -260,5 +278,5 @@ Exemplo de mapeamento:
 3. **Testar `GET /v1/tenants` diretamente:** Com um JWT válido, faça `curl -H "Authorization: Bearer <token>" https://<core-url>/v1/tenants`. Deve retornar 200 com `{ items: [...] }`.
 4. **Policies no Spring:** O Liquibase changeset `008-essential-seed-all-envs.yaml` insere `tenants:read` e `tenants:write`. Se a tabela `policies` estiver vazia, o ABAC bloqueia. Em staging: `SPRING_PROFILES_ACTIVE=staging` e seed (`./scripts/staging-seed.sh railway`). Em prod: o 008 roda no startup e popula as políticas essenciais.
 5. **CORS:** O Spring deve ter `CORS_ALLOWED_ORIGINS` com a origem do admin-console (ex.: `https://admin-console-xxx.up.railway.app`).
-6. **Erro de deserialização no Redis:** Se o 500 mostrar `SerializationException` ou similar no campo `detail`, o cache Redis está com dados incompatíveis. No Railway, defina `CACHE_FRONT_TENANTS_ENABLED=false` no spring-saas-core para desativar o cache de tenants (usa memória). Ou reinicie o Redis para limpar.
+6. **Erro antigo de cache de tenants no Redis:** Versões anteriores cacheavam GET /v1/tenants no Redis; isso foi removido no Core (lista vai sempre à BD). Se ainda vires 500 por `SerializationException` em `/v1/tenants`, faz deploy da versão atual do Core e confirma que não há proxy a servir resposta em cache.
 7. **URL da API no Admin:** No Railway, o serviço **admin-console** precisa de `CORE_API_BASE_URL` apontando para o Spring (ex.: `https://spring-saas-core-xxx.up.railway.app`). Se vazio, o front chama URLs quebradas.

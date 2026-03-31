@@ -25,3 +25,7 @@ Objetivo: padronizar analise estatica apos retirada do Qodana, com gate unico e 
 - Revisao semanal de alertas Semgrep por repositorio
 - Correcao prioritaria para achados em rotas publicas e componentes de identidade
 - Excecoes devem ser justificadas no PR com prazo e responsavel
+
+## Decisao formal e evolucao
+
+Ver [ANALISE-ESTATICA.md](ANALISE-ESTATICA.md) (registo da escolha Semgrep vs Sonar e criterio D-04 do backlog).

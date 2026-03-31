@@ -28,21 +28,37 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 **Gate local unificado (obrigatório antes de PR para `develop`):**
 
-- Executar `./scripts/pre-merge-checks.sh` na raiz do `fluxe-b2b-suite`
+- Executar `./scripts/pre-merge-checks.sh` na raiz do `fluxe-b2b-suite` (ou `pnpm verify:all`)
+- Se o Maven falhar ao criar o repositório local, definir `MAVEN_REPO_LOCAL=$HOME/.m2/repository` (é o default do script)
 - Para validação parcial: `./scripts/pre-merge-checks.sh core` (ou `orders`, `payments`, `suite`)
 - Merge só com todos os checks selecionados em verde
 
 **Gate de contratos cross-repo:**
 
-- Executar `./scripts/check-contract-drift.sh` para validar sincronização de contratos entre Core, Orders e Payments
+- Executar `./scripts/check-contract-drift.sh` (ou `pnpm verify:contracts`) para validar sincronização de contratos entre Core, Orders e Payments — inclui os `.json` em `docs/contracts/schemas/` definidos no Core
 - Se houver drift em `events.md`, `headers.md` ou `identity.md`, bloquear merge até sincronizar
 - CI obrigatório no `fluxe-b2b-suite`: workflow `contracts-drift.yml`
 - Para CI cross-repo privado: configurar secret `CROSS_REPO_READ_TOKEN` (PAT com `repo:read`)
 
+**Smoke HTTP pós-merge (staging):**
+
+- Cada backend tem `scripts/smoke-post-merge.sh` que faz `curl` em health + OpenAPI quando a URL pública está definida.
+- Secrets no GitHub (por repositório): `CORE_SMOKE_URL`, `ORDERS_SMOKE_URL`, `PAYMENTS_SMOKE_URL` — URL base do serviço em Railway/staging (sem barra final). Se o secret estiver vazio, o job termina com sucesso (skip).
+- Local (workspace com os quatro repos): `pnpm smoke:staging` na raiz do `fluxe-b2b-suite` (exportar as mesmas variáveis antes, se necessário).
+- Fluxo mínimo de **pedido** (token → criar → RESERVED → CONFIRMED) em staging: [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md); comando `pnpm smoke:order-staging` com `ORDERS_SMOKE_URL` definido. Opcional até **PAID**: (1) `pnpm smoke:order-staging:paid` com `RABBITMQ_URL` — publica `payment.settled` manualmente (mesmo broker da API/worker); ou (2) `pnpm smoke:order-staging:saga` — poll até PAID com ledger + workers no mesmo broker (sem publicação manual; ver checklist).
+- Thresholds sugeridos para alertas: [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md).
+
 **Qualidade estática (Sonar-like):**
 
 - Workflow `codeql.yml` (job Semgrep) obrigatório em PR/push para `develop` e `master`
-- Política unificada em `docs/POLITICA-QUALIDADE-ESTATICA.md`
+- Política unificada em [POLITICA-QUALIDADE-ESTATICA.md](POLITICA-QUALIDADE-ESTATICA.md); decisão formal em [ANALISE-ESTATICA.md](ANALISE-ESTATICA.md)
+
+**Governação de release (P2):**
+
+- [CHECKLIST-PROMOCAO-DEVELOP-MASTER.md](CHECKLIST-PROMOCAO-DEVELOP-MASTER.md) — checklist único antes de `develop` → `master`
+- [POLITICA-FREEZE-RELEASE.md](POLITICA-FREEZE-RELEASE.md) — freeze por risco P0/P1
+- [TEMPLATE-RELEASE-NOTES.md](TEMPLATE-RELEASE-NOTES.md) — modelo de notas multi-repo
+- [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md) — rollback por serviço
 
 ### 3. Testes
 

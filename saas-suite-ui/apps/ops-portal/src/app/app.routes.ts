@@ -8,6 +8,16 @@ export const appRoutes: Route[] = [
     data: { showSignupLink: false },
   },
   {
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('@saas-suite/shared/auth').then(m => m.ForgotPasswordPageComponent),
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('@saas-suite/shared/auth').then(m => m.ResetPasswordPageComponent),
+  },
+  {
     path: 'change-password',
     loadComponent: () => import('@saas-suite/shared/auth').then(m => m.ChangePasswordPageComponent),
     canActivate: [authGuard],

@@ -7,6 +7,16 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('@saas-suite/shared/auth').then(m => m.LoginPageComponent),
   },
   {
+    path: 'forgot-password',
+    loadComponent: () =>
+      import('@saas-suite/shared/auth').then(m => m.ForgotPasswordPageComponent),
+  },
+  {
+    path: 'reset-password',
+    loadComponent: () =>
+      import('@saas-suite/shared/auth').then(m => m.ResetPasswordPageComponent),
+  },
+  {
     path: 'signup',
     loadComponent: () => import('@saas-suite/shared/auth').then(m => m.SignupPageComponent),
   },
@@ -20,7 +30,11 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./admin-shell.component').then(m => m.AdminShellComponent),
     canActivate: [authGuard],
     children: [
-      { path: '', redirectTo: 'tenants', pathMatch: 'full' },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      {
+        path: 'home',
+        loadComponent: () => import('./pages/home.page').then(m => m.AdminHomePage),
+      },
       {
         path: 'tenants',
         loadComponent: () => import('./pages/tenants-list.page').then(m => m.TenantsListPage),

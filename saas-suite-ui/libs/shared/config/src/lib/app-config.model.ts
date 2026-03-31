@@ -7,6 +7,8 @@ export interface AppConfig {
   supportEmail?: string;
   /** URL da documentação/ajuda (ex.: help center). Se vazio, link "Ajuda" leva para /contact. */
   supportDocsUrl?: string;
+  /** URL externa da documentação da plataforma (contratos, pipelines). Opcional; exibida em Ajuda. */
+  platformDocsUrl?: string;
   oidc?: {
     issuer: string;
     clientId: string;

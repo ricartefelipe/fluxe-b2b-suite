@@ -542,6 +542,8 @@ export interface Messages {
     currentPlanBadge: string;
     noSubscription: string;
     trialBannerMessage: string;
+    shellBannerPastDue: string;
+    shellBannerViewBilling: string;
     trialCtaAddCard: string;
     scheduleCancel: string;
     undoScheduleCancel: string;

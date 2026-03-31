@@ -16,6 +16,8 @@
 | [URLS-AMBIENTES.md](URLS-AMBIENTES.md) | URLs de staging e production (fronts e APIs) e usuário inicial nos 3 fronts |
 | [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Pipeline, esteiras develop/master, release e tags, protocolos (Git Flow, qualidade, testes, CI/CD, docs) |
 | [CHECKLIST-PROMOCAO-DEVELOP-MASTER.md](CHECKLIST-PROMOCAO-DEVELOP-MASTER.md) | Checklist único antes de promover `develop` → `master` |
+| [CHECKLIST-CONTROLE-ENTREGAS.md](CHECKLIST-CONTROLE-ENTREGAS.md) | Checklist operativo de ponta a ponta para controlar entregas (planeamento, dev, staging, release e pós-release) |
+| [CHECKLIST-AMBIENTES-EVIDENCIAS.md](CHECKLIST-AMBIENTES-EVIDENCIAS.md) | Checklist preenchível por rodada para validar staging/produção (branch, deploy, health e evidências) |
 | [POLITICA-FREEZE-RELEASE.md](POLITICA-FREEZE-RELEASE.md) | Política de freeze por risco (P0/P1) em release |
 | [TEMPLATE-RELEASE-NOTES.md](TEMPLATE-RELEASE-NOTES.md) | Template de release notes multi-repo |
 | [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md) | Runbook enxuto de rollback por serviço |
@@ -31,6 +33,7 @@
 | [MANUAL-SISTEMA.md](MANUAL-SISTEMA.md) | Manual completo: arquitetura, segurança, fluxos E2E, APIs e operação |
 | [VISTORIA-COMPLETA.md](VISTORIA-COMPLETA.md) | Vistoria dos 4 serviços: o que falta, o que ficou pela metade, o que está inconsistente |
 | [O-QUE-FALTA-100-VENDAVEL.md](O-QUE-FALTA-100-VENDAVEL.md) | Checklist do que falta para o produto estar 100% vendável (config, legal, suporte, CORS) |
+| [ESTADO-ENTREGAS.md](ESTADO-ENTREGAS.md) | Quadro vivo de execução: concluir e marcar (status, aceite e evidências) |
 | [STACK-E-FERRAMENTAS.md](STACK-E-FERRAMENTAS.md) | O que já usamos (Rabbit, Redis, métricas, Grafana, circuit breaker) e o que pode ser adicionado (Kafka, NoSQL pro front, Sonar) |
 | [CACHE-REDIS-FRONT.md](CACHE-REDIS-FRONT.md) | Cache Redis para respostas consumidas pelo front (padrão de chave, TTL, exemplos por stack) |
 

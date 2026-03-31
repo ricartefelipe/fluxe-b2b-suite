@@ -59,6 +59,7 @@ Ambiente na nuvem para testar antes de produção. Deploy automático quando há
 2. Para cada serviço: **Settings** → **Source** → **Production Branch** = `develop`
 3. Variáveis de ambiente (ver `railway.prod.env.example` em cada repo)
 4. **SPRING_PROFILES_ACTIVE=staging** no spring-saas-core (usa `application-staging.yml` com seed)
+5. Após clonar template, recriar serviços ou alterar Postgres/Redis, seguir a secção **Manutenção contínua** em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) (dois projetos, alinhamento de credenciais, worker vs API, migrações e smoke pós-deploy).
 
 ### Alimentar Staging com dados (após primeiro deploy)
 
@@ -145,7 +146,7 @@ Produção:   migration + 008 (essencial) + schema dos outros; sem seed de demo
 
 - **[config/env/README.md](../config/env/README.md)** — tabela única de portas/hosts (local vs Docker), como evitar troca de config
 - [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) — branches, CI/CD, protocolos
-- [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) — passo a passo Railway
+- [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) — passo a passo Railway e **manutenção contínua** (evitar deriva entre ambientes após clones e novos serviços)
 - [GUIA-OPERACIONAL.md](GUIA-OPERACIONAL.md) — subir local, smoke tests
 - [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md) — lista completa de variáveis por serviço
 - `spring-saas-core/docs/SUBIR-E-TESTAR-TODOS-PROJETOS.md` — guia por projeto

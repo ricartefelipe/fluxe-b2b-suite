@@ -1,44 +1,36 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
+import { I18nService } from '@saas-suite/shared/i18n';
 import { DevLoginComponent } from './dev-auth/dev-login.component';
 import { OidcAuthService } from './oidc-auth.service';
 
 @Component({
   selector: 'lib-login-page',
   standalone: true,
-  imports: [DevLoginComponent, MatProgressSpinnerModule],
+  imports: [DevLoginComponent, MatProgressSpinnerModule, MatIconModule],
   template: `
     @if (showLoginForm) {
       <lib-dev-login />
     } @else {
-      <div class="oidc-loading">
-        <mat-spinner diameter="36" />
-        <p>Redirecting to identity provider&hellip;</p>
+      <div class="auth-premium auth-premium--oidc">
+        <div class="oidc-card">
+          <div class="flow-icon" aria-hidden="true">
+            <mat-icon>verified_user</mat-icon>
+          </div>
+          <mat-spinner diameter="40" />
+          <p>{{ i18n.messages().auth.oidcRedirecting }}</p>
+        </div>
       </div>
     }
   `,
-  styles: [
-    `
-      .oidc-loading {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 16px;
-        min-height: 100vh;
-        background: #f4f6f9;
-      }
-      .oidc-loading p {
-        color: #78909c;
-        font-size: 16px;
-      }
-    `,
-  ],
+  styleUrls: ['./styles/auth-premium.scss'],
 })
 export class LoginPageComponent implements OnInit {
   private readonly config = inject(RuntimeConfigService);
   private readonly oidcAuth = inject(OidcAuthService, { optional: true });
+  protected readonly i18n = inject(I18nService);
 
   showLoginForm = true;
 

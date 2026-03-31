@@ -1,0 +1,13 @@
+# Serviço Railway **node-b2b-orders-worker** quando o Git aponta para **este** repo (fluxe-b2b-suite).
+# Settings → Build → Config as code → `railway.worker.toml`
+#
+# Se o worker estiver ligado ao repo **node-b2b-orders**, use o `railway.worker.toml` desse repo (build a partir do código).
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "deploy/railway/node-b2b-orders-worker.Dockerfile"
+
+[deploy]
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+numReplicas = 1

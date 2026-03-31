@@ -72,6 +72,20 @@ export interface Messages {
     confirmNewPassword: string;
     confirmPasswordMismatch: string;
     changePasswordButton: string;
+    forgotPasswordTitle: string;
+    forgotPasswordSubtitle: string;
+    forgotPasswordSent: string;
+    forgotPasswordSubmit: string;
+    backToLogin: string;
+    resetPasswordTitle: string;
+    resetPasswordSubtitle: string;
+    resetPasswordSubmit: string;
+    resetPasswordSuccess: string;
+    resetPasswordInvalidLink: string;
+    passwordMinHint: string;
+    requestResetError: string;
+    loginSubtitleProd: string;
+    oidcRedirecting: string;
   };
   tenant: {
     selectTenant: string;
@@ -484,6 +498,7 @@ export interface Messages {
   };
   adminNav: {
     appTitle: string;
+    home: string;
     tenants: string;
     newTenant: string;
     policies: string;
@@ -493,6 +508,18 @@ export interface Messages {
     help: string;
     auditLog: string;
     aiAssistant: string;
+  };
+  adminHome: {
+    heroTitle: string;
+    heroSubtitle: string;
+    quickLinksTitle: string;
+    cardTenantsDesc: string;
+    cardOnboardingDesc: string;
+    cardBillingDesc: string;
+    cardUsersDesc: string;
+    cardHelpDesc: string;
+    cardPoliciesDesc: string;
+    cardAuditDesc: string;
   };
   billing: {
     title: string;
@@ -515,6 +542,8 @@ export interface Messages {
     currentPlanBadge: string;
     noSubscription: string;
     trialBannerMessage: string;
+    shellBannerPastDue: string;
+    shellBannerViewBilling: string;
     trialCtaAddCard: string;
     scheduleCancel: string;
     undoScheduleCancel: string;
@@ -591,6 +620,11 @@ export interface Messages {
     insights: string;
     insightsDesc: string;
     aiError: string;
+    aiActionError: string;
+    aiNetworkError: string;
+    aiForbiddenError: string;
+    aiOpenAiKeyMissing: string;
+    aiDismissError: string;
     actor: string;
     rollout: string;
     suspend: string;
@@ -686,6 +720,15 @@ export interface Messages {
     faq2Answer: string;
     faq3Question: string;
     faq3Answer: string;
+    docsSectionTitle: string;
+    docsSectionIntro: string;
+    linkCoreSwagger: string;
+    linkCoreOpenApi: string;
+    linkOrdersDocs: string;
+    linkPaymentsDocs: string;
+    linkPaymentsOpenApi: string;
+    linkPlatformDocs: string;
+    opensInNewTabHint: string;
     dataSectionTitle: string;
     exportLinkHint: string;
   };

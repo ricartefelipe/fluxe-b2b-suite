@@ -30,7 +30,11 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./admin-shell.component').then(m => m.AdminShellComponent),
     canActivate: [authGuard],
     children: [
-      { path: '', redirectTo: 'tenants', pathMatch: 'full' },
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      {
+        path: 'home',
+        loadComponent: () => import('./pages/home.page').then(m => m.AdminHomePage),
+      },
       {
         path: 'tenants',
         loadComponent: () => import('./pages/tenants-list.page').then(m => m.TenantsListPage),

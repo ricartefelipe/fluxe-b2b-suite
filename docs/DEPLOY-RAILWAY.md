@@ -290,6 +290,17 @@ Exemplo de mapeamento:
 2. **Config as code:** em **Settings** do serviço, apontar o ficheiro de config para `apps/shop/railway.toml` (como em `apps/admin-console/railway.toml` e `apps/ops-portal/railway.toml`), **ou** confiar no repositório: existem **dois ficheiros com o mesmo conteúdo** — `saas-suite-ui/railway.toml` (procura por defeito na raiz do **Root Directory**) e `apps/shop/railway.toml` (caminho explícito). **Não usar symlink** em `apps/shop/railway.toml`: o validador do Railway pode falhar com `config file railway.toml does not exist`.
 3. **`watchPatterns`** em `apps/shop/railway.toml` limitam redeploy a alterações sob `saas-suite-ui` relevantes para o build (ex.: não disparam só por mudanças em `docs/` na raiz do monorepo).
 
+#### Se `railway deployment list -s shop-frontend --json` ainda mostrar `configErrors: ["config file railway.toml does not exist"]`
+
+Isto indica que o **serviço no painel** não está a resolver o manifesto (não é só o Git). Faça **espelho** das definições do serviço **admin-console** (que já faz deploy com `dockerfilePath: apps/admin-console/Dockerfile`):
+
+1. Railway → projeto **Staging** → serviço **shop-frontend** → **Settings**.
+2. **Source / Root Directory:** deve ser exactamente `saas-suite-ui` (o mesmo tipo de caminho que o admin usa para o monorepo).
+3. **Build → Config file** (ou equivalente): igual ao admin, mas com `apps/shop/railway.toml`. Se o campo estiver vazio, o Railway procura `railway.toml` na raiz do Root Directory — nesse caso o ficheiro `saas-suite-ui/railway.toml` no repositório deve ser encontrado; se o painel tiver um caminho antigo/errado, **limpe** ou **corrija** para um dos dois ficheiros válidos acima.
+4. Guarde e faça **Redeploy** do serviço (ou um push que toque em `saas-suite-ui` conforme `watchPatterns`).
+
+O CLI **não** expõe hoje alteração destes campos; é preciso o painel (ou API GraphQL com token e permissões).
+
 ### Tenants não listam no Admin Console
 
 1. **Verificar `CORE_API_BASE_URL` no admin-console:** Deve apontar para o **Spring Core** (ex.: `https://spring-saas-core-xxx.up.railway.app`). Confirme em `/assets/config.json` do build que `coreApiBaseUrl` está correto.

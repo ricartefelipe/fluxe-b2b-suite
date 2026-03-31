@@ -1,1 +1,22 @@
-../../railway.toml
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "apps/shop/Dockerfile"
+watchPatterns = [
+  "/saas-suite-ui/apps/shop/**",
+  "/saas-suite-ui/libs/shop/**",
+  "/saas-suite-ui/libs/shared/**",
+  "/saas-suite-ui/libs/data-access/**",
+  "/saas-suite-ui/libs/domains/**",
+  "/saas-suite-ui/libs/api/**",
+  "/saas-suite-ui/package.json",
+  "/saas-suite-ui/pnpm-lock.yaml",
+  "/saas-suite-ui/nx.json",
+  "/saas-suite-ui/tsconfig.base.json",
+]
+
+[deploy]
+healthcheckPath = "/"
+healthcheckTimeout = 60
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 3
+numReplicas = 1

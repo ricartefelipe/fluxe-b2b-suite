@@ -534,6 +534,7 @@ export const EN_US_MESSAGES: Messages = {
   },
   adminNav: {
     appTitle: 'Admin Console',
+    home: 'Home',
     tenants: 'Tenants',
     newTenant: 'New Tenant',
     policies: 'Policies',
@@ -543,6 +544,19 @@ export const EN_US_MESSAGES: Messages = {
     help: 'Help',
     auditLog: 'Audit Log',
     aiAssistant: 'AI Assistant',
+  },
+  adminHome: {
+    heroTitle: 'Welcome to the console',
+    heroSubtitle:
+      'Manage organizations, policies, users, and billing in one place. Use the shortcuts below or the sidebar.',
+    quickLinksTitle: 'Shortcuts',
+    cardTenantsDesc: 'Browse and filter organizations, plans, and status.',
+    cardOnboardingDesc: 'Create a new organization (tenant) and set up essentials.',
+    cardBillingDesc: 'View plan, trial, and open the billing portal.',
+    cardUsersDesc: 'Invite and manage platform users.',
+    cardHelpDesc: 'FAQ and next steps.',
+    cardPoliciesDesc: 'ABAC rules and per-tenant permissions.',
+    cardAuditDesc: 'Action history for compliance.',
   },
   billing: {
     title: 'Billing',

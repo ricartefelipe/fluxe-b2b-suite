@@ -580,6 +580,9 @@ export const EN_US_MESSAGES: Messages = {
     currentPlanBadge: 'Current',
     noSubscription: 'No active subscription. Choose a plan to get started.',
     trialBannerMessage: 'Your trial ends in {{days}} days. Add a card to keep access.',
+    shellBannerPastDue:
+      'Payment is past due. Update your payment method in billing to avoid service interruption.',
+    shellBannerViewBilling: 'View billing',
     trialCtaAddCard: 'Add card',
     scheduleCancel: 'Schedule cancellation',
     undoScheduleCancel: 'Undo schedule',

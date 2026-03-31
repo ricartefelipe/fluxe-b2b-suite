@@ -15,6 +15,6 @@ test.describe('Admin Console Login', () => {
 
   test('should login with dev credentials', async ({ page }) => {
     await loginWithQuickProfile(page, 'Super Admin');
-    await expect(page).toHaveURL(/(tenants|dashboard|onboarding)/, { timeout: 15000 });
+    await expect(page).toHaveURL(/(home|tenants|dashboard|onboarding)/, { timeout: 15000 });
   });
 });

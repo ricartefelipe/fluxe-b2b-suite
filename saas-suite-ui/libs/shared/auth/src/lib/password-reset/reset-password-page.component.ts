@@ -22,16 +22,16 @@ import { I18nService } from '@saas-suite/shared/i18n';
     MatProgressSpinnerModule,
   ],
   template: `
-    <div class="auth-shell">
-      <div class="auth-panel">
+    <div class="auth-premium auth-premium--isolated">
+      <div class="auth-isolated-panel">
         <a routerLink="/login" class="back-link">
           <mat-icon>arrow_back</mat-icon>
           {{ i18n.messages().auth.backToLogin }}
         </a>
 
         @if (invalidLink()) {
-          <div class="header">
-            <div class="icon-wrap warn" aria-hidden="true">
+          <div class="flow-header">
+            <div class="flow-icon flow-icon--warn" aria-hidden="true">
               <mat-icon>link_off</mat-icon>
             </div>
             <h1>{{ i18n.messages().auth.resetPasswordTitle }}</h1>
@@ -42,18 +42,18 @@ import { I18nService } from '@saas-suite/shared/i18n';
           </a>
         } @else if (done()) {
           <div class="success-block">
-            <div class="icon-wrap success" aria-hidden="true">
+            <div class="flow-icon flow-icon--success" aria-hidden="true">
               <mat-icon>check_circle</mat-icon>
             </div>
             <h1>{{ i18n.messages().auth.resetPasswordTitle }}</h1>
-            <p class="lead success-text">{{ i18n.messages().auth.resetPasswordSuccess }}</p>
-            <a mat-flat-button color="primary" class="submit-btn" routerLink="/login">
+            <p class="lead">{{ i18n.messages().auth.resetPasswordSuccess }}</p>
+            <a mat-flat-button color="primary" class="login-cta" routerLink="/login">
               {{ i18n.messages().auth.signIn }}
             </a>
           </div>
         } @else {
-          <div class="header">
-            <div class="icon-wrap" aria-hidden="true">
+          <div class="flow-header">
+            <div class="flow-icon" aria-hidden="true">
               <mat-icon>vpn_key</mat-icon>
             </div>
             <h1>{{ i18n.messages().auth.resetPasswordTitle }}</h1>
@@ -127,148 +127,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
       </div>
     </div>
   `,
-  styles: [
-    `
-      :host {
-        display: block;
-        min-height: 100vh;
-        background: linear-gradient(165deg, #f0f4f8 0%, #e8eef5 45%, #dfe7f0 100%);
-      }
-      .auth-shell {
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 24px 16px 48px;
-        box-sizing: border-box;
-      }
-      .auth-panel {
-        width: 100%;
-        max-width: 420px;
-        background: #fff;
-        border-radius: 20px;
-        padding: 32px 28px 36px;
-        box-shadow:
-          0 1px 2px rgba(15, 23, 42, 0.04),
-          0 12px 40px rgba(15, 23, 42, 0.08);
-        border: 1px solid rgba(15, 23, 42, 0.06);
-      }
-      .back-link {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 14px;
-        font-weight: 500;
-        color: #475569;
-        text-decoration: none;
-        margin-bottom: 28px;
-      }
-      .back-link:hover {
-        color: #1565c0;
-      }
-      .back-link mat-icon {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
-      }
-      .header {
-        margin-bottom: 20px;
-      }
-      .icon-wrap {
-        width: 52px;
-        height: 52px;
-        border-radius: 14px;
-        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 16px;
-      }
-      .icon-wrap mat-icon {
-        color: #1565c0;
-        font-size: 28px;
-        width: 28px;
-        height: 28px;
-      }
-      .icon-wrap.success mat-icon {
-        color: #2e7d32;
-      }
-      .icon-wrap.success {
-        background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
-      }
-      .icon-wrap.warn mat-icon {
-        color: #c2410c;
-      }
-      .icon-wrap.warn {
-        background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
-      }
-      h1 {
-        font-size: 1.5rem;
-        font-weight: 800;
-        margin: 0 0 10px;
-        color: #0f172a;
-        letter-spacing: -0.02em;
-      }
-      .lead {
-        margin: 0;
-        font-size: 15px;
-        line-height: 1.55;
-        color: #64748b;
-      }
-      .full {
-        width: 100%;
-        margin-bottom: 4px;
-      }
-      .prefix-icon {
-        color: #64748b;
-        margin-right: 4px;
-      }
-      .alert {
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-        padding: 12px 14px;
-        border-radius: 12px;
-        font-size: 14px;
-        margin: 12px 0 16px;
-      }
-      .alert.error {
-        background: #fef2f2;
-        border: 1px solid #fecaca;
-        color: #b91c1c;
-      }
-      .alert mat-icon {
-        flex-shrink: 0;
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
-      }
-      .submit-btn {
-        width: 100%;
-        height: 48px;
-        font-size: 15px;
-        font-weight: 600;
-        border-radius: 12px;
-        margin-top: 12px;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        box-sizing: border-box;
-      }
-      .success-block {
-        text-align: center;
-        padding: 8px 0 0;
-      }
-      .success-block .icon-wrap {
-        margin-left: auto;
-        margin-right: auto;
-      }
-      .success-text {
-        margin-bottom: 8px;
-      }
-    `,
-  ],
+  styleUrls: ['../styles/auth-premium.scss'],
 })
 export class ResetPasswordPageComponent {
   private readonly auth = inject(AuthService);

@@ -156,8 +156,11 @@ export class SidebarComponent {
   }
 
   visibleItems() {
-    return this.navItems.filter(
-      item => !item.permission || this.auth.hasPermission(item.permission),
-    );
+    return this.navItems.filter(item => {
+      if (item.requiredPermissions?.length) {
+        return this.auth.hasAllPermissions(item.requiredPermissions);
+      }
+      return !item.permission || this.auth.hasPermission(item.permission);
+    });
   }
 }

@@ -1,3 +1,4 @@
+# Gatilho de deploy após alinhar serviceInstance (rootDirectory + railwayConfigFile) no Railway.
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "apps/shop/Dockerfile"

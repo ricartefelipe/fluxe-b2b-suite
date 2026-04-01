@@ -200,6 +200,7 @@ export const EN_US_MESSAGES: Messages = {
     debits: 'Debits',
     reference: 'Reference',
     account: 'Account',
+    loadFailed: 'Unable to load ledger data',
   },
   checkout: {
     cart: 'Cart',
@@ -229,7 +230,8 @@ export const EN_US_MESSAGES: Messages = {
     noLowStock: 'No items with low stock.',
     recentAdjustments: 'Recent Adjustments',
     availableQty: 'Available',
-    loadError: 'Could not load data. Check API URLs in the environment or try again.',
+    loadError:
+      'Could not load data. Check session, token permissions and API URLs in the environment, or try again.',
     loadErrorAction: 'Try again',
   },
   onboarding: {

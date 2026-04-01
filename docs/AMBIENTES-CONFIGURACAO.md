@@ -12,6 +12,8 @@ Documento central que define os **três ambientes** do Fluxe B2B Suite: configur
 | **Staging** | Railway | `develop` | Migration + seed completo |
 | **Produção** | Railway | `master` | Migration + **só o essencial** (tenant Fluxe B2B Suite, políticas, estrutura) |
 
+**Deploy na nuvem:** automático quando o código **chega** ao remoto em `develop` (staging) ou `master` (produção), desde que cada serviço Railway tenha *Production Branch* alinhada a essa branch. Não há “ambiente de destino” separado no Git: a branch **é** o ambiente. Detalhe na secção *Branch canónica → ambiente* em [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md).
+
 **Seu usuário funciona em todos os ambientes.** Mesmo login (ex.: `admin@local` / `admin123` em local/staging; em prod, criar usuário real ou manter um admin inicial).
 
 ---
@@ -59,6 +61,7 @@ Ambiente na nuvem para testar antes de produção. Deploy automático quando há
 2. Para cada serviço: **Settings** → **Source** → **Production Branch** = `develop`
 3. Variáveis de ambiente (ver `railway.prod.env.example` em cada repo)
 4. **SPRING_PROFILES_ACTIVE=staging** no spring-saas-core (usa `application-staging.yml` com seed)
+5. Após clonar template, recriar serviços ou alterar Postgres/Redis, seguir a secção **Manutenção contínua** em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) (dois projetos, alinhamento de credenciais, worker vs API, migrações e smoke pós-deploy).
 
 ### Alimentar Staging com dados (após primeiro deploy)
 
@@ -145,7 +148,7 @@ Produção:   migration + 008 (essencial) + schema dos outros; sem seed de demo
 
 - **[config/env/README.md](../config/env/README.md)** — tabela única de portas/hosts (local vs Docker), como evitar troca de config
 - [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) — branches, CI/CD, protocolos
-- [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) — passo a passo Railway
+- [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) — passo a passo Railway e **manutenção contínua** (evitar deriva entre ambientes após clones e novos serviços)
 - [GUIA-OPERACIONAL.md](GUIA-OPERACIONAL.md) — subir local, smoke tests
 - [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md) — lista completa de variáveis por serviço
 - `spring-saas-core/docs/SUBIR-E-TESTAR-TODOS-PROJETOS.md` — guia por projeto

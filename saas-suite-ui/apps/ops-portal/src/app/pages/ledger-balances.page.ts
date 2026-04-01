@@ -18,11 +18,19 @@ import { LedgerFacade } from '@saas-suite/data-access/payments';
       <button mat-stroked-button (click)="refresh()"><mat-icon>refresh</mat-icon> {{ i18n.messages().ledger.refresh }}</button>
     </div>
 
+    @if (facade.loadError()) {
+      <div class="ledger-error" role="alert">
+        <strong>{{ i18n.messages().ledger.loadFailed }}</strong>
+        <span class="detail">{{ facade.loadError() }}</span>
+      </div>
+    }
+
     @if (facade.loading()) { <mat-progress-bar mode="indeterminate" /> }
 
-    @if (facade.balances().length === 0 && !facade.loading()) {
+    @if (!facade.loadError() && facade.balances().length === 0 && !facade.loading()) {
       <saas-empty-state icon="balance" [title]="i18n.messages().ledger.noBalancesFound" />
-    } @else {
+    }
+    @if (!facade.loadError() && facade.balances().length > 0) {
       <div class="balances-grid">
         @for (b of facade.balances(); track b.account + b.currency) {
           <mat-card>
@@ -50,6 +58,12 @@ import { LedgerFacade } from '@saas-suite/data-access/payments';
     }
   `,
   styles: [`
+    .ledger-error {
+      margin-bottom: 16px; padding: 12px 16px; border-radius: 8px;
+      background: #ffebee; color: #b71c1c; border: 1px solid #ffcdd2;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .ledger-error .detail { font-size: 13px; opacity: 0.9; word-break: break-word; }
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .balances-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
     .balance-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--app-border); }

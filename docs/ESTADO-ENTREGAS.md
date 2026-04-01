@@ -12,6 +12,16 @@ Legenda de status:
 
 ## Entregas concluidas recentes
 
+### 2026-04-01
+
+- [x] **Validação staging completa (HTTP + smoke pedido + shop deploy)** (`concluida`)
+  - Escopo: `scripts/smoke-staging.sh` (Core, Orders, Payments); `scripts/smoke-order-staging.sh` até `CONFIRMED`; `curl` fronts; Railway `shop-frontend` deploy **SUCCESS** (manifesto `apps/shop/Dockerfile`).
+  - Evidência: execução técnica 2026-04-01; [CHECKLIST-AMBIENTES-EVIDENCIAS.md](CHECKLIST-AMBIENTES-EVIDENCIAS.md) atualizado.
+
+- [x] **Tags `v1.3.0` multi-repo (suite, orders, payments)** (`concluida` — tags no remoto)
+  - Escopo: tag anotada no `develop` atual de fluxe-b2b-suite, node-b2b-orders, py-payments-ledger; spring-saas-core já tinha `v1.3.0` no origin.
+  - Evidência: `git ls-remote origin refs/tags/v1.3.0` após push.
+
 ### 2026-03-31
 
 - [x] **Investigação shop staging + rascunho release v1.3.0** (`concluida`)
@@ -52,11 +62,11 @@ Legenda de status:
 
 ## Fila de execução imediata (concluir e marcar)
 
-- [ ] **Tag de release padronizada multi-repo** (`proxima` → parcialmente documentada)
+- [ ] **Tag de release padronizada multi-repo** (`proxima` → tags criadas; releases GitHub opcionais)
   - Aceite:
-    - [x] Definir versão — baseline atual: `v1.2.0` (fluxe-b2b-suite, node-b2b-orders, py-payments-ledger); `v1.3.0` (spring-saas-core). Próximo alinhamento: decidir se todos sobem para `v1.3.0` na mesma janela de release.
-    - [ ] Criar tags nos repos tocados — pendente apenas se a versão alvo for nova em relação às tags existentes
-    - [ ] Publicar release notes com links dos PRs — base em [RASCUNHO-RELEASE-NOTES-v1.3.0.md](RASCUNHO-RELEASE-NOTES-v1.3.0.md) e [TEMPLATE-RELEASE-NOTES.md](TEMPLATE-RELEASE-NOTES.md); GitHub Releases por repo
+    - [x] Definir versão — alinhamento `v1.3.0` em suite, orders, payments, core (core já estava em `v1.3.0`).
+    - [x] Criar tags nos repos tocados — `v1.3.0` em fluxe-b2b-suite, node-b2b-orders, py-payments-ledger (push para `origin`).
+    - [ ] Publicar release notes com links dos PRs — base em [RASCUNHO-RELEASE-NOTES-v1.3.0.md](RASCUNHO-RELEASE-NOTES-v1.3.0.md) e [TEMPLATE-RELEASE-NOTES.md](TEMPLATE-RELEASE-NOTES.md); GitHub Releases por repo (painel ou `gh release create`)
 
 - [x] **Plano comercial de 30 dias (conversão e retenção)** (`concluida` — documento base)
   - Aceite:

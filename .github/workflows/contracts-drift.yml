@@ -16,17 +16,21 @@ jobs:
       - name: Checkout fluxe-b2b-suite
         uses: actions/checkout@v4
 
-      - name: Validate cross-repo token
+      # Usar output em vez de `if: secrets.*` — evita avaliacao inconsistente no runner.
+      - name: Gate cross-repo drift check
+        id: gate
         env:
           CROSS_REPO_READ_TOKEN: ${{ secrets.CROSS_REPO_READ_TOKEN }}
         run: |
           if [ -z "${CROSS_REPO_READ_TOKEN}" ]; then
-            echo "CROSS_REPO_READ_TOKEN ausente. Drift check cross-repo será marcado como skip."
-            exit 0
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=Contracts drift skipped::CROSS_REPO_READ_TOKEN nao definido; clone cross-repo e drift check omitidos."
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Checkout spring-saas-core (contracts source)
-        if: ${{ secrets.CROSS_REPO_READ_TOKEN != '' }}
+        if: steps.gate.outputs.run == 'true'
         uses: actions/checkout@v4
         with:
           repository: ricartefelipe/spring-saas-core
@@ -35,7 +39,7 @@ jobs:
           token: ${{ secrets.CROSS_REPO_READ_TOKEN }}
 
       - name: Checkout node-b2b-orders (contracts target)
-        if: ${{ secrets.CROSS_REPO_READ_TOKEN != '' }}
+        if: steps.gate.outputs.run == 'true'
         uses: actions/checkout@v4
         with:
           repository: ricartefelipe/node-b2b-orders
@@ -44,7 +48,7 @@ jobs:
           token: ${{ secrets.CROSS_REPO_READ_TOKEN }}
 
       - name: Checkout py-payments-ledger (contracts target)
-        if: ${{ secrets.CROSS_REPO_READ_TOKEN != '' }}
+        if: steps.gate.outputs.run == 'true'
         uses: actions/checkout@v4
         with:
           repository: ricartefelipe/py-payments-ledger
@@ -53,7 +57,7 @@ jobs:
           token: ${{ secrets.CROSS_REPO_READ_TOKEN }}
 
       - name: Check contract drift
-        if: ${{ secrets.CROSS_REPO_READ_TOKEN != '' }}
+        if: steps.gate.outputs.run == 'true'
         run: |
           CORE_BASE_DIR="$GITHUB_WORKSPACE/deps/spring-saas-core" \
           ORDERS_BASE_DIR="$GITHUB_WORKSPACE/deps/node-b2b-orders" \

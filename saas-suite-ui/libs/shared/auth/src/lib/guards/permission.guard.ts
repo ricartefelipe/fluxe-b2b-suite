@@ -6,6 +6,10 @@ export const permissionGuard: CanActivateFn = (route: ActivatedRouteSnapshot) =>
   const store = inject(AuthStore);
   const router = inject(Router);
   const required: string[] = route.data['permissions'] ?? [];
-  if (!required.length || store.hasAnyPermission(required)) return true;
+  const mode = route.data['permissionsMode'] === 'all' ? 'all' : 'any';
+  if (!required.length) return true;
+  const ok =
+    mode === 'all' ? store.hasAllPermissions(required) : store.hasAnyPermission(required);
+  if (ok) return true;
   return router.createUrlTree(['/403']);
 };

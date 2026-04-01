@@ -33,4 +33,8 @@ export class AuthStore {
   hasAnyPermission(perms: string[]): boolean {
     return perms.some(p => this.hasPermission(p));
   }
+
+  hasAllPermissions(perms: string[]): boolean {
+    return perms.length > 0 && perms.every(p => this.hasPermission(p));
+  }
 }

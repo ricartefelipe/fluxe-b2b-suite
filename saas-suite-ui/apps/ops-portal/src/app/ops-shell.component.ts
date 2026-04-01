@@ -21,7 +21,12 @@ export class OpsShellComponent implements OnInit {
   readonly navItems = computed<NavItem[]>(() => {
     const m = this.i18n.messages().opsNav;
     return [
-      { label: m.dashboard, route: '/dashboard', icon: 'dashboard', permission: 'orders:read' },
+      {
+        label: m.dashboard,
+        route: '/dashboard',
+        icon: 'dashboard',
+        requiredPermissions: ['orders:read', 'payments:read', 'inventory:read'],
+      },
       { label: m.orders, route: '/orders', icon: 'receipt_long', permission: 'orders:read' },
       { label: m.newOrder, route: '/orders/new', icon: 'add_shopping_cart', permission: 'orders:write' },
       { label: m.inventory, route: '/inventory/adjustments', icon: 'inventory_2', permission: 'inventory:read' },

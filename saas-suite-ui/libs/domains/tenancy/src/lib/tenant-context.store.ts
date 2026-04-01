@@ -16,9 +16,14 @@ export class TenantContextStore {
   constructor() {
     effect(() => {
       const list = this.tenants();
-      this.tenantCtx.setTenantOptions(
-        list.map((t) => ({ id: t.id, name: t.name })),
-      );
+      const active = this._activeTenant();
+      const fromList = list.map((t) => ({ id: t.id, name: t.name }));
+      const seen = new Set(fromList.map((o) => o.id));
+      if (active && !seen.has(active.id)) {
+        const label = active.name?.trim() ? active.name : active.id;
+        fromList.push({ id: active.id, name: label });
+      }
+      this.tenantCtx.setTenantOptions(fromList);
     });
 
     effect(() => {

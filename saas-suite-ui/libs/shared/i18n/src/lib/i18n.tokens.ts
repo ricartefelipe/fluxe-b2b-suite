@@ -197,6 +197,7 @@ export interface Messages {
     debits: string;
     reference: string;
     account: string;
+    loadFailed: string;
   };
   checkout: {
     cart: string;

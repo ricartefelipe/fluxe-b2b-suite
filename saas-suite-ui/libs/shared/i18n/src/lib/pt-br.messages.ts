@@ -200,6 +200,7 @@ export const PT_BR_MESSAGES: Messages = {
     debits: 'Débitos',
     reference: 'Referência',
     account: 'Conta',
+    loadFailed: 'Não foi possível carregar o ledger',
   },
   checkout: {
     cart: 'Carrinho',

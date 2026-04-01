@@ -13,10 +13,10 @@ Referencias:
 
 ## Dados da rodada
 
-- Data/hora: `2026-03-31T18:15:00-03:00` (validação técnica automatizada)
-- Responsavel: IA (execucao tecnica) + Felipe (validacao painel / negocio)
-- Versao/release: `develop` em fluxe-b2b-suite (pós-merge docs); backends com tags até `v1.2.0` / core `v1.3.0`
-- Observacoes: Railway CLI (`railway status --json`, serviço `Postgres` para variáveis), `curl` staging conforme `URLS-STAGING.md`.
+- Data/hora: `2026-04-01T03:30:00-03:00` (validação técnica + smoke pedido)
+- Responsavel: IA (execucao tecnica) + Felipe (validacao negocio / producao quando aplicavel)
+- Versao/release: `develop` alinhado; tags `v1.3.0` em suite, orders, payments (core ja tinha `v1.3.0` no remoto)
+- Observacoes: `curl` + `scripts/smoke-staging.sh` + `scripts/smoke-order-staging.sh`; Railway `shop-frontend` deploy **SUCCESS** (PR #127 + serviceInstance fix).
 
 ---
 
@@ -58,7 +58,7 @@ Referencias:
 | node-b2b-orders (api) | `SUCCESS` | - | `railway status --json` (env staging, 2026-03-31) | [x] |
 | node-b2b-orders-worker | `SUCCESS` | - | `railway status --json` (env staging) | [x] |
 | py-payments-ledger | `SUCCESS` | - | `railway status --json` (env staging, 2026-03-31) | [x] |
-| shop-frontend | `FAILED` (ultimo deploy Railway) | - | Ver nota: URL publica responde 200 — possivel deploy anterior ativo | [ ] |
+| shop-frontend | `SUCCESS` | - | Deploy `ff3084b3-...` (2026-04-01); `configErrors` ausente; `dockerfilePath` `apps/shop/Dockerfile` | [x] |
 | admin-console | `SUCCESS` | - | `railway status --json` (env staging) | [x] |
 | ops-portal | `SUCCESS` | - | `railway status --json` (env staging) | [x] |
 
@@ -119,10 +119,10 @@ payments:
 
 ### Staging
 
-- [x] Fronts carregam (shop/admin/ops) — HTTP 200 em `admin-console-staging-b1ab`, `ops-portal-staging`, `shop-frontend-staging` (2026-03-31)
-- [ ] Login funciona
-- [ ] Fluxo de pedido minimo ate `CONFIRMED`
-- [ ] (Recomendado) fluxo ate `PAID`
+- [x] Fronts carregam (shop/admin/ops) — HTTP 200 (`curl` 2026-04-01)
+- [x] Login funciona — `POST /v1/auth/token` OK no smoke (`scripts/smoke-order-staging.sh`, utilizador seed `ops@demo.example.com` / tenant `tenant_demo`)
+- [x] Fluxo de pedido minimo ate `CONFIRMED` — mesmo script ate confirmacao
+- [ ] (Recomendado) fluxo ate `PAID` — requer `SMOKE_PAYMENT_PAID=1`+broker ou `SMOKE_SAGA_PAID_LEDGER=1` (ver [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md))
 
 ### Producao
 
@@ -149,14 +149,14 @@ Projeto **Fluxe B2B Suite - Staging**, serviço **Postgres**, `railway variables
 
 ## 6) Fecho da rodada
 
-- [ ] Checklist completo sem bloqueio aberto
+- [ ] Checklist completo sem bloqueio aberto — **staging stack tecnica OK**; producao e branch `master` no projeto Production continuam acao humana
 - [x] Bloqueios remanescentes documentados e com owner (ver abaixo)
-- [ ] Status final: `OK para operacao` ou `NAO OK` — **parcial OK staging**; ver bloqueios
+- [x] Status final (staging): **`OK para operacao` (stack tecnica)** — HTTP + smoke pedido ate `CONFIRMED`; `PAID` opcional pendente
 
 Bloqueios/acoes:
 
 - [ ] **Branch em producao ainda em `develop`** (esperado: `master`) nos serviços do projeto Production no Railway. Owner: Felipe (Settings → Source por serviço).
 - [x] **Core production health endpoint agregado** corrigido para `200/UP` (`/actuator/health`).
 - [ ] **Worker nao listado em production** (`node-b2b-orders-worker`). Owner: Felipe (confirmar se existe servico dedicado no env production).
-- [ ] **shop-frontend (staging): ultimo deploy `FAILED`** no Railway; URL publica ainda responde 200. Owner: Felipe (redeploy ou corrigir build; confirmar se o tráfego usa imagem antiga).
+- [x] **shop-frontend (staging)** — deploy **SUCCESS** apos `serviceInstanceUpdate` + PR #127 (gatilho); manifesto com `apps/shop/Dockerfile`.
 

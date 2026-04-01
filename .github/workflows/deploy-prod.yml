@@ -34,7 +34,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Sem VPS_* nos secrets o deploy por SSH nao corre (ex.: producao so no Railway).
+      - name: Check VPS credentials
+        id: vps
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          if [ -z "${VPS_HOST}" ] || [ -z "${VPS_SSH_KEY}" ] || [ -z "${VPS_USER}" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=VPS deploy omitido::Defina VPS_HOST, VPS_USER e VPS_SSH_KEY nos secrets para activar deploy SSH. Com apenas Railway, o workflow fica verde."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Configure SSH
+        if: steps.vps.outputs.configured == 'true'
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
@@ -42,6 +58,7 @@ jobs:
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
 
       - name: Sync deployment files to VPS
+        if: steps.vps.outputs.configured == 'true'
         run: |
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key" \
@@ -49,6 +66,7 @@ jobs:
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:~/fluxe-b2b-suite/
 
       - name: Deploy on VPS
+        if: steps.vps.outputs.configured == 'true'
         run: |
           ssh -i ~/.ssh/deploy_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'DEPLOY_SCRIPT'
           set -euo pipefail
@@ -70,6 +88,7 @@ jobs:
           DEPLOY_SCRIPT
 
       - name: Smoke test via SSH
+        if: steps.vps.outputs.configured == 'true'
         run: |
           ssh -i ~/.ssh/deploy_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'SMOKE'
           set -e
@@ -82,5 +101,5 @@ jobs:
           SMOKE
 
       - name: Cleanup SSH key
-        if: always()
+        if: always() && steps.vps.outputs.configured == 'true'
         run: rm -f ~/.ssh/deploy_key

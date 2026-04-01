@@ -5,6 +5,8 @@ export interface ProblemDetails {
   detail?: string;
   instance?: string;
   correlationId?: string;
+  /** APIs Python (RFC 7807) */
+  correlation_id?: string;
   permissionCode?: string;
   [key: string]: unknown;
 }

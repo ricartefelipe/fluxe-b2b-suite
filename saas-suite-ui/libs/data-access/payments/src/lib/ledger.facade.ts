@@ -53,8 +53,14 @@ export class LedgerFacade {
   private formatLoadError(e: unknown): string {
     if (e instanceof HttpErrorResponse) {
       const body = e.error;
-      if (body && typeof body === 'object' && 'message' in body) {
-        return String((body as { message: unknown }).message);
+      if (body && typeof body === 'object') {
+        const d = (body as { detail?: unknown }).detail;
+        if (typeof d === 'string' && d.trim().length > 0) {
+          return d.trim();
+        }
+        if ('message' in body) {
+          return String((body as { message: unknown }).message);
+        }
       }
       return `${e.status} ${e.statusText}`.trim();
     }

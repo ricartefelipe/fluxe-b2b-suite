@@ -1,6 +1,16 @@
 [build]
 builder = "DOCKERFILE"
 dockerfilePath = "apps/ops-portal/Dockerfile"
+watchPatterns = [
+  "/saas-suite-ui/apps/ops-portal/**",
+  "/saas-suite-ui/libs/shared/**",
+  "/saas-suite-ui/libs/data-access/**",
+  "/saas-suite-ui/libs/domains/**",
+  "/saas-suite-ui/package.json",
+  "/saas-suite-ui/pnpm-lock.yaml",
+  "/saas-suite-ui/nx.json",
+  "/saas-suite-ui/tsconfig.base.json",
+]
 
 [deploy]
 healthcheckPath = "/"

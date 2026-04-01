@@ -229,7 +229,8 @@ export const PT_BR_MESSAGES: Messages = {
     noLowStock: 'Nenhum item com estoque baixo.',
     recentAdjustments: 'Ajustes Recentes',
     availableQty: 'Disponível',
-    loadError: 'Não foi possível carregar os dados. Verifique as URLs das APIs no ambiente ou tente novamente.',
+    loadError:
+      'Não foi possível carregar os dados. Verifique sessão, permissões no token e URLs das APIs no ambiente, ou tente novamente.',
     loadErrorAction: 'Tentar novamente',
   },
   onboarding: {

@@ -312,6 +312,43 @@ describe('permissionGuard', () => {
     expect(result).toBe(true);
   });
 
+  it('returns true when permissionsMode all and user has every permission', async () => {
+    const { permissionGuard } = await import('../guards/permission.guard');
+    const store = TestBed.inject(AuthStore);
+    store.setSession(
+      validSession({ permissions: ['orders:read', 'payments:read', 'inventory:read'] }),
+    );
+
+    const route = {
+      data: {
+        permissions: ['orders:read', 'payments:read', 'inventory:read'],
+        permissionsMode: 'all',
+      },
+    } as Pick<ActivatedRouteSnapshot, 'data'> as ActivatedRouteSnapshot;
+    const result = TestBed.runInInjectionContext(() =>
+      permissionGuard(route, state),
+    );
+    expect(result).toBe(true);
+  });
+
+  it('returns UrlTree to /403 when permissionsMode all and user lacks one permission', async () => {
+    const { permissionGuard } = await import('../guards/permission.guard');
+    const store = TestBed.inject(AuthStore);
+    store.setSession(validSession({ permissions: ['orders:read', 'inventory:read'] }));
+
+    const route = {
+      data: {
+        permissions: ['orders:read', 'payments:read', 'inventory:read'],
+        permissionsMode: 'all',
+      },
+    } as Pick<ActivatedRouteSnapshot, 'data'> as ActivatedRouteSnapshot;
+    const result = TestBed.runInInjectionContext(() =>
+      permissionGuard(route, state),
+    );
+    expect(result).not.toBe(true);
+    expect(result.toString()).toBe('/403');
+  });
+
   it('returns UrlTree to /403 when user lacks permissions', async () => {
     const { permissionGuard } = await import('../guards/permission.guard');
     const store = TestBed.inject(AuthStore);

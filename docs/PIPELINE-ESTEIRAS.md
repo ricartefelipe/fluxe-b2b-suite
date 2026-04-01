@@ -89,6 +89,21 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 ---
 
+## Branch canónica → ambiente (automático após push)
+
+**Regra:** o destino (staging ou produção) **não** se escolhe num painel de deploy no Git — define-se **só** pela branch em que o código **já foi integrado** no GitHub (`develop` ou `master`). Depois do merge (e do `push` implícito no remoto), os pipelines e o Railway tratam do resto **sem** passo manual obrigatório no repositório.
+
+| Branch no remoto (após merge de PR) | Ambiente | O que dispara sozinho |
+|-------------------------------------|----------|------------------------|
+| **`develop`** | Staging | CI em cada repo; `build-push` publica imagens `:develop`; **Railway** redeploya cada serviço cujo *Production Branch* = `develop` (projeto Staging); smoke pós-merge nos backends quando os secrets de URL estiverem definidos. |
+| **`master`** | Produção | CI; `build-push` publica `:master` / `:latest`; **Railway** (projeto Production, *Production Branch* = `master`); **Cloudflare Pages** para os fronts (`deploy-frontend.yml`); **VPS** quando `deploy-prod.yml` for aplicável. |
+
+**O que *não* publica ambiente partilhado:** `feature/*`, `fix/*`, `docs/*` — aí só corre CI no PR. Só há deploy para staging/produção quando o código **entra** em `develop` ou `master`.
+
+**Pré-requisito (configuração estável, tipicamente uma vez por serviço):** no Railway, *Settings → Source → Production Branch* = `develop` em **todos** os serviços do projeto Staging e = `master` em **todos** os do projeto Production. Com isso, **push nessa branch** = novo deploy naquele ambiente. Ver [Configuração no Railway](#configuração-no-railway).
+
+---
+
 ## Estratégia de branches
 
 | Branch   | Ambiente   | Deploy automático |

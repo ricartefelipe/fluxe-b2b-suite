@@ -21,7 +21,10 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((err: HttpErrorResponse) => {
       const problem: ProblemDetails | null = isProblemDetails(err.error) ? err.error : null;
       const correlationId =
-        problem?.['correlationId'] ?? err.headers?.get('X-Correlation-Id') ?? 'unknown';
+        (typeof problem?.correlationId === 'string' && problem.correlationId) ||
+        (typeof problem?.['correlation_id'] === 'string' && problem['correlation_id']) ||
+        err.headers?.get('X-Correlation-Id') ||
+        'unknown';
       const m = i18n.messages().errors;
 
       logger.error(`HTTP ${err.status} ${req.url}`, err, { correlationId, status: err.status });
@@ -33,13 +36,20 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           router.navigate(['/login']);
           snackBar.open(m.unauthorized, 'OK', { duration: 5000 });
           break;
-        case 403:
-          snackBar.open(
-            `${m.forbidden}${problem?.['permissionCode'] ? ` Permissão: ${problem['permissionCode']}` : ''} [${correlationId}]`,
-            'OK',
-            { duration: 8000 },
-          );
+        case 403: {
+          const detail =
+            typeof problem?.detail === 'string' && problem.detail.trim().length > 0
+              ? ` ${problem.detail.trim()}`
+              : '';
+          const perm =
+            typeof problem?.permissionCode === 'string' && problem.permissionCode
+              ? ` Permissão: ${problem.permissionCode}`
+              : '';
+          snackBar.open(`${m.forbidden}${detail}${perm} [${correlationId}]`, 'OK', {
+            duration: 8000,
+          });
           break;
+        }
         case 404:
           snackBar.open(m.notFound, 'OK', { duration: 4000 });
           break;

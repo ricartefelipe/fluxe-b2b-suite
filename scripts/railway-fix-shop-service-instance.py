@@ -29,7 +29,19 @@ import sys
 import urllib.error
 import urllib.request
 
-GQL_URL = os.environ.get("RAILWAY_GRAPHQL_URL", "https://backboard.railway.app/graphql/v2")
+# backboard.railway.com é o endpoint documentado; .app também existe.
+# Cloudflare 403 + error 1010: pedido bloqueado como "não-browser" — usar User-Agent realista.
+GQL_URL = os.environ.get("RAILWAY_GRAPHQL_URL", "https://backboard.railway.com/graphql/v2")
+
+def _graphql_headers(token: str) -> dict[str, str]:
+    return {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        # Evita Cloudflare 403 / error 1010 (bloqueio por "assinatura" de cliente não-browser)
+        "User-Agent": "curl/8.7.1",
+        "Origin": "https://railway.com",
+    }
 
 DEFAULT_ENV = "3bef7757-dc46-4709-940a-775a14910a85"
 DEFAULT_ADMIN = "969783a4-f56f-46e1-9529-b8e9614fae79"
@@ -61,13 +73,7 @@ mutation ServiceInstanceUpdate(
 def gql(token: str, query: str, variables: dict) -> dict:
     body = json.dumps({"query": query, "variables": variables}).encode()
     req = urllib.request.Request(
-        GQL_URL,
-        data=body,
-        headers={
-            "Authorization": f"Bearer {token}",
-            "Content-Type": "application/json",
-        },
-        method="POST",
+        url=GQL_URL, data=body, headers=_graphql_headers(token), method="POST"
     )
     with urllib.request.urlopen(req, timeout=60) as resp:
         return json.loads(resp.read().decode())

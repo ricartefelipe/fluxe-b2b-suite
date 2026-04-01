@@ -200,6 +200,7 @@ export const EN_US_MESSAGES: Messages = {
     debits: 'Debits',
     reference: 'Reference',
     account: 'Account',
+    loadFailed: 'Unable to load ledger data',
   },
   checkout: {
     cart: 'Cart',

@@ -30,6 +30,13 @@ import { formatDateTime } from '@saas-suite/shared/util';
       <button mat-stroked-button (click)="search()"><mat-icon>refresh</mat-icon> {{ i18n.messages().ledger.refresh }}</button>
     </div>
 
+    @if (facade.loadError()) {
+      <div class="ledger-error" role="alert">
+        <strong>{{ i18n.messages().ledger.loadFailed }}</strong>
+        <span class="detail">{{ facade.loadError() }}</span>
+      </div>
+    }
+
     <div class="filters">
       <mat-form-field appearance="outline">
         <mat-label>{{ i18n.messages().ledger.from }}</mat-label>
@@ -48,9 +55,9 @@ import { formatDateTime } from '@saas-suite/shared/util';
 
     @if (facade.loading()) {
       <saas-table-skeleton [rowCount]="5" [columns]="6" />
-    } @else if (dataSource.data.length === 0) {
+    } @else if (!facade.loadError() && dataSource.data.length === 0) {
       <saas-empty-state icon="account_balance" [title]="i18n.messages().ledger.noEntriesFound" />
-    } @else {
+    } @else if (!facade.loadError()) {
       <table mat-table [dataSource]="dataSource" matSort class="full-width">
         <ng-container matColumnDef="postedAt">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().common.date }}</th>
@@ -81,6 +88,12 @@ import { formatDateTime } from '@saas-suite/shared/util';
     }
   `,
   styles: [`
+    .ledger-error {
+      margin-bottom: 16px; padding: 12px 16px; border-radius: 8px;
+      background: #ffebee; color: #b71c1c; border: 1px solid #ffcdd2;
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .ledger-error .detail { font-size: 13px; opacity: 0.9; word-break: break-word; }
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .filters { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
     .full-width { width: 100%; }

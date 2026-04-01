@@ -27,12 +27,15 @@ export const appRoutes: Route[] = [
     loadComponent: () => import('./ops-shell.component').then(m => m.OpsShellComponent),
     canActivate: [authGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: '', redirectTo: 'orders', pathMatch: 'full' },
       {
         path: 'dashboard',
         loadComponent: () => import('./pages/dashboard.page').then(m => m.DashboardPage),
         canActivate: [permissionGuard],
-        data: { permissions: ['orders:read'] },
+        data: {
+          permissions: ['orders:read', 'payments:read', 'inventory:read'],
+          permissionsMode: 'all',
+        },
       },
       {
         path: 'orders',

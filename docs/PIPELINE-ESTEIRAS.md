@@ -253,14 +253,16 @@ Ao fazer merge `develop` → `master` (produção), **criar uma tag** para rastr
 
 ## URLs esperadas (após configurar Railway)
 
-| Serviço    | Staging (develop)                 | Production (master)                |
-|-----------|------------------------------------|-------------------------------------|
-| Shop      | shop-frontend-staging.up.railway.app   | shop-frontend.up.railway.app (ou custom) |
-| Ops Portal| ops-portal-staging.up.railway.app      | ops-portal.up.railway.app          |
-| Admin     | admin-console-staging.up.railway.app   | admin-console.up.railway.app       |
-| Core API  | spring-saas-core-staging.up.railway.app| spring-saas-core.up.railway.app    |
-| Orders API| node-b2b-orders-staging.up.railway.app | node-b2b-orders.up.railway.app    |
-| Payments  | py-payments-ledger-staging.up.railway.app| py-payments-ledger.up.railway.app|
+O Railway gera **um único host por serviço**; os exemplos abaixo reflectem o projecto actual. Lista canónica e actualização: [URLS-STAGING.md](URLS-STAGING.md) e [URLS-PRODUCAO.md](URLS-PRODUCAO.md). **Não** assumir `spring-saas-core.up.railway.app` sem sufixo — o host real inclui `-staging` / `-production` (e nos fronts um identificador curto).
+
+| Serviço    | Staging (develop) | Production (master) |
+|-----------|-------------------|----------------------|
+| Shop      | shop-frontend-staging.up.railway.app | shop-frontend-production-ecc9.up.railway.app (ou custom) |
+| Ops Portal| ops-portal-staging.up.railway.app | ops-portal-production-186d.up.railway.app |
+| Admin     | admin-console-staging-b1ab.up.railway.app | admin-console-production-85eb.up.railway.app |
+| Core API  | spring-saas-core-staging.up.railway.app | spring-saas-core-production.up.railway.app |
+| Orders API| node-b2b-orders-staging.up.railway.app | node-b2b-orders-production.up.railway.app |
+| Payments  | py-payments-ledger-staging.up.railway.app | py-payments-ledger-production.up.railway.app |
 
 ---
 

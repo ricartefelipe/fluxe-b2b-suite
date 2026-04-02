@@ -66,6 +66,7 @@ def gql(token: str, query: str, variables: dict) -> dict:
         headers={
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
+            "User-Agent": "fluxe-railway-fix/1.0 (urllib)",
         },
         method="POST",
     )

@@ -25,7 +25,7 @@ Hoje, ao cadastrar/convidar um usuário, o email **não é enviado** até você 
 |------|--------|
 | `EMAIL_PROVIDER` | `resend` |
 | `RESEND_API_KEY` | a chave que você copiou (ex.: `re_xxxxxxxx`) |
-| `FRONTEND_URL` | URL do admin-console onde o usuário faz login. Ex.: `https://admin-console-staging-b1ab.up.railway.app` (pegue a URL real do seu serviço admin-console no Railway). |
+| `FRONTEND_URL` | URL do admin-console onde o usuário faz login. Staging (projeto Fluxe): ver [URLS-STAGING.md](URLS-STAGING.md) (ex.: `https://admin-console-production-f309.up.railway.app`). Confirme com `railway domain --json -s admin-console`. |
 | `EMAIL_FROM` | `onboarding@resend.dev` (teste) ou `noreply@seudominio.com.br` (produção, com domínio verificado no Resend) |
 
 4. Salve e faça **redeploy** do serviço spring-saas-core (Deploy → Redeploy, ou um novo commit no repositório).

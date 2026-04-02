@@ -1,11 +1,15 @@
 # URLs — Staging (Railway)
 
-## Links para acessar
+Os hosts `*.up.railway.app` são **gerados por serviço** no projeto [Fluxe B2B Suite — Staging](https://railway.com/project/f83184d7-69fc-4a12-8920-08c433700df0). O Railway pode incluir o segmento `production-` no subdomínio mesmo no ambiente de staging — isso **não** é produção real; o que importa é o **serviço** ao qual o domínio está associado.
+
+**Não** use hosts antigos do tipo `ops-portal-staging.up.railway.app` ou `admin-console-staging-b1ab.up.railway.app` para este projeto: na rede pública eles **não** apontam para os serviços admin/ops corretos (costumam servir o Shop ou 404). Confirme sempre com `railway domain --json -s <serviço>` no repo ligado ao projeto.
+
+## Links para acessar (canónicos)
 
 | App | URL |
 |-----|-----|
-| **Admin Console** | https://admin-console-staging-b1ab.up.railway.app |
-| **Ops Portal** | https://ops-portal-staging.up.railway.app |
+| **Admin Console** | https://admin-console-production-f309.up.railway.app |
+| **Ops Portal** | https://ops-portal-production-ee28.up.railway.app |
 | **Shop** | https://shop-frontend-staging.up.railway.app |
 
 ## APIs (backends)
@@ -30,12 +34,9 @@
    - Variáveis do **spring-saas-core:** `APP_DEV_TOKEN_ENABLED=true` (ou não definida) para login por perfis
    - Variáveis dos **frontends:** `CORE_API_BASE_URL`, `ORDERS_API_BASE_URL`, `PAYMENTS_API_BASE_URL` com as URLs corretas das APIs
 
-3. **CORS:** No spring-saas-core (e node, py), `CORS_ALLOWED_ORIGINS` deve incluir as origens dos frontends:
-   ```
-   https://ops-portal-staging.up.railway.app,https://admin-console-staging.up.railway.app,https://shop-staging.up.railway.app
-   ```
+3. **CORS:** No spring-saas-core (e node, py), `CORS_ALLOWED_ORIGINS` deve incluir as origens dos frontends (use as URLs canónicas desta página).
    Ou deixe vazio em staging (usa `*` por padrão no application.yml).
 
-4. **Config do frontend:** Acesse `https://ops-portal-staging.up.railway.app/assets/config.json` — deve mostrar as URLs das APIs corretas.
+4. **Config do frontend:** Acesse `https://ops-portal-production-ee28.up.railway.app/assets/config.json` — deve mostrar as URLs das APIs corretas.
 
-5. **Dashboard Railway:** https://railway.com/project/b3912187-cdc0-4d3e-b924-1cb74b519cbc
+5. **Dashboard Railway (Fluxe B2B Suite — Staging):** https://railway.com/project/f83184d7-69fc-4a12-8920-08c433700df0

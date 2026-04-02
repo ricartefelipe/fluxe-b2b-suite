@@ -258,8 +258,8 @@ O Railway gera **um único host por serviço**; os exemplos abaixo reflectem o p
 | Serviço    | Staging (develop) | Production (master) |
 |-----------|-------------------|----------------------|
 | Shop      | shop-frontend-staging.up.railway.app | shop-frontend-production-ecc9.up.railway.app (ou custom) |
-| Ops Portal| ops-portal-staging.up.railway.app | ops-portal-production-186d.up.railway.app |
-| Admin     | admin-console-staging-b1ab.up.railway.app | admin-console-production-85eb.up.railway.app |
+| Ops Portal| ops-portal-production-ee28.up.railway.app (ver [URLS-STAGING.md](URLS-STAGING.md)) | ops-portal-production-186d.up.railway.app |
+| Admin     | admin-console-production-f309.up.railway.app (ver [URLS-STAGING.md](URLS-STAGING.md)) | admin-console-production-85eb.up.railway.app |
 | Core API  | spring-saas-core-staging.up.railway.app | spring-saas-core-production.up.railway.app |
 | Orders API| node-b2b-orders-staging.up.railway.app | node-b2b-orders-production.up.railway.app |
 | Payments  | py-payments-ledger-staging.up.railway.app | py-payments-ledger-production.up.railway.app |

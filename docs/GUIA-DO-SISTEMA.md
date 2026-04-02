@@ -44,7 +44,7 @@ Cada organização é um **tenant** com plano (starter, pro, enterprise), regiã
 
 ### 2.2 Ops Portal (Portal de Operações)
 
-**URL**: `ops-portal-staging.up.railway.app`
+**URL**: `ops-portal-production-ee28.up.railway.app` (staging; lista em [URLS-STAGING.md](URLS-STAGING.md))
 
 **Público-alvo**: Equipe operacional (gestores de pedidos, estoque e finanças).
 
@@ -281,8 +281,8 @@ O sistema suporta **Português (pt-BR)** e **Inglês (en-US)** em todas as inter
 | Serviço | URL |
 |---------|-----|
 | Shop | `https://shop-frontend-staging.up.railway.app` |
-| Ops Portal | `https://ops-portal-staging.up.railway.app` |
-| Admin Console | `https://admin-console-staging-b1ab.up.railway.app` |
+| Ops Portal | `https://ops-portal-production-ee28.up.railway.app` |
+| Admin Console | `https://admin-console-production-f309.up.railway.app` |
 | Core API | `https://spring-saas-core-staging.up.railway.app` |
 | Orders API | `https://node-b2b-orders-staging.up.railway.app` |
 | Payments API | `https://py-payments-ledger-staging.up.railway.app` |

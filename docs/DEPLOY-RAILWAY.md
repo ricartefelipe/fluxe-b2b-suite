@@ -282,26 +282,31 @@ Exemplo de mapeamento:
 | **Painel Ops (ou Admin) não carrega / dashboard vazio** | Nos serviços **ops-portal** e **admin-console**, definir **URLs absolutas** das APIs: `CORE_API_BASE_URL`, `ORDERS_API_BASE_URL`, `PAYMENTS_API_BASE_URL` (ex.: `https://spring-saas-core-xxx.up.railway.app`). O `entrypoint.sh` gera `/assets/config.json` a partir do template; se essas variáveis não estiverem setadas, o front chama URLs quebradas. Também garantir que o usuário logado tenha `tenantId` na sessão (Core deve estar acessível para login e lista de tenants). |
 | RabbitMQ não conecta | Verificar URL do CloudAMQP e credenciais |
 | Migrations falham | Verificar `DATABASE_URL` e se o PostgreSQL está acessível |
-| **shop-frontend: deploy `FAILED` com `dockerfilePath: Dockerfile`** | Causa típica: o serviço **não** está a ler o `railway.toml` do shop. Com **Root Directory** = `saas-suite-ui`, o Railway procura por defeito `saas-suite-ui/railway.toml`. **admin-console** e **ops-portal** têm o caminho explícito para `apps/…/railway.toml` nas definições do serviço; o shop precisa do mesmo **ou** do symlink no repositório (ver abaixo). Verificar: `railway deployment list -s shop-frontend --json` → `meta.configErrors` ou `serviceManifest.build.dockerfilePath` (deve ser `apps/shop/Dockerfile`). |
+| **Admin / Ops mostram o Shop (mesma UI, `<title>shop</title>`)** | Com **Root Directory** = `saas-suite-ui` e **Config file** vazio, o Railway pode aplicar um manifest errado e fazer **build do Shop** em todos os serviços. **Correção:** em **cada** serviço (admin, ops, shop), definir **Config file** explícito: `saas-suite-ui/apps/admin-console/railway.toml`, `saas-suite-ui/apps/ops-portal/railway.toml`, `saas-suite-ui/apps/shop/railway.toml`. Automático: [`scripts/railway-fix-front-service-configfiles.py`](../scripts/railway-fix-front-service-configfiles.py) com `RAILWAY_API_TOKEN` e `--staging` ou `--production`. |
+| **shop-frontend: deploy `FAILED` com `dockerfilePath: Dockerfile`** | O serviço não está a ler `apps/shop/railway.toml`. Com **Root Directory** = `saas-suite-ui`, o Railway precisa de **Config file** explícito (`saas-suite-ui/apps/shop/railway.toml`). Verificar: `railway deployment list -s shop-frontend --json` → `serviceManifest.build.dockerfilePath` (deve ser `apps/shop/Dockerfile`). |
 
-### shop-frontend (Railway): alinhar ao admin-console
+### Fronts (Railway): `railway.toml` por serviço
 
-1. **Root Directory** do serviço = `saas-suite-ui` (igual aos outros fronts).
-2. **Config as code:** em **Settings** do serviço, apontar o ficheiro de config para `apps/shop/railway.toml` (como em `apps/admin-console/railway.toml` e `apps/ops-portal/railway.toml`), **ou** confiar no repositório: existem **dois ficheiros com o mesmo conteúdo** — `saas-suite-ui/railway.toml` (procura por defeito na raiz do **Root Directory**) e `apps/shop/railway.toml` (caminho explícito). **Não usar symlink** em `apps/shop/railway.toml`: o validador do Railway pode falhar com `config file railway.toml does not exist`.
-3. **`watchPatterns`** em `apps/shop/railway.toml` limitam redeploy a alterações sob `saas-suite-ui` relevantes para o build (ex.: não disparam só por mudanças em `docs/` na raiz do monorepo).
+1. **Root Directory** do serviço = `saas-suite-ui` (igual para shop, admin e ops).
+2. **Config as code:** em **Settings → Build**, o ficheiro deve ser **um destes** (caminho completo no repo):
+   - Shop: `saas-suite-ui/apps/shop/railway.toml`
+   - Admin: `saas-suite-ui/apps/admin-console/railway.toml`
+   - Ops: `saas-suite-ui/apps/ops-portal/railway.toml`  
+   **Não** deixar o campo vazio: o comportamento por defeito pode associar o manifest errado entre serviços.
+3. **`watchPatterns`** em cada `apps/.../railway.toml` limitam redeploy a alterações relevantes.
 
 #### Se `railway deployment list -s shop-frontend --json` ainda mostrar `configErrors: ["config file railway.toml does not exist"]`
 
-Isto indica que o **serviço no painel** não está a resolver o manifesto (não é só o Git). Faça **espelho** das definições do serviço **admin-console** (que já faz deploy com `dockerfilePath: apps/admin-console/Dockerfile`):
+1. Railway → serviço → **Settings** → **Root Directory** = `saas-suite-ui`.
+2. **Build → Config file** = `saas-suite-ui/apps/shop/railway.toml` (caminho explícito).
+3. Guarde e **Redeploy**.
 
-1. Railway → projeto **Staging** → serviço **shop-frontend** → **Settings**.
-2. **Source / Root Directory:** deve ser exactamente `saas-suite-ui` (o mesmo tipo de caminho que o admin usa para o monorepo).
-3. **Build → Config file** (ou equivalente): igual ao admin, mas com `apps/shop/railway.toml`. Se o campo estiver vazio, o Railway procura `railway.toml` na raiz do Root Directory — nesse caso o ficheiro `saas-suite-ui/railway.toml` no repositório deve ser encontrado; se o painel tiver um caminho antigo/errado, **limpe** ou **corrija** para um dos dois ficheiros válidos acima.
-4. Guarde e faça **Redeploy** do serviço (ou um push que toque em `saas-suite-ui` conforme `watchPatterns`).
+O CLI **não** altera estes campos; use o **painel** ou a **Public API** com token de conta.
 
-O CLI **não** expõe hoje alteração destes campos no `railway` padrão; use o **painel** ou a **Public API** com token de conta (não o token de sessão `rw_Fe26...` do ficheiro local).
+**Scripts (token em [railway.com/account/tokens](https://railway.com/account/tokens)):**
 
-**Automático (recomendado):** no repositório existe [`scripts/railway-fix-shop-service-instance.py`](../scripts/railway-fix-shop-service-instance.py). Crie um token em [railway.com/account/tokens](https://railway.com/account/tokens), exporte `RAILWAY_API_TOKEN`, e execute o script — lê `rootDirectory` do **admin-console** e aplica `railwayConfigFile` `/saas-suite-ui/apps/shop/railway.toml` ao **shop-frontend**. Opção `--redeploy` para disparar redeploy via CLI após a mutação.
+- **Três fronts de uma vez:** [`scripts/railway-fix-front-service-configfiles.py`](../scripts/railway-fix-front-service-configfiles.py) — `python3 scripts/railway-fix-front-service-configfiles.py --staging` (ou `--production`). Opcional `--redeploy`.
+- **Só alinhar o shop ao admin (legado):** [`scripts/railway-fix-shop-service-instance.py`](../scripts/railway-fix-shop-service-instance.py).
 
 ### Tenants não listam no Admin Console
 

@@ -13,10 +13,17 @@ Uso:
   export RAILWAY_API_TOKEN="..."
   python3 scripts/railway-fix-front-service-configfiles.py --staging
   python3 scripts/railway-fix-front-service-configfiles.py --production
+  python3 scripts/railway-fix-front-service-configfiles.py --legacy-staging
+
+O ambiente **--legacy-staging** é o *staging* do projeto Railway **Fluxe B2B Suite — Production**
+(projectId `b3912187-...`), onde os hosts `ops-portal-staging.up.railway.app` etc. estão ligados.
+Se `railwayConfigFile` estiver vazio, admin/ops fazem build do Shop; após corrigir, é preciso
+**novo build** — use `--deploy-v2` (mutation `serviceInstanceDeployV2`), não só `railway redeploy`.
 
 Opções:
-  --dry-run     Mostra o que seria enviado
-  --redeploy    Após mutação, railway redeploy nos três serviços (requer projeto linkado via CLI)
+  --dry-run      Mostra o que seria enviado
+  --redeploy     Após mutação, `railway redeploy` nos três (reinicia deploy actual; pode não rebuild)
+  --deploy-v2    Após mutação, chama `serviceInstanceDeployV2` por serviço (novo build a partir do repo)
 """
 
 from __future__ import annotations
@@ -40,6 +47,13 @@ STAGING = {
 }
 PRODUCTION = {
     "environment_id": "8652b9da-75f3-42d1-8a57-e73319edb900",
+    "admin": "77d6fffe-f1e6-485a-8f43-b438550fe6f8",
+    "ops": "cec609d4-1278-4774-88bf-38090b34a0a7",
+    "shop": "b07cf91b-a187-426b-9b87-34f64eca566b",
+}
+# Staging dentro do projecto "Fluxe B2B Suite — Production" (hosts *-staging.up.railway.app na doc)
+LEGACY_STAGING = {
+    "environment_id": "f91a2b8e-6ba0-4481-b46c-d8f4dc0171dc",
     "admin": "77d6fffe-f1e6-485a-8f43-b438550fe6f8",
     "ops": "cec609d4-1278-4774-88bf-38090b34a0a7",
     "shop": "b07cf91b-a187-426b-9b87-34f64eca566b",
@@ -71,6 +85,16 @@ mutation ServiceInstanceUpdate(
 }
 """
 
+MUTATION_DEPLOY_V2 = """
+mutation serviceInstanceDeployV2($commitSha: String, $environmentId: String!, $serviceId: String!) {
+  serviceInstanceDeployV2(
+    commitSha: $commitSha
+    environmentId: $environmentId
+    serviceId: $serviceId
+  )
+}
+"""
+
 
 def gql(token: str, query: str, variables: dict) -> dict:
     body = json.dumps({"query": query, "variables": variables}).encode()
@@ -94,15 +118,30 @@ def main() -> int:
     g = parser.add_mutually_exclusive_group(required=True)
     g.add_argument("--staging", action="store_true")
     g.add_argument("--production", action="store_true")
+    g.add_argument(
+        "--legacy-staging",
+        action="store_true",
+        help="Ambiente staging do projecto Fluxe B2B Suite — Production (hosts documentados *-staging)",
+    )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument(
         "--redeploy",
         action="store_true",
         help="Executa railway redeploy para admin-console, ops-portal, shop-frontend",
     )
+    parser.add_argument(
+        "--deploy-v2",
+        action="store_true",
+        help="Após mutação, serviceInstanceDeployV2 por serviço (novo build; recomendado após --legacy-staging)",
+    )
     args = parser.parse_args()
 
-    cfg = STAGING if args.staging else PRODUCTION
+    if args.staging:
+        cfg = STAGING
+    elif args.production:
+        cfg = PRODUCTION
+    else:
+        cfg = LEGACY_STAGING
     env_id = cfg["environment_id"]
     token = os.environ.get("RAILWAY_API_TOKEN", "").strip()
 
@@ -154,6 +193,23 @@ def main() -> int:
                 print(json.dumps(out, indent=2), file=sys.stderr)
                 return 1
             print(f"  OK: {name}")
+
+        if args.deploy_v2:
+            for name, service_id, _ in targets:
+                out = gql(
+                    token,
+                    MUTATION_DEPLOY_V2,
+                    {
+                        "environmentId": env_id,
+                        "serviceId": service_id,
+                        "commitSha": None,
+                    },
+                )
+                if out.get("errors"):
+                    print(json.dumps(out, indent=2), file=sys.stderr)
+                    return 1
+                dep = out.get("data", {}).get("serviceInstanceDeployV2")
+                print(f"serviceInstanceDeployV2 {name}: {dep}")
 
         if args.redeploy:
             for svc in ("admin-console", "ops-portal", "shop-frontend"):

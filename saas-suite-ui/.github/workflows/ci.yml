@@ -1,4 +1,6 @@
-name: CI
+# Não executado pelo GitHub: ficheiros em subpastas não são workflows ativos.
+# CI oficial do monorepo: fluxe-b2b-suite/.github/workflows/deploy.yml (raiz do repositório).
+name: CI (não usado — ver deploy.yml na raiz)
 
 on:
   push:

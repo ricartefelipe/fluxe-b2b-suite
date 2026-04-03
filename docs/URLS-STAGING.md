@@ -1,5 +1,7 @@
 # URLs — Staging (Railway)
 
+Os hosts abaixo (`*-staging.up.railway.app`) pertencem ao projecto Railway **Fluxe B2B Suite — Production**, ambiente **staging** (não confundir com o projecto separado **Fluxe B2B Suite — Staging**, que tem outros `*.up.railway.app`). Se o Ops ou o Admin mostrarem a UI do Shop, veja [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) e o script `scripts/railway-fix-front-service-configfiles.py --legacy-staging --deploy-v2`. Se o **build** já estiver certo mas o hostname público ainda servir o Shop, no projecto **Fluxe B2B Suite — Staging** use `scripts/railway-alias-staging-public-domains.py` (mutation `serviceDomainUpdate`).
+
 ## Links para acessar
 
 | App | URL |

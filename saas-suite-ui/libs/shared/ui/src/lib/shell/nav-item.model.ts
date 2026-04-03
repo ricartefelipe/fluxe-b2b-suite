@@ -7,8 +7,12 @@ export interface NavItem {
   /** Mostrar o item só se o utilizador tiver todas estas permissões (ex.: dashboard agrega APIs). */
   requiredPermissions?: string[];
   /**
-   * ABAC do py-payments-ledger (plano/região no JWT). Só aplicável com permissão já satisfeita.
-   * Ver `sessionPaymentsAbacAllows` em shared-auth.
+   * ABAC py-payments-ledger (plano/região no JWT). Ver `sessionPaymentsAbacAllows`.
    */
-  paymentsAbacPermission?: 'ledger:read';
+  paymentsAbacPermissions?: string[];
+  /** Um único código (atalho para o guard e sidebar). */
+  paymentsAbacPermission?: string;
+  /** ABAC node-b2b-orders. Ver `sessionOrdersAbacAllows`. */
+  ordersAbacPermissions?: string[];
+  ordersAbacPermission?: string;
 }

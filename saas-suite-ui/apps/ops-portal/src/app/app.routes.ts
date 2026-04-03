@@ -77,13 +77,13 @@ export const appRoutes: Route[] = [
         path: 'ledger/entries',
         loadComponent: () => import('./pages/ledger-entries.page').then(m => m.LedgerEntriesPage),
         canActivate: [permissionGuard],
-        data: { permissions: ['ledger:read'] },
+        data: { permissions: ['ledger:read'], paymentsAbacPermission: 'ledger:read' },
       },
       {
         path: 'ledger/balances',
         loadComponent: () => import('./pages/ledger-balances.page').then(m => m.LedgerBalancesPage),
         canActivate: [permissionGuard],
-        data: { permissions: ['ledger:read'] },
+        data: { permissions: ['ledger:read'], paymentsAbacPermission: 'ledger:read' },
       },
       {
         path: 'account/password',

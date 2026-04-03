@@ -1,7 +1,7 @@
 import { Component, Input, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthStore } from '@saas-suite/shared/auth';
+import { AuthStore, isKnownPaymentsAbacPermission, sessionPaymentsAbacAllows } from '@saas-suite/shared/auth';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { NavItem } from './nav-item.model';
 
@@ -157,10 +157,18 @@ export class SidebarComponent {
 
   visibleItems() {
     return this.navItems.filter(item => {
+      let visible: boolean;
       if (item.requiredPermissions?.length) {
-        return this.auth.hasAllPermissions(item.requiredPermissions);
+        visible = this.auth.hasAllPermissions(item.requiredPermissions);
+      } else {
+        visible = !item.permission || this.auth.hasPermission(item.permission);
       }
-      return !item.permission || this.auth.hasPermission(item.permission);
+      if (!visible) return false;
+      const abac = item.paymentsAbacPermission;
+      if (abac && isKnownPaymentsAbacPermission(abac)) {
+        return sessionPaymentsAbacAllows(this.auth.session(), abac);
+      }
+      return true;
     });
   }
 }

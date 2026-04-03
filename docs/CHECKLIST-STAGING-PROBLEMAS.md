@@ -2,77 +2,114 @@
 
 Documento operacional para fechar **um item de cada vez**. Referência canónica de ambientes: [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md).
 
+**Como usar:** marca `[x]` em cada linha quando confirmado no teu ambiente.
+
 ---
 
 ## 1. Deploy sem imagem nova (migrações “não aparecem”)
 
-| Estado | Problema | Verificação | Ação |
-|--------|-----------|-------------|------|
-| [ ] | `railway redeploy` só reutiliza a última imagem; código novo em `develop` pode não estar no container | Deployments → commit / build time vs último merge em `develop` | Trigger de **build** a partir do `develop` atual (push ou deploy que compile o Dockerfile), não só redeploy |
+**Problema:** `railway redeploy` só reutiliza a última imagem; código novo em `develop` pode não estar no container.
+
+**No repositório (automatizável):**
+
+- [ ] No monorepo **fluxe-b2b-suite**, corre `./scripts/staging-compare-develop-sha.sh` e anota o SHA de `origin/develop`.
+- [ ] No Railway → serviço (ex. py-payments-ledger) → **Deployments** → último deploy com sucesso → **commit** deve ser o mesmo SHA (ou pipeline a partir desse commit).
+
+**Se o SHA não bater:** faz deploy que **faça build** a partir do Git (push vazio em `develop`, ou botão que dispare **Build**), não só “Redeploy” da imagem antiga.
 
 ---
 
 ## 2. `audit_log` sem coluna `target` (ou `detail`)
 
-| Estado | Problema | Verificação | Ação |
-|--------|-----------|-------------|------|
-| [ ] | Logs: `column "target" of relation "audit_log" does not exist` | `alembic_version` = `0016_audit_log_target_detail` e `\d audit_log` no Postgres da app payments | Garantir imagem com migração **0016**; se BD ficou inconsistente, correr `alembic upgrade head` na mesma BD que o serviço usa |
+**Problema:** Logs: `column "target" of relation "audit_log" does not exist`.
+
+**Verificação:**
+
+- [ ] Nos logs de arranque do **py-payments-ledger** aparece `[entrypoint] Alembic revision aplicada na BD:` seguido de `0016_audit_log_target_detail` (ou `head` nessa revisão).
+- [ ] Opcional no Postgres da BD **do payments**: `SELECT version_num FROM alembic_version;` e `\d audit_log` (colunas `target`, `detail`).
+
+**Ação:** Imagem com migração **0016** + mesma BD que o serviço usa; se necessário `alembic upgrade head` com `DATABASE_PUBLIC_URL` (ver [config/env/README.md](../config/env/README.md)).
 
 ---
 
-## 3. ABAC 403 “Plan … not allowed” com `allowed_plans` estranhos nos logs
+## 3. ABAC 403 “Plan … not allowed” com `allowed_plans` estranhos
 
-| Estado | Problema | Verificação | Ação |
-|--------|-----------|-------------|------|
-| [ ] | Políticas com `allowed_plans` desalinhados ou versão antiga do serviço | Logs já devem mostrar `allowed_plans` como lista de slugs (não caractere a caractere) | Deploy **py-payments-ledger** com `develop` que inclui `_normalize_abac_slug_list` + migrações **0014/0015**; depois `seed` ou só migrações conforme [staging-seed.sh](../scripts/staging-seed.sh) |
+**Problema:** Políticas desalinhadas ou serviço antigo.
+
+**Verificação:**
+
+- [ ] Código em `develop` com `_normalize_abac_slug_list` em `security.py` e migrações **0014/0015** aplicadas (ver item 2).
+- [ ] Após arranque, seed staging correu sem erro (item 7).
+
+**Ação:** [staging-seed.sh](../scripts/staging-seed.sh) `railway` ou migrate+seed manual nos dois repos.
 
 ---
 
 ## 4. Redis — `AuthenticationError` no rate limit
 
-| Estado | Problema | Verificação | Ação |
-|--------|-----------|-------------|------|
-| [ ] | `invalid username-password pair` ao falar com Redis | Variável `REDIS_URL` / credenciais no serviço **py-payments-ledger** vs plugin Redis no mesmo projeto | Alinhar com o **Redis** do projeto staging (referência `${{Redis.REDIS_URL}}` ou equivalente documentado no repo) |
+**Problema:** `invalid username-password pair` ao falar com Redis.
+
+**Verificação:**
+
+- [ ] No serviço **py-payments-ledger**, `REDIS_URL` referencia o plugin **Redis** do mesmo projeto Railway (`${{Redis.REDIS_URL}}` ou equivalente).
+
+**Ação:** Copiar credenciais do plugin Redis para a variável do serviço; redeploy.
 
 ---
 
 ## 5. JWT desalinhado entre Core, Orders e Payments
 
-| Estado | Problema | Verificação | Ação |
-|--------|-----------|-------------|------|
-| [ ] | Token válido no Core rejeitado nos outros serviços | Mesmo `JWT_SECRET` / `JWT_HS256_SECRET` e `JWT_ISSUER` nos três | Copiar valores no Railway staging e redeploy |
+**Problema:** Token válido no Core e 401/403 nos outros.
+
+**Verificação:**
+
+- [ ] Mesmo segredo: `JWT_HS256_SECRET` / `JWT_SECRET` e `JWT_ISSUER=spring-saas-core` nos três serviços de backend em staging.
+
+**Ação:** Alinhar variáveis e redeploy.
 
 ---
 
-## 6. Três bases no mesmo Postgres (local documentado)
+## 6. Três bases no mesmo Postgres
 
-| Estado | Problema | Verificação | Ação |
-|--------|-----------|-------------|------|
-| [ ] | Core / Orders / Payments precisam de **bases distintas** (nomes no fim do URL) | Cada `DATABASE_URL` / `DB_URL` no Railway | Confirmar três nomes de BD coerentes com [config/env/README.md](../config/env/README.md); nunca misturar schemas à mão sem runbook |
+**Problema:** Core / Orders / Payments precisam de **bases distintas** (nomes no fim do URL).
+
+**Verificação:**
+
+- [ ] Cada `DATABASE_URL` / `DB_URL` no Railway termina com **nome de base diferente**, coerente com [config/env/README.md](../config/env/README.md).
 
 ---
 
 ## 7. Seed de staging a falhar sem falhar o deploy
 
-| Estado | Problema | Verificação | Ação |
-|--------|-----------|-------------|------|
-| [ ] | `docker/entrypoint.sh` em payments podia mascarar falha do seed (`\|\| true`) | Logs de arranque: “Staging: running seed…” sem erro visível mas políticas vazias | Corrigido para staging falhar o processo se o seed falhar (ver repo **py-payments-ledger**) |
+**Problema:** Seed falhava e o processo subia na mesma (`|| true` antigo).
+
+**Estado no código:** Corrigido — staging **aborta** se `python -m src.infrastructure.db.seed` falhar.
+
+**Verificação:**
+
+- [ ] Deploy com imagem que inclua esse `docker/entrypoint.sh` (repo **py-payments-ledger**).
 
 ---
 
 ## 8. `ENCRYPTION_KEY` ausente (staging)
 
-| Estado | Problema | Verificação | Ação |
-|--------|-----------|-------------|------|
-| [ ] | Log: `ENCRYPTION_KEY not set - sensitive payment data will be stored in plaintext` | Variáveis do serviço payments | Gerar com `python -m src.shared.encryption` (ver `railway.prod.env.example` no repo payments) e definir no Railway |
+**Problema:** Log avisa armazenamento sensível em texto claro.
+
+**Verificação:**
+
+- [ ] Variável `ENCRYPTION_KEY` definida no serviço payments (gerar: `python -m src.shared.encryption` no repo payments).
 
 ---
 
 ## 9. OpenTelemetry para `localhost:4317` indisponível
 
-| Estado | Problema | Verificação | Ação |
-|--------|-----------|-------------|------|
-| [ ] | Ruído nos logs `StatusCode.UNAVAILABLE` ao exportar traces | Opcional em staging | Desligar tracing em staging ou apontar OTLP para collector real (baixa prioridade se só for ruído) |
+**Problema:** Ruído `StatusCode.UNAVAILABLE` nos logs.
+
+**Estado no código:** Com `APP_ENV=staging`, o tracing fica **desligado por defeito** (podes forçar `OTEL_ENABLED=true` se tiveres collector).
+
+**Verificação:**
+
+- [ ] Logs de arranque mostram `OpenTelemetry disabled (staging default or OTEL_ENABLED=false)` em staging.
 
 ---
 
@@ -84,4 +121,4 @@ Documento operacional para fechar **um item de cada vez**. Referência canónica
 
 ---
 
-*Última atualização: checklist operacional alinhado aos repos Fluxe B2B Suite.*
+*Última atualização: checklist com passos por item e scripts em `scripts/staging-compare-develop-sha.sh`.*

@@ -41,6 +41,8 @@ O projeto tem **três ambientes** bem definidos. Ver [docs/AMBIENTES-CONFIGURACA
 | **Staging** | Railway | **`develop`** | Migration + seed completo |
 | **Produção** | Railway | **`master`** | Migration + só essencial |
 
+**Função:** **Staging** é para **testar** (integração, QA, demos); **produção** é **para valer** (clientes, dados e operações reais). Não confundir staging com produção.
+
 - **“Subir ambiente local”** = Docker/scripts na máquina (`./scripts/up-local.sh`, `nx serve`, etc.) — ver doc.  
 - **“Staging / produção”** = resultado do que está em **`develop`** / **`master`** no remoto após CI e deploy Railway — não é o mesmo que “processo de subida” Git (PR), embora o PR para `develop` seja o que **dispara** o deploy de staging.
 

@@ -1,7 +1,13 @@
 import { Component, Input, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
-import { AuthStore, isKnownPaymentsAbacPermission, sessionPaymentsAbacAllows } from '@saas-suite/shared/auth';
+import {
+  AuthStore,
+  isKnownOrdersAbacPermission,
+  isKnownPaymentsAbacPermission,
+  sessionOrdersAbacAllows,
+  sessionPaymentsAbacAllows,
+} from '@saas-suite/shared/auth';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { NavItem } from './nav-item.model';
 
@@ -164,9 +170,24 @@ export class SidebarComponent {
         visible = !item.permission || this.auth.hasPermission(item.permission);
       }
       if (!visible) return false;
-      const abac = item.paymentsAbacPermission;
-      if (abac && isKnownPaymentsAbacPermission(abac)) {
-        return sessionPaymentsAbacAllows(this.auth.session(), abac);
+      const session = this.auth.session();
+      const payKeys = [
+        ...(item.paymentsAbacPermissions ?? []),
+        ...(item.paymentsAbacPermission ? [item.paymentsAbacPermission] : []),
+      ];
+      for (const abac of payKeys) {
+        if (isKnownPaymentsAbacPermission(abac) && !sessionPaymentsAbacAllows(session, abac)) {
+          return false;
+        }
+      }
+      const ordKeys = [
+        ...(item.ordersAbacPermissions ?? []),
+        ...(item.ordersAbacPermission ? [item.ordersAbacPermission] : []),
+      ];
+      for (const abac of ordKeys) {
+        if (isKnownOrdersAbacPermission(abac) && !sessionOrdersAbacAllows(session, abac)) {
+          return false;
+        }
       }
       return true;
     });

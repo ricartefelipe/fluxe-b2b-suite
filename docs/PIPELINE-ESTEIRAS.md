@@ -10,7 +10,7 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 | Regra | Descrição |
 |-------|-----------|
-| **Branches** | `master` (produção), `develop` (staging), `feature/*`, `fix/*`, `docs/*` |
+| **Branches** | `master` → **produção** (uso real), `develop` → **staging** (teste/QA), `feature/*`, `fix/*`, `docs/*` |
 | **Criação** | `feature/nome-descritivo` ou `fix/nome-descritivo` a partir de `develop` |
 | **Merge em develop** | Sempre via PR; usar `--no-ff` quando possível para rastreabilidade |
 | **Merge em master** | Apenas após validação em staging; via PR; gerar release/tag se relevante |

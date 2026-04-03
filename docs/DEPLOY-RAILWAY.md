@@ -283,6 +283,7 @@ Exemplo de mapeamento:
 | RabbitMQ não conecta | Verificar URL do CloudAMQP e credenciais |
 | Migrations falham | Verificar `DATABASE_URL` e se o PostgreSQL está acessível |
 | **Admin / Ops mostram o Shop (mesma UI, `<title>shop</title>`)** | Com **Root Directory** = `saas-suite-ui` e **Config file** vazio, o Railway pode aplicar um manifest errado e fazer **build do Shop** em todos os serviços. **Correção:** em **cada** serviço (admin, ops, shop), definir **Config file** explícito: `saas-suite-ui/apps/admin-console/railway.toml`, `saas-suite-ui/apps/ops-portal/railway.toml`, `saas-suite-ui/apps/shop/railway.toml`. Automático: [`scripts/railway-fix-front-service-configfiles.py`](../scripts/railway-fix-front-service-configfiles.py) com `RAILWAY_API_TOKEN` e `--staging` ou `--production`. Para os hosts documentados `*-staging.up.railway.app` (projecto **Fluxe B2B Suite — Production**, ambiente staging), use **`--legacy-staging`**; após a mutação é necessário **novo build** — **`--deploy-v2`** (mutation `serviceInstanceDeployV2`). Só `railway redeploy` pode não rebuildar. |
+| **Build correcto, mas `ops-portal-staging` / `admin-console-staging-b1ab` ainda servem Shop ou 404** | O hostname público não estava ligado ao **serviceInstance** certo (o Railway gera um `*.production-xxxx.up.railway.app` por defeito). Corrija com a mutation **`serviceDomainUpdate`** na Public API ou com [`scripts/railway-alias-staging-public-domains.py`](../scripts/railway-alias-staging-public-domains.py) (`RAILWAY_API_TOKEN`; defaults = projeto **Fluxe B2B Suite — Staging**). **Não** exige novo build. |
 | **shop-frontend: deploy `FAILED` com `dockerfilePath: Dockerfile`** | O serviço não está a ler `apps/shop/railway.toml`. Com **Root Directory** = `saas-suite-ui`, o Railway precisa de **Config file** explícito (`saas-suite-ui/apps/shop/railway.toml`). Verificar: `railway deployment list -s shop-frontend --json` → `serviceManifest.build.dockerfilePath` (deve ser `apps/shop/Dockerfile`). |
 
 ### Fronts (Railway): `railway.toml` por serviço
@@ -307,6 +308,7 @@ O CLI **não** altera estes campos; use o **painel** ou a **Public API** com tok
 
 - **Três fronts de uma vez:** [`scripts/railway-fix-front-service-configfiles.py`](../scripts/railway-fix-front-service-configfiles.py) — `python3 scripts/railway-fix-front-service-configfiles.py --staging` (ou `--production`). Opcional `--redeploy`.
 - **Só alinhar o shop ao admin (legado):** [`scripts/railway-fix-shop-service-instance.py`](../scripts/railway-fix-shop-service-instance.py).
+- **Domínios públicos documentados (ops/admin staging):** [`scripts/railway-alias-staging-public-domains.py`](../scripts/railway-alias-staging-public-domains.py) — mutation `serviceDomainUpdate` para `ops-portal-staging.up.railway.app` e `admin-console-staging-b1ab.up.railway.app`.
 
 ### Tenants não listam no Admin Console
 

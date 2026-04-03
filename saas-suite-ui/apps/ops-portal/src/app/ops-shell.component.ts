@@ -31,8 +31,20 @@ export class OpsShellComponent implements OnInit {
       { label: m.newOrder, route: '/orders/new', icon: 'add_shopping_cart', permission: 'orders:write' },
       { label: m.inventory, route: '/inventory/adjustments', icon: 'inventory_2', permission: 'inventory:read' },
       { label: m.payments, route: '/payments', icon: 'payments', permission: 'payments:read' },
-      { label: m.ledger, route: '/ledger/entries', icon: 'account_balance', permission: 'ledger:read' },
-      { label: m.balances, route: '/ledger/balances', icon: 'balance', permission: 'ledger:read' },
+      {
+        label: m.ledger,
+        route: '/ledger/entries',
+        icon: 'account_balance',
+        permission: 'ledger:read',
+        paymentsAbacPermission: 'ledger:read',
+      },
+      {
+        label: m.balances,
+        route: '/ledger/balances',
+        icon: 'balance',
+        permission: 'ledger:read',
+        paymentsAbacPermission: 'ledger:read',
+      },
     ];
   });
 

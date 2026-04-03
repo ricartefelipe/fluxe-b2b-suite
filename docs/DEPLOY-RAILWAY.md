@@ -29,6 +29,25 @@ A stack completa requer **7 serviços** no Railway:
 
 Configure cada projeto Railway com **Production Branch** = `develop` (staging) ou `master` (produção) conforme o ambiente.
 
+### Deploy automático após merge (Git Flow → Railway)
+
+Não é necessário “clicar em deploy” no Railway quando a configuração está correta:
+
+| Repositório | Serviço típico no Railway | O que acontece |
+|-------------|---------------------------|----------------|
+| `spring-saas-core` | API Java (8080) | Push/merge em `develop` → CI verde → build da imagem (ex. `:develop`) → Railway puxa e redeploya se o serviço usa essa branch/imagem. |
+| `node-b2b-orders` | API (3000) + **worker** (imagem separada) | Idem; o **worker** deve ser outro serviço com o mesmo critério de branch/imagem. |
+| `py-payments-ledger` | API Python (8000) | Idem. |
+| `fluxe-b2b-suite` | shop, admin-console, ops-portal | Idem por serviço. |
+
+**Staging:** merge do PR em `develop` (fluxo canónico em [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md)) → GitHub Actions → artefacto/imagem atualizada → Railway redeploya o serviço ligado a esse repo e branch.
+
+**Produção:** só após validação em staging; merge `develop` → `master` (PR de release, por repositório ou orquestrado), com **CI verde**; cada serviço de produção deve usar branch `master` (ou tag/imagem `:master` / `:latest` conforme o vosso CI).
+
+**Migrações após alterações de schema:** Liquibase (Core), Prisma (orders) ou Alembic (payments) **não** correm sozinhos só por redeploy — após deploy com código novo, confirmar no runbook do serviço (ex. `railway run` com migrate, ou job de release). Ver também [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md).
+
+**Smoke pós-deploy:** secrets `CORE_SMOKE_URL`, `ORDERS_SMOKE_URL`, `PAYMENTS_SMOKE_URL` nos repositórios e `pnpm smoke:staging` / checklists em PIPELINE-ESTEIRAS.
+
 **Recomendação operacional:** usar **dois projetos Railway** (um só para staging, outro só para produção). Assim cada ambiente mantém a branch correta sem efeitos colaterais ao alterar serviços; evita o problema em que o mesmo serviço partilha configuração de branch entre ambientes.
 
 ## Manutenção contínua (evitar deriva entre ambientes)

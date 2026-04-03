@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { paymentsAbacAllows, sessionPaymentsAbacAllows } from './payments-abac.policy';
+import { paymentsAbacAllows, sessionPaymentsAbacAllows, isKnownPaymentsAbacPermission } from './payments-abac.policy';
 import type { AuthSession } from './models/auth-session.model';
 
 const baseSession = (over: Partial<AuthSession>): AuthSession => ({
@@ -8,7 +8,7 @@ const baseSession = (over: Partial<AuthSession>): AuthSession => ({
   email: 'u@x',
   tenantId: 'tenant_demo',
   roles: ['ops'],
-  permissions: ['ledger:read'],
+  permissions: ['ledger:read', 'payments:read'],
   plan: 'pro',
   region: 'region-a',
   expiresAt: Date.now() + 60_000,
@@ -42,6 +42,24 @@ describe('paymentsAbacAllows ledger:read', () => {
 
   it('treats empty region as region-a', () => {
     expect(paymentsAbacAllows('ledger:read', 'pro', '')).toBe(true);
+  });
+});
+
+describe('paymentsAbacAllows payments:read', () => {
+  it('allows free in region-a', () => {
+    expect(paymentsAbacAllows('payments:read', 'free', 'region-a')).toBe(true);
+  });
+
+  it('denies free in wrong region', () => {
+    expect(paymentsAbacAllows('payments:read', 'free', 'eu-west-1')).toBe(false);
+  });
+});
+
+describe('isKnownPaymentsAbacPermission', () => {
+  it('recognizes seeded keys', () => {
+    expect(isKnownPaymentsAbacPermission('ledger:read')).toBe(true);
+    expect(isKnownPaymentsAbacPermission('payments:read')).toBe(true);
+    expect(isKnownPaymentsAbacPermission('unknown')).toBe(false);
   });
 });
 

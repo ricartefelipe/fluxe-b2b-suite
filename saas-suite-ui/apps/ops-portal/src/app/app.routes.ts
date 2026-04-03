@@ -35,6 +35,7 @@ export const appRoutes: Route[] = [
         data: {
           permissions: ['orders:read', 'payments:read', 'inventory:read'],
           permissionsMode: 'all',
+          paymentsAbacPermissions: ['payments:read'],
         },
       },
       {
@@ -47,7 +48,7 @@ export const appRoutes: Route[] = [
         path: 'orders/new',
         loadComponent: () => import('./pages/order-create.page').then(m => m.OrderCreatePage),
         canActivate: [permissionGuard],
-        data: { permissions: ['orders:write'] },
+        data: { permissions: ['orders:write'], ordersAbacPermissions: ['orders:write'] },
       },
       {
         path: 'orders/:id',
@@ -65,25 +66,28 @@ export const appRoutes: Route[] = [
         path: 'inventory/adjustments/new',
         loadComponent: () => import('./pages/adjustment-create.page').then(m => m.AdjustmentCreatePage),
         canActivate: [permissionGuard],
-        data: { permissions: ['inventory:write'] },
+        data: {
+          permissions: ['inventory:write'],
+          ordersAbacPermissions: ['inventory:write'],
+        },
       },
       {
         path: 'payments',
         loadComponent: () => import('./pages/payments-list.page').then(m => m.PaymentsListPage),
         canActivate: [permissionGuard],
-        data: { permissions: ['payments:read'] },
+        data: { permissions: ['payments:read'], paymentsAbacPermissions: ['payments:read'] },
       },
       {
         path: 'ledger/entries',
         loadComponent: () => import('./pages/ledger-entries.page').then(m => m.LedgerEntriesPage),
         canActivate: [permissionGuard],
-        data: { permissions: ['ledger:read'], paymentsAbacPermission: 'ledger:read' },
+        data: { permissions: ['ledger:read'], paymentsAbacPermissions: ['ledger:read'] },
       },
       {
         path: 'ledger/balances',
         loadComponent: () => import('./pages/ledger-balances.page').then(m => m.LedgerBalancesPage),
         canActivate: [permissionGuard],
-        data: { permissions: ['ledger:read'], paymentsAbacPermission: 'ledger:read' },
+        data: { permissions: ['ledger:read'], paymentsAbacPermissions: ['ledger:read'] },
       },
       {
         path: 'account/password',

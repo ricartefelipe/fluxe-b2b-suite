@@ -201,6 +201,17 @@ Exemplo (já configurado para dev com proxy):
 
 ## Segurança e ambientes
 
+### Git, branches e nuvem
+
+| Branch | Deploy (Railway) | Função |
+|--------|------------------|--------|
+| **`develop`** | **Staging** | **Teste** — validação, QA, integração; não é uso “real” com clientes. |
+| **`master`** | **Produção** | **Para valer** — dados e operações reais. |
+
+Documento canónico: [docs/AMBIENTES-CONFIGURACAO.md](docs/AMBIENTES-CONFIGURACAO.md). URLs públicas: [docs/URLS-AMBIENTES.md](docs/URLS-AMBIENTES.md).
+
+### Front e auth
+
 - **Dev Auth:** Apenas quando `authMode === 'dev'`. Gera JWT local para demos.
 - **Produção:** Use `authMode: 'oidc'` e configure issuer/clientId/scope. Dev Auth não deve estar acessível em produção.
 

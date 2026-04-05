@@ -50,12 +50,16 @@ const RULES: Record<PaymentsAbacPermissionKey, AbacRule> = {
 
 function normalizePlan(plan: string | undefined | null): string {
   const p = (plan ?? '').trim().toLowerCase();
-  return p || 'free';
+  if (!p) return 'free';
+  if (p === 'professional') return 'pro';
+  return p;
 }
 
 function normalizeRegion(region: string | undefined | null): string {
   const r = (region ?? '').trim().toLowerCase();
-  return r || 'region-a';
+  if (!r) return 'region-a';
+  if (r === 'us-east-1') return 'region-a';
+  return r;
 }
 
 function planAllowed(planNorm: string, allowed: string[]): boolean {

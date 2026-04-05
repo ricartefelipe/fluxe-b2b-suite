@@ -42,6 +42,8 @@ Não é necessário “clicar em deploy” no Railway quando a configuração es
 
 **Staging:** merge do PR em `develop` (fluxo canónico em [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md)) → GitHub Actions → artefacto/imagem atualizada → Railway redeploya o serviço ligado a esse repo e branch.
 
+**Redeploy vs build novo:** no painel do Railway, “Redeploy” pode reutilizar a **última imagem já construída**. Se precisares de código novo (ex. migrações), confirma que o deployment usa o **commit** atual de `develop` (script `./scripts/staging-compare-develop-sha.sh` e checklist [CHECKLIST-STAGING-PROBLEMAS.md](CHECKLIST-STAGING-PROBLEMAS.md) item 1).
+
 **Produção:** só após validação em staging; merge `develop` → `master` (PR de release, por repositório ou orquestrado), com **CI verde**; cada serviço de produção deve usar branch `master` (ou tag/imagem `:master` / `:latest` conforme o vosso CI).
 
 **Migrações após alterações de schema:** Liquibase (Core), Prisma (orders) ou Alembic (payments) **não** correm sozinhos só por redeploy — após deploy com código novo, confirmar no runbook do serviço (ex. `railway run` com migrate, ou job de release). Ver também [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md).

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Smoke HTTP mínimo nos backends de staging (health / ready).
+# Uso: ./scripts/staging-smoke-endpoints.sh
+# Ajusta os hosts se os teus URLs de staging forem outros.
+
+set -euo pipefail
+
+CORE="${CORE_STAGING_URL:-https://spring-saas-core-staging.up.railway.app}"
+ORD="${ORDERS_STAGING_URL:-https://node-b2b-orders-staging.up.railway.app}"
+PAY="${PAYMENTS_STAGING_URL:-https://py-payments-ledger-staging.up.railway.app}"
+
+fail=0
+check() {
+  local name="$1" url="$2"
+  code=$(curl -sS -o /tmp/smoke.json -w "%{http_code}" "$url" || echo "000")
+  if [[ "$code" =~ ^2 ]]; then
+    echo "OK  $name ($code) $url"
+  else
+    echo "FAIL $name ($code) $url"
+    fail=1
+  fi
+}
+
+check "Core actuator/health" "$CORE/actuator/health"
+check "Orders /v1/healthz" "$ORD/v1/healthz"
+check "Orders /v1/readyz" "$ORD/v1/readyz"
+check "Payments /healthz" "$PAY/healthz"
+
+exit "$fail"

@@ -41,6 +41,7 @@ const DEV_PROFILES: DevProfile[] = [
       'orders:read', 'orders:write', 'inventory:read', 'inventory:write',
       'payments:read', 'payments:write', 'ledger:read',
       'products:read', 'products:write', 'profile:read',
+      'webhooks:read', 'webhooks:write',
     ],
     plan: 'enterprise',
     region: 'global',
@@ -56,7 +57,8 @@ const DEV_PROFILES: DevProfile[] = [
     perms: [
       'orders:read', 'orders:write', 'inventory:read', 'inventory:write',
       'products:read', 'products:write', 'payments:read', 'payments:write',
-      'ledger:read', 'profile:read',
+      'ledger:read', 'profile:read', 'analytics:read',
+      'audit:read', 'webhooks:read', 'webhooks:write',
     ],
     plan: 'pro',
     region: 'region-a',
@@ -71,7 +73,7 @@ const DEV_PROFILES: DevProfile[] = [
     roles: ['viewer'],
     perms: [
       'orders:read', 'inventory:read', 'payments:read', 'ledger:read',
-      'products:read', 'profile:read',
+      'products:read', 'profile:read', 'analytics:read', 'audit:read', 'webhooks:read',
     ],
     plan: 'pro',
     region: 'region-a',

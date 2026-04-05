@@ -20,6 +20,14 @@ describe('paymentsAbacAllows ledger:read', () => {
     expect(paymentsAbacAllows('ledger:read', 'pro', 'region-a')).toBe(true);
   });
 
+  it('maps professional to pro for ledger', () => {
+    expect(paymentsAbacAllows('ledger:read', 'professional', 'region-a')).toBe(true);
+  });
+
+  it('maps us-east-1 to region-a', () => {
+    expect(paymentsAbacAllows('ledger:read', 'pro', 'us-east-1')).toBe(true);
+  });
+
   it('allows enterprise tier', () => {
     expect(paymentsAbacAllows('ledger:read', 'enterprise', 'region-b')).toBe(true);
   });

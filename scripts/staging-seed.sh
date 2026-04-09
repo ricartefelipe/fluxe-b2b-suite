@@ -40,10 +40,39 @@ usage() {
   echo ""
   echo "  Repos irmãos esperados: $WKS_ROOT/node-b2b-orders, $WKS_ROOT/py-payments-ledger"
   echo ""
-  echo "  Se 'railway run' falhar com Can't reach database (postgres.railway.internal), use DATABASE_PUBLIC_URL:"
-  echo "  Variável fica no serviço Postgres do projeto Railway. Ver config/env/README.md § Seed de staging a partir da máquina."
-  echo "  Documentação: docs/AMBIENTES-CONFIGURACAO.md, docs/DEPLOY-RAILWAY.md"
+  echo "  O modo 'railway' liga ao serviço Postgres, obtém DATABASE_PUBLIC_URL e corre migrate/seed na"
+  echo "  tua máquina (rede pública). Não precisa copiar URL do painel."
+  echo "  Documentação: docs/AMBIENTES-CONFIGURACAO.md, docs/DEPLOY-RAILWAY.md, config/env/README.md"
   echo ""
+}
+
+# Lê DATABASE_PUBLIC_URL do serviço Postgres (staging) e exporta DATABASE_URL para comandos locais.
+# Motivo: railway run com DATABASE_URL interna (postgres.railway.internal) não resolve fora da rede Railway.
+railway_export_public_database_url() {
+  local pub
+  railway service link Postgres
+  pub="$(railway run printenv DATABASE_PUBLIC_URL)"
+  if [ -z "${pub}" ]; then
+    fail "DATABASE_PUBLIC_URL vazio. No Railway: serviço Postgres → Variables → confirme DATABASE_PUBLIC_URL."
+    exit 1
+  fi
+  export DATABASE_URL="$pub"
+}
+
+# Payments espera postgresql+psycopg:// no Settings; Alembic/seed aceitam o mesmo prefixo.
+railway_export_public_database_url_payments() {
+  local pub
+  railway service link Postgres
+  pub="$(railway run printenv DATABASE_PUBLIC_URL)"
+  if [ -z "${pub}" ]; then
+    fail "DATABASE_PUBLIC_URL vazio."
+    exit 1
+  fi
+  if [[ "$pub" == postgresql://* ]]; then
+    export DATABASE_URL="postgresql+psycopg://${pub#postgresql://}"
+  else
+    export DATABASE_URL="$pub"
+  fi
 }
 
 run_railway_seed() {
@@ -62,14 +91,34 @@ run_railway_seed() {
     fi
   done
 
+  info "Ativar ambiente staging e usar DATABASE_PUBLIC_URL do Postgres (sem colar URL à mão)."
+  (cd "$ORDERS_REPO" && railway environment staging)
+
   echo ""
   echo -e "${BOLD}[1/2] node-b2b-orders — migrate + seed${NC}"
-  (cd "$ORDERS_REPO" && railway run npx prisma migrate deploy && railway run npx prisma db seed)
+  (
+    cd "$ORDERS_REPO"
+    railway_export_public_database_url
+    railway service link node-b2b-orders
+    npx prisma migrate deploy
+    npx prisma db seed
+  )
   ok "node-b2b-orders concluído"
   echo ""
 
   echo -e "${BOLD}[2/2] py-payments-ledger — migrate + seed${NC}"
-  (cd "$PAYMENTS_REPO" && railway run alembic upgrade head && railway run python -m src.infrastructure.db.seed)
+  (
+    cd "$PAYMENTS_REPO"
+    railway environment staging
+    railway_export_public_database_url_payments
+    railway service link py-payments-ledger
+    if [ -d ".venv" ]; then
+      # shellcheck disable=SC1091
+      . .venv/bin/activate
+    fi
+    alembic upgrade head
+    python -m src.infrastructure.db.seed
+  )
   ok "py-payments-ledger concluído"
   echo ""
 

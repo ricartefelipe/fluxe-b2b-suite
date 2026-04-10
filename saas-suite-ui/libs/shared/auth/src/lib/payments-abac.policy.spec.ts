@@ -6,7 +6,7 @@ const baseSession = (over: Partial<AuthSession>): AuthSession => ({
   accessToken: 'x',
   userId: 'u',
   email: 'u@x',
-  tenantId: 'tenant_demo',
+  tenantId: '00000000-0000-0000-0000-000000000002',
   roles: ['ops'],
   permissions: ['ledger:read', 'payments:read'],
   plan: 'pro',

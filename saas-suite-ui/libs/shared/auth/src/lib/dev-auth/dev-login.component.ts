@@ -52,7 +52,7 @@ const DEV_PROFILES: DevProfile[] = [
     label: 'Ops User',
     sub: 'ops@saas.local',
     email: 'ops@saas.local',
-    tid: 'tenant_demo',
+    tid: '00000000-0000-0000-0000-000000000002',
     roles: ['ops'],
     perms: [
       'orders:read', 'orders:write', 'inventory:read', 'inventory:write',
@@ -69,7 +69,7 @@ const DEV_PROFILES: DevProfile[] = [
     label: 'Viewer',
     sub: 'viewer@saas.local',
     email: 'viewer@saas.local',
-    tid: 'tenant_demo',
+    tid: '00000000-0000-0000-0000-000000000002',
     roles: ['viewer'],
     perms: [
       'orders:read', 'inventory:read', 'payments:read', 'ledger:read',

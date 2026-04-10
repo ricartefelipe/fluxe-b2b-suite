@@ -113,7 +113,7 @@ Cada projeto já popula dados automaticamente durante o startup:
 
 | Entidade | Dados |
 |----------|-------|
-| Tenant | `tenant_demo` (plano pro, region-a) |
+| Tenant | `00000000-0000-0000-0000-000000000002` (plano pro, region-a) |
 | Usuários | `admin@local` / `admin123`, `ops@demo.example.com` / `ops123`, `sales@demo.example.com` / `sales123` |
 | Roles | admin, ops, sales (com permissões diferenciadas) |
 | Produtos | 25 produtos em 5 categorias (Eletrônicos, Escritório, Industrial, Segurança, Limpeza) |
@@ -124,7 +124,7 @@ Cada projeto já popula dados automaticamente durante o startup:
 
 | Entidade | Dados |
 |----------|-------|
-| Tenant | `tenant_demo` (plano pro, region-a) |
+| Tenant | `00000000-0000-0000-0000-000000000002` (plano pro, region-a) |
 | Usuários | `admin@local` / `admin123`, `ops@demo.example.com` / `ops123`, `sales@demo.example.com` / `sales123` |
 | Roles | admin, ops, sales |
 | Policies | 5 políticas ABAC para payments, ledger, admin, profile |
@@ -221,12 +221,12 @@ Os serviços Node e Python também têm endpoint local de autenticação:
 # node-b2b-orders
 curl -s -X POST http://localhost:3000/v1/auth/token \
   -H "Content-Type: application/json" \
-  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"tenant_demo"}'
+  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"00000000-0000-0000-0000-000000000002"}'
 
 # py-payments-ledger
 curl -s -X POST http://localhost:8000/v1/auth/token \
   -H "Content-Type: application/json" \
-  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"tenant_demo"}'
+  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"00000000-0000-0000-0000-000000000002"}'
 ```
 
 ---
@@ -254,7 +254,7 @@ TOKEN=$(curl -s -X POST http://localhost:8080/v1/dev/token \
 ORDER=$(curl -s -X POST http://localhost:3000/v1/orders \
   -H "Authorization: Bearer $TOKEN" \
   -H "Content-Type: application/json" \
-  -H "X-Tenant-Id: tenant_demo" \
+  -H "X-Tenant-Id: 00000000-0000-0000-0000-000000000002" \
   -H "Idempotency-Key: $(uuidgen)" \
   -d '{
     "customerId": "customer-001",
@@ -272,7 +272,7 @@ O worker do node-b2b-orders reserva o inventário automaticamente (CREATED → R
 sleep 3  # aguarda worker reservar
 curl -s -X PATCH "http://localhost:3000/v1/orders/$ORDER_ID/confirm" \
   -H "Authorization: Bearer $TOKEN" \
-  -H "X-Tenant-Id: tenant_demo" | jq '.status'
+  -H "X-Tenant-Id: 00000000-0000-0000-0000-000000000002" | jq '.status'
 # → "CONFIRMED"
 ```
 
@@ -281,13 +281,13 @@ curl -s -X PATCH "http://localhost:3000/v1/orders/$ORDER_ID/confirm" \
 ```bash
 PAY_TOKEN=$(curl -s -X POST http://localhost:8000/v1/auth/token \
   -H "Content-Type: application/json" \
-  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"tenant_demo"}' \
+  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"00000000-0000-0000-0000-000000000002"}' \
   | jq -r '.access_token')
 
 PI=$(curl -s -X POST http://localhost:8000/v1/payment-intents \
   -H "Authorization: Bearer $PAY_TOKEN" \
   -H "Content-Type: application/json" \
-  -H "X-Tenant-Id: tenant_demo" \
+  -H "X-Tenant-Id: 00000000-0000-0000-0000-000000000002" \
   -H "Idempotency-Key: $(uuidgen)" \
   -d "{
     \"amount\": 4899.90,
@@ -304,7 +304,7 @@ echo "Payment Intent: $PI_ID — Status: $(echo $PI | jq -r '.status')"
 ```bash
 curl -s -X POST "http://localhost:8000/v1/payment-intents/$PI_ID/confirm" \
   -H "Authorization: Bearer $PAY_TOKEN" \
-  -H "X-Tenant-Id: tenant_demo" | jq '.status'
+  -H "X-Tenant-Id: 00000000-0000-0000-0000-000000000002" | jq '.status'
 # → "AUTHORIZED"
 ```
 
@@ -316,7 +316,7 @@ O worker do py-payments-ledger liquida automaticamente (AUTHORIZED → SETTLED) 
 sleep 5
 curl -s http://localhost:8000/v1/ledger/entries \
   -H "Authorization: Bearer $PAY_TOKEN" \
-  -H "X-Tenant-Id: tenant_demo" | jq '.[0] | {type, amount, currency}'
+  -H "X-Tenant-Id: 00000000-0000-0000-0000-000000000002" | jq '.[0] | {type, amount, currency}'
 ```
 
 ---

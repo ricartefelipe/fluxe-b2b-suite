@@ -836,7 +836,7 @@ Todos os serviços usam o padrão Outbox para garantir consistência:
   "aggregateType": "ORDER",
   "aggregateId": "uuid",
   "eventType": "order.created",
-  "tenantId": "tenant_demo",
+  "tenantId": "00000000-0000-0000-0000-000000000002",
   "correlationId": "uuid",
   "payload": { ... },
   "createdAt": "2026-03-07T12:00:00Z"
@@ -1034,8 +1034,8 @@ cd py-payments-ledger && ./scripts/smoke.sh  # 13 testes
 | Serviço | Usuário | Senha | Role | Tenant |
 |---------|---------|-------|------|--------|
 | node / py | admin@local | admin123 | admin | — (global) |
-| node / py | ops@demo.example.com | ops123 | ops | tenant_demo |
-| node / py | sales@demo.example.com | sales123 | sales | tenant_demo |
+| node / py | ops@demo.example.com | ops123 | ops | 00000000-0000-0000-0000-000000000002 |
+| node / py | sales@demo.example.com | sales123 | sales | 00000000-0000-0000-0000-000000000002 |
 | RabbitMQ | guest | guest | — | — |
 | Grafana | admin | admin | — | — |
 

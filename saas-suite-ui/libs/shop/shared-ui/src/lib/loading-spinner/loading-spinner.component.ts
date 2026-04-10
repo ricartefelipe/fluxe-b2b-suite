@@ -42,6 +42,6 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoadingSpinnerComponent {
-  @Input() label = 'Loading...';
+  @Input() label = 'Carregando...';
   @Input() ariaLabel = 'Carregando conteúdo';
 }

@@ -63,9 +63,8 @@ import { formatDateTime } from '@saas-suite/shared/util';
     @if (facade.error()) {
       <mat-card class="error-card">
         <mat-card-content>
-          <p class="error-message">{{ facade.error() }}</p>
-          <p class="error-hint">Verifique se a URL da API do Core está correta (variável CORE_API_BASE_URL no ambiente).</p>
-          <button mat-raised-button color="primary" (click)="search()">Tentar novamente</button>
+          <p class="error-message">{{ i18n.messages().errors.serverError }}</p>
+          <button mat-raised-button color="primary" (click)="search()">{{ i18n.messages().common.back }}</button>
         </mat-card-content>
       </mat-card>
     } @else if (facade.loading()) {

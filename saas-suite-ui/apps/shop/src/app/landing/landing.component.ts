@@ -20,7 +20,7 @@ import { RuntimeConfigService } from '@saas-suite/shared/config';
           <p class="hero-subtitle">{{ i18n.messages().landing.subtitle }}</p>
           <p class="hero-desc">{{ i18n.messages().landing.description }}</p>
           <div class="hero-ctas">
-            <a mat-raised-button color="primary" routerLink="/signup" class="cta-primary">
+            <a mat-raised-button color="primary" routerLink="/login" class="cta-primary">
               {{ i18n.messages().landing.ctaStart }}
             </a>
             <a mat-stroked-button (click)="scrollTo('features')" (keydown.enter)="scrollTo('features')" (keydown.space)="scrollTo('features'); $event.preventDefault()" tabindex="0" role="button" class="cta-secondary">
@@ -88,7 +88,7 @@ import { RuntimeConfigService } from '@saas-suite/shared/config';
                 </ul>
               </mat-card-content>
               <mat-card-actions>
-                <a mat-raised-button [color]="p.featured ? 'primary' : 'basic'" routerLink="/signup" class="plan-cta">
+                <a mat-raised-button [color]="p.featured ? 'primary' : 'basic'" routerLink="/login" class="plan-cta">
                   {{ p.cta }}
                 </a>
               </mat-card-actions>

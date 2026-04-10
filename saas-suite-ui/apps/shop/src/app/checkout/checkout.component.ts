@@ -864,10 +864,8 @@ export class CheckoutComponent {
       this.confirmedOrder.set(finalOrder ?? confirmedOrd);
       this.cart.clear();
       this.stepper()?.next();
-    } catch (e) {
-      this.checkoutError.set(
-        e instanceof Error ? e.message : msgs.unexpectedError
-      );
+    } catch {
+      this.checkoutError.set(msgs.unexpectedError);
     } finally {
       this.processing.set(false);
     }

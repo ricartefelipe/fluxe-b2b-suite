@@ -42,10 +42,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: pnpm nx run-many -t lint --projects=ops-portal,admin-console,shop
+        run: pnpm nx run-many -t lint --projects=ops-portal,admin-console,shop,api
 
       - name: Test
-        run: pnpm nx run-many -t test,vite:test --projects=ops-portal,admin-console,shop
+        run: pnpm nx run-many -t test,vite:test --projects=ops-portal,admin-console,shop,api
 
       - name: Typecheck
         run: pnpm nx run-many -t typecheck --projects=ops-portal,admin-console,shop

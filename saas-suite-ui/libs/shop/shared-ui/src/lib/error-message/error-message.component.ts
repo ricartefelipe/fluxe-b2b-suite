@@ -1,17 +1,21 @@
-import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, output, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { I18nService } from '@saas-suite/shared/i18n';
 
 @Component({
   selector: 'shop-error-message',
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule],
   template: `
     <div class="error-container">
-      <div class="error-icon">⚠️</div>
-      <h3>{{ title() || 'Oops! Something went wrong' }}</h3>
-      <p>{{ message() || 'An unexpected error occurred. Please try again later.' }}</p>
+      <div class="error-icon" aria-hidden="true">
+        <mat-icon class="error-mat-icon">warning</mat-icon>
+      </div>
+      <h3>{{ title() || i18n.messages().errors.serverError }}</h3>
+      <p>{{ message() || i18n.messages().shop.unexpectedError }}</p>
       @if (showRetry()) {
         <button class="retry-button" (click)="retry.emit()">
-          Try Again
+          {{ i18n.messages().common.back }}
         </button>
       }
     </div>
@@ -30,8 +34,14 @@ import { CommonModule } from '@angular/common';
     }
 
     .error-icon {
-      font-size: 48px;
       margin-bottom: 16px;
+    }
+
+    .error-mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+      color: #e65100;
     }
 
     h3 {
@@ -65,6 +75,7 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorMessageComponent {
+  protected readonly i18n = inject(I18nService);
   readonly title = input<string>();
   readonly message = input<string>();
   readonly showRetry = input(true);

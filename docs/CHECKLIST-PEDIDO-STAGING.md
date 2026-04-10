@@ -8,7 +8,7 @@ Objetivo: **repetir em staging** o fluxo **token → criar pedido → RESERVED �
 2. API **node-b2b-orders** deployada em staging (ex.: Railway) com **mesmo** `JWT_SECRET` / issuer alinhado ao seed, ou auth local da propria API (`POST /v1/auth/token`).
 3. Base URL publica (sem barra final). Nome esperado na doc de pipeline: `https://node-b2b-orders-staging.up.railway.app` (ajuste se o teu projeto usar outro host).
 4. Utilizador e tenant **existentes na base de staging** (apos `seed` ou migracao). Os defaults do script assumem o seed de desenvolvimento:
-   - `ops@demo.example.com` / `ops123` / `tenant_demo`  
+   - `ops@demo.example.com` / `ops123` / `00000000-0000-0000-0000-000000000002`  
    Se o teu staging usar outros dados, define `OPS_EMAIL`, `OPS_PASSWORD`, `OPS_TENANT`.
 5. **Worker** e **RabbitMQ** ativos — sem worker o pedido pode ficar em `CREATED` e nunca chegar a `RESERVED`.
 

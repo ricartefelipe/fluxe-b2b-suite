@@ -21,7 +21,10 @@ import { LedgerFacade } from '@saas-suite/data-access/payments';
     @if (facade.loadError()) {
       <div class="ledger-error" role="alert">
         <strong>{{ i18n.messages().ledger.loadFailed }}</strong>
-        <span class="detail">{{ facade.loadError() }}</span>
+        <span class="detail">{{ i18n.messages().errors.serverError }}</span>
+        <button mat-stroked-button (click)="refresh()" style="align-self: flex-start; margin-top: 8px">
+          <mat-icon>refresh</mat-icon> {{ i18n.messages().ledger.refresh }}
+        </button>
       </div>
     }
 

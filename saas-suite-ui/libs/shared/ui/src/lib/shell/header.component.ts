@@ -31,7 +31,7 @@ import { SearchTriggerComponent } from '@saas-suite/shared/search';
         <button
           class="menu-btn"
           (click)="menuToggle.emit()"
-          aria-label="Toggle sidebar navigation"
+          [attr.aria-label]="i18n.messages().app.menuTooltip"
           [matTooltip]="i18n.messages().app.menuTooltip">
           <mat-icon aria-hidden="true">menu</mat-icon>
         </button>
@@ -53,7 +53,7 @@ import { SearchTriggerComponent } from '@saas-suite/shared/search';
           </div>
         </button>
         <mat-menu #userMenu="matMenu">
-          <div class="user-menu-header" role="group" aria-label="User info">
+          <div class="user-menu-header" role="group" [attr.aria-label]="i18n.messages().app.userMenuLabel">
             <strong>{{ auth.session()?.email }}</strong>
             <span class="user-role">{{ auth.session()?.roles?.[0] ?? 'user' }}</span>
           </div>

@@ -38,13 +38,21 @@ import { I18nService } from '@saas-suite/shared/i18n';
         <input matInput [(ngModel)]="filters.actorSub" [placeholder]="i18n.messages().adminPlaceholders.correlationId">
       </mat-form-field>
       <mat-form-field appearance="outline">
-        <mat-label>Correlation ID</mat-label>
+        <mat-label>{{ i18n.messages().errorPage.correlationIdLabel }}</mat-label>
         <input matInput [(ngModel)]="filters.correlationId" [placeholder]="i18n.messages().adminPlaceholders.correlationId">
       </mat-form-field>
       <button mat-raised-button color="primary" (click)="search()">{{ i18n.messages().common.filter }}</button>
     </div>
 
-    @if (facade.loading()) {
+    @if (facade.error()) {
+      <div class="error-banner" role="alert">
+        <mat-icon>error</mat-icon>
+        <span>{{ i18n.messages().errors.serverError }}</span>
+        <button mat-stroked-button (click)="search()">
+          <mat-icon>refresh</mat-icon> {{ i18n.messages().ledger.refresh }}
+        </button>
+      </div>
+    } @else if (facade.loading()) {
       <saas-table-skeleton [rowCount]="5" [columns]="6" />
     } @else if (dataSource.data.length === 0) {
       <saas-empty-state icon="history" [title]="i18n.messages().admin.noAuditRecords" />
@@ -71,7 +79,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
           <td mat-cell *matCellDef="let a">{{ a.resourceType || '—' }}</td>
         </ng-container>
         <ng-container matColumnDef="correlationId">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Correlation ID</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ i18n.messages().errorPage.correlationIdLabel }}</th>
           <td mat-cell *matCellDef="let a">
             <code class="correlation">{{ a.correlationId?.substring(0, 8) || '—' }}</code>
           </td>
@@ -86,6 +94,12 @@ import { I18nService } from '@saas-suite/shared/i18n';
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .filters { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
     .full-width { width: 100%; }
+    .error-banner {
+      display: flex; align-items: center; gap: 8px; padding: 12px 16px;
+      background: #ffebee; color: #b71c1c; border-radius: 8px; border: 1px solid #ffcdd2;
+      margin-bottom: 16px;
+    }
+    .error-banner span { flex: 1; }
     code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
     .correlation { color: #6a1b9a; }
   `],

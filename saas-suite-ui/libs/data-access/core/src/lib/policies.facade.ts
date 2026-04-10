@@ -12,18 +12,23 @@ export class PoliciesFacade {
   private readonly _policies = signal<Policy[]>([]);
   private readonly _total = signal(0);
   private readonly _loading = signal(false);
+  private readonly _error = signal(false);
 
   readonly policies = this._policies.asReadonly();
   readonly total = this._total.asReadonly();
   readonly loading = this._loading.asReadonly();
+  readonly error = this._error.asReadonly();
 
   async loadPolicies(params?: PolicyListParams): Promise<void> {
     this._loading.set(true);
+    this._error.set(false);
     try {
       const r = await firstValueFrom(this.api.listPolicies(params));
       this._policies.set(r.data); this._total.set(r.total);
-    } catch (e) { this.logger.error('loadPolicies failed', e); }
-    finally { this._loading.set(false); }
+    } catch (e) {
+      this.logger.error('loadPolicies failed', e);
+      this._error.set(true);
+    } finally { this._loading.set(false); }
   }
 
   async createPolicy(req: CreatePolicyRequest): Promise<Policy | null> {

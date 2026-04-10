@@ -46,14 +46,14 @@ export const appRoutes: Route[] = [
       { path: '', redirectTo: 'products', pathMatch: 'full' },
       {
         path: 'products',
-        title: 'Products | Fluxe Shop',
+        title: 'Produtos | Fluxe Shop',
         data: { preload: true },
         loadChildren: () =>
           import('@union.solutions/shop/feature-products').then(m => m.featureProductsRoutes),
       },
       {
         path: 'product',
-        title: 'Product Details | Fluxe Shop',
+        title: 'Detalhe do Produto | Fluxe Shop',
         data: { preload: true },
         loadChildren: () =>
           import('@union.solutions/shop/feature-product-detail').then(
@@ -71,13 +71,13 @@ export const appRoutes: Route[] = [
         children: [
           {
             path: '',
-            title: 'My Orders | Fluxe Shop',
+            title: 'Meus Pedidos | Fluxe Shop',
             loadComponent: () =>
               import('./orders/orders.component').then((m) => m.OrdersComponent),
           },
           {
             path: ':id',
-            title: 'Order Detail | Fluxe Shop',
+            title: 'Detalhe do Pedido | Fluxe Shop',
             loadComponent: () =>
               import('./orders/order-detail.component').then((m) => m.OrderDetailComponent),
           },
@@ -85,7 +85,7 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'profile',
-        title: 'My Profile | Fluxe Shop',
+        title: 'Meu Perfil | Fluxe Shop',
         loadComponent: () =>
           import('./profile/profile.component').then((m) => m.ProfileComponent),
       },
@@ -93,6 +93,6 @@ export const appRoutes: Route[] = [
   },
   {
     path: '**',
-    redirectTo: '',
+    redirectTo: 'welcome',
   },
 ];

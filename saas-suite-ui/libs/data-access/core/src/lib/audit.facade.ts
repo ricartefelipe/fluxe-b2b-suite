@@ -12,17 +12,22 @@ export class AuditFacade {
   private readonly _logs = signal<AuditLog[]>([]);
   private readonly _total = signal(0);
   private readonly _loading = signal(false);
+  private readonly _error = signal(false);
 
   readonly logs = this._logs.asReadonly();
   readonly total = this._total.asReadonly();
   readonly loading = this._loading.asReadonly();
+  readonly error = this._error.asReadonly();
 
   async loadAuditLogs(params?: AuditListParams): Promise<void> {
     this._loading.set(true);
+    this._error.set(false);
     try {
       const r = await firstValueFrom(this.api.listAuditLogs(params));
       this._logs.set(r.data); this._total.set(r.total);
-    } catch (e) { this.logger.error('loadAuditLogs failed', e); }
-    finally { this._loading.set(false); }
+    } catch (e) {
+      this.logger.error('loadAuditLogs failed', e);
+      this._error.set(true);
+    } finally { this._loading.set(false); }
   }
 }

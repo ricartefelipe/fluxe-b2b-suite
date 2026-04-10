@@ -22,7 +22,7 @@ import { NavItem } from './nav-item.model';
           <mat-icon>dashboard</mat-icon>
         </div>
         <div class="brand-text">
-          <span class="brand-name">Union Solutions</span>
+          <span class="brand-name">Fluxe</span>
           <span class="brand-sub">{{ appTitle }}</span>
         </div>
       </div>

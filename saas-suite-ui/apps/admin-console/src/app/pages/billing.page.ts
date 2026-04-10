@@ -7,7 +7,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CoreApiClient, PlanDefinition, Subscription, SubscriptionStatus, TenantHealth, UsageSummary } from '@saas-suite/data-access/core';
+import { ConfirmDialogComponent, ConfirmDialogData } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
 import { UsageWidgetComponent } from './usage-widget.component';
@@ -23,6 +25,7 @@ import { UsageWidgetComponent } from './usage-widget.component';
     MatChipsModule,
     MatProgressSpinnerModule,
     MatDividerModule,
+    MatDialogModule,
     UsageWidgetComponent,
   ],
   template: `
@@ -388,6 +391,7 @@ export class BillingPage implements OnInit {
   private api = inject(CoreApiClient);
   private i18n = inject(I18nService);
   private tenantStore = inject(TenantContextStore);
+  private dialog = inject(MatDialog);
 
   get b() { return this.i18n.messages().billing; }
 
@@ -486,7 +490,13 @@ export class BillingPage implements OnInit {
     return this.b.scheduledCancelMessage.replace('{{date}}', date);
   }
 
-  scheduleCancel(): void {
+  async scheduleCancel(): Promise<void> {
+    const b = this.i18n.messages().billing;
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: { title: b.confirmCancelTitle, message: b.confirmCancelMessage, danger: true } as ConfirmDialogData,
+    });
+    const confirmed = await firstValueFrom(ref.afterClosed());
+    if (!confirmed) return;
     this.api.scheduleCancelAtPeriodEnd().subscribe({
       next: sub => this.subscription.set(sub),
     });
@@ -504,7 +514,13 @@ export class BillingPage implements OnInit {
     });
   }
 
-  selectPlan(plan: PlanDefinition): void {
+  async selectPlan(plan: PlanDefinition): Promise<void> {
+    const b = this.i18n.messages().billing;
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: { title: b.confirmChangePlanTitle, message: b.confirmChangePlanMessage } as ConfirmDialogData,
+    });
+    const confirmed = await firstValueFrom(ref.afterClosed());
+    if (!confirmed) return;
     this.api.startTrial(plan.slug).subscribe({
       next: sub => this.subscription.set(sub),
     });

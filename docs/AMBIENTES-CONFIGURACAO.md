@@ -42,7 +42,7 @@ Ou projeto por projeto (ver `spring-saas-core/docs/SUBIR-E-TESTAR-TODOS-PROJETOS
 
 ### Dados
 - **spring-saas-core:** Liquibase com `contexts: local,seed` → schema + 008 (essencial) + 009 (realista: tenants, usuários, flags, audit, webhooks, outbox)
-- **node-b2b-orders:** `prisma migrate deploy` + `prisma db seed` → tenant_demo, produtos, pedidos, inventário
+- **node-b2b-orders:** `prisma migrate deploy` + `prisma db seed` → 00000000-0000-0000-0000-000000000002, produtos, pedidos, inventário
 - **py-payments-ledger:** `alembic upgrade head` + seed (scripts)
 - **demo-seed.sh:** popula dados extras via API (se existir)
 

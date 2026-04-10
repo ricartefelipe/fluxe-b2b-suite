@@ -8,9 +8,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
-import { EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
+import { firstValueFrom } from 'rxjs';
+import { ConfirmDialogComponent, ConfirmDialogData, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
 import { FlagsFacade, FeatureFlag } from '@saas-suite/data-access/core';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
 import { I18nService } from '@saas-suite/shared/i18n';
@@ -20,7 +22,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
   standalone: true,
   imports: [
     FormsModule, MatTableModule, MatButtonModule, MatIconModule, MatProgressBarModule,
-    MatFormFieldModule, MatInputModule, MatSlideToggleModule, MatSnackBarModule,
+    MatFormFieldModule, MatInputModule, MatSlideToggleModule, MatSnackBarModule, MatDialogModule,
     MatSortModule, MatPaginatorModule,
     EmptyStateComponent, TableSkeletonComponent,
   ],
@@ -98,6 +100,7 @@ export class FlagsListPage implements AfterViewInit {
   protected tenantStore = inject(TenantContextStore);
   protected i18n = inject(I18nService);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
   private cdr = inject(ChangeDetectorRef);
 
   @ViewChild(MatSort) sort!: MatSort;
@@ -145,6 +148,17 @@ export class FlagsListPage implements AfterViewInit {
   async remove(f: FeatureFlag): Promise<void> {
     const tid = this.tenantStore.activeTenantId();
     if (!tid) return;
+    const msgs = this.i18n.messages().admin;
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: msgs.confirmDeleteFlagTitle,
+        message: msgs.confirmDeleteFlagMessage,
+        danger: true,
+      } as ConfirmDialogData,
+    });
+    const confirmed = await firstValueFrom(ref.afterClosed());
+    if (!confirmed) return;
     await this.facade.deleteFlag(tid, f.name);
+    this.snackBar.open(msgs.flagDeleted, 'OK', { duration: 2000 });
   }
 }

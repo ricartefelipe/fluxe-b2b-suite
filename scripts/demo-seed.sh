@@ -45,11 +45,11 @@ echo ""
 # ── Tokens de autenticação ──
 echo -e "${BOLD}[1/6] Gerando tokens de operação...${NC}"
 JSON="Content-Type: application/json"
-TENANT="X-Tenant-Id: tenant_demo"
+TENANT="X-Tenant-Id: 00000000-0000-0000-0000-000000000002"
 
 ORDERS_TOKEN=$(curl -sf -X POST "$ORDERS/v1/auth/token" \
   -H "$JSON" \
-  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"tenant_demo"}' \
+  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"00000000-0000-0000-0000-000000000002"}' \
   | jq -r '.access_token')
 
 if [ -z "$ORDERS_TOKEN" ] || [ "$ORDERS_TOKEN" = "null" ]; then
@@ -60,7 +60,7 @@ ok "Token node-b2b-orders OK"
 
 PAY_TOKEN=$(curl -sf -X POST "$PAYMENTS/v1/auth/token" \
   -H "$JSON" \
-  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"tenant_demo"}' \
+  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"00000000-0000-0000-0000-000000000002"}' \
   | jq -r '.access_token')
 
 if [ -z "$PAY_TOKEN" ] || [ "$PAY_TOKEN" = "null" ]; then
@@ -216,10 +216,10 @@ echo "    • 3 payment intents (2 confirmados → settled)"
 echo "    • Entradas no ledger contábil"
 echo ""
 echo "  Explore a API:"
-echo "    • Produtos:  curl -s $ORDERS/v1/products -H 'Authorization: Bearer TOKEN' -H 'X-Tenant-Id: tenant_demo'"
-echo "    • Pedidos:   curl -s $ORDERS/v1/orders   -H 'Authorization: Bearer TOKEN' -H 'X-Tenant-Id: tenant_demo'"
-echo "    • Pagamentos: curl -s $PAYMENTS/v1/payment-intents -H 'Authorization: Bearer TOKEN' -H 'X-Tenant-Id: tenant_demo'"
-echo "    • Ledger:    curl -s $PAYMENTS/v1/ledger/entries -H 'Authorization: Bearer TOKEN' -H 'X-Tenant-Id: tenant_demo'"
+echo "    • Produtos:  curl -s $ORDERS/v1/products -H 'Authorization: Bearer TOKEN' -H 'X-Tenant-Id: 00000000-0000-0000-0000-000000000002'"
+echo "    • Pedidos:   curl -s $ORDERS/v1/orders   -H 'Authorization: Bearer TOKEN' -H 'X-Tenant-Id: 00000000-0000-0000-0000-000000000002'"
+echo "    • Pagamentos: curl -s $PAYMENTS/v1/payment-intents -H 'Authorization: Bearer TOKEN' -H 'X-Tenant-Id: 00000000-0000-0000-0000-000000000002'"
+echo "    • Ledger:    curl -s $PAYMENTS/v1/ledger/entries -H 'Authorization: Bearer TOKEN' -H 'X-Tenant-Id: 00000000-0000-0000-0000-000000000002'"
 echo ""
 echo "  Swagger UI:"
 echo "    • http://localhost:8080/swagger-ui.html"

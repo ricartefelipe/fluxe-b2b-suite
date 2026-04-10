@@ -8,7 +8,7 @@ function buildMockDevAccessToken(): string {
     JSON.stringify({
       sub: 'viewer-e2e',
       email: 'viewer@e2e.local',
-      tid: 'tenant_demo',
+      tid: '00000000-0000-0000-0000-000000000002',
       roles: ['viewer'],
       perms: [],
       plan: 'starter',
@@ -23,7 +23,7 @@ function buildMockDevAccessToken(): string {
 /** Produto mínimo para listagem/detalhe quando o serviço de orders não está a correr. */
 const MOCK_PRODUCT = {
   id: 'prod-e2e-1',
-  tenantId: 'tenant_demo',
+  tenantId: '00000000-0000-0000-0000-000000000002',
   sku: 'E2E-1',
   name: 'E2E Product',
   description: 'Produto para testes E2E',

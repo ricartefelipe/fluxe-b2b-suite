@@ -35,7 +35,7 @@ usage() {
   echo "    ./scripts/staging-seed.sh           — mostra esta ajuda"
   echo ""
   echo "  spring-saas-core: seed já roda no deploy quando SPRING_PROFILES_ACTIVE=staging (Liquibase contexts: staging,seed)."
-  echo "  node-b2b-orders:  migration + prisma db seed (tenant_demo, produtos, pedidos base)."
+  echo "  node-b2b-orders:  migration + prisma db seed (00000000-0000-0000-0000-000000000002, produtos, pedidos base)."
   echo "  py-payments-ledger: alembic upgrade + python -m src.infrastructure.db.seed"
   echo ""
   echo "  Repos irmãos esperados: $WKS_ROOT/node-b2b-orders, $WKS_ROOT/py-payments-ledger"

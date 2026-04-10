@@ -67,16 +67,22 @@
 
 ## Documentação planejada (roadmap)
 
-Documentos futuros ainda não criados:
+Alguns itens originalmente planejados já estão cobertos por documentos existentes:
 
-| Documento | Descrição planejada |
-|-----------|---------------------|
-| **C4-suite.md** | Diagramas C4 da suite e fluxo Orders ↔ Payments |
-| **documento-implantacao.md** | Ordem de deploy, variáveis por serviço, health checks, rollback |
-| **ci-cd-e-deploy.md** | CI (GitHub Actions) por repo; CD/deploy |
-| **E2E-RUN.md** | Subir os 4 repos integrados (envs, JWT, RabbitMQ) e sugestões de hospedagem |
-| **ESTADO-ENTREGA.md** | Estado da entrega: pronto para venda vs em progresso _(parcialmente coberto por_ [O-QUE-FALTA-100-VENDAVEL.md](O-QUE-FALTA-100-VENDAVEL.md)_)_ |
-| **PUBLICAR-PASSO-A-PASSO.md** | Publicar frontend (GitHub Pages) ou aplicação completa (Railway) |
+| Tópico | Coberto por |
+|--------|-------------|
+| Ordem de deploy, variáveis, health checks, rollback | [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md), [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md), [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md) |
+| CI/CD por repo | [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md), [DEPLOY-GITHUB.md](DEPLOY-GITHUB.md), [BRANCHES-E-WORKFLOWS.md](BRANCHES-E-WORKFLOWS.md) |
+| Subir os 4 repos integrados | [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md), scripts `up-local.sh` / `e2e-integrated.sh` |
+| Regras de negócio | [REGRAS-NEGOCIO.md](REGRAS-NEGOCIO.md), [HISTORIAS-USUARIO.md](HISTORIAS-USUARIO.md) |
+| Estado da entrega | [O-QUE-FALTA-100-VENDAVEL.md](O-QUE-FALTA-100-VENDAVEL.md), [ESTADO-ENTREGAS.md](ESTADO-ENTREGAS.md) |
+| Publicar frontend/Railway | [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md), [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) |
+
+Documentos ainda por criar:
+
+| Documento | Descrição |
+|-----------|-----------|
+| **C4-suite.md** | Diagramas C4 da suite e fluxo Orders ↔ Payments (parcialmente em `spring-saas-core/docs/architecture/`) |
 
 ---
 

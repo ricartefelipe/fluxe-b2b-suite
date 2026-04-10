@@ -1,9 +1,7 @@
 #!/bin/sh
-# Remove "Made-with: Cursor" (ou similar) da mensagem de commit.
+# Remove trailers automáticos de ferramentas da mensagem de commit.
 # Instalar: cp scripts/git-hooks/prepare-commit-msg .git/hooks/prepare-commit-msg && chmod +x .git/hooks/prepare-commit-msg
 FILE="$1"
 [ -f "$FILE" ] || exit 0
-# Remove linhas que contenham apenas "Made-with: Cursor" ou variações
-sed -i '/^[[:space:]]*Made-with[[:space:]]*:[[:space:]]*Cursor[[:space:]]*$/d' "$FILE"
-sed -i '/^[[:space:]]*made-with[[:space:]]*:[[:space:]]*cursor[[:space:]]*$/Id' "$FILE"
+sed -i '/^[[:space:]]*[Mm]ade-with[[:space:]]*:/d' "$FILE"
 exit 0

@@ -1,0 +1,110 @@
+# Smoke opcional: pedido em staging (nao dispara em PR; apenas manual).
+# Alinha-se a docs/CHECKLIST-PEDIDO-STAGING.md e a sugestao de workflow_dispatch.
+#
+# Secrets (Settings > Secrets and variables > Actions) no repositorio fluxe-b2b-suite:
+#   ORDERS_SMOKE_URL  — obrigatorio (URL base publica node-b2b-orders, sem / final)
+#   SMOKE_RABBITMQ_URL — obrigatorio para mode=paid; recomendado para mode=saga (mesmo broker que API/worker)
+#   PAYMENTS_SMOKE_URL — opcional (saga: health do ledger)
+#   SMOKE_OPS_EMAIL, SMOKE_OPS_PASSWORD, SMOKE_OPS_TENANT — opcional; senao o script usa seed demo
+#
+# Repositorio node-b2b-orders: precisa de leitura (publico = clone HTTPS sem token; privado: CROSS_REPO_READ_TOKEN)
+name: Smoke pedido staging (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "confirmed = ate CONFIRMED; paid = publica payment.settled; saga = poll ate PAID (ledger+workers)"
+        type: choice
+        required: true
+        default: confirmed
+        options:
+          - confirmed
+          - paid
+          - saga
+
+concurrency:
+  group: smoke-order-staging
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    name: Order staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout fluxe-b2b-suite
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Clonar node-b2b-orders (apenas mode paid)
+        if: inputs.mode == 'paid'
+        env:
+          PAT: ${{ secrets.CROSS_REPO_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          PARENT="$(dirname "$GITHUB_WORKSPACE")"
+          REPO_URL="https://github.com/${{ github.repository_owner }}/node-b2b-orders.git"
+          if [[ -n "${PAT:-}" ]]; then
+            git clone --depth 1 "https://x-access-token:${PAT}@github.com/${{ github.repository_owner }}/node-b2b-orders.git" "$PARENT/node-b2b-orders"
+          else
+            git clone --depth 1 "$REPO_URL" "$PARENT/node-b2b-orders"
+          fi
+          cd "$PARENT/node-b2b-orders"
+          npm ci
+
+      - name: Executar smoke pedido
+        env:
+          SMOKE_MODE: ${{ inputs.mode }}
+          ORDERS_SMOKE_URL: ${{ secrets.ORDERS_SMOKE_URL }}
+          RABBITMQ_URL: ${{ secrets.SMOKE_RABBITMQ_URL }}
+          PAYMENTS_SMOKE_URL: ${{ secrets.PAYMENTS_SMOKE_URL }}
+          OPS_EMAIL: ${{ secrets.SMOKE_OPS_EMAIL }}
+          OPS_PASSWORD: ${{ secrets.SMOKE_OPS_PASSWORD }}
+          OPS_TENANT: ${{ secrets.SMOKE_OPS_TENANT }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${ORDERS_SMOKE_URL:-}" ]]; then
+            echo "::error::Defina o secret ORDERS_SMOKE_URL (URL base da API orders em staging)."
+            exit 1
+          fi
+          export ORDERS_SMOKE_URL
+          [[ -n "${OPS_EMAIL:-}" ]] && export OPS_EMAIL
+          [[ -n "${OPS_PASSWORD:-}" ]] && export OPS_PASSWORD
+          [[ -n "${OPS_TENANT:-}" ]] && export OPS_TENANT
+          [[ -n "${PAYMENTS_SMOKE_URL:-}" ]] && export PAYMENTS_SMOKE_URL
+
+          MODE="${SMOKE_MODE}"
+          case "$MODE" in
+            confirmed)
+              bash "$GITHUB_WORKSPACE/scripts/smoke-order-staging.sh"
+              ;;
+            paid)
+              if [[ -z "${RABBITMQ_URL:-}" ]]; then
+                echo "::error::Modo paid requer o secret SMOKE_RABBITMQ_URL (mesma URL de broker que a API e o worker de orders em staging)."
+                exit 1
+              fi
+              export RABBITMQ_URL
+              export SMOKE_PAYMENT_PAID=1
+              bash "$GITHUB_WORKSPACE/scripts/smoke-order-staging.sh"
+              ;;
+            saga)
+              if [[ -n "${RABBITMQ_URL:-}" ]]; then
+                export RABBITMQ_URL
+              fi
+              export SMOKE_SAGA_PAID_LEDGER=1
+              bash "$GITHUB_WORKSPACE/scripts/smoke-order-staging.sh"
+              ;;
+            *)
+              echo "::error::Modo desconhecido: $MODE"
+              exit 1
+              ;;
+          esac
+
+      - name: Resumo
+        if: success()
+        run: echo "Smoke staging (${{ inputs.mode }}) concluido com sucesso."

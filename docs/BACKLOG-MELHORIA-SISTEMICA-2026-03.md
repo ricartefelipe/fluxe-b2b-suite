@@ -98,9 +98,9 @@ Objetivo: detectar quebra funcional cedo em staging e reduzir MTTR.
   - Pendencia opcional: validacao de evento publicado / PAID end-to-end (ampliacao futura).
   - Dependencia: A-03.
 
-- **Estado: Parcial** — C-03 | `py-payments-ledger` | Criar smoke pos-merge em `develop`
-  - Entrega atual: `/healthz` + `/openapi.json` em staging (secret `PAYMENTS_SMOKE_URL`).
-  - Pendencia opcional: settle basico e evidencia de fila/evento (ampliacao futura).
+- **Estado: Concluído** — C-03 | `py-payments-ledger` | Criar smoke pos-merge em `develop`
+  - Entrega: `/healthz` + `/openapi.json` + readiness opcional via `GET /readyz` quando `SMOKE_CHECK_READYZ=1` (valida DB, Redis e ligação ao RabbitMQ se `READINESS_REQUIRE_RABBIT` estiver ativo no serviço; CI em `develop` com secret `PAYMENTS_SMOKE_URL`).
+  - Pendência opcional (futuro): smoke que execute settle de negócio de ponta a ponta (além de readiness).
   - Dependencia: A-04.
 
 - **Estado: Concluído** — C-04 | `fluxe-b2b-suite` | Definir thresholds de monitoramento

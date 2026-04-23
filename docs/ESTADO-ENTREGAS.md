@@ -12,6 +12,12 @@ Legenda de status:
 
 ## Entregas concluidas recentes
 
+### 2026-04-23
+
+- [x] **Releases GitHub v1.3.1 (quatro repos) e merges em develop** (`concluida`)
+  - Escopo: PRs [spring-saas-core#121](https://github.com/ricartefelipe/spring-saas-core/pull/121), [py-payments-ledger#100](https://github.com/ricartefelipe/py-payments-ledger/pull/100), [fluxe-b2b-suite#164](https://github.com/ricartefelipe/fluxe-b2b-suite/pull/164); tags `v1.3.1`; releases: [core](https://github.com/ricartefelipe/spring-saas-core/releases/tag/v1.3.1), [orders](https://github.com/ricartefelipe/node-b2b-orders/releases/tag/v1.3.1), [payments](https://github.com/ricartefelipe/py-payments-ledger/releases/tag/v1.3.1), [suite](https://github.com/ricartefelipe/fluxe-b2b-suite/releases/tag/v1.3.1).
+  - Evidência: 2026-04-23.
+
 ### 2026-04-01
 
 - [x] **Validação staging completa (HTTP + smoke pedido + shop deploy)** (`concluida`)
@@ -62,11 +68,11 @@ Legenda de status:
 
 ## Fila de execução imediata (concluir e marcar)
 
-- [ ] **Tag de release padronizada multi-repo** (`proxima` → tags criadas; releases GitHub opcionais)
+- [x] **Tag de release padronizada multi-repo** — **v1.3.1** concluida (tags + GitHub Releases)
   - Aceite:
     - [x] Definir versão — alinhamento `v1.3.0` em suite, orders, payments, core (core já estava em `v1.3.0`).
     - [x] Criar tags nos repos tocados — `v1.3.0` em fluxe-b2b-suite, node-b2b-orders, py-payments-ledger (push para `origin`).
-    - [ ] Publicar release notes com links dos PRs — base em [RASCUNHO-RELEASE-NOTES-v1.3.0.md](RASCUNHO-RELEASE-NOTES-v1.3.0.md) e [TEMPLATE-RELEASE-NOTES.md](TEMPLATE-RELEASE-NOTES.md); GitHub Releases por repo (painel ou `gh release create`)
+    - [x] Publicar release notes com links dos PRs — `v1.3.1` com notas (PRs 121, 100, 164 + coordenacao orders); [releases](https://github.com/ricartefelipe/spring-saas-core/releases)
 
 - [x] **Plano comercial de 30 dias (conversão e retenção)** (`concluida` — documento base)
   - Aceite:

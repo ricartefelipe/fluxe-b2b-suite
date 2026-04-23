@@ -13,7 +13,7 @@ export default defineConfig(() => ({
     environment: 'node',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     reporters: ['default'],
-    passWithNoTests: true,
+    passWithNoTests: false,
     coverage: {
       reportsDirectory: '../../coverage/apps/api',
       provider: 'v8' as const,

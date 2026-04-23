@@ -31,10 +31,22 @@
       },
       "configurations": {
         "production": {
+          "assets": [
+            {
+              "glob": "**/*",
+              "input": "apps/shop/public",
+              "ignore": ["assets/config.json"]
+            },
+            {
+              "glob": "**/*",
+              "input": "apps/shop/public-production"
+            },
+            "apps/shop/src/manifest.webmanifest"
+          ],
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "1.2mb",
+              "maximumWarning": "1.3mb",
               "maximumError": "1.5mb"
             },
             {

@@ -1,0 +1,8 @@
+{
+  "coreApiBaseUrl": "/api/core",
+  "ordersApiBaseUrl": "/api/orders",
+  "paymentsApiBaseUrl": "/api/payments",
+  "authMode": "oidc",
+  "logLevel": "info",
+  "version": "1.0.0"
+}

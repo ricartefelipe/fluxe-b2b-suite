@@ -99,7 +99,7 @@ Objetivo: detectar quebra funcional cedo em staging e reduzir MTTR.
   - Dependencia: A-03.
 
 - **Estado: Concluído** — C-03 | `py-payments-ledger` | Criar smoke pos-merge em `develop`
-  - Entrega: `/healthz` + `/openapi.json` + readiness opcional via `GET /readyz` quando `SMOKE_CHECK_READYZ=1` (valida DB, Redis e ligação ao RabbitMQ se `READINESS_REQUIRE_RABBIT` estiver ativo no serviço; CI em `develop` com secret `PAYMENTS_SMOKE_URL`).
+  - Entrega: `/healthz` + `/openapi.json` + readiness opcional via `GET /readyz` quando `SMOKE_CHECK_READYZ=1` (valida DB, Redis e ligação ao RabbitMQ se `READINESS_REQUIRE_RABBIT` estiver ativo no serviço; CI em `develop` com secret `PAYMENTS_SMOKE_URL`). Código: merge em `py-payments-ledger` (PR do smoke `readyz` no repo).
   - Pendência opcional (futuro): smoke que execute settle de negócio de ponta a ponta (além de readiness).
   - Dependencia: A-04.
 

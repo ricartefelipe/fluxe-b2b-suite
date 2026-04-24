@@ -24,6 +24,27 @@ function buildJwtFromDevTokenBody(body: Record<string, unknown>): string {
 const E2E_TENANT_DEMO = '00000000-0000-0000-0000-000000000002';
 const E2E_TENANT_PLATFORM = '00000000-0000-0000-0000-000000000001';
 
+/** O dashboard exige as três; outras rotas usam subconjunto (permissionGuard + ABAC). */
+const E2E_OPS_JWT_PERMS: string[] = [
+  'orders:read',
+  'orders:write',
+  'payments:read',
+  'payments:write',
+  'inventory:read',
+  'inventory:write',
+  'ledger:read',
+];
+
+const E2E_ADMIN_JWT_PERMS: string[] = [
+  'tenants:read',
+  'tenants:write',
+  'policies:read',
+  'flags:read',
+  'audit:read',
+  'analytics:read',
+  'admin:write',
+];
+
 function buildAccessTokenForE2eLogin(emailRaw: string): string {
   const email = emailRaw.trim().toLowerCase();
   if (email.includes('viewer') || email === 'viewer@e2e.local') {
@@ -40,14 +61,19 @@ function buildAccessTokenForE2eLogin(emailRaw: string): string {
       email: emailRaw,
       tid: E2E_TENANT_PLATFORM,
       roles: ['ops'],
+      perms: E2E_OPS_JWT_PERMS,
+      plan: 'pro',
+      region: 'us-east-1',
     });
   }
   return buildJwtFromDevTokenBody({
     sub: 'admin-e2e',
     email: emailRaw,
-    tid: E2E_TENANT_PLATFORM,
+    tid: '*',
     roles: ['admin'],
+    perms: E2E_ADMIN_JWT_PERMS,
     plan: 'enterprise',
+    region: 'us-east-1',
   });
 }
 

@@ -88,6 +88,7 @@ export const PT_BR_MESSAGES: Messages = {
     passwordMinHint: 'Mínimo de 8 caracteres',
     requestResetError: 'Não foi possível enviar o e-mail. Tente novamente.',
     loginSubtitleProd: 'Use o e-mail corporativo e a senha da sua conta.',
+    loginSubtitleDev: 'Entre com o e-mail e a senha do administrador',
     oidcRedirecting: 'A redirecionar para o fornecedor de identidade…',
   },
   tenant: {
@@ -181,6 +182,8 @@ export const PT_BR_MESSAGES: Messages = {
     paymentConfirmed: 'Pagamento confirmado',
     cancelled: 'Cancelado',
     customer: 'Cliente',
+    confirmPaymentTitle: 'Confirmar pagamento?',
+    confirmPaymentMessage: 'Deseja confirmar este pagamento? Esta ação não pode ser desfeita.',
   },
   ledger: {
     entries: 'Lançamentos',
@@ -595,6 +598,10 @@ export const PT_BR_MESSAGES: Messages = {
     never: 'Nunca',
     exportData: 'Exportar meus dados',
     exportDataHint: 'Baixa um arquivo JSON com tenant, usuários, políticas e feature flags.',
+    confirmCancelTitle: 'Agendar cancelamento?',
+    confirmCancelMessage: 'O cancelamento será efetivado ao final do período atual. Deseja continuar?',
+    confirmChangePlanTitle: 'Alterar plano?',
+    confirmChangePlanMessage: 'Deseja mudar para o plano selecionado? A alteração será aplicada imediatamente.',
   },
   usage: {
     title: 'Seu uso este mês',
@@ -639,6 +646,9 @@ export const PT_BR_MESSAGES: Messages = {
     selectTenantForFlags: 'Selecione um tenant no header para gerenciar flags',
     newFlag: 'Nova Flag',
     flagCreated: 'Flag criada',
+    confirmDeleteFlagTitle: 'Remover flag?',
+    confirmDeleteFlagMessage: 'Tem certeza que deseja remover esta feature flag? Esta ação não pode ser desfeita.',
+    flagDeleted: 'Flag removida',
     noFlagsFound: 'Nenhuma flag encontrada para este tenant',
     auditLogTitle: 'Log de Auditoria',
     action: 'Ação',

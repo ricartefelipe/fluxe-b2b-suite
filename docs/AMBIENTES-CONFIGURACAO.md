@@ -12,6 +12,15 @@ Documento central que define os **três ambientes** do Fluxe B2B Suite: configur
 | **Staging** | Railway | `develop` | Migration + seed completo |
 | **Produção** | Railway | `master` | Migration + **só o essencial** (tenant Fluxe B2B Suite, políticas, estrutura) |
 
+### Branches Git e função (regra fixa)
+
+| Branch | O que deploya na nuvem | Função |
+|--------|------------------------|--------|
+| **`develop`** | **Staging** | **Teste e validação** — QA, integração, demos. **Não** é o ambiente “real” para clientes ou dinheiro. |
+| **`master`** | **Produção** | **Para valer** — dados reais, clientes e operações finais. |
+
+**Resumo:** staging = teste; produção = uso real. O resto deste documento detalha perfis, dados e procedimentos.
+
 **Deploy na nuvem:** automático quando o código **chega** ao remoto em `develop` (staging) ou `master` (produção), desde que cada serviço Railway tenha *Production Branch* alinhada a essa branch. Não há “ambiente de destino” separado no Git: a branch **é** o ambiente. Detalhe na secção *Branch canónica → ambiente* em [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md).
 
 **Seu usuário funciona em todos os ambientes.** Mesmo login (ex.: `admin@local` / `admin123` em local/staging; em prod, criar usuário real ou manter um admin inicial).
@@ -33,7 +42,7 @@ Ou projeto por projeto (ver `spring-saas-core/docs/SUBIR-E-TESTAR-TODOS-PROJETOS
 
 ### Dados
 - **spring-saas-core:** Liquibase com `contexts: local,seed` → schema + 008 (essencial) + 009 (realista: tenants, usuários, flags, audit, webhooks, outbox)
-- **node-b2b-orders:** `prisma migrate deploy` + `prisma db seed` → tenant_demo, produtos, pedidos, inventário
+- **node-b2b-orders:** `prisma migrate deploy` + `prisma db seed` → 00000000-0000-0000-0000-000000000002, produtos, pedidos, inventário
 - **py-payments-ledger:** `alembic upgrade head` + seed (scripts)
 - **demo-seed.sh:** popula dados extras via API (se existir)
 

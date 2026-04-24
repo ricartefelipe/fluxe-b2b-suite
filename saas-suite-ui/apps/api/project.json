@@ -63,7 +63,7 @@
     },
     "test": {
       "options": {
-        "passWithNoTests": true
+        "passWithNoTests": false
       }
     },
     "docker:build": {

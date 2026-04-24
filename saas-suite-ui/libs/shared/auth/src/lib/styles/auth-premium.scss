@@ -383,16 +383,6 @@
   font-weight: 450;
 }
 
-.auth-premium--split .login-tabs {
-  --mat-tab-header-label-text-size: 14px;
-  --mat-tab-header-label-text-weight: 600;
-  --mat-tab-header-divider-color: transparent;
-}
-
-.auth-premium--split .tab-content {
-  padding-top: 22px;
-}
-
 .auth-premium--split .full-width {
   width: 100%;
 }
@@ -414,20 +404,6 @@
   .mat-mdc-form-field-focus-overlay {
     opacity: 0;
   }
-  .mat-mdc-tab-labels {
-    background: #f1f5f9;
-    border-radius: 14px;
-    padding: 4px;
-  }
-  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
-    color: var(--auth-brand-deep);
-    font-weight: 700;
-  }
-  .mat-mdc-tab .mdc-tab-indicator__content--underline {
-    border-color: var(--auth-brand) !important;
-    border-top-width: 3px;
-    border-radius: 2px;
-  }
 }
 
 .auth-premium--split .field-icon {
@@ -436,159 +412,6 @@
 }
 
 .auth-premium--split .toggle-password mat-icon {
-  color: var(--auth-muted);
-}
-
-.auth-premium--split .credentials-hint {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  padding: 12px 14px;
-  margin: 8px 0 18px;
-  font-size: 12px;
-  line-height: 1.5;
-  color: var(--auth-ink-soft);
-  background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
-  border: 1px solid #bae6fd;
-  border-radius: 12px;
-}
-
-.auth-premium--split .credentials-hint mat-icon {
-  flex-shrink: 0;
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
-  color: var(--auth-brand-deep);
-  margin-top: 1px;
-}
-
-.auth-premium--split .credentials-hint code {
-  font-size: 11px;
-  padding: 2px 6px;
-  border-radius: 6px;
-  background: rgba(14, 165, 233, 0.12);
-  color: var(--auth-brand-deep);
-}
-
-.auth-premium--split .profiles {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.auth-premium--split .profile-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  border: 1.5px solid #e2e8f0;
-  background: #fff;
-  cursor: pointer;
-  text-align: left;
-  font: inherit;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.15s ease;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-}
-
-.auth-premium--split .profile-card:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-}
-
-.auth-premium--split .profile-card.selected {
-  border-color: var(--auth-brand);
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  box-shadow:
-    0 0 0 1px rgba(14, 165, 233, 0.25),
-    0 12px 28px rgba(14, 165, 233, 0.12);
-}
-
-.auth-premium--split .profile-icon {
-  width: 46px;
-  height: 46px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-}
-
-.auth-premium--split .profile-icon mat-icon {
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
-  color: #fff;
-}
-
-.auth-premium--split .profile-name {
-  font-weight: 600;
-  font-size: 15px;
-  color: var(--auth-ink);
-}
-
-.auth-premium--split .profile-email {
-  font-size: 12px;
-  color: var(--auth-muted);
-  margin-top: 2px;
-  display: block;
-}
-
-.auth-premium--split .check-icon {
-  color: var(--auth-brand);
-  flex-shrink: 0;
-}
-
-.auth-premium--split .preview {
-  padding: 14px 16px;
-  margin-bottom: 20px;
-  border-radius: 14px;
-  background: #f8fafc;
-  border: 1px solid var(--auth-line);
-}
-
-.auth-premium--split .preview-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-  font-size: 12px;
-}
-
-.auth-premium--split .preview-row:not(:last-child) {
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.auth-premium--split .preview-label {
-  color: var(--auth-muted);
-  font-weight: 500;
-}
-
-.auth-premium--split .preview code {
-  font-size: 11px;
-  padding: 4px 8px;
-  border-radius: 8px;
-  background: #e2e8f0;
-  color: var(--auth-brand-deep);
-  font-weight: 600;
-}
-
-.auth-premium--split .plan-badge {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: #dcfce7;
-  color: #166534;
-}
-
-.auth-premium--split .perm-count {
   color: var(--auth-muted);
 }
 

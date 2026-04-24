@@ -14,7 +14,7 @@ import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
+import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent, ConfirmDialogComponent, ConfirmDialogData } from '@saas-suite/shared/ui';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { formatDateTime } from '@saas-suite/shared/util';
@@ -402,14 +402,8 @@ export class UsersListPage implements OnInit, AfterViewInit {
           this.snack.open(this.i18n.messages().admin.inviteSent, '', { duration: 3000 });
         }
         await this.loadUsers();
-      } catch (err: unknown) {
-        const msg =
-          err && typeof err === 'object' && 'error' in err && typeof (err as { error?: { detail?: string } }).error?.detail === 'string'
-            ? (err as { error: { detail: string } }).error.detail
-            : err && typeof err === 'object' && 'error' in err && typeof (err as { error?: { message?: string } }).error?.message === 'string'
-              ? (err as { error: { message: string } }).error.message
-              : this.i18n.messages().admin.userError;
-        this.snack.open(msg, '', { duration: 5000 });
+      } catch {
+        this.snack.open(this.i18n.messages().admin.userError, '', { duration: 5000 });
       }
     });
   }
@@ -461,7 +455,15 @@ export class UsersListPage implements OnInit, AfterViewInit {
   }
 
   async deleteUser(user: UserDto): Promise<void> {
-    if (!confirm(this.i18n.messages().admin.confirmDeleteUser)) return;
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        title: this.i18n.messages().admin.confirmDeleteUser,
+        message: user.name,
+        danger: true,
+      } as ConfirmDialogData,
+    });
+    const confirmed = await firstValueFrom(ref.afterClosed());
+    if (!confirmed) return;
     try {
       await firstValueFrom(this.http.delete(`${this.baseUrl}/${user.id}`));
       this.snack.open(this.i18n.messages().admin.userDeleted, '', { duration: 3000 });

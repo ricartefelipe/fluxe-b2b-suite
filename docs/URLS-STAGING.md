@@ -20,8 +20,8 @@ Os hosts abaixo (`*-staging.up.railway.app`) pertencem ao projecto Railway **Flu
 
 ## Login (Staging)
 
-- **Modo:** `authMode=hs256` (login com perfis rápidos ou e-mail/senha)
-- **Usuário demo (seed):** `admin@local` / `admin123` (ou perfis rápidos na tela)
+- **Modo:** `authMode=hs256` (login com e-mail e senha)
+- **Utilizador demo (seed, só em staging):** `admin@local` / `admin123`
 
 ## Se as páginas não funcionam
 

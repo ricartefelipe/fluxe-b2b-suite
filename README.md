@@ -201,6 +201,17 @@ Exemplo (já configurado para dev com proxy):
 
 ## Segurança e ambientes
 
+### Git, branches e nuvem
+
+| Branch | Deploy (Railway) | Função |
+|--------|------------------|--------|
+| **`develop`** | **Staging** | **Teste** — validação, QA, integração; não é uso “real” com clientes. |
+| **`master`** | **Produção** | **Para valer** — dados e operações reais. |
+
+Documento canónico: [docs/AMBIENTES-CONFIGURACAO.md](docs/AMBIENTES-CONFIGURACAO.md). URLs públicas: [docs/URLS-AMBIENTES.md](docs/URLS-AMBIENTES.md).
+
+### Front e auth
+
 - **Dev Auth:** Apenas quando `authMode === 'dev'`. Gera JWT local para demos.
 - **Produção:** Use `authMode: 'oidc'` e configure issuer/clientId/scope. Dev Auth não deve estar acessível em produção.
 
@@ -260,7 +271,7 @@ saas-suite-ui/
 - **Playwright no monorepo (mocks, comandos, CI):** [saas-suite-ui/docs/E2E.md](saas-suite-ui/docs/E2E.md)
 - **Rodar os 4 repositórios integrados:** ver [docs/README.md](docs/README.md) e [docs/GUIA-DEPLOY-PASSO-A-PASSO.md](docs/GUIA-DEPLOY-PASSO-A-PASSO.md)
 - **Validar backends com Docker:** `./scripts/e2e-integrated.sh`
-- **Regras de negócio e implantação:** ver índice em [docs/README.md](docs/README.md) (documentos planejados: regras-de-negocio, documento-implantacao)
+- **Regras de negócio:** [docs/REGRAS-NEGOCIO.md](docs/REGRAS-NEGOCIO.md); implantação: [docs/DEPLOY-RAILWAY.md](docs/DEPLOY-RAILWAY.md)
 
 ---
 

@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/saas-suite-ui"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-request-limit: 10
+    labels:
+      - "dependencies"
+      - "saas-suite-ui"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+      - "github-actions"

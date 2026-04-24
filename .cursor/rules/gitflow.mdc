@@ -1,0 +1,15 @@
+---
+description: Git Flow obrigatório — branches, PRs e merges conforme AGENTS.md
+alwaysApply: true
+---
+
+# Git Flow (obrigatório)
+
+Seguir **sempre** [AGENTS.md](../../AGENTS.md) neste repositório e o mesmo princípio nos outros repos do workspace quando aplicável.
+
+- **Nunca** commit direto em `develop` ou `master`.
+- Antes de trabalho novo: `git fetch origin && git checkout develop && git pull origin develop`, depois `git checkout -b feature/...` ou `fix/...` ou `chore/...` / `docs/...`.
+- Integração em `develop` **só** via PR (ou equivalente explícito); CI verde antes de mergear.
+- **`master` / produção:** merge ou PR `develop` → `master` **apenas** quando o responsável pedir de forma explícita.
+
+Ao propor ou executar alterações, incluir branch, commits e PR alinhados a este fluxo.

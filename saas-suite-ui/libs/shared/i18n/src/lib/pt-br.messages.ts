@@ -88,6 +88,7 @@ export const PT_BR_MESSAGES: Messages = {
     passwordMinHint: 'Mínimo de 8 caracteres',
     requestResetError: 'Não foi possível enviar o e-mail. Tente novamente.',
     loginSubtitleProd: 'Use o e-mail corporativo e a senha da sua conta.',
+    loginSubtitleDev: 'Entre com o e-mail e a senha do administrador',
     oidcRedirecting: 'A redirecionar para o fornecedor de identidade…',
   },
   tenant: {

@@ -120,7 +120,7 @@ payments:
 ### Staging
 
 - [x] Fronts carregam (shop/admin/ops) — HTTP 200 (`curl` 2026-04-01)
-- [x] Login funciona — `POST /v1/auth/token` OK no smoke (`scripts/smoke-order-staging.sh`, utilizador seed `ops@demo.example.com` / tenant `tenant_demo`)
+- [x] Login funciona — `POST /v1/auth/token` OK no smoke (`scripts/smoke-order-staging.sh`, utilizador seed `ops@demo.example.com` / tenant `00000000-0000-0000-0000-000000000002`)
 - [x] Fluxo de pedido minimo ate `CONFIRMED` — mesmo script ate confirmacao
 - [ ] (Recomendado) fluxo ate `PAID` — requer `SMOKE_PAYMENT_PAID=1`+broker ou `SMOKE_SAGA_PAID_LEDGER=1` (ver [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md))
 

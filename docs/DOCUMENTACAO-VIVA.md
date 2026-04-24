@@ -3,7 +3,7 @@
 > **Este documento é gerado automaticamente.** Não edite manualmente.
 > Para regenerar, execute: `./docs/scripts/generate-docs.sh`
 
-**Gerado em:** 2026-03-12 16:47 UTC
+**Gerado em:** 2026-04-10 08:29 UTC
 
 ---
 
@@ -38,17 +38,17 @@ A Fluxe B2B Suite é uma plataforma SaaS multi-tenant para operações B2B, comp
 
 # Catálogo de APIs — Fluxe B2B Suite
 
-> Gerado automaticamente em 2026-03-12 16:47 UTC via `docs/scripts/api-catalog.py`
+> Gerado automaticamente em 2026-04-10 08:29 UTC via `docs/scripts/api-catalog.py`
 
 ---
 
-**Total de endpoints:** 179
+**Total de endpoints:** 188
 
 | Serviço | Endpoints |
 |---------|-----------|
 | node-b2b-orders | 47 |
-| py-payments-ledger | 74 |
-| spring-saas-core | 58 |
+| py-payments-ledger | 76 |
+| spring-saas-core | 65 |
 
 ## node-b2b-orders
 
@@ -159,6 +159,8 @@ A Fluxe B2B Suite é uma plataforma SaaS multi-tenant para operações B2B, comp
 | `GET` | `/v1/payment-links/{link_id}` | payment_links | — |
 | `POST` | `/v1/payment-links/{link_id}/cancel` | payment_links | — |
 | `POST` | `/v1/payment-links/{link_id}/pay` | payment_links | — |
+| `DELETE` | `/v1/payment-methods/{method_id}` | payment_methods | — |
+| `GET` | `/v1/payment-methods/{method_id}` | payment_methods | — |
 | `GET` | `/v1/payouts` | payouts | — |
 | `POST` | `/v1/payouts` | payouts | — |
 | `GET` | `/v1/payouts/{payout_id}` | payouts | — |
@@ -199,12 +201,14 @@ A Fluxe B2B Suite é uma plataforma SaaS multi-tenant para operações B2B, comp
 | `GET` | `/v1/analytics/summary` | AnalyticsController | — |
 | `GET` | `/v1/audit` | AuditLogController | — |
 | `GET` | `/v1/audit/export` | AuditLogController | — |
+| `POST` | `/v1/auth/change-password` | AuthController | — |
 | `POST` | `/v1/auth/login` | AuthController | — |
 | `POST` | `/v1/auth/password-reset/confirm` | AuthController | — |
 | `POST` | `/v1/auth/password-reset/request` | AuthController | — |
 | `POST` | `/v1/auth/register` | AuthController | — |
 | `GET` | `/v1/billing/plans` | BillingController | — |
 | `GET` | `/v1/billing/plans/{slug}` | BillingController | — |
+| `POST` | `/v1/billing/portal-session` | BillingController | — |
 | `POST` | `/v1/billing/subscriptions` | BillingController | — |
 | `POST` | `/v1/billing/subscriptions/cancel` | BillingController | — |
 | `GET` | `/v1/billing/subscriptions/current` | BillingController | — |
@@ -222,13 +226,17 @@ A Fluxe B2B Suite é uma plataforma SaaS multi-tenant para operações B2B, comp
 | `GET` | `/v1/subscriptions/current` | SubscriptionController | — |
 | `POST` | `/v1/subscriptions/downgrade` | SubscriptionController | — |
 | `POST` | `/v1/subscriptions/reactivate` | SubscriptionController | — |
+| `POST` | `/v1/subscriptions/schedule-cancel` | SubscriptionController | — |
 | `POST` | `/v1/subscriptions/trial` | SubscriptionController | — |
+| `POST` | `/v1/subscriptions/undo-schedule-cancel` | SubscriptionController | — |
 | `POST` | `/v1/subscriptions/upgrade` | SubscriptionController | — |
 | `GET` | `/v1/tenants` | TenantController | — |
 | `POST` | `/v1/tenants` | TenantController | — |
 | `DELETE` | `/v1/tenants/{id}` | TenantController | — |
 | `GET` | `/v1/tenants/{id}` | TenantController | — |
 | `PATCH` | `/v1/tenants/{id}` | TenantController | — |
+| `GET` | `/v1/tenants/{id}/export` | TenantSnapshotController | — |
+| `GET` | `/v1/tenants/{id}/health` | TenantSnapshotController | — |
 | `GET` | `/v1/tenants/{id}/policies` | TenantSnapshotController | — |
 | `GET` | `/v1/tenants/{id}/snapshot` | TenantSnapshotController | — |
 | `GET` | `/v1/tenants/{tenantId}/flags` | FeatureFlagController | — |
@@ -240,6 +248,7 @@ A Fluxe B2B Suite é uma plataforma SaaS multi-tenant para operações B2B, comp
 | `DELETE` | `/v1/users/{id}` | UserController | — |
 | `GET` | `/v1/users/{id}` | UserController | — |
 | `PATCH` | `/v1/users/{id}` | UserController | — |
+| `POST` | `/v1/users/{id}/resend-invite` | UserController | — |
 | `GET` | `/v1/webhooks` | WebhookController | — |
 | `POST` | `/v1/webhooks` | WebhookController | — |
 | `DELETE` | `/v1/webhooks/{id}` | WebhookController | — |
@@ -348,57 +357,57 @@ Consulte [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md) para todas as 
 
 ### fluxe-b2b-suite
 
-- 6a23e33 merge: sprint 6 — observabilidade (8 minutes ago)
-- a2244dd feat: sprint 6 — observabilidade completa (8 minutes ago)
-- 84a5bdd merge: sprint 3 — qualidade (DAS, regras, histórias, E2E) (38 minutes ago)
-- 4d3ef74 feat: sprint 3 — qualidade, documentação e testes E2E (38 minutes ago)
-- 4f3f3b9 docs: update vistoria — all checklist items resolved in sprint 2 (61 minutes ago)
-- f5dcc78 merge: integrate backlog sprint 2 — docs README cleanup (68 minutes ago)
-- 2e90151 docs: fix README index — list only existing docs, move planned to roadmap (89 minutes ago)
-- 54d7b33 merge: integrate shop search bar with debounce (2 hours ago)
-- ef56af5 merge: integrate consistent i18n across portals (2 hours ago)
-- a490d17 merge: integrate permission guards on portal routes (2 hours ago)
+- 48220e8 Merge pull request #158 from ricartefelipe/feature/ux-polish-demo (25 minutes ago)
+- 59ad3f9 Polir UX dos 3 frontends para demos com clientes (35 minutes ago)
+- e85a3c2 Merge pull request #157 from ricartefelipe/develop (3 hours ago)
+- 3caff05 Merge pull request #156 from ricartefelipe/fix/quality-audit (16 hours ago)
+- 5a486b1 fix: auditoria de qualidade — CVE Vite, CI e scripts (16 hours ago)
+- 10a3430 Merge pull request #155 from ricartefelipe/develop (5 days ago)
+- 3398e58 Merge pull request #154 from ricartefelipe/fix/payments-abac-ui-normalize-claims (5 days ago)
+- 3fa1852 fix(ops-ui): espelhar normalização professional/us-east-1 no ABAC payments (5 days ago)
+- 51f0620 Merge pull request #153 from ricartefelipe/fix/ops-abac-all-services (6 days ago)
+- 15bedd2 fix(ops): ABAC payments + orders em todas as rotas e menu necessários (6 days ago)
 
 ### spring-saas-core
 
-- dbf0923 merge: sprint 6 — observabilidade (8 minutes ago)
-- 88a103b feat: distributed tracing com OpenTelemetry (8 minutes ago)
-- 6a4b733 merge: sprint 4 — subscription lifecycle avançado (28 minutes ago)
-- bfb96ce feat: subscription lifecycle avançado com trial, upgrade, downgrade (28 minutes ago)
-- 4f88618 merge: sprint 3 — qualidade (compilação, testes de contrato) (38 minutes ago)
-- cf069a8 fix: corrigir erros de compilação e adicionar testes de contrato (38 minutes ago)
-- 9abb135 merge: integrate backlog sprint 2 — complete all evolution criteria (68 minutes ago)
-- 440bdf9 feat: complete backlog — webhooks, AI live docs, updated backlog (69 minutes ago)
-- e4dfbc9 feat: add JWT rotation, audit retention job, Grafana alerts and backlog update (88 minutes ago)
-- da91c46 merge: integrate user management and transactional email (2 hours ago)
+- 37dda13 Merge pull request #110 from ricartefelipe/fix/policy-effect-column-transformer (2 hours ago)
+- 8ac550b fix: ColumnTransformer UPPER(effect) para queries JPA com dados legacy (2 hours ago)
+- fc094f6 Merge pull request #109 from ricartefelipe/fix/policy-effect-case-normalize (2 hours ago)
+- 5cb762a fix: normalizar case do campo effect em policies (ALLOW/DENY) (2 hours ago)
+- b6d2f8d Merge pull request #108 from ricartefelipe/develop (3 hours ago)
+- 855b37f Merge pull request #107 from ricartefelipe/fix/cors-staging-restrict (16 hours ago)
+- fb65e90 fix(cors): default to localhost when allowed-origins is empty (16 hours ago)
+- c569eb1 Merge pull request #106 from ricartefelipe/fix/quality-audit (16 hours ago)
+- 5704d72 fix: quality audit — rename workflow, add trace logging, clean annotations (16 hours ago)
+- 29a07ed Merge pull request #105 from ricartefelipe/develop (5 days ago)
 
 ### node-b2b-orders
 
-- fcc00fa merge: sprint 6 — observabilidade (8 minutes ago)
-- 93cfbc5 feat: distributed tracing com OpenTelemetry (8 minutes ago)
-- cb428b2 merge: sprint 5 — integrações externas (17 minutes ago)
-- bad7e50 feat: sprint 5 — SSE real-time, import/export em massa (17 minutes ago)
-- 0b3ecaa merge: sprint 4 — retenção de audit log (28 minutes ago)
-- afa2038 feat: retenção configurável de audit log com purge diário (28 minutes ago)
-- 4df3808 merge: sprint 3 — qualidade (tipo, prisma, testes integração e contrato) (38 minutes ago)
-- d5b2547 fix: corrigir erros de tipo e adicionar testes de integração e contrato (38 minutes ago)
-- 0b69e51 merge: integrate backlog sprint 2 — complete all evolution criteria (68 minutes ago)
-- d0e5107 feat: complete backlog — JWT rotation, OIDC, analytics, search, schema registry (69 minutes ago)
+- 8f3c8f2 Merge pull request #89 from ricartefelipe/fix/order-saga-integrity (51 minutes ago)
+- b684e28 fix: corrigir integridade da saga pedido-pagamento (54 minutes ago)
+- dcee272 Merge pull request #88 from ricartefelipe/develop (3 hours ago)
+- ca24ccb Merge pull request #87 from ricartefelipe/fix/raise-coverage-thresholds (15 hours ago)
+- e16dee9 fix(quality): raise coverage thresholds as regression ratchet (15 hours ago)
+- aeef97e Merge pull request #86 from ricartefelipe/fix/eliminate-any-types (15 hours ago)
+- 59ddee9 fix(types): eliminate all explicit any types and enforce no-explicit-any rule (16 hours ago)
+- e37d404 Merge pull request #85 from ricartefelipe/fix/quality-audit (16 hours ago)
+- 5f5d770 fix(security): patch @nestjs/core injection vulnerability and rename workflow (16 hours ago)
+- 9378301 Merge pull request #84 from ricartefelipe/fix/semgrep-tenants-proxy-trusted-response (5 days ago)
 
 ### py-payments-ledger
 
-- a619a05 merge: sprint 6 — observabilidade (8 minutes ago)
-- b67ebab feat: distributed tracing com OpenTelemetry (8 minutes ago)
-- 63a8805 merge: sprint 5 — integrações externas (17 minutes ago)
-- 75fcf36 feat: sprint 5 — integrações PagSeguro, Mercado Pago, SSE real-time (17 minutes ago)
-- 0d0a349 merge: sprint 4 — capacidades financeiras v1.2 (28 minutes ago)
-- 5247918 feat: sprint 4 — capacidades financeiras avançadas (v1.2) (28 minutes ago)
-- 5158320 merge: sprint 3 — qualidade (testes integração e contrato) (38 minutes ago)
-- f8adf48 feat: adicionar testes de integração e contrato cross-service (38 minutes ago)
-- cfdcc6d docs: update ROADMAP — v1.1 complete, advance to v1.2 (61 minutes ago)
-- 1c937d7 merge: integrate backlog sprint 2 — complete all evolution criteria (68 minutes ago)
+- 7ace0d8 Merge pull request #93 from ricartefelipe/develop (3 hours ago)
+- 3d64bca Merge pull request #92 from ricartefelipe/fix/raise-coverage-threshold (15 hours ago)
+- 81aa544 fix(quality): raise coverage threshold 25→26% as regression ratchet (15 hours ago)
+- 6d504e9 Merge pull request #91 from ricartefelipe/fix/mypy-strict-types (15 hours ago)
+- a7c3567 fix: remove mypy ignore_errors overrides and fix all type errors (16 hours ago)
+- 598d88f Merge pull request #90 from ricartefelipe/fix/trivy-ci-gate (16 hours ago)
+- 68aa626 fix(ci): make Trivy security scan fail on CRITICAL/HIGH vulnerabilities (16 hours ago)
+- af2cb9c Merge pull request #89 from ricartefelipe/fix/quality-audit (16 hours ago)
+- fba2895 fix: corrigir nomes de workflow, versão OpenAPI e dependências (16 hours ago)
+- b2ed135 Merge pull request #88 from ricartefelipe/develop (5 days ago)
 
 
 ---
 
-*Documentação gerada automaticamente em 2026-03-12 16:47 UTC por `docs/scripts/generate-docs.sh`*
+*Documentação gerada automaticamente em 2026-04-10 08:29 UTC por `docs/scripts/generate-docs.sh`*

@@ -1,16 +1,16 @@
 # Catálogo de APIs — Fluxe B2B Suite
 
-> Gerado automaticamente em 2026-03-12 16:47 UTC via `docs/scripts/api-catalog.py`
+> Gerado automaticamente em 2026-04-10 08:29 UTC via `docs/scripts/api-catalog.py`
 
 ---
 
-**Total de endpoints:** 179
+**Total de endpoints:** 188
 
 | Serviço | Endpoints |
 |---------|-----------|
 | node-b2b-orders | 47 |
-| py-payments-ledger | 74 |
-| spring-saas-core | 58 |
+| py-payments-ledger | 76 |
+| spring-saas-core | 65 |
 
 ## node-b2b-orders
 
@@ -121,6 +121,8 @@
 | `GET` | `/v1/payment-links/{link_id}` | payment_links | — |
 | `POST` | `/v1/payment-links/{link_id}/cancel` | payment_links | — |
 | `POST` | `/v1/payment-links/{link_id}/pay` | payment_links | — |
+| `DELETE` | `/v1/payment-methods/{method_id}` | payment_methods | — |
+| `GET` | `/v1/payment-methods/{method_id}` | payment_methods | — |
 | `GET` | `/v1/payouts` | payouts | — |
 | `POST` | `/v1/payouts` | payouts | — |
 | `GET` | `/v1/payouts/{payout_id}` | payouts | — |
@@ -161,12 +163,14 @@
 | `GET` | `/v1/analytics/summary` | AnalyticsController | — |
 | `GET` | `/v1/audit` | AuditLogController | — |
 | `GET` | `/v1/audit/export` | AuditLogController | — |
+| `POST` | `/v1/auth/change-password` | AuthController | — |
 | `POST` | `/v1/auth/login` | AuthController | — |
 | `POST` | `/v1/auth/password-reset/confirm` | AuthController | — |
 | `POST` | `/v1/auth/password-reset/request` | AuthController | — |
 | `POST` | `/v1/auth/register` | AuthController | — |
 | `GET` | `/v1/billing/plans` | BillingController | — |
 | `GET` | `/v1/billing/plans/{slug}` | BillingController | — |
+| `POST` | `/v1/billing/portal-session` | BillingController | — |
 | `POST` | `/v1/billing/subscriptions` | BillingController | — |
 | `POST` | `/v1/billing/subscriptions/cancel` | BillingController | — |
 | `GET` | `/v1/billing/subscriptions/current` | BillingController | — |
@@ -184,13 +188,17 @@
 | `GET` | `/v1/subscriptions/current` | SubscriptionController | — |
 | `POST` | `/v1/subscriptions/downgrade` | SubscriptionController | — |
 | `POST` | `/v1/subscriptions/reactivate` | SubscriptionController | — |
+| `POST` | `/v1/subscriptions/schedule-cancel` | SubscriptionController | — |
 | `POST` | `/v1/subscriptions/trial` | SubscriptionController | — |
+| `POST` | `/v1/subscriptions/undo-schedule-cancel` | SubscriptionController | — |
 | `POST` | `/v1/subscriptions/upgrade` | SubscriptionController | — |
 | `GET` | `/v1/tenants` | TenantController | — |
 | `POST` | `/v1/tenants` | TenantController | — |
 | `DELETE` | `/v1/tenants/{id}` | TenantController | — |
 | `GET` | `/v1/tenants/{id}` | TenantController | — |
 | `PATCH` | `/v1/tenants/{id}` | TenantController | — |
+| `GET` | `/v1/tenants/{id}/export` | TenantSnapshotController | — |
+| `GET` | `/v1/tenants/{id}/health` | TenantSnapshotController | — |
 | `GET` | `/v1/tenants/{id}/policies` | TenantSnapshotController | — |
 | `GET` | `/v1/tenants/{id}/snapshot` | TenantSnapshotController | — |
 | `GET` | `/v1/tenants/{tenantId}/flags` | FeatureFlagController | — |
@@ -202,6 +210,7 @@
 | `DELETE` | `/v1/users/{id}` | UserController | — |
 | `GET` | `/v1/users/{id}` | UserController | — |
 | `PATCH` | `/v1/users/{id}` | UserController | — |
+| `POST` | `/v1/users/{id}/resend-invite` | UserController | — |
 | `GET` | `/v1/webhooks` | WebhookController | — |
 | `POST` | `/v1/webhooks` | WebhookController | — |
 | `DELETE` | `/v1/webhooks/{id}` | WebhookController | — |

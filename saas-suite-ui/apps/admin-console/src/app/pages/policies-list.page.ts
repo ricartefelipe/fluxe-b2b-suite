@@ -62,7 +62,15 @@ import { firstValueFrom } from 'rxjs';
       </form>
     }
 
-    @if (facade.loading()) {
+    @if (facade.error()) {
+      <div class="error-banner" role="alert">
+        <mat-icon>error</mat-icon>
+        <span>{{ i18n.messages().errors.serverError }}</span>
+        <button mat-stroked-button (click)="facade.loadPolicies()">
+          <mat-icon>refresh</mat-icon> {{ i18n.messages().ledger.refresh }}
+        </button>
+      </div>
+    } @else if (facade.loading()) {
       <saas-table-skeleton [rowCount]="5" [columns]="5" />
     } @else if (dataSource.data.length === 0) {
       <saas-empty-state
@@ -107,6 +115,12 @@ import { firstValueFrom } from 'rxjs';
     .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .create-form { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; padding: 16px; background: var(--app-surface-variant); border-radius: 8px; }
     .full-width { width: 100%; }
+    .error-banner {
+      display: flex; align-items: center; gap: 8px; padding: 12px 16px;
+      background: #ffebee; color: #b71c1c; border-radius: 8px; border: 1px solid #ffcdd2;
+      margin-bottom: 16px;
+    }
+    .error-banner span { flex: 1; }
     .chip-allow { background: var(--app-chip-allow-bg); color: var(--app-chip-allow-text); padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
     .chip-deny { background: var(--app-chip-deny-bg); color: var(--app-chip-deny-text); padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; }
   `],

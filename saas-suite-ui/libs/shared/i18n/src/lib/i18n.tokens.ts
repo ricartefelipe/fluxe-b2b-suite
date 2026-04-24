@@ -85,6 +85,7 @@ export interface Messages {
     passwordMinHint: string;
     requestResetError: string;
     loginSubtitleProd: string;
+    loginSubtitleDev: string;
     oidcRedirecting: string;
   };
   tenant: {
@@ -178,6 +179,8 @@ export interface Messages {
     paymentConfirmed: string;
     cancelled: string;
     customer: string;
+    confirmPaymentTitle: string;
+    confirmPaymentMessage: string;
   };
   ledger: {
     entries: string;
@@ -555,6 +558,10 @@ export interface Messages {
     never: string;
     exportData: string;
     exportDataHint: string;
+    confirmCancelTitle: string;
+    confirmCancelMessage: string;
+    confirmChangePlanTitle: string;
+    confirmChangePlanMessage: string;
   };
   usage: {
     title: string;
@@ -599,6 +606,9 @@ export interface Messages {
     selectTenantForFlags: string;
     newFlag: string;
     flagCreated: string;
+    confirmDeleteFlagTitle: string;
+    confirmDeleteFlagMessage: string;
+    flagDeleted: string;
     noFlagsFound: string;
     auditLogTitle: string;
     action: string;

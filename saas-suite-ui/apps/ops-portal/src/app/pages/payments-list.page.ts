@@ -8,9 +8,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSortModule, MatSort } from '@angular/material/sort';
 import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
-import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
+import { firstValueFrom } from 'rxjs';
+import { ConfirmDialogComponent, ConfirmDialogData, StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { PaymentsFacade, PaymentStatus, PaymentIntent } from '@saas-suite/data-access/payments';
 import { formatDateTime } from '@saas-suite/shared/util';
@@ -20,7 +22,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
   standalone: true,
   imports: [
     FormsModule, DecimalPipe, MatTableModule, MatButtonModule, MatIconModule,
-    MatFormFieldModule, MatInputModule, MatSelectModule, MatSnackBarModule,
+    MatFormFieldModule, MatInputModule, MatSelectModule, MatSnackBarModule, MatDialogModule,
     MatSortModule, MatPaginatorModule,
     StatusChipComponent, EmptyStateComponent, TableSkeletonComponent,
   ],
@@ -95,6 +97,7 @@ export class PaymentsListPage implements OnInit, AfterViewInit {
   protected facade = inject(PaymentsFacade);
   protected i18n = inject(I18nService);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -122,8 +125,14 @@ export class PaymentsListPage implements OnInit, AfterViewInit {
   }
 
   async confirmPayment(id: string): Promise<void> {
+    const msgs = this.i18n.messages().payments;
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: { title: msgs.confirmPaymentTitle, message: msgs.confirmPaymentMessage } as ConfirmDialogData,
+    });
+    const confirmed = await firstValueFrom(ref.afterClosed());
+    if (!confirmed) return;
     const p = await this.facade.confirmPayment(id);
-    if (p) this.snackBar.open(this.i18n.messages().payments.paymentConfirmed, 'OK', { duration: 2000 });
+    if (p) this.snackBar.open(msgs.paymentConfirmed, 'OK', { duration: 2000 });
   }
 
   fmtDate(d: string): string { return formatDateTime(d); }

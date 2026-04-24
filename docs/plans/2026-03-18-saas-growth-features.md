@@ -1,6 +1,6 @@
 # Plano de Implementação — Funcionalidades SaaS para Aquisição e Retenção
 
-> **For Claude:** Executar tarefa a tarefa; TDD obrigatório; branch feature/* por entrega; PR para develop após CI verde.
+> Executar tarefa a tarefa; TDD obrigatório; branch feature/* por entrega; PR para develop após CI verde.
 
 **Objetivo:** Implementar as funcionalidades inspiradas em SaaS de referência (Stripe, Notion, Intercom, etc.) para aumentar aquisição e retenção de clientes, com código de alta qualidade, testes e Git Flow impecáveis.
 

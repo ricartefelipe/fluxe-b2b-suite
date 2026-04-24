@@ -26,13 +26,38 @@ export class OpsShellComponent implements OnInit {
         route: '/dashboard',
         icon: 'dashboard',
         requiredPermissions: ['orders:read', 'payments:read', 'inventory:read'],
+        paymentsAbacPermissions: ['payments:read'],
       },
       { label: m.orders, route: '/orders', icon: 'receipt_long', permission: 'orders:read' },
-      { label: m.newOrder, route: '/orders/new', icon: 'add_shopping_cart', permission: 'orders:write' },
+      {
+        label: m.newOrder,
+        route: '/orders/new',
+        icon: 'add_shopping_cart',
+        permission: 'orders:write',
+        ordersAbacPermissions: ['orders:write'],
+      },
       { label: m.inventory, route: '/inventory/adjustments', icon: 'inventory_2', permission: 'inventory:read' },
-      { label: m.payments, route: '/payments', icon: 'payments', permission: 'payments:read' },
-      { label: m.ledger, route: '/ledger/entries', icon: 'account_balance', permission: 'ledger:read' },
-      { label: m.balances, route: '/ledger/balances', icon: 'balance', permission: 'ledger:read' },
+      {
+        label: m.payments,
+        route: '/payments',
+        icon: 'payments',
+        permission: 'payments:read',
+        paymentsAbacPermissions: ['payments:read'],
+      },
+      {
+        label: m.ledger,
+        route: '/ledger/entries',
+        icon: 'account_balance',
+        permission: 'ledger:read',
+        paymentsAbacPermissions: ['ledger:read'],
+      },
+      {
+        label: m.balances,
+        route: '/ledger/balances',
+        icon: 'balance',
+        permission: 'ledger:read',
+        paymentsAbacPermissions: ['ledger:read'],
+      },
     ];
   });
 

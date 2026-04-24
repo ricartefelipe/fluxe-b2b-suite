@@ -26,6 +26,7 @@ Este playbook foca **operação e prova de comportamento** depois disso.
 6. **Pedido até PAID (integração Rabbit + workers):**
    - **Manual:** `pnpm smoke:order-staging:paid` + `RABBITMQ_URL` alinhada à API/worker de orders.
    - **Saga completa:** `pnpm smoke:order-staging:saga` — exige **node-b2b-orders** e **py-payments-ledger** com workers no **mesmo** broker, gateway que autorize em staging, e flags de integração ativas — detalhes no mesmo checklist.
+   - **CI (opcional, mesmo repositório suite):** workflow *Smoke pedido staging (manual)* em GitHub Actions — modos `confirmed` / `paid` / `saga` e segredos em [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md#github-actions-manual-opcional).
 7. Confirmar no painel RabbitMQ (staging): filas sem crescimento anómalo; DLQ em zero ou tratada — ver thresholds em [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md).
 
 ---

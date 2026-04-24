@@ -7,19 +7,29 @@ export async function dismissCookieBanner(page: Page): Promise<void> {
     .catch(() => undefined);
 }
 
+/** E2E: mock em `installShopOrdersApiMocks` devolve o JWT consoante o e-mail. */
+const DEV_LOGIN_E2E: Record<
+  'Super Admin' | 'Ops User' | 'Viewer',
+  { email: string; password: string }
+> = {
+  Viewer: { email: 'viewer@e2e.local', password: 'e2e' },
+  'Ops User': { email: 'ops@e2e.local', password: 'e2e' },
+  'Super Admin': { email: 'admin@e2e.local', password: 'e2e' },
+};
+
 /**
- * Login via aba "Perfis Rápidos" (modo dev do lib-dev-login).
- * Usa JWT local se a API /v1/dev/token não estiver disponível.
+ * Login no ecrã de dev (e-mail + senha). Em CI os POST /v1/auth/login são
+ * intercetados pelos mocks E2E (sem Core em :8080).
  */
 export async function loginWithQuickProfile(
   page: Page,
   profileLabel: 'Super Admin' | 'Ops User' | 'Viewer'
 ): Promise<void> {
+  const { email, password } = DEV_LOGIN_E2E[profileLabel];
   await page.goto('/login');
   await dismissCookieBanner(page);
-  await page.getByRole('tab', { name: /Perfis Rápidos/i }).click();
-  await page.locator('button.profile-card').filter({ hasText: profileLabel }).click();
-  await page.getByRole('button', { name: /^Entrar$/i }).click();
-  // O shop redireciona para /products após sessão válida; evita falso positivo em `/` antes do guard.
+  await page.getByLabel(/Email/i).fill(email);
+  await page.getByLabel(/Senha/i).fill(password);
+  await page.getByRole('button', { name: /Acessar/i }).click();
   await page.waitForURL(/\/products/, { timeout: 30000 });
 }

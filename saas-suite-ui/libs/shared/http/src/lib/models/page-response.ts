@@ -7,13 +7,14 @@ export interface PageResponse<T> {
   pageSize: number;
 }
 
-export interface CursorResponse<T> {
+/** Resposta de listagem com paginação opaca (keyset) alinhada ao JSON da API. */
+export interface KeysetListResponse<T> {
   data: T[];
   nextCursor: string | null;
   hasMore: boolean;
 }
 
-export function cursorToPage<T>(r: CursorResponse<T>): PageResponse<T> {
+export function keysetListToPage<T>(r: KeysetListResponse<T>): PageResponse<T> {
   return { data: r.data, total: r.data.length, page: 0, pageSize: r.data.length };
 }
 

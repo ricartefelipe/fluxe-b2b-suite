@@ -76,7 +76,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.2.0] - 2026-03-14
 
 ### Fixed
-- Paginação: todos os clientes orders/inventory agora usam cursor-based (CursorResponse) alinhado ao backend
+- Paginação: todos os clientes orders/inventory agora usam keyset (KeysetListResponse) alinhado ao backend
 - Paginação: payments e ledger usam limit/offset alinhado ao backend Python
 - Campos: InventoryItem qty/reservedQty/availableQty, InventoryAdjustment qty, CreateAdjustmentRequest qty
 - Campos: AuditLog actorSub/statusCode (derivação de outcome), Policy notes (era description)

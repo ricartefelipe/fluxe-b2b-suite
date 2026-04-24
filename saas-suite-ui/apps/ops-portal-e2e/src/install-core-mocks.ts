@@ -29,7 +29,7 @@ async function fulfillJson(route: Route, body: unknown): Promise<void> {
   });
 }
 
-const cursorEmpty = { data: [] as unknown[], nextCursor: null, hasMore: false };
+const emptyKeysetList = { data: [] as unknown[], nextCursor: null, hasMore: false };
 const pageEmpty = { data: [] as unknown[], total: 0, page: 0, pageSize: 0 };
 const coreListEmpty = { data: [] as unknown[], total: 0, page: 0, pageSize: 0 };
 
@@ -69,7 +69,7 @@ export async function installCoreE2eMocks(page: Page): Promise<void> {
       await route.continue();
       return;
     }
-    await fulfillJson(route, cursorEmpty);
+    await fulfillJson(route, emptyKeysetList);
   });
 
   await page.route('**/api/orders/v1/inventory**', async (route) => {
@@ -77,7 +77,7 @@ export async function installCoreE2eMocks(page: Page): Promise<void> {
       await route.continue();
       return;
     }
-    await fulfillJson(route, cursorEmpty);
+    await fulfillJson(route, emptyKeysetList);
   });
 
   await page.route('**/api/orders/v1/orders**', async (route) => {
@@ -85,7 +85,7 @@ export async function installCoreE2eMocks(page: Page): Promise<void> {
       await route.continue();
       return;
     }
-    await fulfillJson(route, cursorEmpty);
+    await fulfillJson(route, emptyKeysetList);
   });
 
   await page.route('**/api/payments/v1/payment-intents**', async (route) => {

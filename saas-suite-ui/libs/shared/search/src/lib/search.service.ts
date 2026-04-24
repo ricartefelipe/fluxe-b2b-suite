@@ -8,7 +8,7 @@ import { CoreApiClient, Tenant, AuditLog } from '@saas-suite/data-access/core';
 import { OrdersApiClient, Order, InventoryItem } from '@saas-suite/data-access/orders';
 import { PaymentsApiClient, PaymentIntent } from '@saas-suite/data-access/payments';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
-import { CursorResponse, PageResponse, toParams } from '@saas-suite/shared/http';
+import { KeysetListResponse, PageResponse, toParams } from '@saas-suite/shared/http';
 import { Product } from '@union.solutions/models';
 
 import { SearchResult, SearchConfig } from './search.model';
@@ -126,7 +126,7 @@ export class SearchService {
     if (enabled.includes('inventory')) {
       searches.push(
         this.ordersApi.listInventory(query).pipe(
-          map((res: CursorResponse<InventoryItem>) =>
+          map((res: KeysetListResponse<InventoryItem>) =>
             res.data.slice(0, max).map(i => this.mapInventory(i, q)),
           ),
           catchError(() => of([])),

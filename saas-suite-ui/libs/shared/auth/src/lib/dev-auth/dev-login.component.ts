@@ -2,7 +2,6 @@ import { Component, inject, signal } from '@angular/core';
 import { NgTemplateOutlet } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -16,7 +15,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
   selector: 'lib-dev-login',
   standalone: true,
   imports: [
-    NgTemplateOutlet, FormsModule, RouterLink, MatButtonModule, MatCardModule, MatFormFieldModule,
+    NgTemplateOutlet, FormsModule, RouterLink, MatButtonModule, MatFormFieldModule,
     MatInputModule, MatProgressSpinnerModule, MatIconModule,
   ],
   template: `
@@ -74,7 +73,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
             <h2>Bem-vindo de volta</h2>
             <p class="subtitle">{{
               isDevMode
-                ? 'Entre com o e-mail e a senha do administrador'
+                ? i18n.messages().auth.loginSubtitleDev
                 : i18n.messages().auth.loginSubtitleProd
             }}</p>
           </div>

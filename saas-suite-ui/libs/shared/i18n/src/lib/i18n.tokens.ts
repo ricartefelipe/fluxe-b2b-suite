@@ -85,6 +85,7 @@ export interface Messages {
     passwordMinHint: string;
     requestResetError: string;
     loginSubtitleProd: string;
+    loginSubtitleDev: string;
     oidcRedirecting: string;
   };
   tenant: {

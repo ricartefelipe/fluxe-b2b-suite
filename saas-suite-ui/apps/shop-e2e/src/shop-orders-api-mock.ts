@@ -20,6 +20,61 @@ function buildMockDevAccessToken(): string {
   return `${header}.${payload}.e2e`;
 }
 
+const TENANT_E2E_DEMO = '00000000-0000-0000-0000-000000000002';
+const TENANT_E2E_PLATFORM = '00000000-0000-0000-0000-000000000001';
+
+/**
+ * Resposta a POST /v1/auth/login (login por e-mail no DevLogin), alinhada aos
+ * e-mails usados em dev-login.helper para cada “perfil” de E2E.
+ */
+function buildMockLoginAccessToken(emailRaw: string): string {
+  const email = emailRaw.trim().toLowerCase();
+  const header = Buffer.from(JSON.stringify({ alg: 'none', typ: 'JWT' })).toString('base64url');
+  const now = Math.floor(Date.now() / 1000);
+  const exp = now + 86400;
+
+  let body: Record<string, unknown>;
+  if (email.includes('viewer') || email === 'viewer@e2e.local') {
+    body = {
+      sub: 'viewer-e2e',
+      email: emailRaw,
+      tid: TENANT_E2E_DEMO,
+      roles: ['viewer'],
+      perms: [],
+      plan: 'starter',
+      region: 'us-east-1',
+      iat: now,
+      exp,
+    };
+  } else if (email.includes('ops') || email.startsWith('ops@')) {
+    body = {
+      sub: 'ops-e2e',
+      email: emailRaw,
+      tid: TENANT_E2E_PLATFORM,
+      roles: ['ops'],
+      perms: [],
+      plan: 'starter',
+      region: 'us-east-1',
+      iat: now,
+      exp,
+    };
+  } else {
+    body = {
+      sub: 'admin-e2e',
+      email: emailRaw,
+      tid: TENANT_E2E_PLATFORM,
+      roles: ['admin'],
+      perms: [],
+      plan: 'enterprise',
+      region: 'us-east-1',
+      iat: now,
+      exp,
+    };
+  }
+  const payload = Buffer.from(JSON.stringify(body)).toString('base64url');
+  return `${header}.${payload}.e2e`;
+}
+
 /** Produto mínimo para listagem/detalhe quando o serviço de orders não está a correr. */
 const MOCK_PRODUCT = {
   id: 'prod-e2e-1',
@@ -60,6 +115,32 @@ export async function installShopOrdersApiMocks(page: Page): Promise<void> {
       contentType: 'application/json',
       body: JSON.stringify({
         access_token: buildMockDevAccessToken(),
+        token_type: 'Bearer',
+        expires_in: 86400,
+      }),
+    });
+  });
+
+  await page.route(/\/v1\/auth\/login$/, async (route) => {
+    if (route.request().method() !== 'POST') {
+      await route.continue();
+      return;
+    }
+    let email = 'viewer@e2e.local';
+    try {
+      const raw = route.request().postData();
+      if (raw) {
+        const parsed = JSON.parse(raw) as { email?: string };
+        if (typeof parsed.email === 'string') email = parsed.email;
+      }
+    } catch {
+      /* use default */
+    }
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        access_token: buildMockLoginAccessToken(email),
         token_type: 'Bearer',
         expires_in: 86400,
       }),

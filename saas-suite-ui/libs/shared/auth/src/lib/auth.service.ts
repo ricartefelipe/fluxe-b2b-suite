@@ -11,6 +11,8 @@ import { OidcAuthService } from './oidc-auth.service';
 import { SKIP_AUTH, SKIP_TENANT_HEADER } from '@saas-suite/shared/util';
 
 const DEV_TOKEN_TIMEOUT_MS = 3_000;
+/** Login com e-mail/senha no Core; não usar o timeout curto de dev (cold start, rede). */
+const CREDENTIALS_LOGIN_TIMEOUT_MS = 30_000;
 
 interface DevTokenRequest {
   sub: string;
@@ -129,7 +131,7 @@ export class AuthService {
         `${baseUrl}/v1/auth/login`,
         { email, password },
         { context: ctx },
-      ).pipe(timeout(DEV_TOKEN_TIMEOUT_MS))
+      ).pipe(timeout(CREDENTIALS_LOGIN_TIMEOUT_MS)),
     );
 
     const token = resp.access_token;

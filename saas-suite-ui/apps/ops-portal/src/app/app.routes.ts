@@ -34,7 +34,7 @@ export const appRoutes: Route[] = [
         canActivate: [permissionGuard],
         data: {
           permissions: ['orders:read', 'payments:read', 'inventory:read'],
-          permissionsMode: 'all',
+          permissionsMode: 'any',
           paymentsAbacPermissions: ['payments:read'],
         },
       },

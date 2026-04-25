@@ -6,6 +6,8 @@ COPY . .
 RUN npx nx build ops-portal --configuration=production
 
 FROM nginx:1.27-alpine
+RUN mkdir -p /etc/nginx/snippets \
+  && printf '# placeholder (gerado no entrypoint)\n' > /etc/nginx/snippets/api-proxy.conf
 COPY apps/ops-portal/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist/apps/ops-portal/browser /usr/share/nginx/html
 COPY apps/ops-portal/config.template.json /usr/share/nginx/html/assets/config.template.json

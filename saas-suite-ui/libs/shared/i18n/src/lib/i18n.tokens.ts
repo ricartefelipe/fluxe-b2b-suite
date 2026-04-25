@@ -634,6 +634,9 @@ export interface Messages {
     aiActionError: string;
     aiNetworkError: string;
     aiForbiddenError: string;
+    aiUnauthorizedError: string;
+    aiNotFoundError: string;
+    aiServerErrorDetail: string;
     aiOpenAiKeyMissing: string;
     aiDismissError: string;
     actor: string;

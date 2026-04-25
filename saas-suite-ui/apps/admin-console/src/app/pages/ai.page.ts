@@ -373,15 +373,23 @@ export class AiPage implements OnInit {
   }
 
   private formatActionHttpError(err: HttpErrorResponse): string {
-    if (err.status === 0) return this.i18n.messages().admin.aiNetworkError;
-    if (err.status === 403) return this.i18n.messages().admin.aiForbiddenError;
-    return this.i18n.messages().admin.aiActionError;
+    const a = this.i18n.messages().admin;
+    if (err.status === 0) return a.aiNetworkError;
+    if (err.status === 401) return a.aiUnauthorizedError;
+    if (err.status === 403) return a.aiForbiddenError;
+    if (err.status === 404) return a.aiNotFoundError;
+    if (err.status >= 500) return a.aiServerErrorDetail;
+    return a.aiActionError;
   }
 
   private formatChatHttpError(err: HttpErrorResponse): string {
-    if (err.status === 0) return this.i18n.messages().admin.aiNetworkError;
-    if (err.status === 403) return this.i18n.messages().admin.aiForbiddenError;
-    return this.i18n.messages().admin.aiError;
+    const a = this.i18n.messages().admin;
+    if (err.status === 0) return a.aiNetworkError;
+    if (err.status === 401) return a.aiUnauthorizedError;
+    if (err.status === 403) return a.aiForbiddenError;
+    if (err.status === 404) return a.aiNotFoundError;
+    if (err.status >= 500) return a.aiServerErrorDetail;
+    return a.aiError;
   }
 
   sanitize(html: string): string {

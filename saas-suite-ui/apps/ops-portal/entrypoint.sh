@@ -1,6 +1,8 @@
 #!/bin/sh
 # Gera /assets/config.json e fragmento nginx: quando CORE/ORDERS/PAYMENTS forem https://,
 # o config público usa /api/... (same-origin) e o nginx reencaminha (sem CORS; sem HTML da SPA em /api).
+# Nota: alterar este arquivo dispara de novo o CI (paths saas-suite-ui) e, se o projeto estiver
+# ligado, redeploy do front em staging a partir de develop.
 
 set -f
 CONFIG_FILE=/usr/share/nginx/html/assets/config.json

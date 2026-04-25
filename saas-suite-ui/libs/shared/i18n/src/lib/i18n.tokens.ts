@@ -636,6 +636,8 @@ export interface Messages {
     aiForbiddenError: string;
     aiUnauthorizedError: string;
     aiNotFoundError: string;
+    aiRateLimitError: string;
+    aiGatewayOrTimeoutError: string;
     aiServerErrorDetail: string;
     aiOpenAiKeyMissing: string;
     aiDismissError: string;

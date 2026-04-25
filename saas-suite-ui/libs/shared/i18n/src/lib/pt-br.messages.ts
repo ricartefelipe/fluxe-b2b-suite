@@ -678,6 +678,10 @@ export const PT_BR_MESSAGES: Messages = {
     aiUnauthorizedError: 'Sessão inválida ou expirada. Volte a iniciar sessão na consola.',
     aiNotFoundError:
       'Endpoint da API não encontrado. Em produção, confirme se o front aponta para o Core (proxy /api ou URL absoluta).',
+    aiRateLimitError:
+      'Muitas requisições (limite de taxa). Aguarde um minuto e tente de novo.',
+    aiGatewayOrTimeoutError:
+      'Core ou o proxy demorou demais a responder (502/503/504) ou o serviço está indisponível. Tente de novo em instantes.',
     aiServerErrorDetail: 'O Core devolveu erro. Tente de novo ou verifique o estado do serviço.',
     aiOpenAiKeyMissing:
       'No Core, OPENAI_API_KEY não está configurada — o chat usa só o motor de regras.',

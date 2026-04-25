@@ -72,6 +72,9 @@ importers:
       express:
         specifier: ^4.21.2
         version: 4.22.1
+      http-proxy-middleware:
+        specifier: ^3.0.5
+        version: 3.0.5
       material-icons:
         specifier: ^1.13.14
         version: 1.13.14

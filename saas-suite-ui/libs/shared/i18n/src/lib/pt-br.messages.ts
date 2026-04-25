@@ -675,6 +675,10 @@ export const PT_BR_MESSAGES: Messages = {
       'Não foi possível concluir esta ação. Verifica permissões, rede e se o Core está disponível.',
     aiNetworkError: 'Sem ligação ao Core. Verifica rede, VPN e a URL da API.',
     aiForbiddenError: 'Sem permissão para esta função (ex.: analytics:read).',
+    aiUnauthorizedError: 'Sessão inválida ou expirada. Volte a iniciar sessão na consola.',
+    aiNotFoundError:
+      'Endpoint da API não encontrado. Em produção, confirme se o front aponta para o Core (proxy /api ou URL absoluta).',
+    aiServerErrorDetail: 'O Core devolveu erro. Tente de novo ou verifique o estado do serviço.',
     aiOpenAiKeyMissing:
       'No Core, OPENAI_API_KEY não está configurada — o chat usa só o motor de regras.',
     aiDismissError: 'Fechar',

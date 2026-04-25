@@ -675,6 +675,10 @@ export const EN_US_MESSAGES: Messages = {
       'Could not complete this action. Check permissions, network, and Core availability.',
     aiNetworkError: 'Cannot reach Core. Check network, VPN, and API URL.',
     aiForbiddenError: 'No permission for this feature (e.g. analytics:read).',
+    aiUnauthorizedError: 'Session invalid or expired. Sign in to the console again.',
+    aiNotFoundError:
+      'API path not found. In production, ensure the app targets Core ( /api proxy or full URL).',
+    aiServerErrorDetail: 'Core returned an error. Retry or check service health.',
     aiOpenAiKeyMissing:
       'Core has no OPENAI_API_KEY — chat uses the rule engine only.',
     aiDismissError: 'Dismiss',

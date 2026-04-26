@@ -26,9 +26,20 @@ import { I18nService } from '@saas-suite/shared/i18n';
           <mat-progress-bar
             mode="determinate"
             [value]="usersPercent(u)"
-            color="primary"
+            [color]="usageBarColor(u)"
             class="usage-bar"
           />
+          @if (usageSeverity(u) !== 'ok') {
+            <div
+              class="usage-governance-message"
+              [class.usage-warning]="usageSeverity(u) === 'warn'"
+              [class.usage-block]="usageSeverity(u) === 'block'"
+              [attr.role]="usageSeverity(u) === 'block' ? 'alert' : 'status'"
+            >
+              <mat-icon>{{ usageSeverity(u) === 'block' ? 'block' : 'warning' }}</mat-icon>
+              <span>{{ usageMessage(u) }}</span>
+            </div>
+          }
         </mat-card-content>
       </mat-card>
     }
@@ -69,6 +80,25 @@ import { I18nService } from '@saas-suite/shared/i18n';
       height: 8px;
       border-radius: 4px;
     }
+    .usage-governance-message {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .usage-governance-message mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+    .usage-warning {
+      color: #e65100;
+    }
+    .usage-block {
+      color: #c62828;
+    }
   `],
 })
 export class UsageWidgetComponent {
@@ -78,9 +108,31 @@ export class UsageWidgetComponent {
 
   title = () => this.i18n.messages()?.usage?.title ?? 'Seu uso este mês';
   usersLabel = () => this.i18n.messages()?.usage?.users ?? 'Usuários';
+  nearLimitMessage = () => this.i18n.messages()?.usage?.nearLimit ?? 'Perto do limite de usuários do plano.';
+  limitReachedMessage = () => this.i18n.messages()?.usage?.limitReached ?? 'Limite atingido para usuários do plano.';
 
   usersPercent(u: UsageSummary): number {
     if (u.usersLimit <= 0) return 0;
     return Math.min(100, Math.round((u.usersUsed / u.usersLimit) * 100));
+  }
+
+  usageSeverity(u: UsageSummary): 'ok' | 'warn' | 'block' {
+    if (u.usersLimit <= 0) return 'ok';
+    if (u.usersUsed >= u.usersLimit) return 'block';
+    return this.usersPercent(u) >= 90 ? 'warn' : 'ok';
+  }
+
+  usageBarColor(u: UsageSummary): 'primary' | 'accent' | 'warn' {
+    const severity = this.usageSeverity(u);
+    if (severity === 'block') return 'warn';
+    if (severity === 'warn') return 'accent';
+    return 'primary';
+  }
+
+  usageMessage(u: UsageSummary): string {
+    const severity = this.usageSeverity(u);
+    if (severity === 'block') return this.limitReachedMessage();
+    if (severity === 'warn') return this.nearLimitMessage();
+    return '';
   }
 }

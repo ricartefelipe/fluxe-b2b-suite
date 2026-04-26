@@ -647,6 +647,8 @@ export const PT_BR_MESSAGES: Messages = {
   usage: {
     title: 'Seu uso este mês',
     users: 'Usuários',
+    nearLimit: 'Perto do limite de usuários do plano.',
+    limitReached: 'Limite atingido para usuários do plano.',
   },
   status: {
     title: 'Status dos serviços',

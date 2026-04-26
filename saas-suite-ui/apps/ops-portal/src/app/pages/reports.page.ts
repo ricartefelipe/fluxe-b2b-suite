@@ -370,7 +370,7 @@ export class ReportsPage implements OnInit {
     await this.payments.loadAllPayments({
       status: this.paymentStatus,
       customer_ref: this.blankToUndefined(this.paymentCustomer),
-      limit: 500,
+      pageSize: 500,
     });
   }
 

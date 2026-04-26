@@ -253,6 +253,13 @@ export interface Messages {
     availableQty: string;
     loadError: string;
     loadErrorAction: string;
+    executiveSummary: string;
+    averageOrderValue: string;
+    revenueTrend: string;
+    paymentFailureRate: string;
+    failedPayments: string;
+    revenueAtRisk: string;
+    vsPreviousPeriod: string;
   };
   onboarding: {
     title: string;

@@ -35,4 +35,33 @@ describe('UsageWidgetComponent', () => {
     const card = fixture.nativeElement.querySelector('mat-card');
     expect(card).toBeFalsy();
   });
+
+  it('shows a warning when user usage is near the plan limit', () => {
+    component.usage = {
+      usersUsed: 9,
+      usersLimit: 10,
+      planSlug: 'starter',
+      planDisplayName: 'Starter',
+    };
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+
+    expect(component.usageSeverity(component.usage)).toBe('warn');
+    expect(el.textContent).toContain('Perto do limite');
+  });
+
+  it('shows a blocking message when user usage reaches the plan limit', () => {
+    component.usage = {
+      usersUsed: 10,
+      usersLimit: 10,
+      planSlug: 'starter',
+      planDisplayName: 'Starter',
+    };
+    fixture.detectChanges();
+    const el = fixture.nativeElement as HTMLElement;
+
+    expect(component.usageSeverity(component.usage)).toBe('block');
+    expect(el.textContent).toContain('Limite atingido');
+    expect(el.querySelector('[role="alert"]')).toBeTruthy();
+  });
 });

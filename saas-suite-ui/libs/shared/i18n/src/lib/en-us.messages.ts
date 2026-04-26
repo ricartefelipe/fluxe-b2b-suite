@@ -257,6 +257,13 @@ export const EN_US_MESSAGES: Messages = {
     loadError:
       'Could not load data. Check session, token permissions and API URLs in the environment, or try again.',
     loadErrorAction: 'Try again',
+    executiveSummary: 'Executive summary',
+    averageOrderValue: 'Average order value',
+    revenueTrend: 'Revenue trend',
+    paymentFailureRate: 'Payment failure rate',
+    failedPayments: 'failed payments',
+    revenueAtRisk: 'Revenue at risk',
+    vsPreviousPeriod: 'vs. previous period',
   },
   onboarding: {
     title: 'Create New Tenant',

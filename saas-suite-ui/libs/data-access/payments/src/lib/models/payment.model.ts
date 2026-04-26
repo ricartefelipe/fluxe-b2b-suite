@@ -1,4 +1,14 @@
-export type PaymentStatus = 'PENDING' | 'AUTHORIZED' | 'CONFIRMED' | 'SETTLED' | 'FAILED' | 'CANCELLED';
+export type PaymentStatus =
+  | 'CREATED'
+  | 'PENDING'
+  | 'AUTHORIZED'
+  | 'CONFIRMED'
+  | 'SETTLED'
+  | 'FAILED'
+  | 'CANCELLED'
+  | 'VOIDED'
+  | 'REFUNDED'
+  | 'PARTIALLY_REFUNDED';
 
 export interface PaymentIntent {
   id: string;

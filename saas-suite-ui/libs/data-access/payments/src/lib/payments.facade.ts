@@ -27,6 +27,28 @@ export class PaymentsFacade {
     finally { this._loading.set(false); }
   }
 
+  async loadAllPayments(params?: PaymentListParams): Promise<PaymentIntent[]> {
+    this._loading.set(true);
+    try {
+      const pageSize = params?.limit ?? 500;
+      let offset = params?.offset ?? 0;
+      let total = Number.POSITIVE_INFINITY;
+      const payments: PaymentIntent[] = [];
+      while (payments.length < total) {
+        const r = await firstValueFrom(this.api.listPayments({ ...params, limit: pageSize, offset }));
+        payments.push(...r.data);
+        total = r.total;
+        if (r.data.length === 0) break;
+        offset += r.data.length;
+      }
+      this._payments.set(payments); this._total.set(total === Number.POSITIVE_INFINITY ? payments.length : total);
+      return payments;
+    } catch (e) {
+      this.logger.error('loadAllPayments failed', e);
+      return [];
+    } finally { this._loading.set(false); }
+  }
+
   async createPayment(req: CreatePaymentIntentRequest): Promise<PaymentIntent | null> {
     const key = generateIdempotencyKey('pay-create');
     try {

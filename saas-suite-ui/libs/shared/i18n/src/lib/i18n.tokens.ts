@@ -202,6 +202,27 @@ export interface Messages {
     account: string;
     loadFailed: string;
   };
+  reports: {
+    title: string;
+    subtitle: string;
+    ordersTab: string;
+    paymentsTab: string;
+    ledgerTab: string;
+    exportCsv: string;
+    records: string;
+    totalAmount: string;
+    netAmount: string;
+    filters: string;
+    period: string;
+    customer: string;
+    currency: string;
+    loadData: string;
+    exported: string;
+    noDataToExport: string;
+    ordersHint: string;
+    paymentsHint: string;
+    ledgerHint: string;
+  };
   checkout: {
     cart: string;
     shipping: string;
@@ -499,6 +520,7 @@ export interface Messages {
     payments: string;
     ledger: string;
     balances: string;
+    reports: string;
   };
   adminNav: {
     appTitle: string;

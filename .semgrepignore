@@ -1,4 +1,4 @@
-# Escopo do job Semgrep (OWASP Top Ten via codeql.yml): código de aplicação em saas-suite-ui e scripts.
+# Escopo do job Semgrep (OWASP Top Ten via semgrep.yml): código de aplicação em saas-suite-ui e scripts.
 # O que está abaixo é revisto por outros meios (Terraform plan/tfsec, review de PR em GHA, hardening de nginx em deploy).
 
 # Infrastructure as code (regras AWS/Terraform do pack geram bloqueios que não são bugs de app)

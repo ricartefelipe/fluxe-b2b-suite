@@ -678,6 +678,9 @@ export const EN_US_MESSAGES: Messages = {
     aiUnauthorizedError: 'Session invalid or expired. Sign in to the console again.',
     aiNotFoundError:
       'API path not found. In production, ensure the app targets Core ( /api proxy or full URL).',
+    aiRateLimitError: 'Too many requests. Wait a minute and try again.',
+    aiGatewayOrTimeoutError:
+      'Core or the proxy took too long (502/503/504) or the service is down. Try again shortly.',
     aiServerErrorDetail: 'Core returned an error. Retry or check service health.',
     aiOpenAiKeyMissing:
       'Core has no OPENAI_API_KEY — chat uses the rule engine only.',

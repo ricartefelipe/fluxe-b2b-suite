@@ -11,7 +11,7 @@ import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { MatDialog } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
-import { PlanDefinition, Subscription } from '@saas-suite/data-access/core';
+import { BillingInvoice, PlanDefinition, Subscription } from '@saas-suite/data-access/core';
 import { vi } from 'vitest';
 
 const plan: PlanDefinition = {
@@ -33,6 +33,18 @@ const subscription: Subscription = {
   currentPeriodStart: '2026-04-01T00:00:00Z',
   currentPeriodEnd: '2026-05-01T00:00:00Z',
   createdAt: '2026-04-01T00:00:00Z',
+};
+
+const invoice: BillingInvoice = {
+  id: 'in-1',
+  status: 'paid',
+  currency: 'BRL',
+  amountDueCents: 12345,
+  createdAt: '2026-04-02T00:00:00Z',
+  periodStart: '2026-04-01T00:00:00Z',
+  periodEnd: '2026-05-01T00:00:00Z',
+  hostedInvoiceUrl: 'https://billing.example/in-1',
+  invoicePdfUrl: 'https://billing.example/in-1.pdf',
 };
 
 describe('BillingPage', () => {
@@ -117,10 +129,58 @@ describe('BillingPage', () => {
       { message: 'users unavailable' },
       { status: 503, statusText: 'Service Unavailable' },
     );
+    await new Promise(resolve => setTimeout(resolve, 0));
+    http.expectOne('https://api.test/v1/billing/invoices').flush([]);
     await fixture.whenStable();
     await new Promise(resolve => setTimeout(resolve, 0));
 
     expect(fixture.componentInstance.usage()).toBeNull();
+    http.verify();
+  });
+
+  it('shows read-only invoices for the current subscription', async () => {
+    const fixture = TestBed.createComponent(BillingPage);
+    const http = TestBed.inject(HttpTestingController);
+
+    fixture.detectChanges();
+    http.expectOne('https://api.test/v1/billing/plans').flush([plan]);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    http.expectOne('https://api.test/v1/subscriptions/current').flush(subscription);
+    http.expectOne('https://api.test/v1/users').flush([]);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    http.expectOne('https://api.test/v1/billing/invoices').flush([invoice]);
+    await fixture.whenStable();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Faturas');
+    expect(fixture.nativeElement.textContent).toContain('Paga');
+    expect(fixture.nativeElement.textContent).toContain('R$ 123,45');
+    expect(fixture.nativeElement.querySelector('a[href="https://billing.example/in-1.pdf"]')).toBeTruthy();
+    http.verify();
+  });
+
+  it('keeps billing data visible when invoices cannot be loaded', async () => {
+    const fixture = TestBed.createComponent(BillingPage);
+    const http = TestBed.inject(HttpTestingController);
+
+    fixture.detectChanges();
+    http.expectOne('https://api.test/v1/billing/plans').flush([plan]);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    http.expectOne('https://api.test/v1/subscriptions/current').flush(subscription);
+    http.expectOne('https://api.test/v1/users').flush([]);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    http.expectOne('https://api.test/v1/billing/invoices').flush(
+      { message: 'stripe unavailable' },
+      { status: 503, statusText: 'Service Unavailable' },
+    );
+    await fixture.whenStable();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Plano Atual');
+    expect(fixture.nativeElement.textContent).toContain('Não foi possível carregar as faturas agora.');
+    expect(fixture.nativeElement.textContent).not.toContain('Não foi possível carregar os dados de faturamento.');
     http.verify();
   });
 

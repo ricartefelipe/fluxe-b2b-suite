@@ -1,5 +1,7 @@
 import type { AuthSession } from './models/auth-session.model';
 
+const PLATFORM_TENANT_ID = '00000000-0000-0000-0000-000000000001';
+
 /**
  * Espelha as políticas ABAC default do py-payments-ledger (`seed._upsert_policies`).
  * Se alterares políticas no serviço de pagamentos, atualiza este mapa ou extrai contrato partilhado.
@@ -77,7 +79,7 @@ function regionAllowed(regionNorm: string, allowed: string[]): boolean {
 
 function isPaymentsAbacBypassSession(session: AuthSession | null): boolean {
   if (!session) return false;
-  return session.tenantId === '*' && session.roles.includes('admin');
+  return (session.tenantId === '*' || session.tenantId === PLATFORM_TENANT_ID) && session.roles.includes('admin');
 }
 
 export function paymentsAbacAllows(

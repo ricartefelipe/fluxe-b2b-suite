@@ -46,4 +46,13 @@ describe('sessionOrdersAbacAllows bypass', () => {
     const s = baseSession({ tenantId: '*', roles: ['admin'], plan: 'starter' });
     expect(sessionOrdersAbacAllows(s, 'orders:write')).toBe(true);
   });
+
+  it('bypasses platform tenant admin emitted by Core', () => {
+    const s = baseSession({
+      tenantId: '00000000-0000-0000-0000-000000000001',
+      roles: ['admin'],
+      plan: 'starter',
+    });
+    expect(sessionOrdersAbacAllows(s, 'orders:write')).toBe(true);
+  });
 });

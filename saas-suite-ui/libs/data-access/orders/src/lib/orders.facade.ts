@@ -29,6 +29,24 @@ export class OrdersFacade {
     finally { this._loading.set(false); }
   }
 
+  async loadAllOrders(params?: OrderListParams): Promise<Order[]> {
+    this._loading.set(true);
+    try {
+      const orders: Order[] = [];
+      let cursor = params?.cursor;
+      do {
+        const r = await firstValueFrom(this.api.listOrders({ ...params, cursor, limit: params?.limit ?? 500 }));
+        orders.push(...r.data);
+        cursor = r.nextCursor ?? undefined;
+      } while (cursor);
+      this._orders.set(orders); this._total.set(orders.length);
+      return orders;
+    } catch (e) {
+      this.logger.error('loadAllOrders failed', e);
+      return [];
+    } finally { this._loading.set(false); }
+  }
+
   async loadOrder(id: string): Promise<void> {
     this._loading.set(true);
     try {

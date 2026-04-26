@@ -22,3 +22,15 @@ export interface Subscription {
   cancelAtPeriodEnd?: boolean;
   createdAt: string;
 }
+
+export interface BillingInvoice {
+  id: string;
+  status: string;
+  currency: string;
+  amountDueCents: number;
+  createdAt: string;
+  periodStart?: string;
+  periodEnd?: string;
+  hostedInvoiceUrl?: string;
+  invoicePdfUrl?: string;
+}

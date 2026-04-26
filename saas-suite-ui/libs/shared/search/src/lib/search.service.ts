@@ -102,7 +102,7 @@ export class SearchService {
 
     if (enabled.includes('payment')) {
       searches.push(
-        this.paymentsApi.listPayments({ limit: max * 3 }).pipe(
+        this.paymentsApi.listPayments({ pageSize: max * 3 }).pipe(
           map(res =>
             res.data
               .filter(p => this.matchesPayment(p, q))

@@ -257,6 +257,13 @@ export const PT_BR_MESSAGES: Messages = {
     loadError:
       'Não foi possível carregar os dados. Verifique sessão, permissões no token e URLs das APIs no ambiente, ou tente novamente.',
     loadErrorAction: 'Tentar novamente',
+    executiveSummary: 'Resumo executivo',
+    averageOrderValue: 'Ticket médio',
+    revenueTrend: 'Tendência de receita',
+    paymentFailureRate: 'Falha de pagamentos',
+    failedPayments: 'pagamentos falhos',
+    revenueAtRisk: 'Receita em risco',
+    vsPreviousPeriod: 'vs. período anterior',
   },
   onboarding: {
     title: 'Criar Novo Tenant',

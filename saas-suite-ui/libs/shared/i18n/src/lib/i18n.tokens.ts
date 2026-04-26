@@ -607,6 +607,8 @@ export interface Messages {
   usage: {
     title: string;
     users: string;
+    nearLimit: string;
+    limitReached: string;
   };
   status: {
     title: string;

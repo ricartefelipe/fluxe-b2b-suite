@@ -46,11 +46,12 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 - Secrets no GitHub (por repositório): `CORE_SMOKE_URL`, `ORDERS_SMOKE_URL`, `PAYMENTS_SMOKE_URL` — URL base do serviço em Railway/staging (sem barra final). Se o secret estiver vazio, o job termina com sucesso (skip).
 - Local (workspace com os quatro repos): `pnpm smoke:staging` na raiz do `fluxe-b2b-suite` (exportar as mesmas variáveis antes, se necessário).
 - Fluxo mínimo de **pedido** (token → criar → RESERVED → CONFIRMED) em staging: [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md); comando `pnpm smoke:order-staging` com `ORDERS_SMOKE_URL` definido. Opcional até **PAID**: (1) `pnpm smoke:order-staging:paid` com `RABBITMQ_URL` — publica `payment.settled` manualmente (mesmo broker da API/worker); ou (2) `pnpm smoke:order-staging:saga` — poll até PAID com ledger + workers no mesmo broker (sem publicação manual; ver checklist). O mesmo fluxo pode ser disparado de forma **opcional e manual** no GitHub: workflow `smoke-order-staging.yml` (`workflow_dispatch` — modos `confirmed` / `paid` / `saga`; ver checklist para secrets `SMOKE_RABBITMQ_URL`, etc.).
+- Health/ready dos backends em staging também pode ser disparado manualmente no GitHub: workflow `smoke-staging-endpoints.yml` (`workflow_dispatch`) ou localmente com `./scripts/staging-smoke-endpoints.sh`.
 - Thresholds sugeridos para alertas: [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md).
 
 **Qualidade estática (Sonar-like):**
 
-- Workflow `codeql.yml` (job Semgrep) obrigatório em PR/push para `develop` e `master`
+- Workflow `semgrep.yml` obrigatório em PR/push para `develop` e `master`
 - Política unificada em [POLITICA-QUALIDADE-ESTATICA.md](POLITICA-QUALIDADE-ESTATICA.md); decisão formal em [ANALISE-ESTATICA.md](ANALISE-ESTATICA.md)
 
 **Governação de release (P2):**
@@ -127,7 +128,10 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 | deploy-frontend.yml| push **master** (paths `saas-suite-ui/**`) | Build + `config.json` + **Cloudflare Pages** (produção) |
 | deploy-prod.yml    | push master (paths)   | Deploy VPS via SSH (docker-compose.prod)       |
 | contracts-drift.yml| PR/push develop/master | Valida drift de contratos entre core/orders/payments |
-| codeql.yml         | PR/push develop/master | Análise estática com Semgrep (OWASP Top Ten) |
+| semgrep.yml        | PR/push develop/master | Análise estática com Semgrep (OWASP Top Ten) |
+| smoke-staging-endpoints.yml | manual (`workflow_dispatch`) | Smoke HTTP health/ready dos backends em staging |
+
+Observação: workflows dentro de `saas-suite-ui/.github/workflows/` não são executados pelo GitHub neste repositório; a fonte de verdade da esteira fica em `.github/workflows/` na raiz.
 
 **Railway:** 3 serviços (shop, ops-portal, admin-console) conectados ao repo.  
 Cada um com branch configurada no dashboard:
@@ -143,7 +147,7 @@ Cada um com branch configurada no dashboard:
 | ci.yml       | push develop/master| Build + Spotless + OpenAPI    |
 | build-push.yml| push develop/master| Test → build image → push GHCR|
 | post-merge-smoke.yml | push develop | Smoke pós-merge padronizado |
-| codeql.yml | PR/push develop/master | Análise estática com Semgrep |
+| semgrep.yml | PR/push develop/master | Análise estática com Semgrep |
 
 **Railway:** 1 serviço. Branch no dashboard:
 - Staging: `develop`
@@ -161,7 +165,7 @@ Cada um com branch configurada no dashboard:
 | ci.yml       | push develop/master| Lint, test, build, Trivy      |
 | build-push.yml| push develop/master| Build api+worker → push GHCR  |
 | post-merge-smoke.yml | push develop | Smoke pós-merge padronizado |
-| codeql.yml | PR/push develop/master | Análise estática com Semgrep |
+| semgrep.yml | PR/push develop/master | Análise estática com Semgrep |
 
 **Railway:** 2 serviços (api, worker). Branch no dashboard conforme ambiente.
 
@@ -177,7 +181,7 @@ Cada um com branch configurada no dashboard:
 | ci.yml       | push develop/master| Lint, test, build, Trivy      |
 | build-push.yml| push develop/master| Build api+worker → push GHCR  |
 | post-merge-smoke.yml | push develop | Smoke pós-merge padronizado |
-| codeql.yml | PR/push develop/master | Análise estática com Semgrep |
+| semgrep.yml | PR/push develop/master | Análise estática com Semgrep |
 
 **Railway:** 2 serviços (api, worker). Branch no dashboard conforme ambiente.
 

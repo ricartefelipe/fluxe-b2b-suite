@@ -1,12 +1,39 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { BillingPage } from './billing.page';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { MESSAGES } from '@saas-suite/shared/i18n';
+import { I18nService, MESSAGES } from '@saas-suite/shared/i18n';
 import { PT_BR_MESSAGES } from '@saas-suite/shared/i18n';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
+import { MatDialog } from '@angular/material/dialog';
+import { of } from 'rxjs';
+import { TenantContextStore } from '@saas-suite/domains/tenancy';
+import { PlanDefinition, Subscription } from '@saas-suite/data-access/core';
+import { vi } from 'vitest';
+
+const plan: PlanDefinition = {
+  id: 'plan-pro',
+  slug: 'pro',
+  displayName: 'Pro',
+  monthlyPriceCents: 1000,
+  yearlyPriceCents: 10000,
+  maxUsers: 10,
+  maxProjects: 5,
+  storageGb: 50,
+};
+
+const subscription: Subscription = {
+  id: 'sub-1',
+  tenantId: 'tenant-1',
+  planSlug: 'pro',
+  status: 'ACTIVE',
+  currentPeriodStart: '2026-04-01T00:00:00Z',
+  currentPeriodEnd: '2026-05-01T00:00:00Z',
+  createdAt: '2026-04-01T00:00:00Z',
+};
 
 describe('BillingPage', () => {
   beforeEach(async () => {
@@ -22,6 +49,14 @@ describe('BillingPage', () => {
           provide: RuntimeConfigService,
           useValue: { get: (k: string) => (k === 'coreApiBaseUrl' ? 'https://api.test' : '') },
         },
+        {
+          provide: TenantContextStore,
+          useValue: { activeTenantId: () => null },
+        },
+        {
+          provide: MatDialog,
+          useValue: { open: () => ({ afterClosed: () => of(true) }) },
+        },
       ],
     }).compileComponents();
   });
@@ -29,5 +64,92 @@ describe('BillingPage', () => {
   it('should create', () => {
     const fixture = TestBed.createComponent(BillingPage);
     expect(fixture.componentInstance).toBeTruthy();
+  });
+
+  it('shows an actionable error when billing data cannot be loaded', async () => {
+    const fixture = TestBed.createComponent(BillingPage);
+    const http = TestBed.inject(HttpTestingController);
+
+    fixture.detectChanges();
+    http.expectOne('https://api.test/v1/billing/plans').flush({ message: 'down' }, { status: 503, statusText: 'Service Unavailable' });
+    await fixture.whenStable();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Não foi possível carregar os dados de faturamento.');
+    expect(fixture.nativeElement.textContent).not.toContain(PT_BR_MESSAGES.billing.noSubscription);
+    http.verify();
+  });
+
+  it('does not treat subscription load failures as no subscription', async () => {
+    const fixture = TestBed.createComponent(BillingPage);
+    const http = TestBed.inject(HttpTestingController);
+
+    fixture.detectChanges();
+    http.expectOne('https://api.test/v1/billing/plans').flush([plan]);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    http.expectOne('https://api.test/v1/subscriptions/current').flush(
+      { message: 'upstream unavailable' },
+      { status: 500, statusText: 'Internal Server Error' },
+    );
+    http.expectOne('https://api.test/v1/users').flush([]);
+    await fixture.whenStable();
+    await new Promise(resolve => setTimeout(resolve, 0));
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Não foi possível carregar os dados de faturamento.');
+    expect(fixture.nativeElement.textContent).not.toContain(PT_BR_MESSAGES.billing.noSubscription);
+
+    await fixture.componentInstance.selectPlan({ ...plan, slug: 'enterprise' });
+    http.expectNone('https://api.test/v1/subscriptions/trial');
+    http.verify();
+  });
+
+  it('does not show zero usage when users cannot be loaded', async () => {
+    const fixture = TestBed.createComponent(BillingPage);
+    const http = TestBed.inject(HttpTestingController);
+
+    fixture.detectChanges();
+    http.expectOne('https://api.test/v1/billing/plans').flush([plan]);
+    await new Promise(resolve => setTimeout(resolve, 0));
+    http.expectOne('https://api.test/v1/subscriptions/current').flush(subscription);
+    http.expectOne('https://api.test/v1/users').flush(
+      { message: 'users unavailable' },
+      { status: 503, statusText: 'Service Unavailable' },
+    );
+    await fixture.whenStable();
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect(fixture.componentInstance.usage()).toBeNull();
+    http.verify();
+  });
+
+  it('formats plan prices using the active locale', () => {
+    const fixture = TestBed.createComponent(BillingPage);
+    const i18n = TestBed.inject(I18nService);
+    i18n.setLocale('en-US');
+
+    expect(fixture.componentInstance.formatPrice(1000)).toBe('R$10.00');
+  });
+
+  it('opens the billing portal instead of starting a new trial when changing an existing subscription', async () => {
+    let dialogMessage = '';
+    TestBed.inject(I18nService).setLocale('pt-BR');
+    const fixture = TestBed.createComponent(BillingPage);
+    const http = TestBed.inject(HttpTestingController);
+    (fixture.componentInstance as unknown as { dialog: { open: () => { afterClosed: () => ReturnType<typeof of<boolean>> } } }).dialog = {
+      open: (_component: unknown, config: { data?: { message?: string } }) => {
+        dialogMessage = config.data?.message ?? '';
+        return { afterClosed: () => of(true) };
+      },
+    };
+    fixture.componentInstance.subscription.set(subscription);
+
+    await fixture.componentInstance.selectPlan({ ...plan, slug: 'enterprise' });
+
+    expect(dialogMessage).toBe('Abriremos o portal de faturamento para gerenciar a alteração do plano com segurança.');
+    http.expectOne('https://api.test/v1/billing/portal-session').flush({ url: '#billing-portal' });
+    http.expectNone('https://api.test/v1/subscriptions/trial');
+    http.verify();
   });
 });

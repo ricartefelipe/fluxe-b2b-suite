@@ -379,6 +379,14 @@ export async function installCoreE2eMocks(page: Page): Promise<void> {
     await fulfillJson(route, mockBillingPlans);
   });
 
+  await page.route('**/api/core/v1/billing/invoices**', async (route) => {
+    if (route.request().method() !== 'GET') {
+      await route.continue();
+      return;
+    }
+    await fulfillJson(route, []);
+  });
+
   /** Utilizadores: lista, convite, edição, reenvio, remoção. */
   await page.route('**/api/core/v1/users**', async (route) => {
     const url = new URL(route.request().url());

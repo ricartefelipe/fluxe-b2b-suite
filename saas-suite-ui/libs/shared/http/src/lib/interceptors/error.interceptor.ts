@@ -9,6 +9,17 @@ import { LoggerService } from '@saas-suite/shared/telemetry';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { ProblemDetails, isProblemDetails } from '../models/problem-details.model';
 
+function shortProblemDetail(problem: ProblemDetails | null, max = 120): string {
+  const d = problem?.detail?.trim();
+  if (!d) {
+    return '';
+  }
+  if (d.length <= max) {
+    return d;
+  }
+  return `${d.slice(0, max)}…`;
+}
+
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const snackBar = inject(MatSnackBar);
@@ -65,7 +76,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
           break;
         default:
           if (err.status >= 500) {
-            snackBar.open(`${m.serverError} [${correlationId}]`, 'OK', { duration: 8000 });
+            const d = shortProblemDetail(problem);
+            const extra = d ? ` — ${d}` : '';
+            snackBar.open(`${m.serverError}${extra} [${correlationId}]`, 'OK', { duration: 10_000 });
           }
       }
 

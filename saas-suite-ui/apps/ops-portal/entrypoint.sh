@@ -1,6 +1,8 @@
 #!/bin/sh
 # Gera /assets/config.json e fragmento nginx: quando CORE/ORDERS/PAYMENTS forem https://,
 # o config público usa /api/... (same-origin) e o nginx reencaminha (sem CORS; sem HTML da SPA em /api).
+# Nota: alterar este arquivo dispara de novo o CI (paths saas-suite-ui) e, se o projeto estiver
+# ligado, redeploy do front em staging a partir de develop.
 
 set -f
 CONFIG_FILE=/usr/share/nginx/html/assets/config.json
@@ -26,6 +28,10 @@ append_proxy_location() {
     echo "  proxy_ssl_server_name on;"
     echo "  proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;"
     echo "  proxy_set_header X-Forwarded-Proto \$scheme;"
+    echo "  # LLM (OpenAI) e cold start: default 60s derrubava 502/timeout no Nginx"
+    echo "  proxy_connect_timeout 75s;"
+    echo "  proxy_read_timeout 300s;"
+    echo "  proxy_send_timeout 300s;"
     echo "  proxy_pass ${_upn}/;"
     echo "}"
   } >> "$SNIP"

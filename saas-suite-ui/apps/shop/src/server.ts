@@ -39,6 +39,9 @@ function useUpstreamProxy(
     createProxyMiddleware({
       target,
       changeOrigin: true,
+      // Evita 504 em cold start e chamadas longas (login, agregados)
+      proxyTimeout: 300_000,
+      timeout: 300_000,
       pathRewrite: (path) => {
         if (path === mount || path === `${mount}/`) {
           return '/';

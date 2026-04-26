@@ -13,6 +13,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { I18nService } from '@saas-suite/shared/i18n';
+import { isProblemDetails } from '@saas-suite/shared/http';
 
 interface AiResponse {
   engine: string;
@@ -373,23 +374,38 @@ export class AiPage implements OnInit {
   }
 
   private formatActionHttpError(err: HttpErrorResponse): string {
-    const a = this.i18n.messages().admin;
-    if (err.status === 0) return a.aiNetworkError;
-    if (err.status === 401) return a.aiUnauthorizedError;
-    if (err.status === 403) return a.aiForbiddenError;
-    if (err.status === 404) return a.aiNotFoundError;
-    if (err.status >= 500) return a.aiServerErrorDetail;
-    return a.aiActionError;
+    return this.formatAiHttpError(err, 'action');
   }
 
   private formatChatHttpError(err: HttpErrorResponse): string {
+    return this.formatAiHttpError(err, 'chat');
+  }
+
+  /** Mensagens alinhadas ao Core (Problem Details) e a proxies (502/504). */
+  private formatAiHttpError(err: HttpErrorResponse, kind: 'action' | 'chat'): string {
     const a = this.i18n.messages().admin;
+    const fromBody = this.problemDetail(err);
     if (err.status === 0) return a.aiNetworkError;
     if (err.status === 401) return a.aiUnauthorizedError;
     if (err.status === 403) return a.aiForbiddenError;
     if (err.status === 404) return a.aiNotFoundError;
-    if (err.status >= 500) return a.aiServerErrorDetail;
-    return a.aiError;
+    if (err.status === 429) return a.aiRateLimitError;
+    if (err.status === 502 || err.status === 503 || err.status === 504) {
+      return fromBody ? `${a.aiGatewayOrTimeoutError} — ${fromBody}` : a.aiGatewayOrTimeoutError;
+    }
+    if (err.status >= 500) {
+      return fromBody ? `${a.aiServerErrorDetail} — ${fromBody}` : a.aiServerErrorDetail;
+    }
+    if (fromBody) return fromBody;
+    return kind === 'action' ? a.aiActionError : a.aiError;
+  }
+
+  private problemDetail(err: HttpErrorResponse): string {
+    if (isProblemDetails(err.error) && err.error.detail?.trim()) {
+      const d = err.error.detail.trim();
+      return d.length > 200 ? d.slice(0, 200) + '…' : d;
+    }
+    return '';
   }
 
   sanitize(html: string): string {

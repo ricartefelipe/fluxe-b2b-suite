@@ -591,6 +591,9 @@ export interface Messages {
     confirmCancelMessage: string;
     confirmChangePlanTitle: string;
     confirmChangePlanMessage: string;
+    confirmManagePlanMessage: string;
+    loadError: string;
+    retry: string;
   };
   usage: {
     title: string;

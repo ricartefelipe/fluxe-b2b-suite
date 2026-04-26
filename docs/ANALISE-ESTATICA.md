@@ -2,7 +2,7 @@
 
 ## Decisão (2026-03)
 
-- **Ferramenta primária:** [Semgrep](https://semgrep.dev/) via workflow `codeql.yml` (nome histórico do ficheiro; job Semgrep) nos repositórios `fluxe-b2b-suite`, `spring-saas-core`, `node-b2b-orders`, `py-payments-ledger`.
+- **Ferramenta primária:** [Semgrep](https://semgrep.dev/) via workflow `semgrep.yml` nos repositórios `fluxe-b2b-suite`, `spring-saas-core`, `node-b2b-orders`, `py-payments-ledger`.
 - **Objetivo:** regras de segurança e qualidade (OWASP-oriented, políticas da equipa) no pipeline de PR/push para `develop` e `master`.
 
 ## Por que não SonarQube Cloud neste momento

@@ -77,15 +77,28 @@ if [[ "$STATUS" != "CREATED" ]]; then
 fi
 echo "[smoke-order] OK POST /v1/orders id=$ORDER_ID"
 
-echo "[smoke-order] Aguardar worker (reserva de stock)..."
-sleep 4
+poll_until_status () {
+  local expected="$1"
+  local max="${2:-30}"
+  local label="${3:-aguardando $expected}"
+  local observed=""
+  echo "[smoke-order] $label"
+  for _ in $(seq 1 "$max"); do
+    ORDER_STATE=$(http_expect_2xx --max-time 25 "$BASE_URL/v1/orders/$ORDER_ID" \
+      -H "Authorization: Bearer $TOKEN" \
+      -H "X-Tenant-Id: $TENANT")
+    observed=$(json_get "$ORDER_STATE" "status")
+    if [[ "$observed" == "$expected" ]]; then
+      return 0
+    fi
+    sleep 1
+  done
+  echo "[smoke-order] FALHA: esperado $expected, obtido: ${observed:-desconhecido}"
+  return 1
+}
 
-ORDER_AFTER=$(http_expect_2xx --max-time 25 "$BASE_URL/v1/orders/$ORDER_ID" \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "X-Tenant-Id: $TENANT")
-RSV=$(json_get "$ORDER_AFTER" "status")
-if [[ "$RSV" != "RESERVED" ]]; then
-  echo "[smoke-order] AVISO: esperado RESERVED apos worker, obtido: $RSV (verifique worker/RabbitMQ em staging)"
+if ! poll_until_status "RESERVED" 30 "Aguardando worker reservar stock (ate 30s)..."; then
+  echo "[smoke-order] Verifique worker/RabbitMQ em staging."
   exit 1
 fi
 echo "[smoke-order] OK GET /v1/orders/:id -> RESERVED"
@@ -106,20 +119,7 @@ echo "[smoke-order] OK POST /v1/orders/:id/confirm -> CONFIRMED"
 poll_until_paid () {
   local max="${1:-25}"
   local label="${2:-aguardando PAID}"
-  echo "[smoke-order] $label"
-  PAID_OK=0
-  for _ in $(seq 1 "$max"); do
-    O=$(http_expect_2xx --max-time 25 "$BASE_URL/v1/orders/$ORDER_ID" \
-      -H "Authorization: Bearer $TOKEN" \
-      -H "X-Tenant-Id: $TENANT")
-    ST=$(json_get "$O" "status")
-    if [[ "$ST" == "PAID" ]]; then PAID_OK=1; break; fi
-    sleep 1
-  done
-  if [[ "$PAID_OK" != "1" ]]; then
-    return 1
-  fi
-  return 0
+  poll_until_status "PAID" "$max" "$label"
 }
 
 if [[ "${SMOKE_PAYMENT_PAID:-0}" == "1" ]]; then

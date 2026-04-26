@@ -1,4 +1,5 @@
 import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -40,6 +41,17 @@ import { UsageWidgetComponent } from './usage-widget.component';
           <mat-spinner diameter="40" />
         </div>
       } @else {
+        @if (loadError()) {
+          <mat-card class="load-error-card">
+            <mat-card-content>
+              <mat-icon>error_outline</mat-icon>
+              <span>{{ loadError() }}</span>
+            </mat-card-content>
+            <mat-card-actions align="end">
+              <button mat-stroked-button color="primary" (click)="loadData()">{{ b.retry }}</button>
+            </mat-card-actions>
+          </mat-card>
+        } @else {
         @if (subscription(); as sub) {
           @if (sub.status === 'TRIAL' && sub.trialEndsAt && trialDaysLeft(sub) > 0) {
             <div class="trial-banner">
@@ -188,6 +200,7 @@ import { UsageWidgetComponent } from './usage-widget.component';
             }
           </div>
         </section>
+        }
       }
     </div>
   `,
@@ -222,6 +235,18 @@ import { UsageWidgetComponent } from './usage-widget.component';
       display: flex;
       justify-content: center;
       padding: 64px 0;
+    }
+
+    .load-error-card {
+      border-radius: 12px;
+      margin-bottom: 24px;
+      border-left: 4px solid var(--app-danger, #c62828);
+    }
+    .load-error-card mat-card-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--app-danger, #c62828);
     }
 
     .subscription-card, .no-subscription-card {
@@ -400,6 +425,7 @@ export class BillingPage implements OnInit {
   readonly subscription = signal<Subscription | null>(null);
   readonly usage = signal<UsageSummary | null>(null);
   readonly health = signal<TenantHealth | null>(null);
+  readonly loadError = signal<string | null>(null);
   readonly tenantId = computed(() => this.tenantStore.activeTenantId() ?? null);
 
   readonly currentPlan = computed(() => {
@@ -412,19 +438,20 @@ export class BillingPage implements OnInit {
     this.loadData();
   }
 
-  private async loadData(): Promise<void> {
+  async loadData(): Promise<void> {
     this.loading.set(true);
+    this.loadError.set(null);
     try {
-      const [plans, sub, users] = await Promise.all([
-        firstValueFrom(this.api.listPlans()).then(p => p ?? []),
-        firstValueFrom(this.api.getCurrentSubscription()).catch(() => null),
-        firstValueFrom(this.api.listUsers()).then(u => u ?? []),
+      const plans = await firstValueFrom(this.api.listPlans()).then(p => p ?? []);
+      const [sub, users] = await Promise.all([
+        this.loadCurrentSubscription(),
+        firstValueFrom(this.api.listUsers()).then(u => u ?? []).catch(() => null),
       ]);
       this.plans.set(plans);
       this.subscription.set(sub);
       if (sub) {
         const plan = plans.find(p => p.slug === sub.planSlug);
-        if (plan) {
+        if (plan && users) {
           this.usage.set({
             usersUsed: users.length,
             usersLimit: plan.maxUsers,
@@ -449,6 +476,12 @@ export class BillingPage implements OnInit {
       } else {
         this.health.set(null);
       }
+    } catch {
+      this.plans.set([]);
+      this.subscription.set(null);
+      this.usage.set(null);
+      this.health.set(null);
+      this.loadError.set(this.b.loadError);
     } finally {
       this.loading.set(false);
     }
@@ -465,12 +498,23 @@ export class BillingPage implements OnInit {
     return map[status] ?? status;
   }
 
+  private async loadCurrentSubscription(): Promise<Subscription | null> {
+    try {
+      return await firstValueFrom(this.api.getCurrentSubscription());
+    } catch (error) {
+      if (error instanceof HttpErrorResponse && error.status === 404) {
+        return null;
+      }
+      throw error;
+    }
+  }
+
   planDisplayName(slug: string): string {
     return this.plans().find(p => p.slug === slug)?.displayName ?? slug;
   }
 
   formatPrice(cents: number): string {
-    return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    return (cents / 100).toLocaleString(this.i18n.locale(), { style: 'currency', currency: 'BRL' });
   }
 
   trialDaysLeft(sub: Subscription): number {
@@ -515,12 +559,18 @@ export class BillingPage implements OnInit {
   }
 
   async selectPlan(plan: PlanDefinition): Promise<void> {
+    if (this.loadError()) return;
     const b = this.i18n.messages().billing;
+    const message = this.subscription() ? b.confirmManagePlanMessage : b.confirmChangePlanMessage;
     const ref = this.dialog.open(ConfirmDialogComponent, {
-      data: { title: b.confirmChangePlanTitle, message: b.confirmChangePlanMessage } as ConfirmDialogData,
+      data: { title: b.confirmChangePlanTitle, message } as ConfirmDialogData,
     });
     const confirmed = await firstValueFrom(ref.afterClosed());
     if (!confirmed) return;
+    if (this.subscription()) {
+      this.openBillingPortal();
+      return;
+    }
     this.api.startTrial(plan.slug).subscribe({
       next: sub => this.subscription.set(sub),
     });

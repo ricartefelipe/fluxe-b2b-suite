@@ -10,7 +10,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { StatusChipComponent } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
-import { DashboardStore } from '@saas-suite/domains/ops';
+import { DashboardStore, type CurrencyTotal } from '@saas-suite/domains/ops';
 import { formatDateTime } from '@saas-suite/shared/util';
 
 const DONUT_RADIUS = 70;
@@ -42,6 +42,40 @@ const BAR_MAX_HEIGHT = 170;
         </mat-card>
       } @else {
       <h1 class="page-title">{{ i18n.messages().dashboard.title }}</h1>
+
+      <mat-card class="executive-card">
+        <mat-card-header>
+          <mat-card-title>{{ i18n.messages().dashboard.executiveSummary }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="executive-grid">
+            <div class="executive-metric">
+              <span class="executive-label">{{ i18n.messages().dashboard.revenueLast7Days }}</span>
+              <span class="executive-value">{{ formatCurrencyTotals(store.executiveMetrics().revenueLast7DaysTotals) }}</span>
+              <span class="executive-context" [class.executive-context--negative]="store.executiveMetrics().revenueTrendPct < 0">
+                {{ formatPercent(store.executiveMetrics().revenueTrendPct) }} {{ i18n.messages().dashboard.vsPreviousPeriod }}
+              </span>
+            </div>
+            <div class="executive-metric">
+              <span class="executive-label">{{ i18n.messages().dashboard.averageOrderValue }}</span>
+              <span class="executive-value">{{ formatCurrencyTotals(store.executiveMetrics().averageOrderValueLast7DaysTotals) }}</span>
+              <span class="executive-context">{{ i18n.messages().dashboard.revenueLast7Days }}</span>
+            </div>
+            <div class="executive-metric">
+              <span class="executive-label">{{ i18n.messages().dashboard.paymentFailureRate }}</span>
+              <span class="executive-value">{{ formatRatePercent(store.executiveMetrics().paymentFailureRatePct) }}</span>
+              <span class="executive-context executive-context--negative">
+                {{ store.executiveMetrics().failedPayments }} {{ i18n.messages().dashboard.failedPayments }}
+              </span>
+            </div>
+            <div class="executive-metric">
+              <span class="executive-label">{{ i18n.messages().dashboard.revenueAtRisk }}</span>
+              <span class="executive-value">{{ formatCurrencyTotals(store.executiveMetrics().revenueAtRiskTotals) }}</span>
+              <span class="executive-context">{{ i18n.messages().dashboard.pendingPayments }}</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
       <!-- KPI Cards -->
       <div class="kpi-row">
@@ -341,6 +375,53 @@ const BAR_MAX_HEIGHT = 170;
     .kpi-icon--amber { background: var(--app-chip-warn-text); }
     .kpi-icon--orange { background: var(--app-chip-warn-text); }
 
+    .executive-card {
+      border-radius: 16px;
+      margin-bottom: 24px;
+      background:
+        radial-gradient(circle at top right, rgba(30, 136, 229, 0.14), transparent 32%),
+        var(--app-surface);
+    }
+
+    .executive-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .executive-metric {
+      border: 1px solid var(--app-border);
+      border-radius: 14px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.52);
+    }
+
+    .executive-label {
+      display: block;
+      font-size: 12px;
+      color: var(--app-text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .executive-value {
+      display: block;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--app-text);
+      line-height: 1.2;
+    }
+
+    .executive-context {
+      display: block;
+      font-size: 12px;
+      color: var(--app-chip-allow-text);
+      margin-top: 8px;
+    }
+
+    .executive-context--negative {
+      color: var(--app-chip-deny-text);
+    }
+
     .kpi-data {
       display: flex;
       flex-direction: column;
@@ -562,12 +643,14 @@ const BAR_MAX_HEIGHT = 170;
     /* ── Responsive ───────────────────────────────────── */
 
     @media (max-width: 1200px) {
+      .executive-grid,
       .kpi-row { grid-template-columns: repeat(2, 1fr); }
       .charts-row,
       .bottom-row { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 600px) {
+      .executive-grid,
       .kpi-row { grid-template-columns: 1fr; }
       .donut-layout { flex-direction: column; }
     }
@@ -628,10 +711,31 @@ export class DashboardPage implements OnInit {
   }
 
   formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('pt-BR', {
+    return new Intl.NumberFormat(this.i18n.locale(), {
       style: 'currency',
       currency: this.store.currency(),
     }).format(amount);
+  }
+
+  formatCurrencyTotals(totals: readonly CurrencyTotal[]): string {
+    if (!totals.length) return this.formatCurrency(0);
+    return totals.map(total => new Intl.NumberFormat(this.i18n.locale(), {
+      style: 'currency',
+      currency: total.currency,
+    }).format(total.amount)).join(' · ');
+  }
+
+  formatPercent(value: number): string {
+    return new Intl.NumberFormat(this.i18n.locale(), {
+      maximumFractionDigits: 1,
+      signDisplay: 'exceptZero',
+    }).format(value) + '%';
+  }
+
+  formatRatePercent(value: number): string {
+    return new Intl.NumberFormat(this.i18n.locale(), {
+      maximumFractionDigits: 1,
+    }).format(value) + '%';
   }
 
   shortCurrency(amount: number): string {

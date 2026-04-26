@@ -82,6 +82,17 @@ describe('sessionPaymentsAbacAllows', () => {
     expect(sessionPaymentsAbacAllows(s, 'ledger:read')).toBe(true);
   });
 
+  it('bypasses for platform tenant admin emitted by Core', () => {
+    const s = baseSession({
+      tenantId: '00000000-0000-0000-0000-000000000001',
+      roles: ['admin'],
+      plan: 'enterprise',
+      region: 'global',
+    });
+    expect(sessionPaymentsAbacAllows(s, 'payments:read')).toBe(true);
+    expect(sessionPaymentsAbacAllows(s, 'ledger:read')).toBe(true);
+  });
+
   it('denies global region for normal tenant', () => {
     const s = baseSession({ plan: 'enterprise', region: 'global' });
     expect(sessionPaymentsAbacAllows(s, 'ledger:read')).toBe(false);

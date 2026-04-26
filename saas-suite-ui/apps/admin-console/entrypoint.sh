@@ -46,15 +46,15 @@ pay_out="$pay_in"
 
 if is_abs "$core_in"; then
   core_out="/api/core"
-  append_proxy_location "/api/core" "$core_in"
+  append_proxy_location "/api/core/" "$core_in"
 fi
 if is_abs "$orders_in"; then
   orders_out="/api/orders"
-  append_proxy_location "/api/orders" "$orders_in"
+  append_proxy_location "/api/orders/" "$orders_in"
 fi
 if is_abs "$pay_in"; then
   pay_out="/api/payments"
-  append_proxy_location "/api/payments" "$pay_in"
+  append_proxy_location "/api/payments/" "$pay_in"
 fi
 
 export CORE_API_BASE_URL="$core_out"

@@ -1,5 +1,7 @@
 import type { AuthSession } from './models/auth-session.model';
 
+const PLATFORM_TENANT_ID = '00000000-0000-0000-0000-000000000001';
+
 /**
  * Espelha políticas default do node-b2b-orders (`prisma/seed.ts` → Policy).
  * `allowedRegions` vazio no seed = sem restrição de região no serviço.
@@ -62,7 +64,7 @@ function regionAllowed(regionNorm: string, allowed: string[]): boolean {
 
 function isOrdersAbacBypassSession(session: AuthSession | null): boolean {
   if (!session) return false;
-  return session.tenantId === '*' && session.roles.includes('admin');
+  return (session.tenantId === '*' || session.tenantId === PLATFORM_TENANT_ID) && session.roles.includes('admin');
 }
 
 export function ordersAbacAllows(

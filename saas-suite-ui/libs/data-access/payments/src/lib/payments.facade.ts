@@ -30,16 +30,16 @@ export class PaymentsFacade {
   async loadAllPayments(params?: PaymentListParams): Promise<PaymentIntent[]> {
     this._loading.set(true);
     try {
-      const pageSize = params?.limit ?? 500;
-      let offset = params?.offset ?? 0;
+      const pageSize = params?.pageSize ?? 500;
+      let page = params?.page ?? 1;
       let total = Number.POSITIVE_INFINITY;
       const payments: PaymentIntent[] = [];
       while (payments.length < total) {
-        const r = await firstValueFrom(this.api.listPayments({ ...params, limit: pageSize, offset }));
+        const r = await firstValueFrom(this.api.listPayments({ ...params, page, pageSize }));
         payments.push(...r.data);
         total = r.total;
         if (r.data.length === 0) break;
-        offset += r.data.length;
+        page += 1;
       }
       this._payments.set(payments); this._total.set(total === Number.POSITIVE_INFINITY ? payments.length : total);
       return payments;

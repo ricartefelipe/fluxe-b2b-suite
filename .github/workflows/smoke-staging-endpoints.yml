@@ -1,0 +1,37 @@
+name: Smoke staging endpoints
+
+on:
+  workflow_dispatch:
+    inputs:
+      core_url:
+        description: "Core staging URL override"
+        required: false
+        type: string
+      orders_url:
+        description: "Orders staging URL override"
+        required: false
+        type: string
+      payments_url:
+        description: "Payments staging URL override"
+        required: false
+        type: string
+
+concurrency:
+  group: smoke-staging-endpoints
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    name: Backend health and readiness
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run staging endpoint smoke
+        env:
+          CORE_STAGING_URL: ${{ inputs.core_url || secrets.CORE_SMOKE_URL }}
+          ORDERS_STAGING_URL: ${{ inputs.orders_url || secrets.ORDERS_SMOKE_URL }}
+          PAYMENTS_STAGING_URL: ${{ inputs.payments_url || secrets.PAYMENTS_SMOKE_URL }}
+        run: bash scripts/staging-smoke-endpoints.sh

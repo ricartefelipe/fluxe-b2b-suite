@@ -17,7 +17,7 @@ npx nx run-many -t lint --parallel=3 || { echo "FAIL: lint"; exit 1; }
 echo "   OK"
 
 echo "4. Executando testes unitários..."
-npx nx run-many -t test --parallel=3 || echo "WARN: Alguns testes falharam (pode ser esperado sem backends)"
+npx nx run-many -t test,vite:test --parallel=3 || { echo "FAIL: testes unitários"; exit 1; }
 
 echo ""
 echo "=== Smoke Test Concluído ==="

@@ -12,13 +12,18 @@ PAY="${PAYMENTS_STAGING_URL:-https://py-payments-ledger-staging.up.railway.app}"
 fail=0
 check() {
   local name="$1" url="$2"
-  code=$(curl -sS -o /tmp/smoke.json -w "%{http_code}" "$url" || echo "000")
+  local out code
+  out="$(mktemp)"
+  if ! code=$(curl -sS -o "$out" -w "%{http_code}" "$url"); then
+    code="000"
+  fi
   if [[ "$code" =~ ^2 ]]; then
     echo "OK  $name ($code) $url"
   else
     echo "FAIL $name ($code) $url"
     fail=1
   fi
+  rm -f "$out"
 }
 
 check "Core actuator/health" "$CORE/actuator/health"

@@ -15,7 +15,7 @@ Objetivo: padronizar analise estatica apos retirada do Qodana, com gate unico e 
 
 - PR para `develop`/`master` deve passar em:
   - CI principal do repositorio
-  - workflow estatico (`codeql.yml` com job Semgrep)
+  - workflow estatico (`semgrep.yml`)
 - Merge bloqueado em caso de:
   - falha de linter/format/typecheck/test
   - alerta Semgrep de severidade alta/critica nao tratado

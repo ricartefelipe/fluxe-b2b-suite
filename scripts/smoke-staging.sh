@@ -11,13 +11,24 @@ WKS="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
 run_if_exists() {
   local path="$1"
-  [[ -x "$path" ]] || [[ -f "$path" ]] || return 0
+  [[ -x "$path" ]] || [[ -f "$path" ]] || return 1
   chmod +x "$path" 2>/dev/null || true
   bash "$path"
 }
 
 echo "=== smoke-staging (workspace em ${WKS}) ==="
-run_if_exists "${WKS}/spring-saas-core/scripts/smoke-post-merge.sh"
-run_if_exists "${WKS}/node-b2b-orders/scripts/smoke-post-merge.sh"
-run_if_exists "${WKS}/py-payments-ledger/scripts/smoke-post-merge.sh"
+found=0
+for smoke in \
+  "${WKS}/spring-saas-core/scripts/smoke-post-merge.sh" \
+  "${WKS}/node-b2b-orders/scripts/smoke-post-merge.sh" \
+  "${WKS}/py-payments-ledger/scripts/smoke-post-merge.sh"; do
+  if [[ -x "$smoke" || -f "$smoke" ]]; then
+    found=$((found + 1))
+    run_if_exists "$smoke"
+  fi
+done
+if [[ "$found" -eq 0 ]]; then
+  echo "FAIL: nenhum script de smoke encontrado em ${WKS}" >&2
+  exit 1
+fi
 echo "=== fim smoke-staging ==="

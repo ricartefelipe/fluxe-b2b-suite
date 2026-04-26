@@ -9,7 +9,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { CoreApiClient, PlanDefinition, Subscription, SubscriptionStatus, TenantHealth, UsageSummary } from '@saas-suite/data-access/core';
+import { BillingInvoice, CoreApiClient, PlanDefinition, Subscription, SubscriptionStatus, TenantHealth, UsageSummary } from '@saas-suite/data-access/core';
 import { ConfirmDialogComponent, ConfirmDialogData } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
@@ -125,6 +125,55 @@ import { UsageWidgetComponent } from './usage-widget.component';
             </mat-card>
           }
         </section>
+
+        @if (subscription()) {
+          <section class="invoices-section">
+            <mat-card class="invoices-card">
+              <mat-card-header>
+                <mat-icon mat-card-avatar>request_quote</mat-icon>
+                <mat-card-title>{{ b.invoicesTitle }}</mat-card-title>
+                <mat-card-subtitle>{{ b.invoicesSubtitle }}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                @if (invoicesError()) {
+                  <div class="invoices-empty">
+                    <mat-icon>error_outline</mat-icon>
+                    <span>{{ b.invoicesLoadError }}</span>
+                  </div>
+                } @else if (invoices().length) {
+                  <div class="invoices-list">
+                    @for (invoice of invoices(); track invoice.id) {
+                      <div class="invoice-row">
+                        <div class="invoice-main">
+                          <span class="invoice-date">{{ invoice.createdAt | date:'mediumDate' }}</span>
+                          <span class="invoice-status">{{ invoiceStatusLabel(invoice.status) }}</span>
+                        </div>
+                        <span class="invoice-amount">{{ formatInvoiceAmount(invoice) }}</span>
+                        @if (invoice.invoicePdfUrl || invoice.hostedInvoiceUrl) {
+                          <a
+                            mat-stroked-button
+                            color="primary"
+                            [href]="invoice.invoicePdfUrl || invoice.hostedInvoiceUrl"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <mat-icon>open_in_new</mat-icon>
+                            {{ b.invoiceOpen }}
+                          </a>
+                        }
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <div class="invoices-empty">
+                    <mat-icon>receipt_long</mat-icon>
+                    <span>{{ b.noInvoices }}</span>
+                  </div>
+                }
+              </mat-card-content>
+            </mat-card>
+          </section>
+        }
 
         @if (tenantId()) {
           <section class="health-export-section">
@@ -398,6 +447,55 @@ import { UsageWidgetComponent } from './usage-widget.component';
       color: var(--app-primary, #1565c0);
     }
 
+    .invoices-section { margin-bottom: 24px; }
+    .invoices-card { border-radius: 12px; }
+    .invoices-card mat-icon[mat-card-avatar] {
+      color: var(--app-primary, #1565c0);
+      background: rgba(21, 101, 192, 0.08);
+      border-radius: 50%;
+      padding: 8px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .invoices-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 8px;
+    }
+    .invoice-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 16px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .invoice-row:last-child { border-bottom: 0; }
+    .invoice-main {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .invoice-date { color: var(--app-text, #212121); font-weight: 500; }
+    .invoice-status {
+      color: var(--app-text-secondary, #666);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .invoice-amount { font-weight: 600; color: var(--app-text, #212121); }
+    .invoices-empty {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--app-text-secondary, #666);
+      padding: 16px 0;
+    }
+
     .health-export-section { margin-bottom: 24px; }
     .health-export-card { border-radius: 12px; }
     .health-row { display: flex; justify-content: space-between; padding: 8px 0; }
@@ -425,6 +523,8 @@ export class BillingPage implements OnInit {
   readonly subscription = signal<Subscription | null>(null);
   readonly usage = signal<UsageSummary | null>(null);
   readonly health = signal<TenantHealth | null>(null);
+  readonly invoices = signal<BillingInvoice[]>([]);
+  readonly invoicesError = signal<string | null>(null);
   readonly loadError = signal<string | null>(null);
   readonly tenantId = computed(() => this.tenantStore.activeTenantId() ?? null);
 
@@ -449,6 +549,7 @@ export class BillingPage implements OnInit {
       ]);
       this.plans.set(plans);
       this.subscription.set(sub);
+      await this.loadInvoices(sub);
       if (sub) {
         const plan = plans.find(p => p.slug === sub.planSlug);
         if (plan && users) {
@@ -481,6 +582,8 @@ export class BillingPage implements OnInit {
       this.subscription.set(null);
       this.usage.set(null);
       this.health.set(null);
+      this.invoices.set([]);
+      this.invoicesError.set(null);
       this.loadError.set(this.b.loadError);
     } finally {
       this.loading.set(false);
@@ -515,6 +618,33 @@ export class BillingPage implements OnInit {
 
   formatPrice(cents: number): string {
     return (cents / 100).toLocaleString(this.i18n.locale(), { style: 'currency', currency: 'BRL' });
+  }
+
+  formatInvoiceAmount(invoice: BillingInvoice): string {
+    return (invoice.amountDueCents / 100).toLocaleString(this.i18n.locale(), {
+      style: 'currency',
+      currency: invoice.currency?.toUpperCase() || 'BRL',
+    });
+  }
+
+  invoiceStatusLabel(status: string): string {
+    const normalized = status?.toLowerCase();
+    if (normalized === 'paid') return this.b.invoicePaid;
+    if (normalized === 'open') return this.b.invoiceOpenStatus;
+    if (normalized === 'void') return this.b.invoiceVoid;
+    if (normalized === 'draft') return this.b.invoiceDraft;
+    return status;
+  }
+
+  private async loadInvoices(sub: Subscription | null): Promise<void> {
+    this.invoices.set([]);
+    this.invoicesError.set(null);
+    if (!sub) return;
+    try {
+      this.invoices.set(await firstValueFrom(this.api.listBillingInvoices()).then(invoices => invoices ?? []));
+    } catch {
+      this.invoicesError.set(this.b.invoicesLoadError);
+    }
   }
 
   trialDaysLeft(sub: Subscription): number {

@@ -587,6 +587,15 @@ export interface Messages {
     never: string;
     exportData: string;
     exportDataHint: string;
+    invoicesTitle: string;
+    invoicesSubtitle: string;
+    invoicesLoadError: string;
+    noInvoices: string;
+    invoiceOpen: string;
+    invoicePaid: string;
+    invoiceOpenStatus: string;
+    invoiceVoid: string;
+    invoiceDraft: string;
     confirmCancelTitle: string;
     confirmCancelMessage: string;
     confirmChangePlanTitle: string;

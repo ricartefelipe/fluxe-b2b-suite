@@ -30,6 +30,6 @@ export interface CreatePaymentIntentRequest {
 export interface PaymentListParams {
   status?: PaymentStatus;
   customer_ref?: string;
-  limit?: number;
-  offset?: number;
+  page?: number;
+  pageSize?: number;
 }

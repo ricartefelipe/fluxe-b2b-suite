@@ -5,6 +5,7 @@ import { PaymentsApiClient } from '@saas-suite/data-access/payments';
 import { Order, OrderStatus, InventoryItem, InventoryAdjustment } from '@saas-suite/data-access/orders';
 import { PaymentIntent } from '@saas-suite/data-access/payments';
 import { LoggerService } from '@saas-suite/shared/telemetry';
+import { buildExecutiveMetrics } from './executive-metrics.util';
 
 const VALID_STATUSES: OrderStatus[] = ['DRAFT', 'CREATED', 'RESERVED', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'PAID'];
 
@@ -102,6 +103,8 @@ export class DashboardStore {
 
   readonly currency = computed(() => this._orders()[0]?.currency ?? 'BRL');
 
+  readonly executiveMetrics = computed(() => buildExecutiveMetrics(this._orders(), this._payments()));
+
   readonly dailyRevenue = computed<DailyRevenue[]>(() => {
     const orders = this._orders();
     const days: DailyRevenue[] = [];
@@ -164,29 +167,20 @@ export class DashboardStore {
     this._loading.set(true);
     this._loadError.set(false);
     const results = await Promise.allSettled([
-      firstValueFrom(this.ordersApi.listOrders({ limit: 100 })),
-      firstValueFrom(this.paymentsApi.listPayments({ limit: 100 })),
+      this.loadAllOrders(),
+      this.loadAllPayments(),
       firstValueFrom(this.ordersApi.listInventory()),
       firstValueFrom(this.ordersApi.listAdjustments({ limit: 50 })),
     ]);
 
     if (results[0].status === 'fulfilled') {
-      const raw = results[0].value as { data?: unknown[]; items?: unknown[] } | unknown[];
-      const list = Array.isArray(raw)
-        ? raw
-        : Array.isArray((raw as { data?: unknown[] }).data)
-          ? (raw as { data: unknown[] }).data
-          : Array.isArray((raw as { items?: unknown[] }).items)
-            ? (raw as { items: unknown[] }).items
-            : [];
-      this._orders.set(list.map(o => normalizeOrder(o as Record<string, unknown>)));
+      this._orders.set(results[0].value);
     } else {
       this.logger.error('loadOrders failed', results[0].reason);
     }
 
     if (results[1].status === 'fulfilled') {
-      const raw = results[1].value;
-      this._payments.set(Array.isArray(raw) ? raw : (raw.data ?? []));
+      this._payments.set(results[1].value);
     } else {
       this.logger.error('loadPayments failed', results[1].reason);
     }
@@ -208,5 +202,30 @@ export class DashboardStore {
     const hasError = results.some(r => r.status === 'rejected');
     this._loadError.set(hasError);
     this._loading.set(false);
+  }
+
+  private async loadAllOrders(): Promise<Order[]> {
+    const orders: Order[] = [];
+    let cursor: string | undefined;
+    do {
+      const page = await firstValueFrom(this.ordersApi.listOrders({ cursor, limit: 500 }));
+      orders.push(...page.data.map(order => normalizeOrder(order as unknown as Record<string, unknown>)));
+      cursor = page.nextCursor ?? undefined;
+    } while (cursor);
+    return orders;
+  }
+
+  private async loadAllPayments(): Promise<PaymentIntent[]> {
+    const payments: PaymentIntent[] = [];
+    let pageNumber = 1;
+    let total = Number.POSITIVE_INFINITY;
+    while (payments.length < total) {
+      const page = await firstValueFrom(this.paymentsApi.listPayments({ page: pageNumber, pageSize: 500 }));
+      payments.push(...page.data);
+      total = page.total;
+      if (page.data.length === 0) break;
+      pageNumber += 1;
+    }
+    return payments;
   }
 }

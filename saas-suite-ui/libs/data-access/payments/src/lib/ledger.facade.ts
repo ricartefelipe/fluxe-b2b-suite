@@ -37,6 +37,31 @@ export class LedgerFacade {
     finally { this._loading.set(false); }
   }
 
+  async loadAllEntries(params?: LedgerParams): Promise<LedgerEntryRow[]> {
+    this._loading.set(true);
+    this._loadError.set(null);
+    try {
+      const pageSize = params?.limit ?? 500;
+      let offset = params?.offset ?? 0;
+      const journals: LedgerJournalEntry[] = [];
+      while (true) {
+        const page = await firstValueFrom(this.api.listLedgerEntries({ ...params, limit: pageSize, offset }));
+        journals.push(...page);
+        if (page.length < pageSize) break;
+        offset += page.length;
+      }
+      const rows = this.flattenJournals(journals);
+      this._entries.set(rows);
+      this._total.set(rows.length);
+      return rows;
+    } catch (e) {
+      this.logger.error('loadAllLedgerEntries failed', e);
+      this._loadError.set(this.formatLoadError(e));
+      return [];
+    }
+    finally { this._loading.set(false); }
+  }
+
   async loadBalances(params?: LedgerParams): Promise<void> {
     this._loading.set(true);
     this._loadError.set(null);

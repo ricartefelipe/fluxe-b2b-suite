@@ -90,6 +90,17 @@ export const appRoutes: Route[] = [
         data: { permissions: ['ledger:read'], paymentsAbacPermissions: ['ledger:read'] },
       },
       {
+        path: 'reports',
+        loadComponent: () => import('./pages/reports.page').then(m => m.ReportsPage),
+        canActivate: [permissionGuard],
+        data: {
+          permissions: ['orders:read', 'payments:read', 'ledger:read'],
+          permissionsMode: 'all',
+          ordersAbacPermissions: ['orders:read'],
+          paymentsAbacPermissions: ['payments:read', 'ledger:read'],
+        },
+      },
+      {
         path: 'account/password',
         loadComponent: () => import('@saas-suite/shared/auth').then(m => m.ChangePasswordPageComponent),
         data: { fullPage: false, useOptionalSubtitle: true },

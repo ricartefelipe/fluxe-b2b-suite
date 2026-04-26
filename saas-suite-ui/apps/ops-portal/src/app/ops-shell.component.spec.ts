@@ -13,4 +13,24 @@ describe('OpsShellComponent', () => {
     const fixture = TestBed.createComponent(OpsShellComponent);
     expect(fixture.componentInstance).toBeTruthy();
   });
+
+  it('includes the reports navigation item', async () => {
+    await TestBed.configureTestingModule({
+      imports: [OpsShellComponent],
+      providers: [provideRouter([]), provideHttpClient()],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(OpsShellComponent);
+    const navItems = fixture.componentInstance.navItems();
+
+    expect(navItems).toContainEqual(
+      expect.objectContaining({
+        route: '/reports',
+        icon: 'assessment',
+        requiredPermissions: ['orders:read', 'payments:read', 'ledger:read'],
+        ordersAbacPermissions: ['orders:read'],
+        paymentsAbacPermissions: ['payments:read', 'ledger:read'],
+      }),
+    );
+  });
 });

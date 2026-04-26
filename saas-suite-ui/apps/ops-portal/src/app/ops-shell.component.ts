@@ -58,6 +58,14 @@ export class OpsShellComponent implements OnInit {
         permission: 'ledger:read',
         paymentsAbacPermissions: ['ledger:read'],
       },
+      {
+        label: m.reports,
+        route: '/reports',
+        icon: 'assessment',
+        requiredPermissions: ['orders:read', 'payments:read', 'ledger:read'],
+        ordersAbacPermissions: ['orders:read'],
+        paymentsAbacPermissions: ['payments:read', 'ledger:read'],
+      },
     ];
   });
 

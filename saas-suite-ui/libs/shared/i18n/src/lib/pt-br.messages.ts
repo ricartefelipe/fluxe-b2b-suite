@@ -631,6 +631,9 @@ export const PT_BR_MESSAGES: Messages = {
     confirmCancelMessage: 'O cancelamento será efetivado ao final do período atual. Deseja continuar?',
     confirmChangePlanTitle: 'Alterar plano?',
     confirmChangePlanMessage: 'Deseja mudar para o plano selecionado? A alteração será aplicada imediatamente.',
+    confirmManagePlanMessage: 'Abriremos o portal de faturamento para gerenciar a alteração do plano com segurança.',
+    loadError: 'Não foi possível carregar os dados de faturamento.',
+    retry: 'Tentar novamente',
   },
   usage: {
     title: 'Seu uso este mês',

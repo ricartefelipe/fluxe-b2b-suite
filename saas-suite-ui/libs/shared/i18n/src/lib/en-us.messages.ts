@@ -631,6 +631,9 @@ export const EN_US_MESSAGES: Messages = {
     confirmCancelMessage: 'The cancellation will take effect at the end of the current period. Continue?',
     confirmChangePlanTitle: 'Change plan?',
     confirmChangePlanMessage: 'Do you want to switch to the selected plan? The change will be applied immediately.',
+    confirmManagePlanMessage: 'We will open the billing portal so you can manage this plan change safely.',
+    loadError: 'Could not load billing data.',
+    retry: 'Try again',
   },
   usage: {
     title: 'Your usage this month',

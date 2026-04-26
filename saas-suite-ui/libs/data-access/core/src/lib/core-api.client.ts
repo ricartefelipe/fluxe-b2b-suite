@@ -8,7 +8,7 @@ import {
   Policy, CreatePolicyRequest, PolicyListParams,
   FeatureFlag, CreateFlagRequest, UpdateFlagRequest,
   AuditLog, AuditListParams,
-  PlanDefinition, Subscription,
+  BillingInvoice, PlanDefinition, Subscription,
 } from './models';
 
 function normalizePage<T>(raw: Record<string, unknown>): PageResponse<T> {
@@ -93,6 +93,10 @@ export class CoreApiClient {
 
   getCurrentSubscription(): Observable<Subscription> {
     return this.http.get<Subscription>(`${this.base}/v1/subscriptions/current`);
+  }
+
+  listBillingInvoices(): Observable<BillingInvoice[]> {
+    return this.http.get<BillingInvoice[]>(`${this.base}/v1/billing/invoices`);
   }
 
   createPortalSession(returnUrl: string): Observable<{ url: string }> {

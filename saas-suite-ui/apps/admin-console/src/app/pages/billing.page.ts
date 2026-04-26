@@ -1,4 +1,5 @@
 import { Component, inject, signal, computed, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -8,7 +9,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { CoreApiClient, PlanDefinition, Subscription, SubscriptionStatus, TenantHealth, UsageSummary } from '@saas-suite/data-access/core';
+import { BillingInvoice, CoreApiClient, PlanDefinition, Subscription, SubscriptionStatus, TenantHealth, UsageSummary } from '@saas-suite/data-access/core';
 import { ConfirmDialogComponent, ConfirmDialogData } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
@@ -40,6 +41,17 @@ import { UsageWidgetComponent } from './usage-widget.component';
           <mat-spinner diameter="40" />
         </div>
       } @else {
+        @if (loadError()) {
+          <mat-card class="load-error-card">
+            <mat-card-content>
+              <mat-icon>error_outline</mat-icon>
+              <span>{{ loadError() }}</span>
+            </mat-card-content>
+            <mat-card-actions align="end">
+              <button mat-stroked-button color="primary" (click)="loadData()">{{ b.retry }}</button>
+            </mat-card-actions>
+          </mat-card>
+        } @else {
         @if (subscription(); as sub) {
           @if (sub.status === 'TRIAL' && sub.trialEndsAt && trialDaysLeft(sub) > 0) {
             <div class="trial-banner">
@@ -113,6 +125,55 @@ import { UsageWidgetComponent } from './usage-widget.component';
             </mat-card>
           }
         </section>
+
+        @if (subscription()) {
+          <section class="invoices-section">
+            <mat-card class="invoices-card">
+              <mat-card-header>
+                <mat-icon mat-card-avatar>request_quote</mat-icon>
+                <mat-card-title>{{ b.invoicesTitle }}</mat-card-title>
+                <mat-card-subtitle>{{ b.invoicesSubtitle }}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                @if (invoicesError()) {
+                  <div class="invoices-empty">
+                    <mat-icon>error_outline</mat-icon>
+                    <span>{{ b.invoicesLoadError }}</span>
+                  </div>
+                } @else if (invoices().length) {
+                  <div class="invoices-list">
+                    @for (invoice of invoices(); track invoice.id) {
+                      <div class="invoice-row">
+                        <div class="invoice-main">
+                          <span class="invoice-date">{{ invoice.createdAt | date:'mediumDate' }}</span>
+                          <span class="invoice-status">{{ invoiceStatusLabel(invoice.status) }}</span>
+                        </div>
+                        <span class="invoice-amount">{{ formatInvoiceAmount(invoice) }}</span>
+                        @if (invoice.invoicePdfUrl || invoice.hostedInvoiceUrl) {
+                          <a
+                            mat-stroked-button
+                            color="primary"
+                            [href]="invoice.invoicePdfUrl || invoice.hostedInvoiceUrl"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <mat-icon>open_in_new</mat-icon>
+                            {{ b.invoiceOpen }}
+                          </a>
+                        }
+                      </div>
+                    }
+                  </div>
+                } @else {
+                  <div class="invoices-empty">
+                    <mat-icon>receipt_long</mat-icon>
+                    <span>{{ b.noInvoices }}</span>
+                  </div>
+                }
+              </mat-card-content>
+            </mat-card>
+          </section>
+        }
 
         @if (tenantId()) {
           <section class="health-export-section">
@@ -188,6 +249,7 @@ import { UsageWidgetComponent } from './usage-widget.component';
             }
           </div>
         </section>
+        }
       }
     </div>
   `,
@@ -222,6 +284,18 @@ import { UsageWidgetComponent } from './usage-widget.component';
       display: flex;
       justify-content: center;
       padding: 64px 0;
+    }
+
+    .load-error-card {
+      border-radius: 12px;
+      margin-bottom: 24px;
+      border-left: 4px solid var(--app-danger, #c62828);
+    }
+    .load-error-card mat-card-content {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--app-danger, #c62828);
     }
 
     .subscription-card, .no-subscription-card {
@@ -373,6 +447,55 @@ import { UsageWidgetComponent } from './usage-widget.component';
       color: var(--app-primary, #1565c0);
     }
 
+    .invoices-section { margin-bottom: 24px; }
+    .invoices-card { border-radius: 12px; }
+    .invoices-card mat-icon[mat-card-avatar] {
+      color: var(--app-primary, #1565c0);
+      background: rgba(21, 101, 192, 0.08);
+      border-radius: 50%;
+      padding: 8px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .invoices-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-top: 8px;
+    }
+    .invoice-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 16px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+    .invoice-row:last-child { border-bottom: 0; }
+    .invoice-main {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .invoice-date { color: var(--app-text, #212121); font-weight: 500; }
+    .invoice-status {
+      color: var(--app-text-secondary, #666);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .invoice-amount { font-weight: 600; color: var(--app-text, #212121); }
+    .invoices-empty {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--app-text-secondary, #666);
+      padding: 16px 0;
+    }
+
     .health-export-section { margin-bottom: 24px; }
     .health-export-card { border-radius: 12px; }
     .health-row { display: flex; justify-content: space-between; padding: 8px 0; }
@@ -400,6 +523,9 @@ export class BillingPage implements OnInit {
   readonly subscription = signal<Subscription | null>(null);
   readonly usage = signal<UsageSummary | null>(null);
   readonly health = signal<TenantHealth | null>(null);
+  readonly invoices = signal<BillingInvoice[]>([]);
+  readonly invoicesError = signal<string | null>(null);
+  readonly loadError = signal<string | null>(null);
   readonly tenantId = computed(() => this.tenantStore.activeTenantId() ?? null);
 
   readonly currentPlan = computed(() => {
@@ -412,19 +538,21 @@ export class BillingPage implements OnInit {
     this.loadData();
   }
 
-  private async loadData(): Promise<void> {
+  async loadData(): Promise<void> {
     this.loading.set(true);
+    this.loadError.set(null);
     try {
-      const [plans, sub, users] = await Promise.all([
-        firstValueFrom(this.api.listPlans()).then(p => p ?? []),
-        firstValueFrom(this.api.getCurrentSubscription()).catch(() => null),
-        firstValueFrom(this.api.listUsers()).then(u => u ?? []),
+      const plans = await firstValueFrom(this.api.listPlans()).then(p => p ?? []);
+      const [sub, users] = await Promise.all([
+        this.loadCurrentSubscription(),
+        firstValueFrom(this.api.listUsers()).then(u => u ?? []).catch(() => null),
       ]);
       this.plans.set(plans);
       this.subscription.set(sub);
+      await this.loadInvoices(sub);
       if (sub) {
         const plan = plans.find(p => p.slug === sub.planSlug);
-        if (plan) {
+        if (plan && users) {
           this.usage.set({
             usersUsed: users.length,
             usersLimit: plan.maxUsers,
@@ -449,6 +577,14 @@ export class BillingPage implements OnInit {
       } else {
         this.health.set(null);
       }
+    } catch {
+      this.plans.set([]);
+      this.subscription.set(null);
+      this.usage.set(null);
+      this.health.set(null);
+      this.invoices.set([]);
+      this.invoicesError.set(null);
+      this.loadError.set(this.b.loadError);
     } finally {
       this.loading.set(false);
     }
@@ -465,12 +601,50 @@ export class BillingPage implements OnInit {
     return map[status] ?? status;
   }
 
+  private async loadCurrentSubscription(): Promise<Subscription | null> {
+    try {
+      return await firstValueFrom(this.api.getCurrentSubscription());
+    } catch (error) {
+      if (error instanceof HttpErrorResponse && error.status === 404) {
+        return null;
+      }
+      throw error;
+    }
+  }
+
   planDisplayName(slug: string): string {
     return this.plans().find(p => p.slug === slug)?.displayName ?? slug;
   }
 
   formatPrice(cents: number): string {
-    return (cents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    return (cents / 100).toLocaleString(this.i18n.locale(), { style: 'currency', currency: 'BRL' });
+  }
+
+  formatInvoiceAmount(invoice: BillingInvoice): string {
+    return (invoice.amountDueCents / 100).toLocaleString(this.i18n.locale(), {
+      style: 'currency',
+      currency: invoice.currency?.toUpperCase() || 'BRL',
+    });
+  }
+
+  invoiceStatusLabel(status: string): string {
+    const normalized = status?.toLowerCase();
+    if (normalized === 'paid') return this.b.invoicePaid;
+    if (normalized === 'open') return this.b.invoiceOpenStatus;
+    if (normalized === 'void') return this.b.invoiceVoid;
+    if (normalized === 'draft') return this.b.invoiceDraft;
+    return status;
+  }
+
+  private async loadInvoices(sub: Subscription | null): Promise<void> {
+    this.invoices.set([]);
+    this.invoicesError.set(null);
+    if (!sub) return;
+    try {
+      this.invoices.set(await firstValueFrom(this.api.listBillingInvoices()).then(invoices => invoices ?? []));
+    } catch {
+      this.invoicesError.set(this.b.invoicesLoadError);
+    }
   }
 
   trialDaysLeft(sub: Subscription): number {
@@ -515,12 +689,18 @@ export class BillingPage implements OnInit {
   }
 
   async selectPlan(plan: PlanDefinition): Promise<void> {
+    if (this.loadError()) return;
     const b = this.i18n.messages().billing;
+    const message = this.subscription() ? b.confirmManagePlanMessage : b.confirmChangePlanMessage;
     const ref = this.dialog.open(ConfirmDialogComponent, {
-      data: { title: b.confirmChangePlanTitle, message: b.confirmChangePlanMessage } as ConfirmDialogData,
+      data: { title: b.confirmChangePlanTitle, message } as ConfirmDialogData,
     });
     const confirmed = await firstValueFrom(ref.afterClosed());
     if (!confirmed) return;
+    if (this.subscription()) {
+      this.openBillingPortal();
+      return;
+    }
     this.api.startTrial(plan.slug).subscribe({
       next: sub => this.subscription.set(sub),
     });

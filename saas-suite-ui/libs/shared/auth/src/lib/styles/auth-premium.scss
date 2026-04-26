@@ -396,6 +396,26 @@
     background: #f1f5f9;
     border-radius: 14px !important;
   }
+  .mat-mdc-input-element {
+    color: var(--auth-ink) !important;
+    -webkit-text-fill-color: var(--auth-ink) !important;
+    caret-color: var(--auth-brand-deep);
+  }
+  .mat-mdc-input-element::placeholder {
+    color: #64748b !important;
+    -webkit-text-fill-color: #64748b !important;
+    opacity: 1;
+  }
+  .mat-mdc-floating-label {
+    color: #475569 !important;
+  }
+  input.mat-mdc-input-element:-webkit-autofill,
+  input.mat-mdc-input-element:-webkit-autofill:hover,
+  input.mat-mdc-input-element:-webkit-autofill:focus {
+    box-shadow: 0 0 0 1000px #f1f5f9 inset !important;
+    -webkit-text-fill-color: var(--auth-ink) !important;
+    caret-color: var(--auth-brand-deep);
+  }
   .mdc-notched-outline__leading,
   .mdc-notched-outline__notch,
   .mdc-notched-outline__trailing {

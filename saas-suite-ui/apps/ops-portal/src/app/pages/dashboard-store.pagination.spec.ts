@@ -49,6 +49,7 @@ describe('DashboardStore pagination', () => {
     const store = TestBed.inject(DashboardStore);
     await store.loadAll();
 
+    expect(ordersApi.listOrders).toHaveBeenCalledWith({ cursor: undefined, limit: 100 });
     expect(paymentsApi.listPayments).toHaveBeenNthCalledWith(1, { page: 1, pageSize: 500 });
     expect(paymentsApi.listPayments).toHaveBeenNthCalledWith(2, { page: 2, pageSize: 500 });
     expect(store.executiveMetrics().failedPayments).toBe(1);

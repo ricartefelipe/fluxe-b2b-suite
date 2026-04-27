@@ -16,7 +16,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { EmptyStateComponent, StatusChipComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { LedgerEntryRow, LedgerFacade, PaymentIntent, PaymentsFacade, PaymentStatus } from '@saas-suite/data-access/payments';
-import { Order, OrderStatus, OrdersFacade } from '@saas-suite/data-access/orders';
+import { Order, ORDER_LIST_MAX_LIMIT, OrderStatus, OrdersFacade } from '@saas-suite/data-access/orders';
 import {
   buildCsv,
   buildDateRangeParams,
@@ -362,7 +362,7 @@ export class ReportsPage implements OnInit {
     await this.orders.loadAllOrders({
       status: this.orderStatus,
       q: this.blankToUndefined(this.orderCustomer),
-      limit: 500,
+      limit: ORDER_LIST_MAX_LIMIT,
     });
   }
 

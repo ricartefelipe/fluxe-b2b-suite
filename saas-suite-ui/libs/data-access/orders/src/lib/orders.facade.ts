@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { OrdersApiClient } from './orders-api.client';
-import { Order, CreateOrderRequest, OrderListParams } from './models/order.model';
+import { Order, CreateOrderRequest, ORDER_LIST_MAX_LIMIT, OrderListParams } from './models/order.model';
 import { LoggerService } from '@saas-suite/shared/telemetry';
 import { generateIdempotencyKey } from '@saas-suite/shared/util';
 
@@ -34,8 +34,9 @@ export class OrdersFacade {
     try {
       const orders: Order[] = [];
       let cursor = params?.cursor;
+      const limit = Math.min(params?.limit ?? ORDER_LIST_MAX_LIMIT, ORDER_LIST_MAX_LIMIT);
       do {
-        const r = await firstValueFrom(this.api.listOrders({ ...params, cursor, limit: params?.limit ?? 500 }));
+        const r = await firstValueFrom(this.api.listOrders({ ...params, cursor, limit }));
         orders.push(...r.data);
         cursor = r.nextCursor ?? undefined;
       } while (cursor);

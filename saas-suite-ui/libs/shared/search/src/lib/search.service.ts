@@ -5,7 +5,7 @@ import { Observable, Subject, forkJoin, of } from 'rxjs';
 import { catchError, debounceTime, map, switchMap } from 'rxjs/operators';
 
 import { CoreApiClient, Tenant, AuditLog } from '@saas-suite/data-access/core';
-import { OrdersApiClient, Order, InventoryItem } from '@saas-suite/data-access/orders';
+import { InventoryItem, Order, ORDER_LIST_MAX_LIMIT, OrdersApiClient } from '@saas-suite/data-access/orders';
 import { PaymentsApiClient, PaymentIntent } from '@saas-suite/data-access/payments';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { CursorResponse, PageResponse, toParams } from '@saas-suite/shared/http';
@@ -88,7 +88,7 @@ export class SearchService {
 
     if (enabled.includes('order')) {
       searches.push(
-        this.ordersApi.listOrders({ limit: max * 3 }).pipe(
+        this.ordersApi.listOrders({ limit: Math.min(max * 3, ORDER_LIST_MAX_LIMIT) }).pipe(
           map(res =>
             res.data
               .filter(o => this.matchesOrder(o, q))

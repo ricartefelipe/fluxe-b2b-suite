@@ -1,5 +1,7 @@
 export type OrderStatus = 'DRAFT' | 'CREATED' | 'RESERVED' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'CANCELLED' | 'PAID';
 
+export const ORDER_LIST_MAX_LIMIT = 100;
+
 export interface OrderItem {
   sku: string;
   description?: string;

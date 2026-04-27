@@ -2,7 +2,7 @@ import { Injectable, inject, signal, computed } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { OrdersApiClient } from '@saas-suite/data-access/orders';
 import { PaymentsApiClient } from '@saas-suite/data-access/payments';
-import { Order, OrderStatus, InventoryItem, InventoryAdjustment } from '@saas-suite/data-access/orders';
+import { InventoryAdjustment, InventoryItem, Order, ORDER_LIST_MAX_LIMIT, OrderStatus } from '@saas-suite/data-access/orders';
 import { PaymentIntent } from '@saas-suite/data-access/payments';
 import { LoggerService } from '@saas-suite/shared/telemetry';
 import { buildExecutiveMetrics } from './executive-metrics.util';
@@ -208,7 +208,7 @@ export class DashboardStore {
     const orders: Order[] = [];
     let cursor: string | undefined;
     do {
-      const page = await firstValueFrom(this.ordersApi.listOrders({ cursor, limit: 500 }));
+      const page = await firstValueFrom(this.ordersApi.listOrders({ cursor, limit: ORDER_LIST_MAX_LIMIT }));
       orders.push(...page.data.map(order => normalizeOrder(order as unknown as Record<string, unknown>)));
       cursor = page.nextCursor ?? undefined;
     } while (cursor);

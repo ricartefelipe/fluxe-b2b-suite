@@ -5,9 +5,9 @@
 
 set -euo pipefail
 
-CORE="${CORE_STAGING_URL:-https://spring-saas-core-staging.up.railway.app}"
-ORD="${ORDERS_STAGING_URL:-https://node-b2b-orders-staging.up.railway.app}"
-PAY="${PAYMENTS_STAGING_URL:-https://py-payments-ledger-staging.up.railway.app}"
+CORE="${CORE_STAGING_URL:?Defina CORE_STAGING_URL}"
+ORD="${ORDERS_STAGING_URL:?Defina ORDERS_STAGING_URL}"
+PAY="${PAYMENTS_STAGING_URL:?Defina PAYMENTS_STAGING_URL}"
 
 fail=0
 check() {

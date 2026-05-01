@@ -24,9 +24,9 @@ import urllib.request
 
 GQL_URL = os.environ.get("RAILWAY_GRAPHQL_URL", "https://backboard.railway.app/graphql/v2")
 
-DEFAULT_ENV = "3bef7757-dc46-4709-940a-775a14910a85"
-DEFAULT_OPS = "f8d811b2-1fbb-48c3-9521-ee0824f3e933"
-DEFAULT_ADMIN = "969783a4-f56f-46e1-9529-b8e9614fae79"
+DEFAULT_ENV = os.environ.get("RAILWAY_ENVIRONMENT_ID", "")
+DEFAULT_OPS = os.environ.get("RAILWAY_OPS_SERVICE_ID", "")
+DEFAULT_ADMIN = os.environ.get("RAILWAY_ADMIN_SERVICE_ID", "")
 
 OPS_CONFIG = "/saas-suite-ui/apps/ops-portal/railway.toml"
 ADMIN_CONFIG = "/saas-suite-ui/apps/admin-console/railway.toml"

@@ -45,11 +45,14 @@ echo ""
 # ── Tokens de autenticação ──
 echo -e "${BOLD}[1/6] Gerando tokens de operação...${NC}"
 JSON="Content-Type: application/json"
-TENANT="X-Tenant-Id: 00000000-0000-0000-0000-000000000002"
+SEED_EMAIL="${SEED_EMAIL:-ops@demo.example.com}"
+SEED_PASSWORD="${SEED_PASSWORD:?Defina SEED_PASSWORD}"
+SEED_TENANT="${SEED_TENANT:-00000000-0000-0000-0000-000000000002}"
+TENANT="X-Tenant-Id: $SEED_TENANT"
 
 ORDERS_TOKEN=$(curl -sf -X POST "$ORDERS/v1/auth/token" \
   -H "$JSON" \
-  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"00000000-0000-0000-0000-000000000002"}' \
+  -d "{\"email\":\"$SEED_EMAIL\",\"password\":\"$SEED_PASSWORD\",\"tenantId\":\"$SEED_TENANT\"}" \
   | jq -r '.access_token')
 
 if [ -z "$ORDERS_TOKEN" ] || [ "$ORDERS_TOKEN" = "null" ]; then
@@ -60,7 +63,7 @@ ok "Token node-b2b-orders OK"
 
 PAY_TOKEN=$(curl -sf -X POST "$PAYMENTS/v1/auth/token" \
   -H "$JSON" \
-  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"00000000-0000-0000-0000-000000000002"}' \
+  -d "{\"email\":\"$SEED_EMAIL\",\"password\":\"$SEED_PASSWORD\",\"tenantId\":\"$SEED_TENANT\"}" \
   | jq -r '.access_token')
 
 if [ -z "$PAY_TOKEN" ] || [ "$PAY_TOKEN" = "null" ]; then

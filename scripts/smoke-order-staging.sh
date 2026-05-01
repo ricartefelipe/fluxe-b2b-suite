@@ -23,9 +23,9 @@ if [[ -z "$BASE_URL" ]]; then
 fi
 BASE_URL="${BASE_URL%/}"
 
-OPS_EMAIL="${OPS_EMAIL:-ops@demo.example.com}"
-OPS_PASSWORD="${OPS_PASSWORD:-ops123}"
-TENANT="${OPS_TENANT:-00000000-0000-0000-0000-000000000002}"
+OPS_EMAIL="${OPS_EMAIL:?Defina OPS_EMAIL}"
+OPS_PASSWORD="${OPS_PASSWORD:?Defina OPS_PASSWORD}"
+TENANT="${OPS_TENANT:?Defina OPS_TENANT (UUID do tenant)}"
 
 json_get () {
   node -e "const obj=JSON.parse(process.argv[1]); const path=process.argv[2].split('.'); let cur=obj; for (const p of path){cur=cur[p];} console.log(cur);" "$1" "$2"

@@ -1569,7 +1569,7 @@ Cenário: Definir região
 ```gherkin
 Cenário: Login com sucesso
   Dado que estou na página de login
-  Quando informo email "ops@demo.example.com" e senha "ops123"
+  Quando informo email e senha válidos do seed
   Então o sistema valida as credenciais
   E emite um JWT (HS256) com claims: sub, tid, roles, perms, plan, region
   E o token é armazenado em sessionStorage

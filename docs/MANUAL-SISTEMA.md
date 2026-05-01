@@ -359,7 +359,7 @@ O worker roda em processo separado e é responsável por:
 
 ### 4.6 Dados de Seed
 
-- 3 usuários: admin@local (admin123), ops@demo.example.com (ops123), sales@demo.example.com (sales123)
+- 3 usuários de seed (senhas definidas via variável de ambiente no seed — ver `.env.example`)
 - 25 produtos em 5 categorias com estoque inicial de 30 unidades cada
 - Roles: admin, ops, sales com permissões diferenciadas
 - 8 políticas ABAC
@@ -540,7 +540,7 @@ Configuração: `GATEWAY_PROVIDER=mock` (dev) ou `GATEWAY_PROVIDER=stripe` + `ST
 
 ### 5.7 Dados de Seed
 
-- 3 usuários: admin@local (admin123), ops@demo.example.com (ops123), sales@demo.example.com (sales123)
+- 3 usuários de seed (senhas definidas via variável de ambiente no seed — ver `.env.example`)
 - Contas contábeis padrão (CASH, REVENUE, REFUND_EXPENSE)
 - Feature flags: fast_settlement, chaos_controls
 - 5 políticas ABAC para payments, ledger, admin, profile
@@ -1033,9 +1033,9 @@ cd py-payments-ledger && ./scripts/smoke.sh  # 13 testes
 
 | Serviço | Usuário | Senha | Role | Tenant |
 |---------|---------|-------|------|--------|
-| node / py | admin@local | admin123 | admin | — (global) |
-| node / py | ops@demo.example.com | ops123 | ops | 00000000-0000-0000-0000-000000000002 |
-| node / py | sales@demo.example.com | sales123 | sales | 00000000-0000-0000-0000-000000000002 |
+| node / py | admin@local | *(seed password)* | admin | — (global) |
+| node / py | ops@demo.example.com | *(seed password)* | ops | *(tenant do seed)* |
+| node / py | sales@demo.example.com | *(seed password)* | sales | *(tenant do seed)* |
 | RabbitMQ | guest | guest | — | — |
 | Grafana | admin | admin | — | — |
 

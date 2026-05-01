@@ -25,10 +25,29 @@ Thumbs.db
 npm-debug.log*
 pnpm-debug.log*
 
-# Environment
+# Environment (NEVER commit real env files)
 .env
 .env.local
 .env.*.local
+.env.production
+.env.staging
+.env.development
+*.env
+!*.env.example
+
+# Secrets & credentials (NEVER commit)
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+credentials.json
+service-account*.json
+*-credentials.*
+*.secret
+.secrets/
+secrets/
 
 # Terraform
 *.tfstate

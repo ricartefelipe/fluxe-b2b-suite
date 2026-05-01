@@ -114,7 +114,7 @@ Cada projeto já popula dados automaticamente durante o startup:
 | Entidade | Dados |
 |----------|-------|
 | Tenant | `00000000-0000-0000-0000-000000000002` (plano pro, region-a) |
-| Usuários | `admin@local` / `admin123`, `ops@demo.example.com` / `ops123`, `sales@demo.example.com` / `sales123` |
+| Usuários | Criados pelo seed — senhas configuráveis via variáveis de ambiente (ver `.env.example`) |
 | Roles | admin, ops, sales (com permissões diferenciadas) |
 | Produtos | 25 produtos em 5 categorias (Eletrônicos, Escritório, Industrial, Segurança, Limpeza) |
 | Inventário | SKU-1 (100 un.), SKU-2 (50 un.) + estoque para todos os 25 produtos |
@@ -125,7 +125,7 @@ Cada projeto já popula dados automaticamente durante o startup:
 | Entidade | Dados |
 |----------|-------|
 | Tenant | `00000000-0000-0000-0000-000000000002` (plano pro, region-a) |
-| Usuários | `admin@local` / `admin123`, `ops@demo.example.com` / `ops123`, `sales@demo.example.com` / `sales123` |
+| Usuários | Criados pelo seed — senhas configuráveis via variáveis de ambiente (ver `.env.example`) |
 | Roles | admin, ops, sales |
 | Policies | 5 políticas ABAC para payments, ledger, admin, profile |
 | Feature Flags | `fast_settlement`, `chaos_controls` |
@@ -221,12 +221,12 @@ Os serviços Node e Python também têm endpoint local de autenticação:
 # node-b2b-orders
 curl -s -X POST http://localhost:3000/v1/auth/token \
   -H "Content-Type: application/json" \
-  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"00000000-0000-0000-0000-000000000002"}'
+  -d '{"email":"$OPS_EMAIL","password":"$OPS_PASSWORD","tenantId":"$OPS_TENANT"}'
 
 # py-payments-ledger
 curl -s -X POST http://localhost:8000/v1/auth/token \
   -H "Content-Type: application/json" \
-  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"00000000-0000-0000-0000-000000000002"}'
+  -d '{"email":"$OPS_EMAIL","password":"$OPS_PASSWORD","tenantId":"$OPS_TENANT"}'
 ```
 
 ---
@@ -281,7 +281,7 @@ curl -s -X PATCH "http://localhost:3000/v1/orders/$ORDER_ID/confirm" \
 ```bash
 PAY_TOKEN=$(curl -s -X POST http://localhost:8000/v1/auth/token \
   -H "Content-Type: application/json" \
-  -d '{"email":"ops@demo.example.com","password":"ops123","tenantId":"00000000-0000-0000-0000-000000000002"}' \
+  -d '{"email":"$OPS_EMAIL","password":"$OPS_PASSWORD","tenantId":"$OPS_TENANT"}' \
   | jq -r '.access_token')
 
 PI=$(curl -s -X POST http://localhost:8000/v1/payment-intents \
@@ -352,9 +352,9 @@ O sistema implementa ABAC (Attribute-Based Access Control) em todas as camadas:
 
 | Usuário | Role | Pode fazer |
 |---------|------|------------|
-| `admin@local` / `admin123` | admin | Tudo (global admin) |
-| `ops@demo.example.com` / `ops123` | ops | CRUD pedidos/produtos/inventário/pagamentos |
-| `sales@demo.example.com` / `sales123` | sales | Somente leitura |
+| `admin@local` / *(seed password)* | admin | Tudo (global admin) |
+| `ops@demo.example.com` / *(seed password)* | ops | CRUD pedidos/produtos/inventário/pagamentos |
+| `sales@demo.example.com` / *(seed password)* | sales | Somente leitura |
 
 ---
 

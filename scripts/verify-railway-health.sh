@@ -3,9 +3,9 @@
 # Sobrescrever: CORE_URL ORDERS_URL PAYMENTS_URL (sem barra final).
 set -euo pipefail
 
-CORE_URL="${CORE_URL:-https://spring-saas-core-production.up.railway.app}"
-ORDERS_URL="${ORDERS_URL:-https://node-b2b-orders-production.up.railway.app}"
-PAYMENTS_URL="${PAYMENTS_URL:-https://py-payments-ledger-production.up.railway.app}"
+CORE_URL="${CORE_URL:?Defina CORE_URL (ex: https://seu-core.up.railway.app)}"
+ORDERS_URL="${ORDERS_URL:?Defina ORDERS_URL (ex: https://seu-orders.up.railway.app)}"
+PAYMENTS_URL="${PAYMENTS_URL:?Defina PAYMENTS_URL (ex: https://seu-payments.up.railway.app)}"
 
 check() {
   local name="$1" url="$2"

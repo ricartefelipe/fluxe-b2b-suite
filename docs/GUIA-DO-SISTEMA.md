@@ -25,7 +25,7 @@ Cada organização é um **tenant** com plano (starter, pro, enterprise), regiã
 
 ### 2.1 Shop (Loja B2B)
 
-**URL**: `shop-frontend-staging.up.railway.app`
+**URL**: *(ver Railway Dashboard — Settings → Networking)*
 
 **Público-alvo**: Compradores e representantes comerciais do tenant.
 
@@ -44,7 +44,7 @@ Cada organização é um **tenant** com plano (starter, pro, enterprise), regiã
 
 ### 2.2 Ops Portal (Portal de Operações)
 
-**URL**: `ops-portal-staging.up.railway.app`
+**URL**: *(ver Railway Dashboard — Settings → Networking)*
 
 **Público-alvo**: Equipe operacional (gestores de pedidos, estoque e finanças).
 
@@ -66,7 +66,7 @@ Cada organização é um **tenant** com plano (starter, pro, enterprise), regiã
 
 ### 2.3 Admin Console (Console Administrativo)
 
-**URL**: `admin-console-staging.up.railway.app`
+**URL**: *(ver Railway Dashboard — Settings → Networking)*
 
 **Público-alvo**: Administradores da plataforma e gestores de governança.
 
@@ -280,9 +280,9 @@ O sistema suporta **Português (pt-BR)** e **Inglês (en-US)** em todas as inter
 
 | Serviço | URL |
 |---------|-----|
-| Shop | `https://shop-frontend-staging.up.railway.app` |
-| Ops Portal | `https://ops-portal-staging.up.railway.app` |
-| Admin Console | `https://admin-console-staging-b1ab.up.railway.app` |
-| Core API | `https://spring-saas-core-staging.up.railway.app` |
-| Orders API | `https://node-b2b-orders-staging.up.railway.app` |
-| Payments API | `https://py-payments-ledger-staging.up.railway.app` |
+| Shop | *(Railway Dashboard → shop-frontend → Settings → Networking)* |
+| Ops Portal | *(Railway Dashboard → ops-portal → Settings → Networking)* |
+| Admin Console | *(Railway Dashboard → admin-console → Settings → Networking)* |
+| Core API | *(Railway Dashboard → spring-saas-core → Settings → Networking)* |
+| Orders API | *(Railway Dashboard → node-b2b-orders → Settings → Networking)* |
+| Payments API | *(Railway Dashboard → py-payments-ledger → Settings → Networking)* |

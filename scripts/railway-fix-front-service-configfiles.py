@@ -38,25 +38,26 @@ import urllib.request
 
 GQL_URL = os.environ.get("RAILWAY_GRAPHQL_URL", "https://backboard.railway.app/graphql/v2")
 
-# environmentId + serviceId por ambiente (Fluxe B2B Suite; actualizar se recriar serviços)
+# environmentId + serviceId por ambiente — definir via variáveis de ambiente.
+# Exportar RAILWAY_STAGING_ENV_ID, RAILWAY_STAGING_ADMIN_ID, etc. antes de usar.
 STAGING = {
-    "environment_id": "3bef7757-dc46-4709-940a-775a14910a85",
-    "admin": "969783a4-f56f-46e1-9529-b8e9614fae79",
-    "ops": "f8d811b2-1fbb-48c3-9521-ee0824f3e933",
-    "shop": "b115c175-e10c-4cb0-bb82-ff1723ab5108",
+    "environment_id": os.environ.get("RAILWAY_STAGING_ENV_ID", ""),
+    "admin": os.environ.get("RAILWAY_STAGING_ADMIN_ID", ""),
+    "ops": os.environ.get("RAILWAY_STAGING_OPS_ID", ""),
+    "shop": os.environ.get("RAILWAY_STAGING_SHOP_ID", ""),
 }
 PRODUCTION = {
-    "environment_id": "8652b9da-75f3-42d1-8a57-e73319edb900",
-    "admin": "77d6fffe-f1e6-485a-8f43-b438550fe6f8",
-    "ops": "cec609d4-1278-4774-88bf-38090b34a0a7",
-    "shop": "b07cf91b-a187-426b-9b87-34f64eca566b",
+    "environment_id": os.environ.get("RAILWAY_PROD_ENV_ID", ""),
+    "admin": os.environ.get("RAILWAY_PROD_ADMIN_ID", ""),
+    "ops": os.environ.get("RAILWAY_PROD_OPS_ID", ""),
+    "shop": os.environ.get("RAILWAY_PROD_SHOP_ID", ""),
 }
-# Staging dentro do projecto "Fluxe B2B Suite — Production" (hosts *-staging.up.railway.app na doc)
+# Staging dentro do projecto Production (legacy)
 LEGACY_STAGING = {
-    "environment_id": "f91a2b8e-6ba0-4481-b46c-d8f4dc0171dc",
-    "admin": "77d6fffe-f1e6-485a-8f43-b438550fe6f8",
-    "ops": "cec609d4-1278-4774-88bf-38090b34a0a7",
-    "shop": "b07cf91b-a187-426b-9b87-34f64eca566b",
+    "environment_id": os.environ.get("RAILWAY_LEGACY_STAGING_ENV_ID", ""),
+    "admin": os.environ.get("RAILWAY_LEGACY_STAGING_ADMIN_ID", ""),
+    "ops": os.environ.get("RAILWAY_LEGACY_STAGING_OPS_ID", ""),
+    "shop": os.environ.get("RAILWAY_LEGACY_STAGING_SHOP_ID", ""),
 }
 
 CONFIG_PATHS = {

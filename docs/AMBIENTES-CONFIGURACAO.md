@@ -23,7 +23,7 @@ Documento central que define os **três ambientes** do Fluxe B2B Suite: configur
 
 **Deploy na nuvem:** automático quando o código **chega** ao remoto em `develop` (staging) ou `master` (produção), desde que cada serviço Railway tenha *Production Branch* alinhada a essa branch. Não há “ambiente de destino” separado no Git: a branch **é** o ambiente. Detalhe na secção *Branch canónica → ambiente* em [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md).
 
-**Seu usuário funciona em todos os ambientes.** Mesmo login (ex.: `admin@local` / `admin123` em local/staging; em prod, criar usuário real ou manter um admin inicial).
+**Seu usuário funciona em todos os ambientes.** O seed cria utilizadores demo cujas senhas são configuráveis via variáveis de ambiente (ver `.env.example` de cada repo). Em produção, criar utilizador real com senha forte.
 
 ---
 

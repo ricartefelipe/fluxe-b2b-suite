@@ -3,7 +3,7 @@
 Renomeia os domínios públicos gerados pelo Railway (*.up.railway.app) dos serviços
 ops-portal e admin-console para os FQDN documentados em URLS-STAGING.md.
 
-Útil quando os hosts `ops-portal-staging` / `admin-console-staging-b1ab` respondem com
+Útil quando os hosts dos frontends staging respondem com
 a UI do Shop ou outro serviço: o tráfego não estava associado ao serviceInstance certo.
 
 Não dispara novo build — só atualiza o mapeamento na edge (propagação em segundos).
@@ -35,10 +35,10 @@ import urllib.request
 
 GQL_URL = os.environ.get("RAILWAY_GRAPHQL_URL", "https://backboard.railway.app/graphql/v2")
 
-DEFAULT_PROJECT = "f83184d7-69fc-4a12-8920-08c433700df0"
-DEFAULT_ENV = "3bef7757-dc46-4709-940a-775a14910a85"
-DEFAULT_OPS_DOMAIN = "ops-portal-staging.up.railway.app"
-DEFAULT_ADMIN_DOMAIN = "admin-console-staging-b1ab.up.railway.app"
+DEFAULT_PROJECT = os.environ.get("RAILWAY_PROJECT_ID", "")
+DEFAULT_ENV = os.environ.get("RAILWAY_ENVIRONMENT_ID", "")
+DEFAULT_OPS_DOMAIN = os.environ.get("OPS_PORTAL_DOMAIN", "")
+DEFAULT_ADMIN_DOMAIN = os.environ.get("ADMIN_CONSOLE_DOMAIN", "")
 
 QUERY_ENV = """
 query EnvDomains($id: String!, $projectId: String!) {

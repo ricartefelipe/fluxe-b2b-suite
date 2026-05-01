@@ -14,7 +14,11 @@ coverage/
 *.swp
 *.swo
 .vscode/
+.cursor/
 *.sublime-*
+
+# AI assistant config (should not be in source control)
+AGENTS.md
 
 # OS
 .DS_Store

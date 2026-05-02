@@ -215,11 +215,16 @@ info "Subindo PostgreSQL + Redis (py-payments-ledger)..."
 (cd "$PY_DIR" && docker compose up -d --no-deps postgres redis) 2>&1 | tail -3
 
 info "Aguardando bancos ficarem saudáveis..."
-for i in $(seq 1 30); do
-  PG1=$(cd "$SPRING_DIR" && docker compose ps --format json postgres 2>/dev/null | grep -c '"healthy"' || echo "0")
-  PG2=$(cd "$NODE_DIR" && docker compose ps --format json postgres 2>/dev/null | grep -c '"healthy"' || echo "0")
-  PG3=$(cd "$PY_DIR" && docker compose ps --format json postgres 2>/dev/null | grep -c '"healthy"' || echo "0")
-  [ "$PG1" -ge 1 ] && [ "$PG2" -ge 1 ] && [ "$PG3" -ge 1 ] && break
+postgres_ready() {
+  local dir="$1" user="$2" db="$3"
+  (cd "$dir" && docker compose exec -T postgres pg_isready -U "$user" -d "$db") &>/dev/null
+}
+for _i in $(seq 1 45); do
+  if postgres_ready "$SPRING_DIR" saascore saascore &&
+    postgres_ready "$NODE_DIR" app app &&
+    postgres_ready "$PY_DIR" app app; then
+    break
+  fi
   sleep 2
 done
 ok "PostgreSQL x3 + Redis x3 + RabbitMQ prontos"
@@ -260,7 +265,14 @@ ok "Node buildado"
 
 info "Python: verificando dependências..."
 if [ ! -d "$PY_DIR/.venv" ]; then
-  (cd "$PY_DIR" && python3 -m venv .venv)
+  if ! (cd "$PY_DIR" && python3 -m venv .venv); then
+    fail "Não foi possível criar .venv em py-payments-ledger. Em Debian/Ubuntu: sudo apt install python3.12-venv (ou o pacote venv da tua versão de Python)."
+    exit 1
+  fi
+fi
+if [ ! -x "$PY_DIR/.venv/bin/pip" ]; then
+  fail "pip ausente no venv. Instale python3-venv, apague py-payments-ledger/.venv e execute este script de novo."
+  exit 1
 fi
 (cd "$PY_DIR" && .venv/bin/pip install -q -r requirements.txt 2>&1 | tail -2)
 ok "Python pronto"

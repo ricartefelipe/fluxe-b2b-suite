@@ -71,7 +71,7 @@ const BAR_MAX_HEIGHT = 170;
             <div class="executive-metric">
               <span class="executive-label">{{ i18n.messages().dashboard.revenueAtRisk }}</span>
               <span class="executive-value">{{ formatCurrencyTotals(store.executiveMetrics().revenueAtRiskTotals) }}</span>
-              <span class="executive-context">{{ i18n.messages().dashboard.pendingPayments }}</span>
+              <span class="executive-context">{{ i18n.messages().dashboard.revenueAtRiskHint }}</span>
             </div>
           </div>
         </mat-card-content>
@@ -113,8 +113,8 @@ const BAR_MAX_HEIGHT = 170;
           <mat-card-content class="kpi-content">
             <div class="kpi-icon kpi-icon--orange"><mat-icon>payments</mat-icon></div>
             <div class="kpi-data">
-              <span class="kpi-value">{{ store.pendingPayments() }}</span>
-              <span class="kpi-label">{{ i18n.messages().dashboard.pendingPayments }}</span>
+              <span class="kpi-value">{{ store.paymentsAtRiskCount() }}</span>
+              <span class="kpi-label">{{ i18n.messages().dashboard.paymentsAtRisk }}</span>
             </div>
           </mat-card-content>
         </mat-card>
@@ -393,7 +393,7 @@ const BAR_MAX_HEIGHT = 170;
       border: 1px solid var(--app-border);
       border-radius: 14px;
       padding: 16px;
-      background: rgba(255, 255, 255, 0.52);
+      background: var(--app-surface-variant);
     }
 
     .executive-label {

@@ -92,6 +92,8 @@ O frontend obtém o token (em modo dev ou OIDC) e envia nas requisições aos ba
 
 ## Quick Start
 
+**Começar do zero (suíte completa local)?** Guia curto: [COMECE-AQUI.md](COMECE-AQUI.md).
+
 ### Pré-requisitos
 
 - **Node.js 20+**, **pnpm** (recomendado)

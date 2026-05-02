@@ -1,6 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom, timeout } from 'rxjs';
+import { initSentryBrowser } from '@saas-suite/shared/telemetry';
 import { AppConfig, DEFAULT_CONFIG } from './app-config.model';
 
 /** Evita APP_INITIALIZER preso indefinidamente se /assets/config.json não responder. */
@@ -30,6 +31,11 @@ export class RuntimeConfigService {
         merged.paymentsApiBaseUrl = r['paymentsApiUrl'] as string;
       }
       this._config.set(merged);
+      initSentryBrowser({
+        dsn: merged.sentryDsn,
+        environment: merged.sentryEnvironment,
+        tracesSampleRate: merged.sentryTracesSampleRate,
+      });
     } catch {
       console.warn('[RuntimeConfig] Could not load config.json — using defaults');
       this._config.set(DEFAULT_CONFIG);

@@ -262,6 +262,8 @@ export interface Messages {
     failedPayments: string;
     revenueAtRisk: string;
     vsPreviousPeriod: string;
+    totalRevenueHint: string;
+    revenueLast7DaysScopeHint: string;
   };
   onboarding: {
     title: string;
@@ -792,6 +794,14 @@ export interface Messages {
     opensInNewTabHint: string;
     dataSectionTitle: string;
     exportLinkHint: string;
+    firstStepsTitle: string;
+    firstStepsIntro: string;
+    firstStepsStep1: string;
+    firstStepsStep2: string;
+    firstStepsStep3: string;
+    firstStepsStep4: string;
+    firstStepsStep5: string;
+    firstStepsFooter: string;
   };
 }
 

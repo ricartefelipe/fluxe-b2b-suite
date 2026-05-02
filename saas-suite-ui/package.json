@@ -52,6 +52,7 @@
     "@angular/ssr": "21.1.5",
     "@fontsource/plus-jakarta-sans": "^5.2.8",
     "@fontsource/roboto": "^5.2.10",
+    "@sentry/angular": "^10.51.0",
     "angular-oauth2-oidc": "^20.0.2",
     "express": "^4.21.2",
     "http-proxy-middleware": "^3.0.5",

@@ -244,6 +244,8 @@ export const EN_US_MESSAGES: Messages = {
     totalRevenue: 'Total Revenue',
     activeInventory: 'Active Inventory',
     pendingPayments: 'Pending Payments',
+    paymentsAtRisk: 'Payments at risk',
+    revenueAtRiskHint: 'Pending, authorized or failed payment amounts',
     recentOrders: 'Recent Orders',
     inventoryAlerts: 'Inventory Alerts',
     revenueOverTime: 'Revenue Over Time',

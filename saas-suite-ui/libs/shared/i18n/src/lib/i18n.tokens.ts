@@ -241,6 +241,8 @@ export interface Messages {
     totalRevenue: string;
     activeInventory: string;
     pendingPayments: string;
+    paymentsAtRisk: string;
+    revenueAtRiskHint: string;
     recentOrders: string;
     inventoryAlerts: string;
     revenueOverTime: string;

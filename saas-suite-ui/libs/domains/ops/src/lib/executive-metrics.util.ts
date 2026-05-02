@@ -1,8 +1,10 @@
 import { Order } from '@saas-suite/data-access/orders';
-import { PaymentIntent } from '@saas-suite/data-access/payments';
+import type { PaymentIntent, PaymentStatus } from '@saas-suite/data-access/payments';
 
 const REVENUE_ORDER_STATUSES = new Set(['CONFIRMED', 'PAID', 'SHIPPED', 'DELIVERED']);
-const RISK_PAYMENT_STATUSES = new Set(['FAILED', 'PENDING', 'AUTHORIZED']);
+
+/** Pagamentos cujo valor entra em receita em risco (mesma regra que o KPI do dashboard). */
+export const RISK_PAYMENT_STATUSES = new Set<PaymentStatus>(['FAILED', 'PENDING', 'AUTHORIZED']);
 
 export interface ExecutiveMetrics {
   revenueLast7Days: number;

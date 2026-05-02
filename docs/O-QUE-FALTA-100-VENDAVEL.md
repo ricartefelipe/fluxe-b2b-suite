@@ -33,6 +33,7 @@ Checklist objetivo do que ainda falta implementar ou validar para considerar o p
 | **Webhook Stripe** | ✅ Implementado | Retorno e validação de tenant documentados no CHANGELOG. |
 | **Limites por plano** | ✅ Existe | ABAC/RN com `allowedPlans`; rate limiting por plano. |
 | **Preços e planos na landing** | ✅ Existe | Landing `/welcome` com 3 planos e pricing. |
+| **Lembretes de fim de trial** | ✅ Implementado | E-mail automático **3 e 1 dia antes** do `trialEndsAt` (UTC), aos admins ativos; idempotente; `app.trial-reminder.*` e `TRIAL_REMINDER_*` no Core. |
 
 ---
 
@@ -49,7 +50,7 @@ Checklist objetivo do que ainda falta implementar ou validar para considerar o p
 
 | Item | Status | Notas |
 |------|--------|--------|
-| **Onboarding de tenant (wizard)** | ✅ Existe | Stepper no Admin: organização, plano, configuração, revisão. |
+| **Onboarding de tenant (wizard)** | ✅ Existe | Stepper no Admin: organização, plano, configuração, revisão. **Trilha pós-login até primeiro pedido:** [PRIMEIROS-PASSOS.md](PRIMEIROS-PASSOS.md) |
 | **Signup self-service** | ✅ Existe | “Criar conta” / signup com tenant + admin. |
 | **Convite com senha temporária** | ✅ Implementado | Backend (hash) + template de email com senha temporária. |
 
@@ -61,6 +62,7 @@ Checklist objetivo do que ainda falta implementar ou validar para considerar o p
 |------|--------|--------|
 | **Mensagem de erro no dashboard** | ✅ Implementado | Quando `loadAll` falha no painel Ops, exibe card com mensagem clara e botão "Tentar novamente" (“Não foi possível carregar os dados. Verifique as URLs das APIs no ambiente.”). |
 | **CORS em produção** | ✅ Documentado | Tabela em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md#51-cors-nos-backends): variável por backend (`CORS_ALLOWED_ORIGINS` / `CORS_ORIGINS`) e exemplo; checklist pós-deploy inclui CORS. |
+| **Sentry (erros servidor)** | ✅ Implementado | Com `SENTRY_DSN` preenchido: **spring-saas-core** (`sentry-spring-boot-starter-jakarta`), **node-b2b-orders** (`@sentry/node` + captura 5xx no `ProblemDetailsFilter`; worker importa o mesmo instrumento), **py-payments-ledger** (`sentry-sdk` + handler global + worker). Variáveis: `SENTRY_ENVIRONMENT`, `SENTRY_TRACES_SAMPLE_RATE`. |
 
 ---
 

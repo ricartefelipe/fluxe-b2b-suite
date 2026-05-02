@@ -1,0 +1,14 @@
+# Evita copiar artefactos locais para o contexto Docker — sem isto o Nx pode falhar com
+# "The projects in the following directories have no name provided" (.angular/cache/...).
+
+node_modules
+dist
+tmp
+coverage
+.angular
+.nx
+.git
+.gitignore
+**/.DS_Store
+*.log
+eslint-report.json

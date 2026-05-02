@@ -51,6 +51,7 @@ const BAR_MAX_HEIGHT = 170;
           <div class="executive-grid">
             <div class="executive-metric">
               <span class="executive-label">{{ i18n.messages().dashboard.revenueLast7Days }}</span>
+              <span class="executive-scope-hint">{{ i18n.messages().dashboard.revenueLast7DaysScopeHint }}</span>
               <span class="executive-value">{{ formatCurrencyTotals(store.executiveMetrics().revenueLast7DaysTotals) }}</span>
               <span class="executive-context" [class.executive-context--negative]="store.executiveMetrics().revenueTrendPct < 0">
                 {{ formatPercent(store.executiveMetrics().revenueTrendPct) }} {{ i18n.messages().dashboard.vsPreviousPeriod }}
@@ -95,6 +96,7 @@ const BAR_MAX_HEIGHT = 170;
             <div class="kpi-data">
               <span class="kpi-value">{{ store.totalRevenue() | currency:store.currency():'symbol':'1.2-2' }}</span>
               <span class="kpi-label">{{ i18n.messages().dashboard.totalRevenue }}</span>
+              <span class="kpi-hint">{{ i18n.messages().dashboard.totalRevenueHint }}</span>
             </div>
           </mat-card-content>
         </mat-card>
@@ -403,6 +405,15 @@ const BAR_MAX_HEIGHT = 170;
       margin-bottom: 6px;
     }
 
+    .executive-scope-hint {
+      display: block;
+      font-size: 11px;
+      line-height: 1.35;
+      color: var(--app-text-secondary);
+      opacity: 0.92;
+      margin: -2px 0 8px;
+    }
+
     .executive-value {
       display: block;
       font-size: 24px;
@@ -438,6 +449,14 @@ const BAR_MAX_HEIGHT = 170;
       font-size: 13px;
       color: var(--app-text-secondary);
       margin-top: 2px;
+    }
+
+    .kpi-hint {
+      font-size: 11px;
+      line-height: 1.35;
+      color: var(--app-text-secondary);
+      margin-top: 6px;
+      max-width: 220px;
     }
 
     /* ── Charts ───────────────────────────────────────── */

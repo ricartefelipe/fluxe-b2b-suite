@@ -4,5 +4,8 @@
   "paymentsApiBaseUrl": "/api/payments",
   "authMode": "oidc",
   "logLevel": "info",
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "sentryDsn": "",
+  "sentryEnvironment": "",
+  "sentryTracesSampleRate": 0
 }

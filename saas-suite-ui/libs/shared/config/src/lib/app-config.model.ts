@@ -19,6 +19,11 @@ export interface AppConfig {
   };
   logLevel: 'debug' | 'info' | 'warn' | 'error';
   version: string;
+  /** DSN do Sentry (browser). Vazio ou omitido desativa o envio. */
+  sentryDsn?: string;
+  sentryEnvironment?: string;
+  /** 0–1; fora desse intervalo usa 0. */
+  sentryTracesSampleRate?: number;
 }
 
 export const DEFAULT_CONFIG: AppConfig = {

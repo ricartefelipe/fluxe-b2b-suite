@@ -12,7 +12,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { of } from 'rxjs';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
 import { BillingInvoice, PlanDefinition, Subscription } from '@saas-suite/data-access/core';
-import { vi } from 'vitest';
 
 const plan: PlanDefinition = {
   id: 'plan-pro',

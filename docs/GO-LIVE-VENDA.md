@@ -152,6 +152,7 @@ Ver referência em [docs/TERMOS-PRIVACIDADE.md](TERMOS-PRIVACIDADE.md).
 | [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md) | Todas as variáveis por serviço |
 | [GUIA-DO-SISTEMA.md](GUIA-DO-SISTEMA.md) | Visão geral do sistema e operação |
 | [EXECUCAO-VENDA-MONITORIZACAO.md](EXECUCAO-VENDA-MONITORIZACAO.md) | Playbook único: staging → monitorização → promoção → produção |
+| [PRODUCAO-OPERACAO.md](PRODUCAO-OPERACAO.md) | **Go-live operacional:** domínio/SSL, prefight de env, migrations sem seed, backup, incidentes |
 | Raiz: `.env.example` | Variáveis do `docker-compose.prod.yml` (OIDC JWKS, JWT partilhado, Resend, Stripe billing + ledger, `ENCRYPTION_KEY`) |
 | Script `pnpm verify:go-live` | Health HTTP dos três backends (`scripts/go-live-production-verify.sh`) |
 

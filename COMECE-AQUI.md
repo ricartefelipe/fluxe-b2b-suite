@@ -38,3 +38,4 @@ Isto sobe bases (Docker), os três backends, migrations, seed de demo (onde apli
 - Logs: pasta `.local-logs/` dentro de `fluxe-b2b-suite`
 - Guia de produto (login, primeiro pedido): [docs/PRIMEIROS-PASSOS.md](docs/PRIMEIROS-PASSOS.md)
 - Produção real (domínio, Stripe, etc.): [docs/GO-LIVE-VENDA.md](docs/GO-LIVE-VENDA.md)
+- **Vender a clientes** (backup, incidentes, preflight de env): [docs/PRODUCAO-OPERACAO.md](docs/PRODUCAO-OPERACAO.md)

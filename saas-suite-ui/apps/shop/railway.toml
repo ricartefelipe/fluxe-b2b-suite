@@ -3,6 +3,7 @@
 builder = "DOCKERFILE"
 dockerfilePath = "apps/shop/Dockerfile"
 watchPatterns = [
+  "/saas-suite-ui/.dockerignore",
   "/saas-suite-ui/apps/shop/**",
   "/saas-suite-ui/libs/shop/**",
   "/saas-suite-ui/libs/shared/**",

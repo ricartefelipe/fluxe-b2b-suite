@@ -54,5 +54,6 @@ describe('DashboardStore pagination', () => {
     expect(paymentsApi.listPayments).toHaveBeenNthCalledWith(2, { page: 2, pageSize: 500 });
     expect(store.executiveMetrics().failedPayments).toBe(1);
     expect(store.executiveMetrics().revenueAtRisk).toBe(15);
+    expect(store.paymentsAtRiskCount()).toBe(2);
   });
 });

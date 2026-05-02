@@ -169,7 +169,7 @@ Secrets (`JWT_SECRET`, `STRIPE_*`, `RESEND_*`, `ENCRYPTION_KEY`) devem estar ape
 
 ## 11. Observabilidade
 
-- [ ] **Sentry (recomendado):** definir `SENTRY_DSN_CORE`, `SENTRY_DSN_ORDERS`, `SENTRY_DSN_PAYMENTS` em cada serviço (variáveis já previstas em [.env.example](../.env.example) e no `docker-compose.prod.yml`).
+- [ ] **Sentry (recomendado):** os três backends já incluem o SDK (Core Spring, Orders Nest, Payments FastAPI/worker). Em cada serviço definir `SENTRY_DSN` (no compose: `SENTRY_DSN_CORE` / `SENTRY_DSN_ORDERS` / `SENTRY_DSN_PAYMENTS` → ver [.env.example](../.env.example)); opcional `SENTRY_ENVIRONMENT`, `SENTRY_TRACES_SAMPLE_RATE`.
 - [ ] **Métricas:** spring-saas-core expõe métricas Micrometer/Prometheus conforme perfil — não expor `/actuator/prometheus` à Internet sem autenticação ou rede privada.
 - [ ] **Alertas:** thresholds iniciais em [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md); configurar pelo menos alerta de disponibilidade (health falhou) e um alerta de erros ou latência por serviço.
 - [ ] **OpenTelemetry:** no compose de referência os serviços apontam OTLP para Jaeger local; em Railway pode usar exporter OTLP para o provedor gerido (Datadog, Grafana Cloud, etc.) se aplicável.

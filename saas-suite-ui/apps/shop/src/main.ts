@@ -1,9 +1,11 @@
 import { bootstrapApplication } from '@angular/platform-browser';
+import { captureClientError } from '@saas-suite/shared/telemetry';
 import { appConfig } from './app/app.config';
 import { App } from './app/app';
 
 bootstrapApplication(App, appConfig).catch((err) => {
   console.error('Bootstrap failed:', err);
+  captureClientError(err);
   document.body.innerHTML = `
     <div style="font-family: system-ui; padding: 2rem; max-width: 600px; margin: 0 auto;">
       <h1 style="color: #c62828;">Erro ao carregar a aplicação</h1>

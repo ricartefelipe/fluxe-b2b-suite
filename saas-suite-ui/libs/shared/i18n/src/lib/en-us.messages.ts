@@ -266,6 +266,10 @@ export const EN_US_MESSAGES: Messages = {
     failedPayments: 'failed payments',
     revenueAtRisk: 'Revenue at risk',
     vsPreviousPeriod: 'vs. previous period',
+    totalRevenueHint:
+      'All-time sum: confirmed, paid, shipped, or delivered orders (no date filter).',
+    revenueLast7DaysScopeHint:
+      'Only orders created in the last 7 UTC days with those statuses — can be zero if activity is older.',
   },
   onboarding: {
     title: 'Create New Tenant',
@@ -840,5 +844,15 @@ export const EN_US_MESSAGES: Messages = {
     opensInNewTabHint: 'Opens in a new tab',
     dataSectionTitle: 'Data & privacy',
     exportLinkHint: 'Download your data as JSON (tenant, users, policies and feature flags) from the Billing page.',
+    firstStepsTitle: 'Getting started',
+    firstStepsIntro:
+      'Goal: from login to a useful first order in under 30 minutes on staging or demo. Full guide in the repo: docs/PRIMEIROS-PASSOS.md.',
+    firstStepsStep1: 'Admin: sign in, create or pick your organization (tenant), review Billing/plan.',
+    firstStepsStep2: 'Optional: invite an operator and verify first login.',
+    firstStepsStep3: 'Ops Portal: confirm tenant context and open the dashboard (orders, inventory).',
+    firstStepsStep4: 'Shop (if applicable): build a cart and check out to create an order.',
+    firstStepsStep5: 'For end-to-end CONFIRMED or PAID, follow the staging order checklist (workers + queues).',
+    firstStepsFooter:
+      'Technical docs and APIs: section below. Long-form platform guide: set platformDocsUrl in config.json when available.',
   },
 };

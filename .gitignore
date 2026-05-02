@@ -17,7 +17,7 @@ coverage/
 .cursor/
 *.sublime-*
 
-# AI assistant config (should not be in source control)
+# Optional local agent policy files (not committed)
 AGENTS.md
 
 # OS

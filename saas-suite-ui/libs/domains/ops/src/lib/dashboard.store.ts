@@ -5,7 +5,7 @@ import { PaymentsApiClient } from '@saas-suite/data-access/payments';
 import { InventoryAdjustment, InventoryItem, Order, ORDER_LIST_MAX_LIMIT, OrderStatus } from '@saas-suite/data-access/orders';
 import { PaymentIntent } from '@saas-suite/data-access/payments';
 import { LoggerService } from '@saas-suite/shared/telemetry';
-import { buildExecutiveMetrics } from './executive-metrics.util';
+import { buildExecutiveMetrics, RISK_PAYMENT_STATUSES } from './executive-metrics.util';
 
 const VALID_STATUSES: OrderStatus[] = ['DRAFT', 'CREATED', 'RESERVED', 'CONFIRMED', 'SHIPPED', 'DELIVERED', 'CANCELLED', 'PAID'];
 
@@ -69,6 +69,54 @@ function getOrderDateStr(created: string | number | Date): string {
   return new Date(typeof created === 'number' ? created : created).toISOString().slice(0, 10);
 }
 
+/** YYYY-MM-DD em UTC — alinha buckets do gráfico com datas ISO dos pedidos. */
+function utcCalendarDayStr(dateUtc: Date): string {
+  const y = dateUtc.getUTCFullYear();
+  const m = String(dateUtc.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(dateUtc.getUTCDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+const PAYMENT_STATUSES = [
+  'CREATED',
+  'PENDING',
+  'AUTHORIZED',
+  'CONFIRMED',
+  'SETTLED',
+  'FAILED',
+  'CANCELLED',
+  'VOIDED',
+  'REFUNDED',
+  'PARTIALLY_REFUNDED',
+] as const;
+
+function normalizePayment(raw: Record<string, unknown>): PaymentIntent {
+  const statusRaw = String(raw['status'] ?? 'CREATED').toUpperCase();
+  const status = PAYMENT_STATUSES.includes(statusRaw as (typeof PAYMENT_STATUSES)[number])
+    ? (statusRaw as PaymentIntent['status'])
+    : 'CREATED';
+  return {
+    id: String(raw['id'] ?? ''),
+    amount: raw['amount'] != null ? String(raw['amount']) : '0',
+    currency: raw['currency'] != null ? String(raw['currency']) : 'BRL',
+    status,
+    customer_ref: String(raw['customer_ref'] ?? raw['customerRef'] ?? ''),
+    gateway_ref: raw['gateway_ref'] != null ? String(raw['gateway_ref']) : raw['gatewayRef'] != null ? String(raw['gatewayRef']) : null,
+    created_at:
+      typeof raw['created_at'] === 'string'
+        ? raw['created_at']
+        : typeof raw['createdAt'] === 'string'
+          ? raw['createdAt']
+          : new Date().toISOString(),
+    updated_at:
+      typeof raw['updated_at'] === 'string'
+        ? raw['updated_at']
+        : typeof raw['updatedAt'] === 'string'
+          ? raw['updatedAt']
+          : new Date().toISOString(),
+  };
+}
+
 @Injectable({ providedIn: 'root' })
 export class DashboardStore {
   private ordersApi = inject(OrdersApiClient);
@@ -97,8 +145,9 @@ export class DashboardStore {
     this._inventoryItems().filter(i => i.availableQty > 0).length,
   );
 
-  readonly pendingPayments = computed(() =>
-    this._payments().filter(p => p.status === 'PENDING').length,
+  /** Mesmos status que somam «receita em risco» em buildExecutiveMetrics (pendente, autorizado ou falho). */
+  readonly paymentsAtRiskCount = computed(() =>
+    this._payments().filter(p => RISK_PAYMENT_STATUSES.has(p.status)).length,
   );
 
   readonly currency = computed(() => this._orders()[0]?.currency ?? 'BRL');
@@ -108,10 +157,11 @@ export class DashboardStore {
   readonly dailyRevenue = computed<DailyRevenue[]>(() => {
     const orders = this._orders();
     const days: DailyRevenue[] = [];
+    const now = new Date();
+    const anchorUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
     for (let i = 6; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().slice(0, 10);
+      const d = new Date(anchorUtc - i * 86_400_000);
+      const dateStr = utcCalendarDayStr(d);
       const amount = orders
         .filter(o => {
           const created = o?.createdAt;
@@ -120,9 +170,10 @@ export class DashboardStore {
           return orderDate === dateStr && REVENUE_STATUSES.has(o.status);
         })
         .reduce((s, o) => s + (Number(o.totalAmount) || 0), 0);
+      const label = new Intl.DateTimeFormat('pt-BR', { weekday: 'short', timeZone: 'UTC' }).format(d).replace('.', '');
       days.push({
         date: dateStr,
-        label: d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', ''),
+        label,
         amount,
       });
     }
@@ -221,7 +272,7 @@ export class DashboardStore {
     let total = Number.POSITIVE_INFINITY;
     while (payments.length < total) {
       const page = await firstValueFrom(this.paymentsApi.listPayments({ page: pageNumber, pageSize: 500 }));
-      payments.push(...page.data);
+      payments.push(...page.data.map(p => normalizePayment(p as unknown as Record<string, unknown>)));
       total = page.total;
       if (page.data.length === 0) break;
       pageNumber += 1;

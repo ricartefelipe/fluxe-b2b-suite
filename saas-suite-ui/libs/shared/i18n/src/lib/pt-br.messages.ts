@@ -244,6 +244,8 @@ export const PT_BR_MESSAGES: Messages = {
     totalRevenue: 'Receita Total',
     activeInventory: 'Estoque Ativo',
     pendingPayments: 'Pagamentos Pendentes',
+    paymentsAtRisk: 'Pagamentos em risco',
+    revenueAtRiskHint: 'Valores em pendência, autorização ou falha',
     recentOrders: 'Pedidos Recentes',
     inventoryAlerts: 'Alertas de Estoque',
     revenueOverTime: 'Receita ao Longo do Tempo',

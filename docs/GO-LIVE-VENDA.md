@@ -65,9 +65,28 @@ Checklist para colocar o Fluxe B2B Suite em produção e **pronto para venda**. 
 
 ## 4. Migrations em produção (sem seed de demo)
 
-- [ ] **spring-saas-core:** Liquibase roda no startup com `SPRING_PROFILES_ACTIVE=prod` (só changeset 008 essencial)
-- [ ] **node-b2b-orders:** `railway run npx prisma migrate deploy` — **não** rodar `prisma db seed`
-- [ ] **py-payments-ledger:** `railway run alembic upgrade head` — **não** rodar seed completo
+- [ ] **spring-saas-core:** Liquibase roda no startup com `SPRING_PROFILES_ACTIVE=prod` (changesets essenciais do perfil prod — **sem** contextos `staging`/`seed`). Confirmar que não há seed Liquibase activo em prod.
+- [ ] **node-b2b-orders:** na raiz desse repositório (ou via Railway CLI ligado ao serviço):
+
+```bash
+railway run npx prisma migrate deploy
+```
+
+— **não** executar `prisma db seed` em produção.
+
+- [ ] **py-payments-ledger:**
+
+```bash
+railway run alembic upgrade head
+```
+
+— **não** rodar scripts de seed de demo em produção.
+
+**Docker Compose próprio:** após `docker compose -f docker-compose.prod.yml up`, confirmar nas imagens que migrations já aplicaram ou executar os comandos equivalentes dentro dos containers de release, conforme runbook de cada serviço.
+
+### Variáveis de ambiente para compose VM
+
+Referência única de placeholders alinhados ao `docker-compose.prod.yml`: [.env.example](../.env.example) na raiz deste monorepo (`OIDC_JWK_SET_URI`, `JWT_SECRET`, `ENCRYPTION_KEY`, Resend, Stripe billing vs Stripe ledger, etc.).
 
 ---
 
@@ -96,6 +115,7 @@ Ver [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md) e [MANUAL-SISTEMA.m
 ## 7. Checklist pós-deploy (validação)
 
 - [ ] Health de cada backend: `/actuator/health` (core), `/v1/healthz` (orders), `/healthz` (payments)
+- [ ] Verificação automatizada (URLs públicas HTTPS): na raiz do monorepo `pnpm verify:go-live` após definir `CORE_URL`, `ORDERS_URL` e `PAYMENTS_URL` (ver secção 13)
 - [ ] Frontends carregam e exibem tela de login
 - [ ] Login funciona (OIDC ou HS256 com segredo forte)
 - [ ] Produtos listam no Shop
@@ -132,6 +152,55 @@ Ver referência em [docs/TERMOS-PRIVACIDADE.md](TERMOS-PRIVACIDADE.md).
 | [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md) | Todas as variáveis por serviço |
 | [GUIA-DO-SISTEMA.md](GUIA-DO-SISTEMA.md) | Visão geral do sistema e operação |
 | [EXECUCAO-VENDA-MONITORIZACAO.md](EXECUCAO-VENDA-MONITORIZACAO.md) | Playbook único: staging → monitorização → promoção → produção |
+| Raiz: `.env.example` | Variáveis do `docker-compose.prod.yml` (OIDC JWKS, JWT partilhado, Resend, Stripe billing + ledger, `ENCRYPTION_KEY`) |
+| Script `pnpm verify:go-live` | Health HTTP dos três backends (`scripts/go-live-production-verify.sh`) |
+
+---
+
+## 10. Backups (PostgreSQL e dados)
+
+- [ ] **Railway:** no plugin PostgreSQL do projeto Production, confirmar política de backup (snapshot automático conforme plano). Documentação operacional da Railway sobre backups do Postgres.
+- [ ] **Export manual:** agendar `pg_dump` encriptado para armazenamento externo (S3 compatível, bucket privado) pelo menos mensalmente para clientes enterprise.
+- [ ] **Teste de restore:** pelo menos uma vez por trimestre, restaurar backup para um ambiente isolado e validar integridade (schema + amostra de dados).
+
+Secrets (`JWT_SECRET`, `STRIPE_*`, `RESEND_*`, `ENCRYPTION_KEY`) devem estar apenas em gestão de secrets (Railway / Vault); **não** incluir em dumps públicos nem em repositório.
+
+---
+
+## 11. Observabilidade
+
+- [ ] **Sentry (recomendado):** definir `SENTRY_DSN_CORE`, `SENTRY_DSN_ORDERS`, `SENTRY_DSN_PAYMENTS` em cada serviço (variáveis já previstas em [.env.example](../.env.example) e no `docker-compose.prod.yml`).
+- [ ] **Métricas:** spring-saas-core expõe métricas Micrometer/Prometheus conforme perfil — não expor `/actuator/prometheus` à Internet sem autenticação ou rede privada.
+- [ ] **Alertas:** thresholds iniciais em [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md); configurar pelo menos alerta de disponibilidade (health falhou) e um alerta de erros ou latência por serviço.
+- [ ] **OpenTelemetry:** no compose de referência os serviços apontam OTLP para Jaeger local; em Railway pode usar exporter OTLP para o provedor gerido (Datadog, Grafana Cloud, etc.) se aplicável.
+
+---
+
+## 12. Stripe — billing (Core) vs pagamentos (ledger)
+
+| Fluxo | Serviço | Variáveis típicas |
+|-------|---------|-------------------|
+| Assinaturas / portal cliente / planos | spring-saas-core | `APP_BILLING_PROVIDER=stripe`, `STRIPE_BILLING_SECRET_KEY` |
+| Cobrança de pedidos B2B / ledger | py-payments-ledger | `GATEWAY_PROVIDER=stripe`, `STRIPE_API_KEY`, `STRIPE_WEBHOOK_SECRET`, `ENCRYPTION_KEY` |
+
+- [ ] No **Stripe Dashboard → Developers → Webhooks**, registar o endpoint **HTTPS público** exposto pelo **py-payments-ledger** para eventos de `payment_intent` / gateway conforme documentação desse repositório (path exacto pode variar por versão — confirmar no código ou README do serviço).
+- [ ] Copiar o **Signing secret** do webhook para `STRIPE_WEBHOOK_SECRET` no serviço de pagamentos.
+- [ ] Para billing SaaS no Core, configurar webhook ou billing conforme integração Stripe Customer Portal já usada pela Admin Console.
+
+---
+
+## 13. Script de verificação pós-deploy
+
+Com três URLs públicas (staging ou produção):
+
+```bash
+export CORE_URL=https://...
+export ORDERS_URL=https://...
+export PAYMENTS_URL=https://...
+pnpm verify:go-live
+```
+
+O script chama os endpoints de health documentados na secção 7 e falha com código diferente de zero se algum não responder HTTP 2xx.
 
 ---
 

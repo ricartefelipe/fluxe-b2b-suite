@@ -25,6 +25,23 @@ function joinApiUrl(base: string, path: string): string {
         <h1>{{ h().title }}</h1>
       </header>
 
+      <section class="first-steps-section">
+        <h2>{{ h().firstStepsTitle }}</h2>
+        <mat-card class="first-steps-card">
+          <mat-card-content>
+            <p class="first-steps-intro">{{ h().firstStepsIntro }}</p>
+            <ol class="first-steps-list">
+              <li>{{ h().firstStepsStep1 }}</li>
+              <li>{{ h().firstStepsStep2 }}</li>
+              <li>{{ h().firstStepsStep3 }}</li>
+              <li>{{ h().firstStepsStep4 }}</li>
+              <li>{{ h().firstStepsStep5 }}</li>
+            </ol>
+            <p class="first-steps-footer">{{ h().firstStepsFooter }}</p>
+          </mat-card-content>
+        </mat-card>
+      </section>
+
       <section class="faq-section">
         <h2>{{ h().faqTitle }}</h2>
         <mat-card class="faq-card">
@@ -182,6 +199,7 @@ function joinApiUrl(base: string, path: string): string {
         font-size: 28px;
         font-weight: 500;
       }
+      .first-steps-section h2,
       .faq-section h2,
       .docs-section h2,
       .contact-section h2,
@@ -190,12 +208,36 @@ function joinApiUrl(base: string, path: string): string {
         font-weight: 500;
         margin: 0 0 16px;
       }
+      .first-steps-card,
       .faq-card,
       .docs-card,
       .contact-card,
       .data-card {
         margin-bottom: 24px;
         border-radius: 12px;
+      }
+      .first-steps-intro,
+      .first-steps-footer {
+        margin: 0 0 16px;
+        color: var(--app-text-secondary, #666);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      .first-steps-footer {
+        margin: 16px 0 0;
+      }
+      .first-steps-list {
+        margin: 0;
+        padding-left: 22px;
+        color: var(--app-text, #212121);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+      .first-steps-list li {
+        margin-bottom: 8px;
+      }
+      .first-steps-list li:last-child {
+        margin-bottom: 0;
       }
       .docs-intro {
         margin: 0 0 16px;

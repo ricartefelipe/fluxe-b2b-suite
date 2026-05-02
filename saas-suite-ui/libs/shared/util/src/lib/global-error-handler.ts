@@ -1,4 +1,5 @@
 import { ErrorHandler, Injectable, NgZone, inject } from '@angular/core';
+import { captureClientError } from '@saas-suite/shared/telemetry';
 
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
@@ -9,6 +10,7 @@ export class GlobalErrorHandler implements ErrorHandler {
 
     this.zone.runOutsideAngular(() => {
       console.error('[GlobalErrorHandler]', err.message, err);
+      captureClientError(err);
     });
   }
 }

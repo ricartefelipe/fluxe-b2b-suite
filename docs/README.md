@@ -36,6 +36,7 @@
 | [O-QUE-FALTA-100-VENDAVEL.md](O-QUE-FALTA-100-VENDAVEL.md) | Checklist do que falta para o produto estar 100% vendável (config, legal, suporte, CORS) |
 | [ESTADO-ENTREGAS.md](ESTADO-ENTREGAS.md) | Quadro vivo de execução: concluir e marcar (status, aceite e evidências) |
 | [PLANO-COMERCIAL-30-DIAS.md](PLANO-COMERCIAL-30-DIAS.md) | Plano de 30 dias: conversão, retenção, prioridades e métricas |
+| [PRIMEIROS-PASSOS.md](PRIMEIROS-PASSOS.md) | Guia curto: login → primeiro pedido (time-to-value em staging/demo) |
 | [STACK-E-FERRAMENTAS.md](STACK-E-FERRAMENTAS.md) | O que já usamos (Rabbit, Redis, métricas, Grafana, circuit breaker) e o que pode ser adicionado (Kafka, NoSQL pro front, Sonar) |
 | [CACHE-REDIS-FRONT.md](CACHE-REDIS-FRONT.md) | Cache Redis para respostas consumidas pelo front (padrão de chave, TTL, exemplos por stack) |
 

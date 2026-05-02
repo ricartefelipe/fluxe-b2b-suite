@@ -266,6 +266,10 @@ export const PT_BR_MESSAGES: Messages = {
     failedPayments: 'pagamentos falhos',
     revenueAtRisk: 'Receita em risco',
     vsPreviousPeriod: 'vs. período anterior',
+    totalRevenueHint:
+      'Somatório histórico: pedidos confirmados, pagos, enviados ou entregues (sem filtro de data).',
+    revenueLast7DaysScopeHint:
+      'Só entra pedido criado na janela dos últimos 7 dias (UTC) com esses mesmos status — pode ser zero se a atividade for mais antiga.',
   },
   onboarding: {
     title: 'Criar Novo Tenant',
@@ -841,5 +845,15 @@ export const PT_BR_MESSAGES: Messages = {
     opensInNewTabHint: 'Abre num novo separador',
     dataSectionTitle: 'Dados e privacidade',
     exportLinkHint: 'Baixe seus dados em JSON (tenant, usuários, políticas e feature flags) na página Faturamento.',
+    firstStepsTitle: 'Primeiros passos',
+    firstStepsIntro:
+      'Objetivo: ir do login ao primeiro pedido útil em menos de 30 minutos em staging ou demo. Guia completo no repositório: docs/PRIMEIROS-PASSOS.md.',
+    firstStepsStep1: 'Admin: login, criar ou selecionar organização (tenant) e revisar Faturamento/plano.',
+    firstStepsStep2: 'Opcional: convidar utilizador operacional e validar primeiro acesso.',
+    firstStepsStep3: 'Ops Portal: confirmar contexto do tenant e abrir o painel (pedidos, estoque).',
+    firstStepsStep4: 'Shop (se aplicável): montar carrinho e finalizar checkout para gerar pedido.',
+    firstStepsStep5: 'Para CONFIRMED ou PAID de ponta a ponta, seguir o checklist de pedido em staging (workers + filas).',
+    firstStepsFooter:
+      'Documentação técnica e APIs: secção abaixo. Guia longo da plataforma: configure platformDocsUrl no config.json, se disponível.',
   },
 };

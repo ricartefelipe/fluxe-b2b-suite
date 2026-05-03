@@ -10,6 +10,17 @@ Documento único para **venda a clientes**: o que configurar no ambiente, base d
 - **Três fronts:** convém subdomínios dedicados (ex.: `loja.`, `ops.`, `admin.`) e **auth** (Keycloak ou IdP) em `auth.` — todos em **HTTPS**.
 - Após definir domínios, atualizar **CORS** nos três backends com a lista **exacta** de origens `https://…` (ver `.env.example` na raiz do suite).
 
+### O que só o responsável faz (não automatizável no Git)
+
+| Item | Onde |
+|------|------|
+| Registo DNS (CNAME/A) e propagação | Registo.br / Cloudflare / DNS do cliente |
+| Custom domain + confiança TLS no PaaS | Railway / Cloudflare **painel** |
+| Chaves live (Stripe, Resend, OIDC prod, JWT forte) | Variáveis em cada serviço |
+| Decisão jurídica/contrato com cliente | Fora do repositório |
+
+**VM + Nginx do suite (`deploy/nginx/`):** o sample escuta **HTTP :80**; o HTTPS costuma terminar **à frente** (Cloudflare “Full (strict)”, load balancer, ou Certbot no host). Quem opera a VM deve configurar TLS no edge ou emitir certificados no proxy conforme [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md).
+
 ---
 
 ## 2. Variáveis obrigatórias (resumo)

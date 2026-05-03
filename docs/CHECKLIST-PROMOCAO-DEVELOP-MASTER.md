@@ -2,7 +2,11 @@
 
 Usar antes de mergear o PR `develop` → `master` e deploy de produção. Complementa [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) e [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md).
 
-### Abrir PRs `develop` → `master` nos quatro repos
+### Branches e workflow automático
+
+Com **sync-master-with-develop** ativo nos quatro repos do suite, **`master` acompanha o topo de `develop` em cada push em `develop`** — não é preciso «promover commits» só para alinhar SHAs. Este checklist cobre **gates de produção** (CI, staging, contratos, notas, deploy/tag). O script abaixo passa a servir sobretudo quando queres confirmar alinhamento ou em cenários excecionais (workflow desligado, drift temporário).
+
+### Abrir PRs `develop` → `master` nos quatro repos (opcional se já alinhados)
 
 Com [GitHub CLI](https://cli.github.com/) autenticado e os quatro clones no mesmo diretório pai do monorepo:
 

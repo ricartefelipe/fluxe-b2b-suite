@@ -13,9 +13,10 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 | **Branches** | `master` → **produção** (uso real), `develop` → **staging** (teste/QA), `feature/*`, `fix/*`, `docs/*` |
 | **Criação** | `feature/nome-descritivo` ou `fix/nome-descritivo` a partir de `develop` |
 | **Merge em develop** | Sempre via PR; usar `--no-ff` quando possível para rastreabilidade |
-| **Merge em master** | Apenas após validação em staging; via PR; gerar release/tag se relevante |
+| **Merge em master** | SHA de `master` segue `develop` via workflow **sync-master-with-develop** em cada push em `develop`; **release** em produção só após checklist (staging, contratos, tag/deploy). PR `develop` → `master` só é necessário se os ramos divergirem (ex.: workflow desativado). |
 | **Proibido** | Push direto em `master` sem PR; merge sem CI verde; mensagens de commit com marcas de ferramentas ou rodapés automáticos |
 | **Fluxo por feature** | Criar branch `feature/nome` a partir de `develop` → trabalhar → merge em `develop` (PR ou merge local) → apagar a branch `feature/nome` → quando for release, merge `develop` em `master` |
+| **Sincronização `master` ↔ `develop`** | Nos repositórios com `.github/workflows/sync-master-with-develop.yml` (suite + backends onde está ativo), **cada push em `develop`** avança **`master` para o mesmo commit**, mantendo *master nunca atrás de develop*. **Release em produção** continua a exigir checklist (staging, contratos, imagens/tag, deploy) — não confundir «mesmo SHA» com «pronto para cliente». |
 
 ### 2. Qualidade de código
 

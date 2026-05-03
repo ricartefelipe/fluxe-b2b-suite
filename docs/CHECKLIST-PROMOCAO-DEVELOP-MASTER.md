@@ -12,6 +12,8 @@ Com [GitHub CLI](https://cli.github.com/) autenticado e os quatro clones no mesm
 
 O script ignora repositórios já alinhados e não duplica PR aberto.
 
+**Ao mergear** esse tipo de PR no GitHub: **não** marques “delete branch” — o ramó de origem é `develop`; só deve continuar a existir apontando ao mesmo commit que `master` (ou à frente na próxima feature).
+
 ## Qualidade e CI
 
 - [ ] Todos os PRs integrados em `develop` passaram CI (lint, test, build) nos repositórios tocados.

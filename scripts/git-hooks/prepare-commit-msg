@@ -1,7 +1,8 @@
 #!/bin/sh
-# Remove trailers automáticos de ferramentas da mensagem de commit.
+# Normaliza a mensagem antes do commit final (remove trailers automatizados problemáticos).
 # Instalar: cp scripts/git-hooks/prepare-commit-msg .git/hooks/prepare-commit-msg && chmod +x .git/hooks/prepare-commit-msg
 FILE="$1"
 [ -f "$FILE" ] || exit 0
 sed -i '/^[[:space:]]*[Mm]ade-with[[:space:]]*:/d' "$FILE"
+sed -i '/cursoragent@cursor\.com/d' "$FILE"
 exit 0

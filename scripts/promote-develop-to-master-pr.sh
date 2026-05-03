@@ -2,6 +2,10 @@
 # Abre um PR develop → master em cada repositório do suite quando os SHAs divergem.
 # Pré-requisitos: GitHub CLI (`gh`) autenticado; clones dos quatro repos sob o mesmo diretório pai do monorepo.
 #
+# IMPORTANTE — ao fazer merge desses PRs no GitHub ou via `gh pr merge`:
+#   NÃO use `--delete-branch`: o head é `develop` e apagar o ramo quebra o Git Flow.
+#   Use apenas merge (squash ou merge commit), sem eliminar `develop`.
+#
 # Uso (na raiz do fluxe-b2b-suite):
 #   ./scripts/promote-develop-to-master-pr.sh
 #

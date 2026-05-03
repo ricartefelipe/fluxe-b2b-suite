@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 # Abre um PR develop → master em cada repositório do suite quando os SHAs divergem.
+# Com `sync-master-with-develop.yml` ativo, master e develop devem coincidir após cada push em
+# develop — este script costuma apenas imprimir [ok] já alinhados; mantém-se para verificação
+# ou se o workflow estiver desativado.
 # Pré-requisitos: GitHub CLI (`gh`) autenticado; clones dos quatro repos sob o mesmo diretório pai do monorepo.
 #
 # IMPORTANTE — ao fazer merge desses PRs no GitHub ou via `gh pr merge`:

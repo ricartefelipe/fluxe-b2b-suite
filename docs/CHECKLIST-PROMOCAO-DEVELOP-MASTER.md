@@ -2,6 +2,16 @@
 
 Usar antes de mergear o PR `develop` → `master` e deploy de produção. Complementa [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) e [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md).
 
+### Abrir PRs `develop` → `master` nos quatro repos
+
+Com [GitHub CLI](https://cli.github.com/) autenticado e os quatro clones no mesmo diretório pai do monorepo:
+
+```bash
+./scripts/promote-develop-to-master-pr.sh
+```
+
+O script ignora repositórios já alinhados e não duplica PR aberto.
+
 ## Qualidade e CI
 
 - [ ] Todos os PRs integrados em `develop` passaram CI (lint, test, build) nos repositórios tocados.

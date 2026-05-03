@@ -56,7 +56,7 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 **Governação de release (P2):**
 
-- [CHECKLIST-PROMOCAO-DEVELOP-MASTER.md](CHECKLIST-PROMOCAO-DEVELOP-MASTER.md) — checklist único antes de `develop` → `master`
+- [CHECKLIST-PROMOCAO-DEVELOP-MASTER.md](CHECKLIST-PROMOCAO-DEVELOP-MASTER.md) — checklist único antes de `develop` → `master`; PRs nos quatro repos: `./scripts/promote-develop-to-master-pr.sh` (GitHub CLI autenticado)
 - [POLITICA-FREEZE-RELEASE.md](POLITICA-FREEZE-RELEASE.md) — freeze por risco P0/P1
 - [TEMPLATE-RELEASE-NOTES.md](TEMPLATE-RELEASE-NOTES.md) — modelo de notas multi-repo
 - [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md) — rollback por serviço

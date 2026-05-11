@@ -190,7 +190,6 @@ O CI do node-b2b-orders configura serviços Docker (Postgres, Redis) e variávei
 
 ## 9. Referências
 
-- [AGENTS.md](../AGENTS.md) — regras e fluxo Git
 - [docs/AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md) — ambientes e config
 - [docs/PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) — pipeline e deploy
 - node-b2b-orders: [.github/workflows/ci.yml](../../node-b2b-orders/.github/workflows/ci.yml) — env E2E

@@ -12,7 +12,7 @@ docker compose up -d
 Keycloak will be available at **http://localhost:8180**.
 
 Admin console: http://localhost:8180/admin  
-Credentials: `admin` / `admin`
+Credentials: *(ver docker-compose.yml)*
 
 ## Realm: fluxe-b2b
 
@@ -32,9 +32,9 @@ All clients use **PKCE (S256)** with authorization code flow.
 
 | Email                 | Password      | Role       | Plan         |
 |-----------------------|---------------|------------|--------------|
-| `admin@fluxe.io`     | `admin123`    | admin      | enterprise   |
-| `operator@fluxe.io`  | `operator123` | operator   | professional |
-| `viewer@fluxe.io`    | `viewer123`   | viewer     | starter      |
+| `admin@fluxe.io`     | *(ver realm-export.json)* | admin      | enterprise   |
+| `operator@fluxe.io`  | *(ver realm-export.json)* | operator   | professional |
+| `viewer@fluxe.io`    | *(ver realm-export.json)* | viewer     | starter      |
 
 All users belong to `tenant-1`.
 

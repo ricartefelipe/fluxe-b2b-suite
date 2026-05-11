@@ -11,7 +11,7 @@ Data da vistoria: 2025-03-07.
 
 | Área | Situação (atualizado sprint 2) |
 |------|----------|
-| **spring-saas-core** | Backlog 100% concluído. Webhook, rate limit, retenção de audit, rotação JWT, Grafana, IA/LLM — tudo implementado. |
+| **spring-saas-core** | Backlog 100% concluído. Webhook, rate limit, retenção de audit, rotação JWT, Grafana — tudo implementado. |
 | **node-b2b-orders** | Backlog 100% concluído. Estável com analytics, schema registry, structured logging, busca full-text. |
 | **py-payments-ledger** | Backlog 100% concluído. ROADMAP v1.1 completo. Multi-gateway, criptografia, analytics implementados. |
 | **fluxe-b2b-suite** | docs/README, go-live, catálogo de eventos alinhado ao Core; CI E2E com Playwright + deps; sininho de notificações só mock em dev (sem endpoint SSE). |
@@ -38,9 +38,8 @@ Fonte: `docs/BACKLOG-EVOLUCAO.md`, `docs/compliance.md`, código e `scripts/smok
 | Política de privacidade de dados | ✅ Já existia |
 | Alertas Grafana pré-configurados | ✅ Feito |
 | Versionamento de contratos | ✅ Já existia |
-| API de dados agregados para análise (IA/LLM) | ✅ Já existia |
+| API de dados agregados para análise | ✅ Já existia |
 | Endpoint de anomalias em audit log | ✅ Já existia |
-| Documentação viva gerada por IA | ✅ Feito |
 
 ### 2.3 Implementado de forma frágil ou incompleta
 
@@ -125,6 +124,6 @@ Fonte: `docs/BACKLOG-EVOLUCAO.md`, `docs/compliance.md`, código e `scripts/smok
 
 ## 8. Referências
 
-- spring-saas-core: `docs/PROMPT-EVOLUCAO.md`, `docs/BACKLOG-EVOLUCAO.md`, `docs/compliance.md`
+- spring-saas-core: `docs/compliance.md`
 - py-payments-ledger: `ROADMAP.md`, `README.md`
 - fluxe-b2b-suite: `docs/README.md`, `saas-suite-ui/apps/ops-portal/.../dashboard.page.ts`

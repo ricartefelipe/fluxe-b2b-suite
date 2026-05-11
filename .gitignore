@@ -14,11 +14,7 @@ coverage/
 *.swp
 *.swo
 .vscode/
-.cursor/
 *.sublime-*
-
-# Optional local agent policy files (not committed)
-AGENTS.md
 
 # OS
 .DS_Store

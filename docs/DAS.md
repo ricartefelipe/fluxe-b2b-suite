@@ -38,7 +38,7 @@ A plataforma permite que múltiplas empresas (tenants) operem de forma isolada d
 | Loja B2B | Vitrine de produtos, carrinho, checkout, acompanhamento de pedidos |
 | Portal operacional | Gestão de pedidos, estoque, pagamentos e ledger |
 | Console administrativo | Gestão de tenants, políticas, flags, auditoria, onboarding |
-| IA/LLM | Recomendações de governança, análise de auditoria, documentação viva |
+| Análise de dados | Recomendações de governança, análise de auditoria |
 
 ### 1.3 Stakeholders
 
@@ -191,7 +191,7 @@ C4Component
         Component(outbox, "Outbox", "JpaOutboxPublisher, RabbitOutboxSender", "Transactional outbox → RabbitMQ (saas.events)")
         Component(webhooks, "Webhooks", "WebhookUseCase, WebhookDeliveryWorker", "Entrega de webhooks com retry exponencial")
         Component(billing, "Billing", "BillingUseCase, BillingController", "Planos, assinaturas, onboarding")
-        Component(ai, "IA/LLM", "AiService, AiDocsService", "Análise de governança, documentação viva, chat")
+        Component(analytics, "Analytics", "AnalyticsService", "Análise de governança e dados agregados")
         Component(users, "Users", "UserUseCase, UserManagementUseCase", "Gestão de usuários, reset de senha")
     }
 
@@ -979,7 +979,6 @@ Todos os eventos seguem um envelope padronizado:
 | Contrato de Eventos | `docs/contracts/events.md` — canónico em **spring-saas-core**; réplicas em node-b2b-orders e py-payments-ledger |
 | JSON Schemas de Eventos (tenant/policy/flag) | **spring-saas-core** `docs/contracts/schemas/` |
 | JSON Schemas adicionais (orders/inventory) | **node-b2b-orders** `docs/contracts/schemas/` (ver SCHEMA_REGISTRY) |
-| Prompt de Evolução | `docs/PROMPT-EVOLUCAO.md` (core) |
 | Backlog de Evolução | `docs/BACKLOG-EVOLUCAO.md` (cada repositório) |
 | Compliance/Auditoria | `docs/compliance.md` (cada repositório) |
 | Guia Operacional | `docs/GUIA-OPERACIONAL.md` (fluxe-b2b-suite) |

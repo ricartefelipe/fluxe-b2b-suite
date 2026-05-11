@@ -115,8 +115,6 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 **Staging — dados para testes:** após o deploy em `develop`, rode `./scripts/staging-seed.sh railway` no repo fluxe-b2b-suite (Railway CLI e backends linkados ao projeto Staging). Em **produção** não rodar seed (apenas migrations essenciais). Detalhes: [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md#alimentar-staging-com-dados-após-primeiro-deploy).
 
-**Hook de commit:** para bloquear rodapés indesejados em mensagens de commit, instale o hook: `cp scripts/git-hooks/prepare-commit-msg .git/hooks/prepare-commit-msg && chmod +x .git/hooks/prepare-commit-msg`. Repita nos demais repositórios (spring-saas-core, node-b2b-orders, py-payments-ledger) se desejar o mesmo comportamento.
-
 ---
 
 ## Repositórios e workflows

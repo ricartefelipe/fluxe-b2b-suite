@@ -90,7 +90,7 @@ Documentos ainda por criar:
 
 ## Documentação em outros repositórios
 
-- **spring-saas-core:** `docs/PROMPT-EVOLUCAO.md`, `docs/BACKLOG-EVOLUCAO.md`, `docs/compliance.md`, `docs/contracts/`
+- **spring-saas-core:** `docs/compliance.md`, `docs/contracts/`
 - **node-b2b-orders:** `docs/contracts/`, `docs/api/`
 - **py-payments-ledger:** `docs/contracts/events.md`, `docs/architecture/`, `ROADMAP.md`
 

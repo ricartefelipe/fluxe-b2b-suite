@@ -92,19 +92,6 @@ Por padrão o Core **não envia email**: só registra o conteúdo no log (`provi
 
 **Railway (staging/prod):** no serviço spring-saas-core defina `EMAIL_PROVIDER=resend`, `RESEND_API_KEY=re_xxx`, `FRONTEND_URL=https://admin-console-xxx.up.railway.app`. Verifique o domínio do remetente em resend.com.
 
-### IA/LLM
-
-| Variável | Tipo | Padrão | Descrição |
-|----------|------|--------|-----------|
-| `AI_ENABLED` | boolean | `false` | Habilitar funcionalidades de IA |
-| `AI_PROVIDER` | string | _(vazio)_ | Provedor de IA (openai, anthropic) |
-| `AI_API_KEY` | string | _(vazio)_ | Chave da API do provedor |
-| `AI_BASE_URL` | string | _(vazio)_ | URL base da API |
-| `AI_MODEL` | string | _(vazio)_ | Modelo a utilizar |
-| `AI_MAX_TOKENS` | int | _(vazio)_ | Máximo de tokens por resposta |
-| `AI_TEMPERATURE` | float | _(vazio)_ | Temperatura para geração |
-| `AI_TIMEOUT_SECONDS` | int | _(vazio)_ | Timeout da chamada |
-
 ---
 
 ## node-b2b-orders

@@ -22,3 +22,8 @@ services:
   payments-api:
     environment:
       OTEL_EXPORTER_OTLP_ENDPOINT: ""
+
+  nginx:
+    volumes:
+      - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deploy/nginx/conf.d/default-pilot.conf:/etc/nginx/conf.d/default.conf:ro

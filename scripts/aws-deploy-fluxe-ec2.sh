@@ -43,13 +43,13 @@ COMPOSE_CMD="$("${SSH[@]}" "command -v docker-compose >/dev/null 2>&1 && echo do
 ENV_FILE="${ENV_FILE:-$SUITE_ROOT/.env.aws-pilot}"
 if [[ ! -f "$ENV_FILE" ]]; then
   echo "▸ Gerando $ENV_FILE (piloto — revisar antes de vender)"
-  JWT_SECRET="$(openssl rand -base64 32)"
-  DB_PASSWORD="$(openssl rand -base64 24)"
-  REDIS_PASSWORD="$(openssl rand -base64 24)"
-  RABBITMQ_PASSWORD="$(openssl rand -base64 24)"
-  KEYCLOAK_ADMIN_PASSWORD="$(openssl rand -base64 16)"
-  GRAFANA_PASSWORD="$(openssl rand -base64 16)"
-  ENCRYPTION_KEY="$(openssl rand -base64 32)"
+  JWT_SECRET="$(openssl rand -hex 32)"
+  DB_PASSWORD="$(openssl rand -hex 16)"
+  REDIS_PASSWORD="$(openssl rand -hex 16)"
+  RABBITMQ_PASSWORD="$(openssl rand -hex 16)"
+  KEYCLOAK_ADMIN_PASSWORD="$(openssl rand -hex 12)"
+  GRAFANA_PASSWORD="$(openssl rand -hex 12)"
+  ENCRYPTION_KEY="$(openssl rand -hex 32)"
 
   cat > "$ENV_FILE" <<EOF
 DOMAIN=${FLUXE_HOST}

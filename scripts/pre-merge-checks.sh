@@ -54,20 +54,18 @@ check_orders() {
 check_payments() {
   (
     cd "${PATH_PAYMENTS}"
-    if [[ -x .venv/bin/ruff ]]; then
-      .venv/bin/ruff check .
-      .venv/bin/black --check .
-      .venv/bin/mypy src
-      .venv/bin/pytest -q
-    elif command -v uv >/dev/null 2>&1 && [[ -f pyproject.toml ]]; then
-      uv run ruff check .
-      uv run black --check .
-      uv run mypy src
-      uv run pytest -q
-    else
-      echo "[ERRO] py-payments-ledger: crie .venv (python -m venv .venv && pip install -e '.[dev]') ou instale uv."
+    if ! bash scripts/bootstrap-venv.sh; then
       exit 1
     fi
+    if [[ ! -x .venv/bin/python3 ]]; then
+      echo "[ERRO] py-payments-ledger: .venv/bin/python3 ausente após bootstrap."
+      exit 1
+    fi
+    .venv/bin/python3 -m pip install -q -e ".[dev]"
+    .venv/bin/ruff check .
+    .venv/bin/black --check .
+    .venv/bin/mypy src
+    .venv/bin/pytest -q
   )
 }
 

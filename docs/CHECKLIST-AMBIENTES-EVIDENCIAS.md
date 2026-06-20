@@ -160,3 +160,35 @@ Bloqueios/acoes:
 - [ ] **Worker nao listado em production** (`node-b2b-orders-worker`). Owner: Felipe (confirmar se existe servico dedicado no env production).
 - [x] **shop-frontend (staging)** — deploy **SUCCESS** apos `serviceInstanceUpdate` + PR #127 (gatilho); manifesto com `apps/shop/Dockerfile`.
 
+---
+
+## Rodada retomada (2026-06-20) — contas Railway/Resend indisponiveis
+
+- Data/hora: `2026-06-20` — validacao local de codigo (sem cloud)
+- Responsavel: retomada pos-crise financeira; deploy cloud pendente de nova conta ou VM
+- Observacoes: Railway e Resend perdidos; estrategia alternativa em [RETOMADA-SEM-RAILWAY.md](RETOMADA-SEM-RAILWAY.md)
+
+### Validacao de codigo (local)
+
+| Repo | Comando | Resultado |
+|------|---------|-----------|
+| spring-saas-core | `./mvnw spotless:check test` | **274 testes OK**, BUILD SUCCESS |
+| node-b2b-orders | `npm test` | **210 testes OK** |
+| py-payments-ledger | `pre-merge-checks payments` | **224 testes OK** (bootstrap venv corrigido) |
+| fluxe-b2b-suite | `pnpm lint`, `pnpm build`, `pnpm test` | **OK** |
+| Contratos | `pnpm verify:contracts` | **Alinhados** com Core |
+
+### Ambiente local (Docker)
+
+- [ ] Docker Desktop/Engine a correr (`docker ps`) — **bloqueio atual**: daemon inacessivel nesta maquina
+- [ ] `./scripts/up-local.sh` stack completa
+- [ ] Smoke pedido `CONFIRMED` local
+- [ ] Smoke saga `PAID` local
+
+### Proximos passos operacionais
+
+- [ ] Iniciar Docker e executar `up-local.sh` + smokes locais
+- [ ] VM + `docker-compose.prod.yml` **ou** recriar conta Railway (staging primeiro)
+- [ ] E-mail: `EMAIL_PROVIDER=log` (dev) ou SMTP ate reativar Resend
+- [ ] Stripe test mode para piloto; live quando houver cliente pagante
+

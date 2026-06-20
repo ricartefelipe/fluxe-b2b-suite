@@ -76,7 +76,19 @@ Migrations rodam nos entrypoints (`SPRING_PROFILES_ACTIVE=prod`, `NODE_ENV=produ
 
 ### 6. TLS e domínio
 
-**Opção barata:** Caddy ou Nginx na EC2 + **Let's Encrypt** (ver `deploy/nginx/` e [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md)).
+**Piloto recomendado:** `app.fluxe.com.br` (Cloudflare, DNS only) → Elastic IP da EC2.
+
+```bash
+# 1) DNS (automático com token ou instruções manuais)
+CLOUDFLARE_API_TOKEN=... FLUXE_DOMAIN=app.fluxe.com.br ./scripts/aws-setup-dns-cloudflare.sh
+
+# 2) Let's Encrypt + nginx :443
+CERTBOT_EMAIL=seu@email.com FLUXE_DOMAIN=app.fluxe.com.br ./scripts/aws-setup-tls-ec2.sh
+```
+
+Scripts: [`aws-setup-dns-cloudflare.sh`](../scripts/aws-setup-dns-cloudflare.sh), [`aws-setup-tls-ec2.sh`](../scripts/aws-setup-tls-ec2.sh).
+
+**Opção barata (legado):** Caddy ou Certbot manual (ver `deploy/nginx/` e [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md)).
 
 **Opção AWS:** Route 53 → ALB → target group EC2:443; certificado **ACM** no ALB.
 

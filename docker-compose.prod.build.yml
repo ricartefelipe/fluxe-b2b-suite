@@ -1,0 +1,41 @@
+# Override: build imagens localmente na EC2 (sem pull GHCR privado).
+# Uso: docker-compose -f docker-compose.prod.yml -f docker-compose.prod.build.yml up -d --build
+#
+# Estrutura esperada em /opt/fluxe/:
+#   fluxe-b2b-suite/  spring-saas-core/  node-b2b-orders/  py-payments-ledger/
+
+services:
+  saas-core:
+    image: fluxe-local/saas-core:latest
+    build:
+      context: ../spring-saas-core
+      dockerfile: docker/app.Dockerfile
+    platform: linux/amd64
+
+  orders-api:
+    image: fluxe-local/orders-api:latest
+    build:
+      context: ../node-b2b-orders
+      dockerfile: docker/api.Dockerfile
+    platform: linux/amd64
+
+  orders-worker:
+    image: fluxe-local/orders-worker:latest
+    build:
+      context: ../node-b2b-orders
+      dockerfile: docker/worker.Dockerfile
+    platform: linux/amd64
+
+  payments-api:
+    image: fluxe-local/payments-api:latest
+    build:
+      context: ../py-payments-ledger
+      dockerfile: docker/api.Dockerfile
+    platform: linux/amd64
+
+  payments-worker:
+    image: fluxe-local/payments-worker:latest
+    build:
+      context: ../py-payments-ledger
+      dockerfile: docker/worker.Dockerfile
+    platform: linux/amd64

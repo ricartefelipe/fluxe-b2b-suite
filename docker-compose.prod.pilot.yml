@@ -1,0 +1,24 @@
+# Piloto em t3.small: desliga observabilidade pesada (profile obs).
+# Uso: COMPOSE_PROFILES= docker-compose -f docker-compose.prod.yml -f docker-compose.prod.build.yml -f docker-compose.prod.pilot.yml up -d
+
+services:
+  jaeger:
+    profiles: ["obs"]
+
+  prometheus:
+    profiles: ["obs"]
+
+  grafana:
+    profiles: ["obs"]
+
+  saas-core:
+    environment:
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: ""
+
+  orders-api:
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: ""
+
+  payments-api:
+    environment:
+      OTEL_EXPORTER_OTLP_ENDPOINT: ""

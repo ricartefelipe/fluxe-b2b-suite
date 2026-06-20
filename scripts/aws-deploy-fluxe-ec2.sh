@@ -30,13 +30,14 @@ SSH=(ssh -i "$FLUXE_KEY" -o StrictHostKeyChecking=accept-new "${FLUXE_USER}@${FL
 
 echo "▸ Aguardando SSH em $FLUXE_HOST..."
 for _ in $(seq 1 30); do
-  if "${SSH[@]}" "test -f /opt/fluxe/bootstrap.ok" 2>/dev/null; then
+  if "${SSH[@]}" "command -v docker >/dev/null 2>&1 || test -f /opt/fluxe/bootstrap.ok" 2>/dev/null; then
     break
   fi
   sleep 10
 done
 
-"${SSH[@]}" "docker --version"
+"${SSH[@]}" "docker --version || sudo docker --version"
+COMPOSE_CMD="$("${SSH[@]}" "command -v docker-compose >/dev/null 2>&1 && echo docker-compose || echo 'sudo docker compose'")"
 
 # Gerar .env piloto se não existir localmente
 ENV_FILE="${ENV_FILE:-$SUITE_ROOT/.env.aws-pilot}"
@@ -91,33 +92,55 @@ EOF
   chmod 600 "$ENV_FILE"
 fi
 
-echo "▸ Sincronizando repositório na EC2..."
+echo "▸ Sincronizando repositórios na EC2..."
+WKS_ROOT="$(cd "$SUITE_ROOT/.." && pwd)"
 "${SSH[@]}" "sudo mkdir -p /opt/fluxe && sudo chown ${FLUXE_USER}:${FLUXE_USER} /opt/fluxe"
 
-# Rsync local (inclui commits ainda não no remoto) ou clone git
-if [[ "${DEPLOY_FROM_LOCAL:-1}" == "1" ]]; then
+RSYNC_SSH="ssh -i $FLUXE_KEY -o StrictHostKeyChecking=accept-new"
+for dir in fluxe-b2b-suite spring-saas-core node-b2b-orders py-payments-ledger; do
+  src="$WKS_ROOT/$dir/"
+  dst="${FLUXE_USER}@${FLUXE_HOST}:/opt/fluxe/$dir/"
+  echo "  → $dir"
   rsync -az --delete \
-    -e "ssh -i $FLUXE_KEY -o StrictHostKeyChecking=accept-new" \
-    --exclude '.git' --exclude 'node_modules' --exclude '.aws-deploy' \
+    -e "$RSYNC_SSH" \
+    --exclude '.git' --exclude 'node_modules' --exclude 'target' \
+    --exclude '.venv' --exclude '__pycache__' --exclude '.local-logs' \
     --exclude 'saas-suite-ui/node_modules' \
-    "$SUITE_ROOT/" "${FLUXE_USER}@${FLUXE_HOST}:${DEPLOY_DIR}/"
-else
-  "${SSH[@]}" "test -d ${DEPLOY_DIR}/.git || git clone ${REPO_URL} ${DEPLOY_DIR}"
-  "${SSH[@]}" "cd ${DEPLOY_DIR} && git pull origin master"
-fi
+    "$src" "$dst"
+done
+
+DEPLOY_DIR="/opt/fluxe/fluxe-b2b-suite"
 
 scp -i "$FLUXE_KEY" -o StrictHostKeyChecking=accept-new \
   "$ENV_FILE" "${FLUXE_USER}@${FLUXE_HOST}:${DEPLOY_DIR}/.env"
 
-echo "▸ Pull imagens GHCR + compose up..."
+echo "▸ Build + compose up (pode levar 20–40 min na t3.small)..."
+GHCR_TOKEN="$(gh auth token 2>/dev/null || true)"
+BUILD_MODE="${BUILD_MODE:-local}"
 "${SSH[@]}" bash <<REMOTE
 set -euo pipefail
 cd ${DEPLOY_DIR}
 sudo usermod -aG docker ${FLUXE_USER} 2>/dev/null || true
-docker compose -f docker-compose.prod.yml pull || true
-docker compose -f docker-compose.prod.yml up -d
-sleep 15
-docker compose -f docker-compose.prod.yml ps
+if ! swapon --show | grep -q /swapfile; then
+  sudo fallocate -l 2G /swapfile 2>/dev/null || sudo dd if=/dev/zero of=/swapfile bs=1M count=2048
+  sudo chmod 600 /swapfile
+  sudo mkswap /swapfile
+  sudo swapon /swapfile
+fi
+COMPOSE="\$(command -v docker-compose || echo docker-compose)"
+COMPOSE_FILES="-f docker-compose.prod.yml -f docker-compose.prod.pilot.yml"
+if [[ "${BUILD_MODE}" == "local" ]]; then
+  COMPOSE_FILES="\$COMPOSE_FILES -f docker-compose.prod.build.yml"
+  sudo \$COMPOSE \$COMPOSE_FILES build --parallel 2>&1 | tail -20
+else
+  if [[ -n "${GHCR_TOKEN}" ]]; then
+    echo "${GHCR_TOKEN}" | sudo docker login ghcr.io -u ricartefelipe --password-stdin || true
+  fi
+  sudo \$COMPOSE \$COMPOSE_FILES pull || true
+fi
+sudo \$COMPOSE \$COMPOSE_FILES up -d
+sleep 60
+sudo \$COMPOSE \$COMPOSE_FILES ps
 curl -sf http://127.0.0.1/health && echo " nginx OK" || echo " nginx ainda subindo..."
 REMOTE
 

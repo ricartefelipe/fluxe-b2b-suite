@@ -83,19 +83,19 @@ import { I18nService } from '@saas-suite/shared/i18n';
           </div>
 
           <ng-template #credentialsForm>
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Email</mat-label>
-              <input matInput type="email" [(ngModel)]="email"
-                placeholder="usuario&#64;empresa.com" autocomplete="username">
+            <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
               <mat-icon matPrefix class="field-icon">email</mat-icon>
+              <mat-label>{{ i18n.messages().common.email }}</mat-label>
+              <input matInput type="email" [(ngModel)]="email"
+                autocomplete="username">
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Senha</mat-label>
-              <input matInput [type]="showPassword() ? 'text' : 'password'"
-                [(ngModel)]="password" placeholder="••••••••" autocomplete="current-password"
-                (keyup.enter)="loginWithCredentials()">
+            <mat-form-field appearance="outline" class="full-width" subscriptSizing="dynamic">
               <mat-icon matPrefix class="field-icon">lock</mat-icon>
+              <mat-label>{{ i18n.messages().auth.password }}</mat-label>
+              <input matInput [type]="showPassword() ? 'text' : 'password'"
+                [(ngModel)]="password" autocomplete="current-password"
+                (keyup.enter)="loginWithCredentials()">
               <button mat-icon-button matSuffix type="button" (click)="showPassword.set(!showPassword())"
                 class="toggle-password">
                 <mat-icon>{{ showPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>

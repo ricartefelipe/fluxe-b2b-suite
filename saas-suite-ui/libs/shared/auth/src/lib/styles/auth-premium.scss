@@ -390,11 +390,20 @@
 /* Campos Material — ::ng-deep necessário para estilizar filhos do Material */
 .auth-premium--split .login-card ::ng-deep {
   .mat-mdc-form-field {
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+  }
+  .mat-mdc-form-field-icon-prefix {
+    padding: 0 6px 0 4px;
+    align-self: center;
   }
   .mat-mdc-text-field-wrapper {
     background: #f1f5f9;
     border-radius: 14px !important;
+  }
+  .mat-mdc-form-field-infix {
+    min-height: 48px;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
   }
   .mat-mdc-input-element {
     color: var(--auth-ink) !important;
@@ -402,9 +411,9 @@
     caret-color: var(--auth-brand-deep);
   }
   .mat-mdc-input-element::placeholder {
-    color: #64748b !important;
-    -webkit-text-fill-color: #64748b !important;
-    opacity: 1;
+    color: transparent !important;
+    -webkit-text-fill-color: transparent !important;
+    opacity: 0;
   }
   .mat-mdc-floating-label {
     color: #475569 !important;
@@ -551,37 +560,17 @@
   color: #94a3b8;
 }
 
-@media (max-width: 960px) {
-  .auth-premium--split .login-left {
-    flex: 0 0 auto;
-    padding: 36px 28px 28px;
-  }
-  .auth-premium--split .brand-features .feature-desc {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .auth-premium--split {
     flex-direction: column;
   }
   .auth-premium--split .login-left {
-    padding: 28px 20px 20px;
-  }
-  .auth-premium--split .brand {
-    text-align: center;
-    max-width: none;
-  }
-  .auth-premium--split .brand-logo {
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .auth-premium--split .brand-features,
-  .auth-premium--split .brand-divider {
     display: none;
   }
   .auth-premium--split .login-right {
-    padding: 20px 16px 32px;
+    flex: 1;
+    min-height: 100vh;
+    padding: 24px 16px 32px;
   }
   .auth-premium--split .login-card {
     border-radius: 20px;

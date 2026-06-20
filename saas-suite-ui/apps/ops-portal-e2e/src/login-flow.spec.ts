@@ -10,7 +10,7 @@ test.describe('Ops Portal Login', () => {
   test('should display login page', async ({ page }) => {
     await page.goto('/login');
     await expect(page.getByRole('heading', { name: /Bem-vindo de volta/i })).toBeVisible();
-    await expect(page.getByLabel(/Email/i)).toBeVisible();
+    await expect(page.getByLabel(/E-mail|Email/i)).toBeVisible();
     await expect(page.getByRole('button', { name: /^Acessar$/i })).toBeVisible();
   });
 

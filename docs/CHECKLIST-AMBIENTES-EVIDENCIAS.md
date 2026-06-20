@@ -124,6 +124,18 @@ payments:
 - [x] Fluxo de pedido minimo ate `CONFIRMED` — mesmo script ate confirmacao
 - [x] (Recomendado) fluxo ate `PAID` — local `SMOKE_SAGA_PAID_LEDGER=1 bash scripts/smoke-order-staging.sh` OK (2026-06-20)
 
+### Piloto AWS (EC2 sslip.io — 2026-06-20)
+
+- [x] Fronts HTTPS — shop `/`, ops `/ops/`, admin `/admin/` (`54-94-52-89.sslip.io`)
+- [x] Login Core — `admin@local` / `admin123`
+- [x] Saga pedido → `PAID` — `pnpm pilot:smoke` (`scripts/aws-pilot-smoke.sh`)
+- [x] Signup self-service — `POST /v1/onboarding/signup` via smoke
+- [x] Backup Postgres — `pnpm pilot:backup` → `/opt/fluxe/backups/daily/`
+- [x] Cron operacional — `pnpm pilot:cron` (backup + smoke diário)
+- [ ] Stripe test real — aguarda chaves em `.env.aws-pilot`
+- [ ] SES / e-mail transacional — aguarda domínio verificado
+- [ ] Upgrade EC2 `t3.medium` — bloqueado (free tier AWS)
+
 ### Producao
 
 - [ ] Fronts carregam (shop/admin/ops)

@@ -103,11 +103,30 @@ Atualizar `.env`:
 | Pedido demo | `ops@demo.example.com` / `ops123` |
 
 ```bash
-./scripts/aws-pilot-smoke.sh       # health + login + saga PAID
-./scripts/aws-pilot-backup-ec2.sh  # backup Postgres (cron semanal)
+pnpm pilot:smoke      # health + login + signup + saga PAID
+pnpm pilot:status     # containers, disco, backup, certificado
+pnpm pilot:backup     # backup Postgres manual
+pnpm pilot:cron       # instala cron (backup 03:15 UTC + smoke 06:00 UTC)
+pnpm pilot:signup     # só signup self-service
 ```
 
-**Quando tiver domínio:** SES (§7) → Stripe test no `.env` → upgrade EC2 se necessário.
+**Stripe test** (quando tiver chaves `sk_test_...` em `.env.aws-pilot`):
+
+```bash
+./scripts/aws-pilot-prepare-billing.sh --deploy
+```
+
+**Amazon SES** (após verificar domínio no console):
+
+```bash
+./scripts/aws-pilot-prepare-ses.sh --check-domain seudominio.com
+# preencher SMTP_* no .env.aws-pilot
+./scripts/aws-pilot-prepare-ses.sh --apply --deploy
+```
+
+**Limitações conta free tier AWS:** upgrade `t3.small` → `t3.medium` bloqueado até plano pago.
+
+**Quando tiver domínio:** A record → Elastic IP → `./scripts/aws-setup-tls-ec2.sh` → SES (§7) → Stripe test.
 
 ### 7. E-mail com Amazon SES
 

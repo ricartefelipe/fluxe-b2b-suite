@@ -122,7 +122,7 @@ payments:
 - [x] Fronts carregam (shop/admin/ops) — HTTP 200 (`curl` 2026-04-01)
 - [x] Login funciona — `POST /v1/auth/token` OK no smoke (`scripts/smoke-order-staging.sh`, utilizador seed `ops@demo.example.com` / tenant `00000000-0000-0000-0000-000000000002`)
 - [x] Fluxo de pedido minimo ate `CONFIRMED` — mesmo script ate confirmacao
-- [ ] (Recomendado) fluxo ate `PAID` — requer `SMOKE_PAYMENT_PAID=1`+broker ou `SMOKE_SAGA_PAID_LEDGER=1` (ver [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md))
+- [x] (Recomendado) fluxo ate `PAID` — local `SMOKE_SAGA_PAID_LEDGER=1 bash scripts/smoke-order-staging.sh` OK (2026-06-20)
 
 ### Producao
 
@@ -180,14 +180,21 @@ Bloqueios/acoes:
 
 ### Ambiente local (Docker)
 
-- [ ] Docker Desktop/Engine a correr (`docker ps`) — **bloqueio atual**: daemon inacessivel nesta maquina
-- [ ] `./scripts/up-local.sh` stack completa
-- [ ] Smoke pedido `CONFIRMED` local
-- [ ] Smoke saga `PAID` local
+- [x] Docker Desktop/Engine a correr (`docker ps`) — contexto `default` (2026-06-20)
+- [x] `./scripts/up-local.sh` stack completa — backends 8080/3000/8000 UP
+- [x] Smoke pedido `CONFIRMED` local — `scripts/smoke-order-staging.sh` OK
+- [x] Smoke saga `PAID` local — `SMOKE_SAGA_PAID_LEDGER=1 scripts/smoke-order-staging.sh` OK (pedido `febc3ca5-8aa0-4003-8b4d-f8a252d0422d`)
+
+Evidencia PAID local:
+
+```txt
+[smoke-order] OK GET /v1/orders/:id -> PAID
+[smoke-order] Fluxo saga concluido com sucesso (ate PAID via py-payments-ledger).
+```
 
 ### Proximos passos operacionais
 
-- [ ] Iniciar Docker e executar `up-local.sh` + smokes locais
+- [x] Iniciar Docker e executar `up-local.sh` + smokes locais
 - [ ] VM + `docker-compose.prod.yml` **ou** recriar conta Railway (staging primeiro)
 - [ ] E-mail: `EMAIL_PROVIDER=log` (dev) ou SMTP ate reativar Resend
 - [ ] Stripe test mode para piloto; live quando houver cliente pagante

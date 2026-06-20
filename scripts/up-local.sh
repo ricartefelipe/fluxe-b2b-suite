@@ -302,7 +302,7 @@ OPENAI_API_KEY="${OPENAI_API_KEY:-}" \
 AI_MODEL="${AI_MODEL:-gpt-4o-mini}" \
 java -jar "$SPRING_JAR" > "$LOG_DIR/spring.log" 2>&1 &
 save_pid "spring" $!
-wait_health "Spring API" "http://localhost:8080/actuator/health/liveness" 120
+wait_health "Spring API" "http://localhost:8080/actuator/health/liveness" 180
 
 # -- Node API --
 info "Iniciando Node API (porta 3000)..."

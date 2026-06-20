@@ -318,18 +318,6 @@ APP_ENV=local \
 CORS_ORIGINS="http://localhost:4200,http://localhost:4300,http://localhost:4400,http://localhost:3000" \
 node "$NODE_DIR/dist/src/main.js" > "$LOG_DIR/node-api.log" 2>&1 &
 save_pid "node-api" $!
-
-# -- Node Worker --
-info "Iniciando Node Worker..."
-DATABASE_URL="postgresql://app:app@localhost:5433/app" \
-REDIS_URL="redis://localhost:6380" \
-RABBITMQ_URL="amqp://guest:guest@localhost:5675" \
-JWT_SECRET="$JWT_SECRET" \
-JWT_ISSUER="$JWT_ISSUER" \
-NODE_ENV=development \
-APP_ENV=local \
-node "$NODE_DIR/dist/src/worker/main.js" > "$LOG_DIR/node-worker.log" 2>&1 &
-save_pid "node-worker" $!
 wait_health "Node API" "http://localhost:3000/v1/healthz" 60
 
 # -- Python API --
@@ -349,20 +337,9 @@ GATEWAY_PROVIDER=fake \
 CORS_ORIGINS="http://localhost:4200,http://localhost:4300,http://localhost:4400" \
 .venv/bin/uvicorn src.api.main:app --host 0.0.0.0 --port 8000 > "$LOG_DIR/python-api.log" 2>&1 &)
 save_pid "python-api" $!
-
-# -- Python Worker --
-info "Iniciando Python Worker..."
-(cd "$PY_DIR" && \
-DATABASE_URL="postgresql+psycopg://app:app@localhost:5434/app" \
-REDIS_URL="redis://localhost:6381/0" \
-RABBITMQ_URL="amqp://guest:guest@localhost:5675/" \
-JWT_SECRET="$JWT_SECRET" \
-JWT_ISSUER="$JWT_ISSUER" \
-APP_ENV=local \
-GATEWAY_PROVIDER=fake \
-.venv/bin/python -m src.worker.main > "$LOG_DIR/python-worker.log" 2>&1 &)
-save_pid "python-worker" $!
 wait_health "Python API" "http://localhost:8000/healthz" 60
+
+# Workers sobem após migrations/seed (Fase 5b) — evita falha em OutboxEvent inexistente.
 
 # ═══════════════════════════════════════════════════════
 # FASE 4: Migrations
@@ -401,6 +378,36 @@ JWT_SECRET="$JWT_SECRET" \
 JWT_ISSUER="$JWT_ISSUER" \
 GATEWAY_PROVIDER=fake \
 .venv/bin/python -m src.infrastructure.db.seed 2>&1 | tail -3) && ok "Python seed OK" || warn "Python seed (já existia ou falhou)"
+
+# ═══════════════════════════════════════════════════════
+# FASE 5b: Workers (após schema e seed)
+# ═══════════════════════════════════════════════════════
+header "Fase 5b — Workers"
+
+info "Iniciando Node Worker..."
+DATABASE_URL="postgresql://app:app@localhost:5433/app" \
+REDIS_URL="redis://localhost:6380" \
+RABBITMQ_URL="amqp://guest:guest@localhost:5675" \
+JWT_SECRET="$JWT_SECRET" \
+JWT_ISSUER="$JWT_ISSUER" \
+NODE_ENV=development \
+APP_ENV=local \
+node "$NODE_DIR/dist/src/worker/main.js" > "$LOG_DIR/node-worker.log" 2>&1 &
+save_pid "node-worker" $!
+ok "Node Worker iniciado"
+
+info "Iniciando Python Worker..."
+(cd "$PY_DIR" && \
+DATABASE_URL="postgresql+psycopg://app:app@localhost:5434/app" \
+REDIS_URL="redis://localhost:6381/0" \
+RABBITMQ_URL="amqp://guest:guest@localhost:5675/" \
+JWT_SECRET="$JWT_SECRET" \
+JWT_ISSUER="$JWT_ISSUER" \
+APP_ENV=local \
+GATEWAY_PROVIDER=fake \
+.venv/bin/python -m src.worker.main > "$LOG_DIR/python-worker.log" 2>&1 &)
+save_pid "python-worker" $!
+ok "Python Worker iniciado"
 
 # ═══════════════════════════════════════════════════════
 # FASE 6: Observabilidade (Prometheus + Grafana)

@@ -140,6 +140,8 @@ else
 fi
 sudo \$COMPOSE \$COMPOSE_FILES up -d
 sleep 60
+sudo \$COMPOSE \$COMPOSE_FILES restart nginx 2>/dev/null || true
+sleep 5
 sudo \$COMPOSE \$COMPOSE_FILES ps
 curl -sf http://127.0.0.1/health && echo " nginx OK" || echo " nginx ainda subindo..."
 REMOTE

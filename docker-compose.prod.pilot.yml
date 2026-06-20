@@ -1,5 +1,6 @@
-# Piloto em t3.small: desliga observabilidade pesada (profile obs).
-# Uso: COMPOSE_PROFILES= docker-compose -f docker-compose.prod.yml -f docker-compose.prod.build.yml -f docker-compose.prod.pilot.yml up -d
+# Piloto AWS t3.small: sem observabilidade/SSO, auth HS256, limites de RAM.
+# Uso:
+#   docker-compose -f docker-compose.prod.yml -f docker-compose.prod.build.yml -f docker-compose.prod.pilot.yml up -d
 
 services:
   jaeger:
@@ -11,19 +12,81 @@ services:
   grafana:
     profiles: ["obs"]
 
+  keycloak:
+    profiles: ["sso"]
+
+  postgres:
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  redis:
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  rabbitmq:
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
   saas-core:
     environment:
+      AUTH_MODE: hs256
+      SPRING_PROFILES_ACTIVE: prod
+      APP_DEV_TOKEN_ENDPOINT_ENABLED: "false"
+      JAVA_OPTS: -Xmx384m
       OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: ""
+    deploy:
+      resources:
+        limits:
+          memory: 768M
 
   orders-api:
     environment:
+      NODE_ENV: staging
       OTEL_EXPORTER_OTLP_ENDPOINT: ""
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+
+  orders-worker:
+    deploy:
+      resources:
+        limits:
+          memory: 192M
 
   payments-api:
     environment:
+      APP_ENV: staging
       OTEL_EXPORTER_OTLP_ENDPOINT: ""
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+
+  payments-worker:
+    deploy:
+      resources:
+        limits:
+          memory: 192M
 
   nginx:
+    depends_on: !override
+      saas-core:
+        condition: service_started
+      orders-api:
+        condition: service_healthy
+      payments-api:
+        condition: service_healthy
     volumes: !override
       - ./deploy/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./deploy/nginx/conf.d/default-pilot.conf:/etc/nginx/conf.d/default.conf:ro
+    deploy:
+      resources:
+        limits:
+          memory: 128M

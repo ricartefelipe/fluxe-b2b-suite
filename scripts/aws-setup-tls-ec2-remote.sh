@@ -30,11 +30,10 @@ fi
 
 $COMPOSE $CF run --rm --entrypoint certbot certbot certonly --webroot -w /var/www/certbot \
   $EMAIL_ARG --agree-tos --no-eff-email \
-  -d "$FLUXE_DOMAIN" \
-  --force-renewal 2>/dev/null || \
-$COMPOSE $CF run --rm --entrypoint certbot certbot certonly --webroot -w /var/www/certbot \
-  $EMAIL_ARG --agree-tos --no-eff-email \
   -d "$FLUXE_DOMAIN"
+
+# nginx worker (uid nginx) precisa ler a chave privada
+$COMPOSE $CF run --rm --entrypoint sh certbot -c "chmod 644 /etc/letsencrypt/archive/${FLUXE_DOMAIN}/privkey1.pem"
 
 sed "s/__FLUXE_DOMAIN__/${FLUXE_DOMAIN}/g" \
   deploy/nginx/conf.d/default-pilot-ssl.conf > deploy/nginx/conf.d/default-pilot-active.conf

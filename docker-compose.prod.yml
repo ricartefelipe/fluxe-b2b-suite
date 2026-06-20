@@ -84,7 +84,7 @@ services:
   # === BACKENDS ===
   saas-core:
     image: ghcr.io/${GHCR_ORG}/spring-saas-core:${SAAS_CORE_TAG:-latest}
-    platform: linux/arm64
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
     restart: unless-stopped
     environment:
       SPRING_PROFILES_ACTIVE: prod
@@ -140,7 +140,7 @@ services:
 
   orders-api:
     image: ghcr.io/${GHCR_ORG}/node-b2b-orders:${ORDERS_TAG:-latest}
-    platform: linux/arm64
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -175,7 +175,7 @@ services:
 
   orders-worker:
     image: ghcr.io/${GHCR_ORG}/node-b2b-orders-worker:${ORDERS_TAG:-latest}
-    platform: linux/arm64
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
     restart: unless-stopped
     environment:
       NODE_ENV: production
@@ -194,9 +194,11 @@ services:
 
   payments-api:
     image: ghcr.io/${GHCR_ORG}/py-payments-ledger:${PAYMENTS_TAG:-latest}
-    platform: linux/arm64
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
     restart: unless-stopped
     environment:
+      APP_ENV: production
+      ORDERS_INTEGRATION_ENABLED: "true"
       DATABASE_URL: postgresql+psycopg://${DB_USER:-fluxe}:${DB_PASSWORD}@postgres:5432/payments
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
       RABBITMQ_URL: amqp://${RABBITMQ_USER:-fluxe}:${RABBITMQ_PASSWORD}@rabbitmq:5672
@@ -231,9 +233,11 @@ services:
 
   payments-worker:
     image: ghcr.io/${GHCR_ORG}/py-payments-ledger-worker:${PAYMENTS_TAG:-latest}
-    platform: linux/arm64
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
     restart: unless-stopped
     environment:
+      APP_ENV: production
+      ORDERS_INTEGRATION_ENABLED: "true"
       DATABASE_URL: postgresql+psycopg://${DB_USER:-fluxe}:${DB_PASSWORD}@postgres:5432/payments
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
       RABBITMQ_URL: amqp://${RABBITMQ_USER:-fluxe}:${RABBITMQ_PASSWORD}@rabbitmq:5672

@@ -109,6 +109,8 @@ for dir in fluxe-b2b-suite spring-saas-core node-b2b-orders py-payments-ledger; 
     --exclude '.git' --exclude 'node_modules' --exclude 'target' \
     --exclude '.venv' --exclude '__pycache__' --exclude '.local-logs' \
     --exclude 'saas-suite-ui/node_modules' \
+    --exclude '.env' --exclude '.env.aws-pilot' \
+    --exclude 'deploy/nginx/conf.d/default-pilot-active.conf' \
     "$src" "$dst"
 done
 

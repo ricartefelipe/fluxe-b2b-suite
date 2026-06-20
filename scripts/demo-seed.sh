@@ -5,9 +5,10 @@
 
 set -euo pipefail
 
-CORE="http://localhost:8080"
-ORDERS="http://localhost:3000"
-PAYMENTS="http://localhost:8000"
+CORE="${CORE:-http://localhost:8080}"
+ORDERS="${ORDERS:-http://localhost:3000}"
+PAYMENTS="${PAYMENTS:-http://localhost:8000}"
+CURL_OPTS="${CURL_OPTS:-}"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -29,7 +30,7 @@ echo ""
 echo -e "${BOLD}Verificando serviços...${NC}"
 check_health() {
   local name="$1" url="$2"
-  if curl -sf --max-time 5 "$url" >/dev/null 2>&1; then
+  if curl $CURL_OPTS -sf --max-time 5 "$url" >/dev/null 2>&1; then
     ok "$name OK"
   else
     fail "$name não respondeu em $url"
@@ -50,7 +51,7 @@ SEED_PASSWORD="${SEED_PASSWORD:?Defina SEED_PASSWORD}"
 SEED_TENANT="${SEED_TENANT:-00000000-0000-0000-0000-000000000002}"
 TENANT="X-Tenant-Id: $SEED_TENANT"
 
-ORDERS_TOKEN=$(curl -sf -X POST "$ORDERS/v1/auth/token" \
+ORDERS_TOKEN=$(curl $CURL_OPTS -sf -X POST "$ORDERS/v1/auth/token" \
   -H "$JSON" \
   -d "{\"email\":\"$SEED_EMAIL\",\"password\":\"$SEED_PASSWORD\",\"tenantId\":\"$SEED_TENANT\"}" \
   | jq -r '.access_token')
@@ -61,7 +62,7 @@ if [ -z "$ORDERS_TOKEN" ] || [ "$ORDERS_TOKEN" = "null" ]; then
 fi
 ok "Token node-b2b-orders OK"
 
-PAY_TOKEN=$(curl -sf -X POST "$PAYMENTS/v1/auth/token" \
+PAY_TOKEN=$(curl $CURL_OPTS -sf -X POST "$PAYMENTS/v1/auth/token" \
   -H "$JSON" \
   -d "{\"email\":\"$SEED_EMAIL\",\"password\":\"$SEED_PASSWORD\",\"tenantId\":\"$SEED_TENANT\"}" \
   | jq -r '.access_token')
@@ -90,7 +91,7 @@ for entry in "${SKUS[@]}"; do
   sku="${entry%%:*}"
   qty="${entry##*:}"
   idem=$(uuidgen)
-  resp=$(curl -sf -X POST "$ORDERS/v1/inventory/adjustments" \
+  resp=$(curl $CURL_OPTS -sf -X POST "$ORDERS/v1/inventory/adjustments" \
     -H "$AUTH" -H "$TENANT" -H "$JSON" \
     -H "Idempotency-Key: $idem" \
     -d "{\"sku\":\"$sku\",\"type\":\"IN\",\"qty\":$qty,\"reason\":\"demo-seed initial stock\"}" 2>/dev/null) && ((ADJUSTED++)) || true
@@ -106,7 +107,7 @@ create_order() {
   local idem
   idem=$(uuidgen)
   local resp
-  resp=$(curl -sf -X POST "$ORDERS/v1/orders" \
+  resp=$(curl $CURL_OPTS -sf -X POST "$ORDERS/v1/orders" \
     -H "$AUTH" -H "$TENANT" -H "$JSON" \
     -H "Idempotency-Key: $idem" \
     -d "{\"customerId\":\"$customer\",\"items\":$items}" 2>/dev/null)
@@ -148,9 +149,9 @@ sleep 8
 CONFIRMED=0
 for oid in $ORDER1 $ORDER2 $ORDER3; do
   [ -z "$oid" ] && continue
-  status=$(curl -sf "$ORDERS/v1/orders/$oid" -H "$AUTH" -H "$TENANT" | jq -r '.status' 2>/dev/null || echo "?")
+  status=$(curl $CURL_OPTS -sf "$ORDERS/v1/orders/$oid" -H "$AUTH" -H "$TENANT" | jq -r '.status' 2>/dev/null || echo "?")
   if [ "$status" = "RESERVED" ]; then
-    curl -sf -X PATCH "$ORDERS/v1/orders/$oid/confirm" \
+    curl $CURL_OPTS -sf -X PATCH "$ORDERS/v1/orders/$oid/confirm" \
       -H "$AUTH" -H "$TENANT" >/dev/null 2>&1 && ((CONFIRMED++)) || true
   fi
 done
@@ -165,7 +166,7 @@ echo -e "${BOLD}[5/6] Criando payment intents...${NC}"
     local idem
     idem=$(uuidgen)
     local resp
-    resp=$(curl -sf -X POST "$PAYMENTS/v1/payment-intents" \
+    resp=$(curl $CURL_OPTS -sf -X POST "$PAYMENTS/v1/payment-intents" \
       -H "$PAY_AUTH" -H "$TENANT" -H "$JSON" \
       -H "Idempotency-Key: $idem" \
       -d "{\"amount\":$amount,\"currency\":\"BRL\",\"description\":\"$desc\",\"customer_ref\":\"order:$ref\"}" 2>/dev/null)
@@ -185,7 +186,7 @@ echo -e "${BOLD}[5/6] Criando payment intents...${NC}"
   SETTLED=0
   for pid in $PI1 $PI2; do
     [ -z "$pid" ] && continue
-    curl -sf -X POST "$PAYMENTS/v1/payment-intents/$pid/confirm" \
+    curl $CURL_OPTS -sf -X POST "$PAYMENTS/v1/payment-intents/$pid/confirm" \
       -H "$PAY_AUTH" -H "$TENANT" \
       -H "Idempotency-Key: $(uuidgen)" >/dev/null 2>&1 && ((SETTLED++)) || true
   done
@@ -198,11 +199,11 @@ echo -e "${BOLD}[6/6] Aguardando worker liquidar pagamentos...${NC}"
 sleep 8
 
 if [ -n "${PAY_TOKEN:-}" ]; then
-  ENTRIES=$(curl -sf "$PAYMENTS/v1/ledger/entries" \
+  ENTRIES=$(curl $CURL_OPTS -sf "$PAYMENTS/v1/ledger/entries" \
     -H "$PAY_AUTH" -H "$TENANT" 2>/dev/null | jq 'length' 2>/dev/null || echo "0")
   ok "$ENTRIES entradas no ledger"
 
-  BALANCES=$(curl -sf "$PAYMENTS/v1/ledger/balances" \
+  BALANCES=$(curl $CURL_OPTS -sf "$PAYMENTS/v1/ledger/balances" \
     -H "$PAY_AUTH" -H "$TENANT" 2>/dev/null | jq 'length' 2>/dev/null || echo "0")
   ok "$BALANCES contas no balanço"
 fi

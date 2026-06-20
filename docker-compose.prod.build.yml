@@ -39,3 +39,28 @@ services:
       context: ../py-payments-ledger
       dockerfile: docker/worker.Dockerfile
     platform: linux/amd64
+
+  shop-frontend:
+    image: fluxe-local/shop-frontend:latest
+    build:
+      context: ./saas-suite-ui
+      dockerfile: apps/shop/Dockerfile
+    platform: linux/amd64
+
+  ops-portal:
+    image: fluxe-local/ops-portal:latest
+    build:
+      context: ./saas-suite-ui
+      dockerfile: apps/ops-portal/Dockerfile
+      args:
+        NX_BASE_HREF: /ops/
+    platform: linux/amd64
+
+  admin-console:
+    image: fluxe-local/admin-console:latest
+    build:
+      context: ./saas-suite-ui
+      dockerfile: apps/admin-console/Dockerfile
+      args:
+        NX_BASE_HREF: /admin/
+    platform: linux/amd64

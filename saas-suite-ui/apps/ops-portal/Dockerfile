@@ -1,9 +1,10 @@
 FROM node:20-alpine AS build
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
-RUN corepack enable && pnpm install --frozen-lockfile
+RUN corepack enable && corepack prepare pnpm@9.15.9 --activate && pnpm install --frozen-lockfile
 COPY . .
-RUN npx nx build ops-portal --configuration=production
+ARG NX_BASE_HREF=/
+RUN npx nx build ops-portal --configuration=production --baseHref=${NX_BASE_HREF}
 
 FROM nginx:1.27-alpine
 RUN mkdir -p /etc/nginx/snippets \

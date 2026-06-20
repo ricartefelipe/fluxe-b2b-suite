@@ -69,8 +69,8 @@ KEYCLOAK_HOSTNAME=${FLUXE_HOST}
 KEYCLOAK_ADMIN=admin
 KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
 
-OIDC_ISSUER_URI=http://${FLUXE_HOST}/auth/realms/fluxe
-OIDC_JWK_SET_URI=http://${FLUXE_HOST}/auth/realms/fluxe/protocol/openid-connect/certs
+OIDC_ISSUER_URI=https://${FLUXE_HOST}/auth/realms/fluxe
+OIDC_JWK_SET_URI=https://${FLUXE_HOST}/auth/realms/fluxe/protocol/openid-connect/certs
 OIDC_CLIENT_ID=fluxe-app
 OIDC_AUDIENCE=
 JWT_ISSUER=spring-saas-core

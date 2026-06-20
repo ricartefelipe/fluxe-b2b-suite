@@ -95,6 +95,20 @@ Atualizar `.env`:
 - `DOMAIN`, `KEYCLOAK_HOSTNAME`, `CORS_ALLOWED_ORIGINS` com URLs HTTPS reais.
 - `FRONTEND_URL` para o Admin Console público.
 
+**Demo ao vivo (piloto sslip.io):**
+
+| Login | Credenciais |
+|-------|-------------|
+| Admin / Ops | `admin@local` / `admin123` |
+| Pedido demo | `ops@demo.example.com` / `ops123` |
+
+```bash
+./scripts/aws-pilot-smoke.sh       # health + login + saga PAID
+./scripts/aws-pilot-backup-ec2.sh  # backup Postgres (cron semanal)
+```
+
+**Quando tiver domínio:** SES (§7) → Stripe test no `.env` → upgrade EC2 se necessário.
+
 ### 7. E-mail com Amazon SES
 
 No Core (variáveis do serviço `saas-core` no compose ou `.env`):

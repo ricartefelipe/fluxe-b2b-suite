@@ -334,6 +334,7 @@ HTTP_HOST=0.0.0.0 \
 HTTP_PORT=8000 \
 APP_ENV=local \
 GATEWAY_PROVIDER=fake \
+ORDERS_INTEGRATION_ENABLED=true \
 CORS_ORIGINS="http://localhost:4200,http://localhost:4300,http://localhost:4400" \
 .venv/bin/uvicorn src.api.main:app --host 0.0.0.0 --port 8000 > "$LOG_DIR/python-api.log" 2>&1 &)
 save_pid "python-api" $!
@@ -405,6 +406,7 @@ JWT_SECRET="$JWT_SECRET" \
 JWT_ISSUER="$JWT_ISSUER" \
 APP_ENV=local \
 GATEWAY_PROVIDER=fake \
+ORDERS_INTEGRATION_ENABLED=true \
 .venv/bin/python -m src.worker.main > "$LOG_DIR/python-worker.log" 2>&1 &)
 save_pid "python-worker" $!
 ok "Python Worker iniciado"

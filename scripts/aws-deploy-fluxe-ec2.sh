@@ -75,6 +75,7 @@ OIDC_CLIENT_ID=fluxe-app
 OIDC_AUDIENCE=
 JWT_ISSUER=spring-saas-core
 JWT_SECRET=${JWT_SECRET}
+AUTH_MODE=hs256
 
 CORS_ALLOWED_ORIGINS=http://${FLUXE_HOST}
 
@@ -111,10 +112,16 @@ done
 
 DEPLOY_DIR="/opt/fluxe/fluxe-b2b-suite"
 
+if grep -q '^AUTH_MODE=' "$ENV_FILE"; then
+  sed -i 's/^AUTH_MODE=.*/AUTH_MODE=hs256/' "$ENV_FILE"
+else
+  echo 'AUTH_MODE=hs256' >> "$ENV_FILE"
+fi
+
 scp -i "$FLUXE_KEY" -o StrictHostKeyChecking=accept-new \
   "$ENV_FILE" "${FLUXE_USER}@${FLUXE_HOST}:${DEPLOY_DIR}/.env"
 
-echo "▸ Build + compose up (pode levar 20–40 min na t3.small)..."
+echo "▸ Build + compose up (backends ~20 min; frontends +30 min na t3.small)..."
 GHCR_TOKEN="$(gh auth token 2>/dev/null || true)"
 BUILD_MODE="${BUILD_MODE:-local}"
 "${SSH[@]}" bash <<REMOTE
@@ -131,7 +138,9 @@ COMPOSE="\$(command -v docker-compose || echo docker-compose)"
 COMPOSE_FILES="-f docker-compose.prod.yml -f docker-compose.prod.pilot.yml"
 if [[ "${BUILD_MODE}" == "local" ]]; then
   COMPOSE_FILES="\$COMPOSE_FILES -f docker-compose.prod.build.yml"
-  sudo \$COMPOSE \$COMPOSE_FILES build --parallel 2>&1 | tail -20
+  sudo \$COMPOSE \$COMPOSE_FILES build saas-core orders-api orders-worker payments-api payments-worker 2>&1 | tail -15
+  sudo \$COMPOSE \$COMPOSE_FILES build shop-frontend 2>&1 | tail -15
+  sudo \$COMPOSE \$COMPOSE_FILES build ops-portal admin-console 2>&1 | tail -15
 else
   if [[ -n "${GHCR_TOKEN}" ]]; then
     echo "${GHCR_TOKEN}" | sudo docker login ghcr.io -u ricartefelipe --password-stdin || true
@@ -148,7 +157,11 @@ REMOTE
 
 echo ""
 echo "✔ Deploy iniciado em http://${FLUXE_HOST}/health"
-echo "  APIs: http://${FLUXE_HOST}/api/core/actuator/health"
-echo "        http://${FLUXE_HOST}/api/orders/v1/healthz"
-echo "        http://${FLUXE_HOST}/api/payments/healthz"
+echo "  Shop:   http://${FLUXE_HOST}/"
+echo "  Ops:    http://${FLUXE_HOST}/ops/"
+echo "  Admin:  http://${FLUXE_HOST}/admin/"
+echo "  APIs:   http://${FLUXE_HOST}/api/core/actuator/health"
+echo "          http://${FLUXE_HOST}/api/orders/v1/healthz"
+echo "          http://${FLUXE_HOST}/api/payments/healthz"
+echo "  Login piloto (Core): admin@local — ver seed migration 021"
 echo "  .env piloto: $ENV_FILE"

@@ -577,4 +577,6 @@ echo ""
 if [ "$SKIP_FRONT" = false ]; then
   trap 'echo -e "\n${YELLOW}Frontends parados.${NC} Backends e infra continuam. Use --down para parar tudo."; exit 0' INT
   wait
+else
+  disown -a 2>/dev/null || true
 fi

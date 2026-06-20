@@ -5,6 +5,11 @@ import { TenantContextStore } from '@saas-suite/domains/tenancy';
 import { AuthStore } from '@saas-suite/shared/auth';
 import { Tenant } from '@saas-suite/data-access/core';
 
+/** Tenant demo com massa de pedidos/produtos no piloto. */
+const DEMO_TENANT_ID = '00000000-0000-0000-0000-000000000002';
+/** Tenant plataforma — sem pedidos no Orders; evitar como default no Ops. */
+const PLATFORM_TENANT_ID = '00000000-0000-0000-0000-000000000001';
+
 @Component({
   selector: 'app-ops-shell',
   standalone: true,
@@ -74,6 +79,12 @@ export class OpsShellComponent implements OnInit {
     if (!this.tenantStore.activeTenantId()) {
       const tid = this.authStore.session()?.tenantId;
       const tenants = this.tenantStore.tenants();
+      const demoTenant = tenants.find(t => t.id === DEMO_TENANT_ID);
+      const isPlatformScope = tid === '*' || tid === PLATFORM_TENANT_ID;
+      if (isPlatformScope && demoTenant) {
+        this.tenantStore.selectTenant(demoTenant);
+        return;
+      }
       const match = tenants.find(t => t.id === tid);
       if (match) {
         this.tenantStore.selectTenant(match);

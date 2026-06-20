@@ -19,6 +19,8 @@ DEPLOY_DIR="${DEPLOY_DIR:-/opt/fluxe/fluxe-b2b-suite}"
 if [[ -z "$FLUXE_HOST" && -f "$SUITE_ROOT/.aws-deploy/last-ec2.env" ]]; then
   # shellcheck disable=SC1091
   source "$SUITE_ROOT/.aws-deploy/last-ec2.env"
+  FLUXE_HOST="${PUBLIC_IP:-$FLUXE_HOST}"
+  FLUXE_KEY="${KEY_FILE:-$FLUXE_KEY}"
 fi
 
 if [[ -z "$FLUXE_HOST" ]]; then
@@ -118,8 +120,33 @@ else
   echo 'AUTH_MODE=hs256' >> "$ENV_FILE"
 fi
 
+PILOT_DOMAIN="${PILOT_DOMAIN:-}"
+if [[ -z "$PILOT_DOMAIN" && -f "$SUITE_ROOT/.aws-deploy/last-ec2.env" ]]; then
+  # shellcheck disable=SC1091
+  source "$SUITE_ROOT/.aws-deploy/last-ec2.env"
+fi
+if [[ -n "${PILOT_DOMAIN:-}" ]]; then
+  echo "▸ Ajustando .env para HTTPS ($PILOT_DOMAIN)..."
+  patch_env() {
+    local key="$1" val="$2"
+    if grep -q "^${key}=" "$ENV_FILE"; then
+      sed -i "s|^${key}=.*|${key}=${val}|" "$ENV_FILE"
+    else
+      echo "${key}=${val}" >> "$ENV_FILE"
+    fi
+  }
+  patch_env DOMAIN "$PILOT_DOMAIN"
+  patch_env CORS_ALLOWED_ORIGINS "https://${PILOT_DOMAIN}"
+  patch_env FRONTEND_URL "https://${PILOT_DOMAIN}/admin"
+  patch_env KEYCLOAK_HOSTNAME "$PILOT_DOMAIN"
+fi
+
 scp -i "$FLUXE_KEY" -o StrictHostKeyChecking=accept-new \
   "$ENV_FILE" "${FLUXE_USER}@${FLUXE_HOST}:${DEPLOY_DIR}/.env"
+
+if [[ -n "${PILOT_DOMAIN:-}" ]]; then
+  "${SSH[@]}" "echo '${PILOT_DOMAIN}' > ${DEPLOY_DIR}/.pilot-domain"
+fi
 
 echo "▸ Build + compose up (backends ~20 min; frontends +30 min na t3.small)..."
 GHCR_TOKEN="$(gh auth token 2>/dev/null || true)"

@@ -57,6 +57,17 @@ else
   fail=1
 fi
 
+if [[ "${SMOKE_SIGNUP:-1}" == "1" ]]; then
+  echo "▸ Signup self-service..."
+  export PILOT_BASE_URL="$BASE"
+  if "$SCRIPT_DIR/aws-pilot-signup-smoke.sh" >/dev/null 2>&1; then
+    echo "  OK  signup onboarding"
+  else
+    echo "  FAIL signup onboarding" >&2
+    fail=1
+  fi
+fi
+
 echo "▸ Saga pedido → PAID..."
 export ORDERS_SMOKE_URL="$BASE/api/orders"
 export PAYMENTS_SMOKE_URL="$BASE/api/payments"

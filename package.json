@@ -16,7 +16,12 @@
     "smoke:staging": "bash scripts/smoke-staging.sh",
     "smoke:order-staging": "bash scripts/smoke-order-staging.sh",
     "smoke:order-staging:paid": "env SMOKE_PAYMENT_PAID=1 bash scripts/smoke-order-staging.sh",
-    "smoke:order-staging:saga": "env SMOKE_SAGA_PAID_LEDGER=1 bash scripts/smoke-order-staging.sh"
+    "smoke:order-staging:saga": "env SMOKE_SAGA_PAID_LEDGER=1 bash scripts/smoke-order-staging.sh",
+    "pilot:smoke": "bash scripts/aws-pilot-smoke.sh",
+    "pilot:status": "bash scripts/aws-pilot-status.sh",
+    "pilot:backup": "bash scripts/aws-pilot-backup-ec2.sh",
+    "pilot:cron": "bash scripts/aws-pilot-install-cron.sh",
+    "pilot:signup": "bash scripts/aws-pilot-signup-smoke.sh"
   },
   "repository": {
     "type": "git",

@@ -36,7 +36,7 @@ services:
   saas-core:
     environment:
       AUTH_MODE: hs256
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: prod,pilot
       APP_DEV_TOKEN_ENDPOINT_ENABLED: "false"
       JAVA_OPTS: -Xmx384m
       OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: ""

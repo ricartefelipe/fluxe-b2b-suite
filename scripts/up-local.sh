@@ -185,7 +185,7 @@ check_cmd() {
 }
 
 if ! docker info &>/dev/null; then
-  fail "Docker não está rodando. Inicie o Docker e tente novamente."
+  fail "Docker não está rodando. Inicie o Docker Desktop (ou: sudo systemctl start docker) e confirme com: docker ps"
   exit 1
 fi
 ok "Docker OK"
@@ -264,17 +264,15 @@ info "Node: npm ci + prisma generate + build..."
 ok "Node buildado"
 
 info "Python: verificando dependências..."
-if [ ! -d "$PY_DIR/.venv" ]; then
-  if ! (cd "$PY_DIR" && python3 -m venv .venv); then
-    fail "Não foi possível criar .venv em py-payments-ledger. Em Debian/Ubuntu: sudo apt install python3.12-venv (ou o pacote venv da tua versão de Python)."
-    exit 1
-  fi
-fi
-if [ ! -x "$PY_DIR/.venv/bin/pip" ]; then
-  fail "pip ausente no venv. Instale python3-venv, apague py-payments-ledger/.venv e execute este script de novo."
+if ! bash "$PY_DIR/scripts/bootstrap-venv.sh"; then
+  fail "Não foi possível preparar .venv em py-payments-ledger (ver mensagem acima)."
   exit 1
 fi
-(cd "$PY_DIR" && .venv/bin/pip install -q -r requirements.txt 2>&1 | tail -2)
+if ! "$PY_DIR/.venv/bin/python3" -m pip --version >/dev/null 2>&1; then
+  fail "pip indisponível no venv. Apague py-payments-ledger/.venv e execute este script de novo."
+  exit 1
+fi
+(cd "$PY_DIR" && .venv/bin/python3 -m pip install -q -r requirements.txt 2>&1 | tail -2)
 ok "Python pronto"
 
 # ═══════════════════════════════════════════════════════

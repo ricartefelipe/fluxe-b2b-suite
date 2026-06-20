@@ -14,11 +14,21 @@ Base: **https://54-94-52-89.sslip.io**
 
 ## Massa de dados (piloto)
 
-| Serviço | Dados |
-|---------|--------|
-| **Core** | Tenants Acme/TechParts/Global + flags, subscriptions, audit (Liquibase seed) |
-| **Orders** | ~50 produtos, ~20 pedidos, 2 tenants (Demo + Acme) |
-| **Payments** | Ledger + intents (seed staging) |
+| Serviço | Dados (tenant demo `...002`) |
+|---------|------------------------------|
+| **Core** | 7 tenants, 11 users, 23 políticas ABAC, 8 feature flags, audit log |
+| **Orders** | 25 produtos, 15+ pedidos (vários status), inventário, 2 tenants |
+| **Payments** | 20 payment intents, 13+ ledger entries, invoices, refunds |
+| **Shop** | Catálogo completo com imagens e estoque |
+
+### Recarregar massa de dados
+
+```bash
+source .aws-deploy/last-ec2.env
+./scripts/aws-pilot-seed.sh
+```
+
+O script aplica o seed realistic do Payments na EC2 e roda `demo-seed.sh` contra as URLs HTTPS do piloto.
 
 ## Signup (novo tenant)
 
@@ -30,4 +40,5 @@ Shop ou Admin → **Criar conta** → cria tenant + admin automaticamente.
 source .aws-deploy/last-ec2.env
 ./scripts/aws-pilot-smoke.sh
 ./scripts/aws-pilot-status.sh
+./scripts/aws-pilot-seed.sh   # recarrega massa de dados em Core/Orders/Payments
 ```

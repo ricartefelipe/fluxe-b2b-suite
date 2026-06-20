@@ -109,7 +109,9 @@ Se falhar, ver `.local-logs/` e [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-S
 
 ## Fase 3 — Produção barata (substituto do Railway)
 
-**Recomendado:** uma VM (Hetzner, Contabo, Oracle Free Tier, etc.) com **Docker Compose** — já documentado em [.env.example](../.env.example) e [docker-compose.prod.yml](../docker-compose.prod.yml).
+**Recomendado:** uma VM (Hetzner, Contabo, Oracle Free Tier, **AWS EC2/Lightsail**, etc.) com **Docker Compose** — já documentado em [.env.example](../.env.example) e [docker-compose.prod.yml](../docker-compose.prod.yml).
+
+**Conta Amazon:** ver [DEPLOY-AWS-EC2.md](DEPLOY-AWS-EC2.md) (EC2 + SES + Compose).
 
 Passos resumidos:
 
@@ -167,6 +169,7 @@ Marcar quando concluído:
 | Produto “vendável” (features) | [O-QUE-FALTA-100-VENDAVEL.md](O-QUE-FALTA-100-VENDAVEL.md) |
 | Começar local | [../COMECE-AQUI.md](../COMECE-AQUI.md) |
 | Operação produção VM | [PRODUCAO-OPERACAO.md](PRODUCAO-OPERACAO.md) |
+| Deploy AWS (EC2) | [DEPLOY-AWS-EC2.md](DEPLOY-AWS-EC2.md) |
 
 ---
 

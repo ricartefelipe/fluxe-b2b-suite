@@ -97,10 +97,11 @@ Atualizar `.env`:
 
 **Demo ao vivo (piloto sslip.io):**
 
-| Login | Credenciais |
-|-------|-------------|
-| Admin / Ops | `admin@local` / `admin123` |
-| Pedido demo | `ops@demo.example.com` / `ops123` |
+| Login | Credenciais | Tenant |
+|-------|-------------|--------|
+| Plataforma (admin global) | `admin@local` / `admin123` | Fluxe B2B Suite |
+| Cliente demo (multi-tenant) | `ops@demo.example.com` / `ops123` | Demo Corp |
+| Pedido demo (API smoke) | mesmo ops + tenant `00000000-0000-0000-0000-000000000002` | Demo Corp |
 
 ```bash
 pnpm pilot:smoke      # health + login + signup + saga PAID

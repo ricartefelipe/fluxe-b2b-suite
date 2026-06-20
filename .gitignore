@@ -29,6 +29,7 @@ pnpm-debug.log*
 .env
 .env.local
 .env.*.local
+.env.aws-pilot
 .env.production
 .env.staging
 .env.development

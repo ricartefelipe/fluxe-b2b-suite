@@ -76,19 +76,17 @@ Migrations rodam nos entrypoints (`SPRING_PROFILES_ACTIVE=prod`, `NODE_ENV=produ
 
 ### 6. TLS e domínio
 
-**Piloto recomendado:** `app.fluxe.com.br` (Cloudflare, DNS only) → Elastic IP da EC2.
+**Piloto sem Cloudflare:** domínio automático **sslip.io** (zero config):
 
 ```bash
-# 1) DNS (automático com token ou instruções manuais)
-CLOUDFLARE_API_TOKEN=... FLUXE_DOMAIN=app.fluxe.com.br ./scripts/aws-setup-dns-cloudflare.sh
-
-# 2) Let's Encrypt + nginx :443
-CERTBOT_EMAIL=seu@email.com FLUXE_DOMAIN=app.fluxe.com.br ./scripts/aws-setup-tls-ec2.sh
+source .aws-deploy/last-ec2.env
+./scripts/aws-setup-dns-auto.sh    # valida 54-94-52-89.sslip.io → IP
+CERTBOT_EMAIL=seu@email.com ./scripts/aws-setup-tls-ec2.sh
 ```
 
-Scripts: [`aws-setup-dns-cloudflare.sh`](../scripts/aws-setup-dns-cloudflare.sh), [`aws-setup-tls-ec2.sh`](../scripts/aws-setup-tls-ec2.sh).
+URLs: `https://54-94-52-89.sslip.io/` (shop), `/ops/`, `/admin/`.
 
-**Opção barata (legado):** Caddy ou Certbot manual (ver `deploy/nginx/` e [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md)).
+**Domínio próprio depois:** registro A no seu provedor (Registro.br, etc.) ou Route 53 hosted zone — ver [`aws-setup-dns-route53.sh`](../scripts/aws-setup-dns-route53.sh) (quando tiver zona). Cloudflare é opcional ([`aws-setup-dns-cloudflare.sh`](../scripts/aws-setup-dns-cloudflare.sh)).
 
 **Opção AWS:** Route 53 → ALB → target group EC2:443; certificado **ACM** no ALB.
 

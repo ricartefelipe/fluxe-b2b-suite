@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 # Emite certificado Let's Encrypt na EC2 piloto e ativa HTTPS no nginx.
 #
-# Pré-requisito: registro A do FLUXE_DOMAIN apontando para FLUXE_HOST (DNS only na Cloudflare).
+# Pré-requisito: FLUXE_DOMAIN apontando para FLUXE_HOST (use aws-setup-dns-auto.sh).
 #
 # Uso:
 #   source .aws-deploy/last-ec2.env
-#   FLUXE_DOMAIN=app.fluxe.com.br ./scripts/aws-setup-tls-ec2.sh
-#   # ou com e-mail Let's Encrypt:
-#   CERTBOT_EMAIL=felipericartem@gmail.com FLUXE_DOMAIN=app.fluxe.com.br ./scripts/aws-setup-tls-ec2.sh
+#   ./scripts/aws-setup-dns-auto.sh && ./scripts/aws-setup-tls-ec2.sh
+#   # ou explícito:
+#   CERTBOT_EMAIL=seu@email.com FLUXE_DOMAIN=54-94-52-89.sslip.io ./scripts/aws-setup-tls-ec2.sh
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SUITE_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-FLUXE_DOMAIN="${FLUXE_DOMAIN:-app.fluxe.com.br}"
+FLUXE_DOMAIN="${FLUXE_DOMAIN:-}"
 FLUXE_HOST="${FLUXE_HOST:-}"
 FLUXE_KEY="${FLUXE_KEY:-$HOME/.ssh/fluxe-b2b-deploy.pem}"
 FLUXE_USER="${FLUXE_USER:-ec2-user}"
@@ -26,6 +26,11 @@ if [[ -z "$FLUXE_HOST" && -f "$SUITE_ROOT/.aws-deploy/last-ec2.env" ]]; then
   source "$SUITE_ROOT/.aws-deploy/last-ec2.env"
   FLUXE_HOST="${PUBLIC_IP:-}"
   FLUXE_KEY="${KEY_FILE:-$FLUXE_KEY}"
+  FLUXE_DOMAIN="${FLUXE_DOMAIN:-${PILOT_DOMAIN:-}}"
+fi
+
+if [[ -z "$FLUXE_DOMAIN" && -n "$FLUXE_HOST" ]]; then
+  FLUXE_DOMAIN="${FLUXE_HOST//./-}.sslip.io"
 fi
 
 if [[ -z "$FLUXE_HOST" ]]; then
@@ -39,7 +44,7 @@ echo "▸ Verificando DNS: $FLUXE_DOMAIN → $FLUXE_HOST"
 RESOLVED="$(dig +short "$FLUXE_DOMAIN" A 2>/dev/null | head -1 || true)"
 if [[ "$RESOLVED" != "$FLUXE_HOST" ]]; then
   echo "DNS não aponta para a EC2 (resolvido: ${RESOLVED:-vazio})." >&2
-  echo "Rode primeiro: FLUXE_DOMAIN=$FLUXE_DOMAIN FLUXE_HOST=$FLUXE_HOST ./scripts/aws-setup-dns-cloudflare.sh" >&2
+  echo "Rode: FLUXE_HOST=$FLUXE_HOST ./scripts/aws-setup-dns-auto.sh" >&2
   exit 1
 fi
 echo "✔ DNS OK"
@@ -50,8 +55,11 @@ rsync -az -e "$RSYNC_SSH" \
   "$SUITE_ROOT/deploy/nginx/conf.d/default-pilot.conf" \
   "$SUITE_ROOT/deploy/nginx/conf.d/default-pilot-ssl.conf" \
   "$SUITE_ROOT/docker-compose.prod.tls.yml" \
-  "$SUITE_ROOT/scripts/aws-setup-tls-ec2-remote.sh" \
   "${FLUXE_USER}@${FLUXE_HOST}:${DEPLOY_DIR}/"
+
+rsync -az -e "$RSYNC_SSH" \
+  "$SUITE_ROOT/scripts/aws-setup-tls-ec2-remote.sh" \
+  "${FLUXE_USER}@${FLUXE_HOST}:${DEPLOY_DIR}/scripts/"
 
 rsync -az -e "$RSYNC_SSH" \
   "$SUITE_ROOT/deploy/nginx/conf.d/" \

@@ -4,6 +4,7 @@ import {
   inject,
   signal,
   HostListener,
+  OnInit,
 } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
@@ -16,6 +17,11 @@ import { OfflineIndicatorComponent, InstallPromptComponent } from '@union.soluti
 import { NotificationStore } from '@saas-suite/shared/notifications';
 import { AuthStore, AuthService } from '@saas-suite/shared/auth';
 import { I18nService } from '@saas-suite/shared/i18n';
+import { TenantContextService } from '@saas-suite/shared/util';
+
+/** Tenant demo com catálogo e pedidos no piloto. */
+const DEMO_TENANT_ID = '00000000-0000-0000-0000-000000000002';
+const PLATFORM_TENANT_ID = '00000000-0000-0000-0000-000000000001';
 
 @Component({
   selector: 'app-shop-shell',
@@ -35,7 +41,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
   styleUrl: './app.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ShopShellComponent {
+export class ShopShellComponent implements OnInit {
   protected readonly cart = inject(CartService);
   protected readonly notifications = inject(NotificationStore);
   protected readonly auth = inject(AuthStore);
@@ -43,6 +49,17 @@ export class ShopShellComponent {
   protected readonly router = inject(Router);
 
   private readonly authService = inject(AuthService);
+  private readonly tenantCtx = inject(TenantContextService);
+
+  ngOnInit(): void {
+    const tid = this.auth.session()?.tenantId;
+    const isPlatformScope = tid === '*' || tid === PLATFORM_TENANT_ID;
+    if (isPlatformScope) {
+      this.tenantCtx.setActiveTenantId(DEMO_TENANT_ID);
+    } else if (tid) {
+      this.tenantCtx.setActiveTenantId(tid);
+    }
+  }
 
   protected readonly minicartOpen = signal(false);
   protected readonly mobileMenuOpen = signal(false);

@@ -165,6 +165,9 @@ if ! swapon --show | grep -q /swapfile; then
 fi
 COMPOSE="\$(command -v docker-compose || echo docker-compose)"
 COMPOSE_FILES="-f docker-compose.prod.yml -f docker-compose.prod.pilot.yml"
+if [[ -n "${PILOT_DOMAIN:-}" && -f docker-compose.prod.tls.yml ]]; then
+  COMPOSE_FILES="\$COMPOSE_FILES -f docker-compose.prod.tls.yml"
+fi
 if [[ "${BUILD_MODE}" == "local" ]]; then
   COMPOSE_FILES="\$COMPOSE_FILES -f docker-compose.prod.build.yml"
   sudo \$COMPOSE \$COMPOSE_FILES build saas-core orders-api orders-worker payments-api payments-worker 2>&1 | tail -15

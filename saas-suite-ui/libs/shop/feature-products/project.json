@@ -4,11 +4,16 @@
   "projectType": "library",
   "sourceRoot": "libs/shop/feature-products/src",
   "prefix": "shop",
-  "tags": ["scope:shop", "type:feature"],
+  "tags": [
+    "scope:shop",
+    "type:feature"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/shop/feature-products"
+      ],
       "options": {
         "reportsDirectory": "../../../coverage/libs/shop/feature-products"
       }

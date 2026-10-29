@@ -4,11 +4,16 @@
   "sourceRoot": "libs/shop/performance/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["scope:shop", "type:util"],
+  "tags": [
+    "scope:shop",
+    "type:util"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/shop/performance"
+      ],
       "options": {
         "reportsDirectory": "../../../coverage/libs/shop/performance",
         "passWithNoTests": true

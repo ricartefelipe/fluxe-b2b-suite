@@ -20,7 +20,9 @@ USER appuser
 EXPOSE 4000
 ENV PORT=4000 NODE_ENV=production
 
+# A porta vem de PORT (as plataformas a injetam) e o servidor escuta nela; o healthcheck fixo em
+# 4000 ficava unhealthy sempre que PORT era outra, mesmo com a aplicacao atendendo.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD wget -qO- http://localhost:4000/ || exit 1
+  CMD sh -c 'wget -qO- "http://127.0.0.1:${PORT:-4000}/" >/dev/null || exit 1'
 
 CMD ["./entrypoint.sh"]

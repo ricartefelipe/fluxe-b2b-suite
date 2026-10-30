@@ -23,7 +23,7 @@ export async function loginWithQuickProfile(
   const { email, password } = DEV_LOGIN_E2E[profileLabel];
   await page.goto('/login');
   await dismissCookieBanner(page);
-  await page.getByLabel(/Email/i).fill(email);
+  await page.getByLabel(/E-?mail/i).fill(email);
   await page.getByLabel(/Senha/i).fill(password);
   await page.getByRole('button', { name: /Acessar/i }).click();
   await page.waitForURL((url) => !url.pathname.includes('login'), { timeout: 30000 });

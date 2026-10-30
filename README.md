@@ -11,6 +11,8 @@ Plataforma B2B **multi-tenant** para e-commerce, operações e gestão administr
 
 **Repositório:** [github.com/ricartefelipe/fluxe-b2b-suite](https://github.com/ricartefelipe/fluxe-b2b-suite)
 
+**Autor:** [Felipe Ricarte Magalhães](https://github.com/ricartefelipe) · [Site](https://codigodeproducao.com.br/) · [LinkedIn](https://www.linkedin.com/in/felipe-ricarte-magalhaes/)
+
 ---
 
 ## Índice

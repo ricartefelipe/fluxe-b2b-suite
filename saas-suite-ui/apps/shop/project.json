@@ -4,15 +4,22 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/shop/src",
-  "tags": ["scope:shop", "type:app"],
+  "tags": [
+    "scope:shop",
+    "type:app"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/shop",
         "browser": "apps/shop/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/shop/tsconfig.app.json",
         "assets": [
           {
@@ -21,7 +28,9 @@
           },
           "apps/shop/src/manifest.webmanifest"
         ],
-        "styles": ["apps/shop/src/styles.scss"],
+        "styles": [
+          "apps/shop/src/styles.scss"
+        ],
         "serviceWorker": "apps/shop/ngsw-config.json",
         "server": "apps/shop/src/main.server.ts",
         "ssr": {
@@ -35,7 +44,9 @@
             {
               "glob": "**/*",
               "input": "apps/shop/public",
-              "ignore": ["assets/config.json"]
+              "ignore": [
+                "assets/config.json"
+              ]
             },
             {
               "glob": "**/*",
@@ -71,7 +82,9 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "dependsOn": ["api:serve"],
+      "dependsOn": [
+        "api:serve"
+      ],
       "continuous": true,
       "executor": "@angular/build:dev-server",
       "configurations": {
@@ -98,7 +111,9 @@
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/apps/shop"
+      ],
       "options": {
         "reportsDirectory": "../../coverage/apps/shop"
       }

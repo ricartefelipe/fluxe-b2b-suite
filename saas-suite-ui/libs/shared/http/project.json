@@ -4,16 +4,21 @@
   "sourceRoot": "libs/shared/http/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["scope:shared", "type:util"],
+  "tags": [
+    "scope:shared",
+    "type:util"
+  ],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/shared-http"
+      ],
       "options": {
-        "reportsDirectory": "../../coverage/libs/shared-http",
+        "reportsDirectory": "../../../coverage/libs/shared-http",
         "passWithNoTests": true
       }
     }

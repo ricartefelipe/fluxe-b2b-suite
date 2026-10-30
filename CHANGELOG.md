@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2026-10-29
+
+Observação: a versão 1.5.0 foi registrada neste changelog sem tag publicada; a tag `v1.5.1` é a primeira após a `v1.4.0`.
+
+### Fixed
+- **deps:** declara o runtime OXC que o Angular 21.2 importa; builds não dependem mais de hoisting acidental.
+- **nx:** saídas de cobertura ancoradas em `{workspaceRoot}`; cache distribuído deixa de gravar fora do workspace.
+- **docker:** healthcheck do shop segue a porta configurada (`PORT`, padrão 4000).
+- **e2e:** helpers de login dos Playwright encontram o campo rotulado "E-mail" (admin-console, ops-portal e shop).
+
+### CI
+- Deploys só publicam com a CI do mesmo SHA aprovada (`require-ci`).
+- A sincronização destrutiva master↔develop foi substituída por verificação somente leitura (`check-master-sync.yml`, `scripts/check-branch-sync.sh`) que distingue iguais, ausente, divergentes e master com commits exclusivos.
+
 ## [1.5.0] - 2026-03-15
 
 ### Added

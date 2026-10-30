@@ -175,6 +175,7 @@
     "@nx/web": "22.7.7",
     "@nx/workspace": "22.7.7",
     "@openapitools/openapi-generator-cli": "^2.29.0",
+    "@oxc-project/runtime": "0.156.0",
     "@playwright/test": "^1.36.0",
     "@schematics/angular": "21.2.13",
     "@swc-node/register": "1.11.1",

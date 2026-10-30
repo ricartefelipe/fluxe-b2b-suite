@@ -4,11 +4,16 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/ops-portal/src",
-  "tags": ["scope:ops", "type:app"],
+  "tags": [
+    "scope:ops",
+    "type:app"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/ops-portal",
         "browser": "apps/ops-portal/src/main.ts",
@@ -20,7 +25,9 @@
             "input": "apps/ops-portal/public"
           }
         ],
-        "styles": ["apps/ops-portal/src/styles.scss"]
+        "styles": [
+          "apps/ops-portal/src/styles.scss"
+        ]
       },
       "configurations": {
         "production": {
@@ -28,7 +35,9 @@
             {
               "glob": "**/*",
               "input": "apps/ops-portal/public",
-              "ignore": ["assets/config.json"]
+              "ignore": [
+                "assets/config.json"
+              ]
             },
             {
               "glob": "**/*",
@@ -84,7 +93,9 @@
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/apps/ops-portal"
+      ],
       "options": {
         "reportsDirectory": "../../coverage/apps/ops-portal"
       }

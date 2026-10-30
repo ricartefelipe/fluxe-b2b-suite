@@ -4,11 +4,16 @@
   "sourceRoot": "libs/shop/shared-ui/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": ["scope:shop", "type:ui"],
+  "tags": [
+    "scope:shop",
+    "type:ui"
+  ],
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/shop/shared-ui"
+      ],
       "options": {
         "reportsDirectory": "../../../coverage/libs/shop/shared-ui"
       }

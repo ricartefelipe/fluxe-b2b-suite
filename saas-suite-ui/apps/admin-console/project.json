@@ -4,11 +4,16 @@
   "projectType": "application",
   "prefix": "app",
   "sourceRoot": "apps/admin-console/src",
-  "tags": ["scope:admin", "type:app"],
+  "tags": [
+    "scope:admin",
+    "type:app"
+  ],
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/admin-console",
         "browser": "apps/admin-console/src/main.ts",
@@ -20,7 +25,9 @@
             "input": "apps/admin-console/public"
           }
         ],
-        "styles": ["apps/admin-console/src/styles.scss"]
+        "styles": [
+          "apps/admin-console/src/styles.scss"
+        ]
       },
       "configurations": {
         "production": {
@@ -28,7 +35,9 @@
             {
               "glob": "**/*",
               "input": "apps/admin-console/public",
-              "ignore": ["assets/config.json"]
+              "ignore": [
+                "assets/config.json"
+              ]
             },
             {
               "glob": "**/*",
@@ -84,7 +93,9 @@
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/apps/admin-console"
+      ],
       "options": {
         "reportsDirectory": "../../coverage/apps/admin-console"
       }

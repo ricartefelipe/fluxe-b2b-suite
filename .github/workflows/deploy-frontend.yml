@@ -3,8 +3,9 @@
 # Staging dos fronts está no Railway (ramo develop nos projetos Railway), ver docs/URLS-STAGING.md.
 # Não dispare este workflow em develop: evita build duplicado sem deploy e mantém um destino claro por ramo.
 #
-# Pré-requisito: o workflow "CI" (deploy.yml) também corre em push para master quando mudam os mesmos
-# caminhos em saas-suite-ui; validação completa (lint, test, e2e) fica lá. Aqui só: artefacto + wrangler.
+# Pré-requisito imposto, não apenas documentado: o job `require-ci` espera o workflow "CI"
+# (deploy.yml) deste mesmo SHA ficar verde antes de qualquer publicação. A validação completa
+# (lint, test, e2e) continua lá; aqui só: artefacto + wrangler.
 name: Deploy Frontend
 
 on:
@@ -25,7 +26,64 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
+  # A publicacao nao avanca enquanto o workflow "CI" **deste mesmo SHA** nao estiver verde.
+  #
+  # Antes, "CI" e a publicacao disparavam em paralelo no mesmo push: o artefacto ia para fora mesmo
+  # com lint, testes ou e2e reprovados, e o deploy verde dava a impressao de commit aprovado. A
+  # verificacao e sempre contra a ultima tentativa deste commit — nunca contra o "ultimo verde" de
+  # outro commit ou outro evento.
+  require-ci:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+    steps:
+      - name: Wait for the CI workflow on this SHA
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sha = context.sha;
+            const deadline = Date.now() + 30 * 60 * 1000;
+            const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+            while (true) {
+              const { data } = await github.rest.actions.listWorkflowRunsForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                head_sha: sha,
+                per_page: 100,
+              });
+
+              const runs = data.workflow_runs.filter((r) => r.name === 'CI');
+              if (runs.length === 0) {
+                core.setFailed(
+                  `Nenhuma execucao do workflow "CI" encontrada para o SHA ${sha}. ` +
+                  'A publicacao exige a CI deste commit.'
+                );
+                return;
+              }
+
+              runs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+              const run = runs[0];
+              core.info(`CI run ${run.id}: status=${run.status} conclusion=${run.conclusion}`);
+
+              if (run.status === 'completed') {
+                if (run.conclusion === 'success') {
+                  core.info('CI deste SHA esta verde; publicacao liberada.');
+                  return;
+                }
+                core.setFailed(`CI deste SHA terminou como "${run.conclusion}". Publicacao bloqueada.`);
+                return;
+              }
+
+              if (Date.now() > deadline) {
+                core.setFailed('Tempo esgotado aguardando a CI deste SHA.');
+                return;
+              }
+              await sleep(20000);
+            }
+
   cloudflare-pages:
+    needs: require-ci
     runs-on: ubuntu-latest
     defaults:
       run:

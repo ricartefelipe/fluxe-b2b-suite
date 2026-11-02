@@ -9,7 +9,7 @@ Documento **único** para percorrer, em ordem, o que precisas fazer para **vende
 | Tipo | O quê |
 |------|--------|
 | **No repositório** | Scripts de smoke, `verify:contracts`, docs, CI — já automatizáveis localmente ou no GitHub. |
-| **Contigo / equipa** | Railway, domínios, Stripe/Resend/OIDC em produção, secrets, merge `develop` → `master`, alertas nos painéis. |
+| **Contigo / equipa** | Servidor, domínios, Stripe/Resend/OIDC em produção, secrets, merge `develop` → `master`, alertas nos painéis. |
 | **Já coberto como “100% vendável” (checklist de produto)** | Ver [O-QUE-FALTA-100-VENDAVEL.md](O-QUE-FALTA-100-VENDAVEL.md) — itens de legal, billing, suporte, CORS, etc. |
 
 Este playbook foca **operação e prova de comportamento** depois disso.
@@ -34,8 +34,8 @@ Este playbook foca **operação e prova de comportamento** depois disso.
 ## Fase 2 — Monitorização (staging primeiro, depois produção)
 
 1. Ler e aplicar [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md) (p95, 5xx, filas, smoke pós-deploy).
-2. **Railway:** health check por serviço no path correto (Core actuator, orders `/v1/healthz`, payments `/healthz`).
-3. **Métricas:** seguir [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md#métricas-e-grafana-no-deploy) — scrape Prometheus, dashboards em `monitoring/grafana/dashboards/`.
+2. **Servidor:** health check por serviço no path correto (Core actuator, orders `/v1/healthz`, payments `/healthz`).
+3. **Métricas:** seguir [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) — scrape Prometheus, dashboards em `monitoring/grafana/dashboards/`.
 4. **Logs e correlação:** [OBSERVABILITY.md](OBSERVABILITY.md) — usar `correlation id` ao cruzar orders ↔ payments.
 5. **Saga pedido → PAID:** além de DLQ e outbox, vigiar fila **`orders.payments`** (consumo de `payment.settled` pelo worker de orders). Referência de eventos: [CATALOGO-EVENTOS.md](CATALOGO-EVENTOS.md) e contrato em `spring-saas-core` / espelhos `docs/contracts/events.md`.
 
@@ -51,7 +51,7 @@ Este playbook foca **operação e prova de comportamento** depois disso.
 
 ## Fase 4 — Produção (go-live)
 
-1. Executar **todo** o [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md) (Railway production branch `master`, variáveis, migrations sem seed, domínio, OIDC, checklist pós-deploy).
+1. Executar **todo** o [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md) (branch `master`, variáveis, migrations sem seed, domínio, OIDC, checklist pós-deploy).
 2. Após deploy: repetir smoke HTTP e checklist da secção 7 do GO-LIVE; **opcional** validar um fluxo de pedido real ou e2e controlado (PAID em produção depende de gateway real e política de risco — muitas equipas deixam prova de **PAID** pesada para staging e em produção monitorizam filas + métricas).
 
 ---
@@ -69,7 +69,7 @@ Este playbook foca **operação e prova de comportamento** depois disso.
 | Objetivo | Documento |
 |----------|-----------|
 | Checklist completo produção | [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md) |
-| Deploy Railway e métricas | [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) |
+| Deploy e métricas | [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) |
 | Smoke pedido / PAID | [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md) |
 | Thresholds e alertas | [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md) |
 | Promoção develop → master | [CHECKLIST-PROMOCAO-DEVELOP-MASTER.md](CHECKLIST-PROMOCAO-DEVELOP-MASTER.md) |

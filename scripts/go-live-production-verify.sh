@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Verifica health público dos três backends após deploy (Railway ou TLS próprio).
+# Verifica health público dos três backends após deploy (TLS próprio ou da plataforma).
 # Uso:
 #   CORE_URL=https://core.example.com ORDERS_URL=https://orders.example.com PAYMENTS_URL=https://pay.example.com ./scripts/go-live-production-verify.sh
 # Ou na raiz do repo:

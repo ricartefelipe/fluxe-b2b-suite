@@ -1,6 +1,6 @@
 # Deploy na AWS (EC2 + Docker Compose)
 
-Alternativa ao Railway usando a **conta Amazon** que você já tem. Caminho mais simples: **uma EC2** (ou **Lightsail**) com `docker-compose.prod.yml` — mesma stack documentada para VM genérica.
+Implantação usando a **conta Amazon** que você já tem. Caminho mais simples: **uma EC2** (ou **Lightsail**) com `docker-compose.prod.yml` — mesma stack documentada para VM genérica.
 
 ---
 
@@ -204,5 +204,5 @@ Se faltar, adicionar antes do primeiro cliente pagante.
 | Compose produção | [../docker-compose.prod.yml](../docker-compose.prod.yml) |
 | Secrets | [../.env.example](../.env.example) |
 | Go-live completo | [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md) |
-| Sem Railway | [RETOMADA-SEM-RAILWAY.md](RETOMADA-SEM-RAILWAY.md) |
+| Sem PaaS | [RETOMADA-SEM-RAILWAY.md](RETOMADA-SEM-RAILWAY.md) |
 | Operação | [PRODUCAO-OPERACAO.md](PRODUCAO-OPERACAO.md) |

@@ -8,8 +8,8 @@ Esta pasta centraliza **valores de configuração por contexto** (local, Docker,
 |-----------|------------------|-----|
 | **local** | Máquina (processos na sua máquina, infra no Docker) | Dev: Core/Orders/Payments rodando local; Postgres/Redis/Rabbit via `spring-saas-core/docker-compose` |
 | **docker** | Tudo dentro do Docker Compose | Serviços se falam por nome de serviço (`postgres`, `redis`, `rabbitmq`) |
-| **staging** | Railway (branch `develop`) | URLs e secrets de staging |
-| **prod**   | Railway (branch `master`) | URLs e secrets de produção |
+| **staging** | Servidor do ambiente (branch `develop`) | URLs e secrets de staging |
+| **prod**   | Servidor do ambiente (branch `master`) | URLs e secrets de produção |
 
 ## Tabela única: hosts e portas
 
@@ -73,14 +73,11 @@ Use `local.env.example` como referência ao configurar cada repositório (spring
 
 ## Seed de staging a partir da máquina
 
-O script `./scripts/staging-seed.sh railway` roda `railway run` nos repos linkados; dentro da rede do Railway a `DATABASE_URL` usa host interno (`postgres.railway.internal`). Se você rodar **na sua máquina** (por exemplo para debugar o seed), esse host não resolve. Use a **URL pública** do Postgres:
+Com acesso ao banco de staging, exporte a URL pública e rode os comandos, por exemplo para node-b2b-orders:
 
-- No Railway: serviço **Postgres** do projeto → variável **DATABASE_PUBLIC_URL** (ex.: `ballast.proxy.rlwy.net:35931`).
-- Exporte e rode os comandos manualmente, por exemplo para node-b2b-orders:
-  ```bash
-  export DATABASE_URL="<valor de DATABASE_PUBLIC_URL do serviço Postgres>"
-  cd node-b2b-orders && npx prisma migrate deploy && npx prisma db seed
-  ```
-- Obter a URL: no diretório do monorepo, `railway link` ao serviço Postgres do ambiente staging e depois `railway run -s <postgres-service-id> env | grep DATABASE_PUBLIC_URL`.
+```bash
+export DATABASE_URL="<URL pública do banco de staging>"
+cd node-b2b-orders && npx prisma migrate deploy && npx prisma db seed
+```
 
 Referência completa de variáveis: [REFERENCIA-CONFIGURACAO.md](../../docs/REFERENCIA-CONFIGURACAO.md).

@@ -124,7 +124,6 @@ Passos resumidos:
 
 **Custo alvo:** ~€5–15/mês (VM + domínio), vs. Railway multi-serviço.
 
-Quando voltar a ter budget para Railway, reutilizar [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) — o código não muda.
 
 ---
 

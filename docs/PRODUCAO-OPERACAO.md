@@ -6,7 +6,7 @@ Documento único para **venda a clientes**: o que configurar no ambiente, base d
 
 ## 1. Domínio e SSL
 
-- **Railway (ou outro PaaS):** em cada serviço com frontend ou API pública, **Settings → Networking → Custom domain**; apontar **CNAME** conforme o painel; o SSL é emitido automaticamente (ex.: Let’s Encrypt).
+- **Servidor:** aponte o DNS para o servidor e termine TLS no proxy (Let's Encrypt).
 - **Três fronts:** convém subdomínios dedicados (ex.: `loja.`, `ops.`, `admin.`) e **auth** (Keycloak ou IdP) em `auth.` — todos em **HTTPS**.
 - Após definir domínios, atualizar **CORS** nos três backends com a lista **exacta** de origens `https://…` (ver `.env.example` na raiz do suite).
 
@@ -15,7 +15,7 @@ Documento único para **venda a clientes**: o que configurar no ambiente, base d
 | Item | Onde |
 |------|------|
 | Registo DNS (CNAME/A) e propagação | Registo.br / Cloudflare / DNS do cliente |
-| Custom domain + confiança TLS no PaaS | Railway / Cloudflare **painel** |
+| Custom domain + confiança TLS no PaaS | Proxy do servidor / Cloudflare **painel** |
 | Chaves live (Stripe, Resend, OIDC prod, JWT forte) | Variáveis em cada serviço |
 | Decisão jurídica/contrato com cliente | Fora do repositório |
 
@@ -59,17 +59,16 @@ Na raiz do monorepo também existe `pnpm verify:prod-env` (atalho no `package.js
 
 ## 4. Base de dados — só migrations, sem seed de demo
 
-| Serviço | Comando típico (após deploy ou one-off no Railway) |
+| Serviço | Comando típico (após deploy) |
 |---------|-----------------------------------------------------|
 | **spring-saas-core** | Liquibase corre no arranque com `SPRING_PROFILES_ACTIVE=prod` — **sem** contextos `staging`/`seed`. |
 | **node-b2b-orders** | `npx prisma migrate deploy` — **não** `prisma db seed` em produção. O `entrypoint` só corre seed se `NODE_ENV=staging`. |
-| **py-payments-ledger** | `alembic upgrade head` — seed só se `APP_ENV=staging` ou `RAILWAY_ENVIRONMENT=staging` no entrypoint. |
+| **py-payments-ledger** | `alembic upgrade head` — seed só se `APP_ENV=staging` no entrypoint. |
 
 ---
 
 ## 5. Backups PostgreSQL
 
-- **Railway:** confirmar no plugin Postgres a política de snapshot do plano.
 - **Export manual:** com URL de ligação (role só leitura para dump, se possível):
 
 ```bash
@@ -85,7 +84,7 @@ Guarde o `.dump` fora do repositório, em armazenamento privado e encriptado. **
 ## 6. Incidentes (runbook mínimo)
 
 1. **Indisponibilidade:** health checks públicos (`/actuator/health`, `/v1/healthz`, `/healthz`) — usar `pnpm verify:go-live` com as URLs HTTPS.
-2. **Erros 5xx:** painel Sentry (se configurado) ou logs do serviço no Railway.
+2. **Erros 5xx:** painel Sentry (se configurado) ou logs do serviço.
 3. **Filas Rabbit:** mensagens acumuladas ou workers parados — ver [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md).
 4. **Escalação:** definir **uma pessoa primária e uma substituta** com acesso ao projeto e aos secrets; contacto de suporte ao cliente publicado (email/página).
 
@@ -94,7 +93,7 @@ Guarde o `.dump` fora do repositório, em armazenamento privado e encriptado. **
 ## 7. Hábitos de monitorização
 
 - **Semanal:** rever erros no Sentry e disponibilidade dos health endpoints.
-- **Mensal:** confirmar backups e espaço em disco / custos Railway.
+- **Mensal:** confirmar backups e espaço em disco e custos do servidor.
 - **Trimestral:** exercício de restore; rever [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md) secção 7 checklist.
 
 ---
@@ -104,6 +103,6 @@ Guarde o `.dump` fora do repositório, em armazenamento privado e encriptado. **
 | Documento | Uso |
 |-----------|-----|
 | [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md) | Checklist completo legal, Stripe, domínio |
-| [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) | Railway passo a passo |
+| [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) | Passo a passo de implantação |
 | [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md) | Alertas iniciais |
 | [EXECUCAO-VENDA-MONITORIZACAO.md](EXECUCAO-VENDA-MONITORIZACAO.md) | Fluxo staging → produção |

@@ -90,7 +90,7 @@ Por padrão o Core **não envia email**: só registra o conteúdo no log (`provi
 | `app.email.from` | `EMAIL_FROM` | `noreply@fluxe.com.br` | Endereço remetente (domínio verificado no Resend) |
 | `app.email.frontend-url` | `FRONTEND_URL` | `http://localhost:4200` | URL do admin-console para links no email (login, reset) |
 
-**Railway (staging/prod):** no serviço spring-saas-core defina `EMAIL_PROVIDER=resend`, `RESEND_API_KEY=re_xxx`, `FRONTEND_URL=https://admin-console-xxx.up.railway.app`. Verifique o domínio do remetente em resend.com.
+**Staging/produção:** no serviço spring-saas-core defina `EMAIL_PROVIDER=resend`, `RESEND_API_KEY=re_xxx`, `FRONTEND_URL=https://admin-console-xxx.seu-dominio.com`. Verifique o domínio do remetente em resend.com.
 
 ---
 

@@ -49,4 +49,4 @@ Use este checklist após subir o sistema localmente (ou em staging) para validar
 ## Observações
 
 - Se alguma tela depender de Core API (ex.: lista de tenants), confirme que `CORE_API_BASE_URL` (ou proxy) está correto.
-- Em staging, use as URLs do Railway (admin-console-staging, spring-saas-core-staging, etc.).
+- Em staging, use as URLs do ambiente.

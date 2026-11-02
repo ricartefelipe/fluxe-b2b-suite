@@ -16,16 +16,10 @@ Objetivo: reverter deploy com impacto mínimo quando staging ou produção ficam
 
 Em dúvida: reverter o serviço que mudou na última release primeiro.
 
-## Railway
-
-1. Abrir o serviço → **Deployments**.
-2. Selecionar o deployment **anterior estável** → **Redeploy** (ou rollback nativo se disponível).
-3. Confirmar health (URLs em [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md#urls-esperadas-após-configurar-railway)).
-
 ## Imagem Docker (GHCR)
 
 - Tags `:develop` (staging) e `:master` / `:latest` (produção) — ver [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md).
-- Rollback: fixar no Railway a imagem digest ou tag anterior conhecida (anotar na release).
+- Rollback: fixar no compose a imagem digest ou tag anterior conhecida (anotar na release).
 
 ## Base de dados
 

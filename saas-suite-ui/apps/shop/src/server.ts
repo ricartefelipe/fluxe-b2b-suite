@@ -20,7 +20,7 @@ function trimSlash(s: string): string {
 }
 
 /**
- * No Railway, config.json costuma apontar para /api/core (mesmo host). O Express SSR não tinha
+ * Em produção, config.json costuma apontar para /api/core (mesmo host). O Express SSR não tinha
  * proxy, pelo que o browser recebia HTML em vez de JSON. Variáveis definidas no entrypoint do
  * container quando CORE_API_BASE_URL (etc.) for URL absoluta.
  */

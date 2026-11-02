@@ -1,6 +1,5 @@
 # Cloudflare Pages — produção (somente ramo master).
 #
-# Staging dos fronts está no Railway (ramo develop nos projetos Railway), ver docs/URLS-STAGING.md.
 # Não dispare este workflow em develop: evita build duplicado sem deploy e mantém um destino claro por ramo.
 #
 # Pré-requisito imposto, não apenas documentado: o job `require-ci` espera o workflow "CI"

@@ -91,7 +91,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Sem VPS_* nos secrets o deploy por SSH nao corre (ex.: producao so no Railway).
+      # Sem VPS_* nos secrets o deploy por SSH nao corre.
       - name: Check VPS credentials
         id: vps
         env:

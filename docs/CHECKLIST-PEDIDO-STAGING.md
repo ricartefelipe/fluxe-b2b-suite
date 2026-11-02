@@ -12,16 +12,6 @@ Objetivo: **repetir em staging** o fluxo **token → criar pedido → RESERVED �
    Se o teu staging usar outros dados, define `OPS_EMAIL`, `OPS_PASSWORD`, `OPS_TENANT`.
 5. **Worker** e **RabbitMQ** ativos — sem worker o pedido pode ficar em `CREATED` e nunca chegar a `RESERVED`.
 
-## GitHub Actions (manual, opcional)
-
-No repositório **fluxe-b2b-suite**: **Actions** → **Smoke pedido staging (manual)** → **Run workflow**.
-
-- **Modo `confirmed`:** até CONFIRMED — exige secret `ORDERS_SMOKE_URL`.
-- **Modo `paid`:** até PAID com publicação manual de `payment.settled` — exige `ORDERS_SMOKE_URL` e `SMOKE_RABBITMQ_URL` (mesmo broker que a API/worker). O workflow clona **node-b2b-orders** e executa `npm ci` para o script `publish-payment-settled.js`. Repositório privado: configurar `CROSS_REPO_READ_TOKEN` (PAT com `repo`).
-- **Modo `saga`:** poll até PAID (ledger + workers) — exige `ORDERS_SMOKE_URL`; `SMOKE_RABBITMQ_URL` e `PAYMENTS_SMOKE_URL` são opcionais (health do ledger). **Não** bloqueia PRs; use após validar variáveis em staging.
-
-Segredos opcionais: `SMOKE_OPS_EMAIL`, `SMOKE_OPS_PASSWORD`, `SMOKE_OPS_TENANT` (senão o script usa os defaults do seed).
-
 ## Execucao automatica (recomendado)
 
 Na raiz do **fluxe-b2b-suite**:

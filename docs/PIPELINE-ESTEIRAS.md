@@ -46,7 +46,7 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 - Cada backend tem `scripts/smoke-post-merge.sh`, de execução manual, que faz `curl` em health + OpenAPI quando a URL pública está definida.
 - Variáveis para execução manual: `CORE_SMOKE_URL`, `ORDERS_SMOKE_URL`, `PAYMENTS_SMOKE_URL` — URL base do serviço em staging (sem barra final). Se não estiver definida, o script termina com sucesso (skip).
 - Local (workspace com os quatro repos): `pnpm smoke:staging` na raiz do `fluxe-b2b-suite` (exportar as mesmas variáveis antes, se necessário).
-- Fluxo mínimo de **pedido** (token → criar → RESERVED → CONFIRMED) em staging: [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md); comando `pnpm smoke:order-staging` com `ORDERS_SMOKE_URL` definido. Opcional até **PAID**: (1) `pnpm smoke:order-staging:paid` com `RABBITMQ_URL` — publica `payment.settled` manualmente (mesmo broker da API/worker); ou (2) `pnpm smoke:order-staging:saga` — poll até PAID com ledger + workers no mesmo broker (sem publicação manual; ver checklist).).
+- Fluxo mínimo de **pedido** (token → criar → RESERVED → CONFIRMED) em staging: [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md); comando `pnpm smoke:order-staging` com `ORDERS_SMOKE_URL` definido. Opcional até **PAID**: (1) `pnpm smoke:order-staging:paid` com `RABBITMQ_URL` — publica `payment.settled` manualmente (mesmo broker da API/worker); ou (2) `pnpm smoke:order-staging:saga` — poll até PAID com ledger + workers no mesmo broker (sem publicação manual; ver checklist).
 - Thresholds sugeridos para alertas: [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md).
 
 **Qualidade estática (Sonar-like):**

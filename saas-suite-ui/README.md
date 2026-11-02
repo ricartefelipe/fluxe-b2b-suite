@@ -177,9 +177,9 @@ Ver `docker/keycloak/README.md` — cópia de `config.keycloak.json` para `publi
 
 ## Deploy
 
-O pipeline, imagens Docker e variáveis por serviço no Railway estão descritos no repositório pai:
+O pipeline, imagens Docker e variáveis por serviço estão descritos no repositório pai:
 
-**[docs/DEPLOY-RAILWAY.md](../docs/DEPLOY-RAILWAY.md)** (caminho relativo a partir da raiz `fluxe-b2b-suite`).
+**[docs/GUIA-DEPLOY-PASSO-A-PASSO.md](../docs/GUIA-DEPLOY-PASSO-A-PASSO.md)** (caminho relativo a partir da raiz `fluxe-b2b-suite`).
 
 Inclui serviços `shop` (SSR), `admin-console` e `ops-portal` e a relação com branches `develop` / `master`.
 

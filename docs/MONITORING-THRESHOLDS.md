@@ -1,6 +1,6 @@
 # Thresholds de monitoramento (EPIC-C)
 
-Referencia inicial para alertas em staging/producao (Grafana, Railway health, logs). Ajustar por tenant e por carga.
+Referencia inicial para alertas em staging/producao (Grafana, health checks, logs). Ajustar por tenant e por carga.
 
 ## Latencia HTTP (p95)
 
@@ -38,7 +38,7 @@ Referencia inicial para alertas em staging/producao (Grafana, Railway health, lo
 
 | Onde | O que configurar | Ligacao aos thresholds |
 |------|------------------|-------------------------|
-| **Railway** | Health check do servico (path `/healthz` ou equivalente), restart policy | Falha consecutiva = investigar antes de novo deploy |
+| **Plataforma** | Health check do servico (path `/healthz` ou equivalente), restart policy | Falha consecutiva = investigar antes de novo deploy |
 | **Grafana** (Core: Prometheus) | Alert rules sobre `http_server_requests_seconds` p95, taxa 5xx derivada de metricas | Usar colunas deste doc como valores iniciais |
 | **Logs** | Filtro por `level=ERROR` e correlation id | Picos correlacionados com 5xx |
 

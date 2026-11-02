@@ -5,7 +5,7 @@ set -euo pipefail
 # Requer utilizador e seed alinhados ao ambiente (ver docs/CHECKLIST-PEDIDO-STAGING.md).
 #
 # Uso:
-#   export ORDERS_SMOKE_URL="https://xxx.railway.app"
+#   export ORDERS_SMOKE_URL="https://orders-staging.seu-dominio.com"
 #   ./scripts/smoke-order-staging.sh
 #
 # Opcional: OPS_EMAIL, OPS_PASSWORD, OPS_TENANT (defaults = seed local/demo)

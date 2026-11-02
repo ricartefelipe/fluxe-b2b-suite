@@ -43,11 +43,10 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 **Smoke HTTP pós-merge (staging):**
 
-- Cada backend tem `scripts/smoke-post-merge.sh` que faz `curl` em health + OpenAPI quando a URL pública está definida.
-- Secrets no GitHub (por repositório): `CORE_SMOKE_URL`, `ORDERS_SMOKE_URL`, `PAYMENTS_SMOKE_URL` — URL base do serviço em Railway/staging (sem barra final). Se o secret estiver vazio, o job termina com sucesso (skip).
+- Cada backend tem `scripts/smoke-post-merge.sh`, de execução manual, que faz `curl` em health + OpenAPI quando a URL pública está definida.
+- Variáveis para execução manual: `CORE_SMOKE_URL`, `ORDERS_SMOKE_URL`, `PAYMENTS_SMOKE_URL` — URL base do serviço em staging (sem barra final). Se não estiver definida, o script termina com sucesso (skip).
 - Local (workspace com os quatro repos): `pnpm smoke:staging` na raiz do `fluxe-b2b-suite` (exportar as mesmas variáveis antes, se necessário).
-- Fluxo mínimo de **pedido** (token → criar → RESERVED → CONFIRMED) em staging: [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md); comando `pnpm smoke:order-staging` com `ORDERS_SMOKE_URL` definido. Opcional até **PAID**: (1) `pnpm smoke:order-staging:paid` com `RABBITMQ_URL` — publica `payment.settled` manualmente (mesmo broker da API/worker); ou (2) `pnpm smoke:order-staging:saga` — poll até PAID com ledger + workers no mesmo broker (sem publicação manual; ver checklist). O mesmo fluxo pode ser disparado de forma **opcional e manual** no GitHub: workflow `smoke-order-staging.yml` (`workflow_dispatch` — modos `confirmed` / `paid` / `saga`; ver checklist para secrets `SMOKE_RABBITMQ_URL`, etc.).
-- Health/ready dos backends em staging também pode ser disparado manualmente no GitHub: workflow `smoke-staging-endpoints.yml` (`workflow_dispatch`) ou localmente com `./scripts/staging-smoke-endpoints.sh`.
+- Fluxo mínimo de **pedido** (token → criar → RESERVED → CONFIRMED) em staging: [CHECKLIST-PEDIDO-STAGING.md](CHECKLIST-PEDIDO-STAGING.md); comando `pnpm smoke:order-staging` com `ORDERS_SMOKE_URL` definido. Opcional até **PAID**: (1) `pnpm smoke:order-staging:paid` com `RABBITMQ_URL` — publica `payment.settled` manualmente (mesmo broker da API/worker); ou (2) `pnpm smoke:order-staging:saga` — poll até PAID com ledger + workers no mesmo broker (sem publicação manual; ver checklist).).
 - Thresholds sugeridos para alertas: [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md).
 
 **Qualidade estática (Sonar-like):**
@@ -93,16 +92,14 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 ## Branch canónica → ambiente (automático após push)
 
-**Regra:** o destino (staging ou produção) **não** se escolhe num painel de deploy no Git — define-se **só** pela branch em que o código **já foi integrado** no GitHub (`develop` ou `master`). Depois do merge (e do `push` implícito no remoto), os pipelines e o Railway tratam do resto **sem** passo manual obrigatório no repositório.
+**Regra:** o destino (staging ou produção) **não** se escolhe num painel de deploy no Git — define-se **só** pela branch em que o código **já foi integrado** no GitHub (`develop` ou `master`). Depois do merge (e do `push` implícito no remoto), os pipelines tratam do resto **sem** passo manual obrigatório no repositório.
 
 | Branch no remoto (após merge de PR) | Ambiente | O que dispara sozinho |
 |-------------------------------------|----------|------------------------|
-| **`develop`** | Staging | CI em cada repo; `build-push` publica imagens `:develop`; **Railway** redeploya cada serviço cujo *Production Branch* = `develop` (projeto Staging); smoke pós-merge nos backends quando os secrets de URL estiverem definidos. |
-| **`master`** | Produção | CI; `build-push` publica `:master` / `:latest`; **Railway** (projeto Production, *Production Branch* = `master`); **Cloudflare Pages** para os fronts (`deploy-frontend.yml`); **VPS** quando `deploy-prod.yml` for aplicável. |
+| **`develop`** | Staging | CI em cada repo; `build-push` publica imagens `:develop`; o servidor de staging atualiza a partir das imagens. |
+| **`master`** | Produção | CI; `build-push` publica `:master` / `:latest`; **Cloudflare Pages** para os fronts (`deploy-frontend.yml`); **VPS** quando `deploy-prod.yml` for aplicável. |
 
 **O que *não* publica ambiente partilhado:** `feature/*`, `fix/*`, `docs/*` — aí só corre CI no PR. Só há deploy para staging/produção quando o código **entra** em `develop` ou `master`.
-
-**Pré-requisito (configuração estável, tipicamente uma vez por serviço):** no Railway, *Settings → Source → Production Branch* = `develop` em **todos** os serviços do projeto Staging e = `master` em **todos** os do projeto Production. Com isso, **push nessa branch** = novo deploy naquele ambiente. Ver [Configuração no Railway](#configuração-no-railway).
 
 ---
 
@@ -110,10 +107,10 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 
 | Branch   | Ambiente   | Deploy automático |
 |----------|------------|-------------------|
-| **develop** | Staging   | **Railway** (fronts + serviços com branch `develop`). Cloudflare Pages **não** é disparado por `deploy-frontend.yml` neste ramo. |
-| **master**  | Production| **Cloudflare Pages** (`deploy-frontend.yml`) + **Railway** (produção, se o projeto estiver com branch `master`) + **VPS** quando aplicável (`deploy-prod.yml`). |
+| **develop** | Staging   | Imagens `:develop` no GHCR. Cloudflare Pages **não** é disparado por `deploy-frontend.yml` neste ramo. |
+| **master**  | Production| **Cloudflare Pages** (`deploy-frontend.yml`) + **VPS** quando aplicável (`deploy-prod.yml`). |
 
-**Staging — dados para testes:** após o deploy em `develop`, rode `./scripts/staging-seed.sh railway` no repo fluxe-b2b-suite (Railway CLI e backends linkados ao projeto Staging). Em **produção** não rodar seed (apenas migrations essenciais). Detalhes: [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md#alimentar-staging-com-dados-após-primeiro-deploy).
+**Staging — dados para testes:** após o deploy em `develop`, rode migrations e seed dos backends apontando para o banco de staging. Em **produção** não rodar seed (apenas migrations essenciais). Detalhes: [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md#alimentar-staging-com-dados-após-primeiro-deploy).
 
 ---
 
@@ -128,14 +125,9 @@ Este documento define pipelines, esteiras e **protocolos obrigatórios** de dese
 | deploy-prod.yml    | push master (paths)   | Deploy VPS via SSH (docker-compose.prod)       |
 | contracts-drift.yml| PR/push develop/master | Valida drift de contratos entre core/orders/payments |
 | semgrep.yml        | PR/push develop/master | Análise estática com Semgrep (OWASP Top Ten) |
-| smoke-staging-endpoints.yml | manual (`workflow_dispatch`) | Smoke HTTP health/ready dos backends em staging |
 
 Observação: workflows dentro de `saas-suite-ui/.github/workflows/` não são executados pelo GitHub neste repositório; a fonte de verdade da esteira fica em `.github/workflows/` na raiz.
 
-**Railway:** 3 serviços (shop, ops-portal, admin-console) conectados ao repo.  
-Cada um com branch configurada no dashboard:
-- Staging: Production Branch = `develop`
-- Production: Production Branch = `master`
 
 ---
 
@@ -147,10 +139,6 @@ Cada um com branch configurada no dashboard:
 | build-push.yml| push develop/master| Test → build image → push GHCR|
 | post-merge-smoke.yml | push develop | Smoke pós-merge padronizado |
 | semgrep.yml | PR/push develop/master | Análise estática com Semgrep |
-
-**Railway:** 1 serviço. Branch no dashboard:
-- Staging: `develop`
-- Production: `master`
 
 **Imagens GHCR:**  
 `ghcr.io/ricartefelipe/spring-saas-core:develop` | `:master` | `:latest` (só em master)
@@ -166,8 +154,6 @@ Cada um com branch configurada no dashboard:
 | post-merge-smoke.yml | push develop | Smoke pós-merge padronizado |
 | semgrep.yml | PR/push develop/master | Análise estática com Semgrep |
 
-**Railway:** 2 serviços (api, worker). Branch no dashboard conforme ambiente.
-
 **Imagens GHCR:**  
 `ghcr.io/ricartefelipe/node-b2b-orders:develop` | `:master` | `:latest`
 
@@ -182,28 +168,8 @@ Cada um com branch configurada no dashboard:
 | post-merge-smoke.yml | push develop | Smoke pós-merge padronizado |
 | semgrep.yml | PR/push develop/master | Análise estática com Semgrep |
 
-**Railway:** 2 serviços (api, worker). Branch no dashboard conforme ambiente.
-
 **Imagens GHCR:**  
 `ghcr.io/ricartefelipe/py-payments-ledger:develop` | `:master` | `:latest`
-
----
-
-## Configuração no Railway
-
-### Staging (develop)
-
-1. Projeto Railway "Fluxe B2B Suite - Staging" (ou ambiente staging)
-2. Para cada serviço: **Settings** → **Source** → **Production Branch** = `develop`
-3. Push em `develop` dispara deploy automático
-
-### Production (master)
-
-1. Projeto Railway "Fluxe B2B Suite - Production" (ou ambiente production)
-2. Para cada serviço: **Settings** → **Source** → **Production Branch** = `master`
-3. Push em `master` dispara deploy automático
-
-**Ou:** um único projeto com 2 ambientes, cada ambiente com seus serviços apontando para a branch correta.
 
 ---
 
@@ -213,7 +179,6 @@ Cada um com branch configurada no dashboard:
 feature/* → develop (merge) → master (merge, quando pronto)
     │              │                    │
     └── CI + build-push (develop)       └── CI + build-push + deploy-prod (master)
-    └── Railway staging deploy          └── Railway production deploy
 ```
 
 ---
@@ -254,27 +219,11 @@ Ao fazer merge `develop` → `master` (produção), **criar uma tag** para rastr
 
 ---
 
-## URLs esperadas (após configurar Railway)
-
-O Railway gera **um único host por serviço**. Consulte o Railway Dashboard (Settings → Networking) para obter os hosts reais de cada ambiente. **Não** publicar hosts reais em repositórios públicos.
-
-| Serviço    | Staging (develop) | Production (master) |
-|-----------|-------------------|----------------------|
-| Shop      | *(ver Railway Dashboard → Settings → Networking)* | *(domínio custom ou Railway gerado)* |
-| Ops Portal| *(ver Railway Dashboard)* | *(domínio custom ou Railway gerado)* |
-| Admin     | *(ver Railway Dashboard)* | *(domínio custom ou Railway gerado)* |
-| Core API  | *(ver Railway Dashboard)* | *(domínio custom ou Railway gerado)* |
-| Orders API| *(ver Railway Dashboard)* | *(domínio custom ou Railway gerado)* |
-| Payments  | *(ver Railway Dashboard)* | *(domínio custom ou Railway gerado)* |
-
----
-
 ## Checklist de setup inicial
 
 - [x] Branch padrão dos 4 repos = `master`
 - [x] Workflows GitHub com `develop` e `master` (não `main`)
-- [ ] Railway: 2 projetos ou 2 ambientes (staging / production)
-- [ ] Cada serviço Railway com Production Branch correto (develop ou master)
+- [ ] Servidor por ambiente com `docker-compose.prod.yml`
 - [ ] Variáveis de ambiente por ambiente (JWT_SECRET, DB, etc.)
 - [ ] CORS_ORIGINS com URLs dos frontends de cada ambiente
 
@@ -293,17 +242,15 @@ Para checklist completo de go-live (produção, Stripe, Resend, domínio, OIDC, 
 | node-b2b-orders | ci.yml, build-push.yml |
 | py-payments-ledger | ci.yml, build-push.yml |
 
-**Próximo passo:** configurar Railway e testar push em `develop` e `master`.
-
 ---
 
 ## Status staging (última verificação)
 
 | Repo | CI | Build & Push | Deploy Frontend (Cloudflare) |
 |------|----|--------------|-------------------------------|
-| fluxe-b2b-suite | ✅ | — | ✅ em **master** (produção); **develop** → Railway staging |
+| fluxe-b2b-suite | ✅ | — | ✅ em **master** (produção); **develop** sem deploy de fronts |
 | spring-saas-core | ✅ | ✅ | — |
 | node-b2b-orders | ✅ | ✅ | — |
 | py-payments-ledger | ✅ | ✅ | — |
 
-**Imagens GHCR** (tag `:develop`): disponíveis para Railway staging.
+**Imagens GHCR** (tag `:develop`): disponíveis para staging.

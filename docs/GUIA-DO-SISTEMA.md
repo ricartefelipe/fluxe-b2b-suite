@@ -25,7 +25,7 @@ Cada organização é um **tenant** com plano (starter, pro, enterprise), regiã
 
 ### 2.1 Shop (Loja B2B)
 
-**URL**: *(ver Railway Dashboard — Settings → Networking)*
+**URL**: *(host do ambiente)*
 
 **Público-alvo**: Compradores e representantes comerciais do tenant.
 
@@ -44,7 +44,7 @@ Cada organização é um **tenant** com plano (starter, pro, enterprise), regiã
 
 ### 2.2 Ops Portal (Portal de Operações)
 
-**URL**: *(ver Railway Dashboard — Settings → Networking)*
+**URL**: *(host do ambiente)*
 
 **Público-alvo**: Equipe operacional (gestores de pedidos, estoque e finanças).
 
@@ -66,7 +66,7 @@ Cada organização é um **tenant** com plano (starter, pro, enterprise), regiã
 
 ### 2.3 Admin Console (Console Administrativo)
 
-**URL**: *(ver Railway Dashboard — Settings → Networking)*
+**URL**: *(host do ambiente)*
 
 **Público-alvo**: Administradores da plataforma e gestores de governança.
 
@@ -259,7 +259,7 @@ O sistema suporta **Português (pt-BR)** e **Inglês (en-US)** em todas as inter
 
 | Componente | Tecnologia |
 |-----------|-----------|
-| Cloud | Railway |
+| Hospedagem | Servidor com Docker Compose |
 | Banco de Dados | PostgreSQL (compartilhado, isolamento por tenant_id) |
 | Mensageria | RabbitMQ (outbox pattern) |
 | CI/CD | GitHub Actions |
@@ -273,16 +273,16 @@ O sistema suporta **Português (pt-BR)** e **Inglês (en-US)** em todas as inter
 
 | Ambiente | Descrição |
 |----------|-----------|
-| **Staging** | Ambiente de testes com dados de demonstração. Todos os serviços deployados no Railway. |
+| **Staging** | Ambiente de testes com dados de demonstração.  |
 | **Produção** | Ambiente de produção (configuração via variáveis de ambiente). |
 
 ### URLs de Staging
 
 | Serviço | URL |
 |---------|-----|
-| Shop | *(Railway Dashboard → shop-frontend → Settings → Networking)* |
-| Ops Portal | *(Railway Dashboard → ops-portal → Settings → Networking)* |
-| Admin Console | *(Railway Dashboard → admin-console → Settings → Networking)* |
-| Core API | *(Railway Dashboard → spring-saas-core → Settings → Networking)* |
-| Orders API | *(Railway Dashboard → node-b2b-orders → Settings → Networking)* |
-| Payments API | *(Railway Dashboard → py-payments-ledger → Settings → Networking)* |
+| Shop | *(host do ambiente)* |
+| Ops Portal | *(host do ambiente)* |
+| Admin Console | *(host do ambiente)* |
+| Core API | *(host do ambiente)* |
+| Orders API | *(host do ambiente)* |
+| Payments API | *(host do ambiente)* |

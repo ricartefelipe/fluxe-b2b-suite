@@ -8,14 +8,9 @@ Documento operacional para fechar **um item de cada vez**. Referência canónica
 
 ## 1. Deploy sem imagem nova (migrações “não aparecem”)
 
-**Problema:** `railway redeploy` só reutiliza a última imagem; código novo em `develop` pode não estar no container.
+**Problema:** reiniciar o serviço reutiliza a última imagem; código novo em `develop` pode não estar no container.
 
-**No repositório (automatizável):**
-
-- [ ] No monorepo **fluxe-b2b-suite**, corre `./scripts/staging-compare-develop-sha.sh` e anota o SHA de `origin/develop`.
-- [ ] No Railway → serviço (ex. py-payments-ledger) → **Deployments** → último deploy com sucesso → **commit** deve ser o mesmo SHA (ou pipeline a partir desse commit).
-
-**Se o SHA não bater:** faz deploy que **faça build** a partir do Git (push vazio em `develop`, ou botão que dispare **Build**), não só “Redeploy” da imagem antiga.
+- [ ] Atualize a imagem (`docker compose pull` ou novo build) e confirme que ela corresponde ao SHA de `origin/develop`.
 
 ---
 
@@ -41,7 +36,7 @@ Documento operacional para fechar **um item de cada vez**. Referência canónica
 - [ ] Código em `develop` com `_normalize_abac_slug_list` em `security.py` e migrações **0014/0015** aplicadas (ver item 2).
 - [ ] Após arranque, seed staging correu sem erro (item 7).
 
-**Ação:** [staging-seed.sh](../scripts/staging-seed.sh) `railway` ou migrate+seed manual nos dois repos.
+**Ação:** migrate+seed manual nos dois repos.
 
 ---
 
@@ -51,7 +46,7 @@ Documento operacional para fechar **um item de cada vez**. Referência canónica
 
 **Verificação:**
 
-- [ ] No serviço **py-payments-ledger**, `REDIS_URL` referencia o plugin **Redis** do mesmo projeto Railway (`${{Redis.REDIS_URL}}` ou equivalente).
+- [ ] No serviço **py-payments-ledger**, `REDIS_URL` referencia o **Redis** do mesmo ambiente (`REDIS_URL`).
 
 **Ação:** Copiar credenciais do plugin Redis para a variável do serviço; redeploy.
 
@@ -75,7 +70,7 @@ Documento operacional para fechar **um item de cada vez**. Referência canónica
 
 **Verificação:**
 
-- [ ] Cada `DATABASE_URL` / `DB_URL` no Railway termina com **nome de base diferente**, coerente com [config/env/README.md](../config/env/README.md).
+- [ ] Cada `DATABASE_URL` / `DB_URL` termina com **nome de base diferente**, coerente com [config/env/README.md](../config/env/README.md).
 
 ---
 
@@ -116,9 +111,8 @@ Documento operacional para fechar **um item de cada vez**. Referência canónica
 ## Ordem recomendada após “zerar” BD
 
 1. Subir **spring-saas-core** (`SPRING_PROFILES_ACTIVE=staging`) — Liquibase.
-2. `./scripts/staging-seed.sh railway` (orders + payments), ou equivalente com `DATABASE_PUBLIC_URL` se a CLI não resolver o host interno.
+2. Migrations e seed de orders e payments apontando para o banco de staging.
 3. Smoke: login no admin, chamada autenticada a payments/orders.
 
 ---
 
-*Última atualização: checklist com passos por item e scripts em `scripts/staging-compare-develop-sha.sh`.*

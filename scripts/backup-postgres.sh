@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Backup lógico PostgreSQL (compatível com URL do Railway).
+# Backup lógico PostgreSQL (aceita URL de conexão).
 #
 # Requisitos: cliente psql/pg_dump instalado (postgresql-client).
 # Uso:

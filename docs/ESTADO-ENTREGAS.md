@@ -31,7 +31,7 @@ Legenda de status:
 ### 2026-03-31
 
 - [x] **Investigação shop staging + rascunho release v1.3.0** (`concluida`)
-  - Escopo: linha de troubleshooting em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) (deploy FAILED vs tráfego 200); [RASCUNHO-RELEASE-NOTES-v1.3.0.md](RASCUNHO-RELEASE-NOTES-v1.3.0.md); lista de deployments via `railway deployment list -s shop-frontend`.
+  - Escopo: linha de troubleshooting em [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) (deploy FAILED vs tráfego 200); [RASCUNHO-RELEASE-NOTES-v1.3.0.md](RASCUNHO-RELEASE-NOTES-v1.3.0.md); lista de deployments via `railway deployment list -s shop-frontend`.
   - Evidência: CLI Railway 2026-03-31 (últimos deploys FAILED após merges só em docs; último SUCCESS anterior operacional para URL pública).
 
 - [x] **Checklist de ambientes (evidências), Postgres e plano comercial 30 dias** (`concluida`)

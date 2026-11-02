@@ -9,8 +9,8 @@ Documento central que define os **três ambientes** do Fluxe B2B Suite: configur
 | Ambiente | Onde roda | Branch | Dados |
 |----------|-----------|--------|-------|
 | **Local** | Sua máquina | qualquer | Migration + seed **até a tampa** (máximo para testar) |
-| **Staging** | Railway | `develop` | Migration + seed completo |
-| **Produção** | Railway | `master` | Migration + **só o essencial** (tenant Fluxe B2B Suite, políticas, estrutura) |
+| **Staging** | Servidor com `docker-compose.prod.yml` | `develop` | Migration + seed completo |
+| **Produção** | Servidor com `docker-compose.prod.yml` | `master` | Migration + **só o essencial** (tenant Fluxe B2B Suite, políticas, estrutura) |
 
 ### Branches Git e função (regra fixa)
 
@@ -21,7 +21,7 @@ Documento central que define os **três ambientes** do Fluxe B2B Suite: configur
 
 **Resumo:** staging = teste; produção = uso real. O resto deste documento detalha perfis, dados e procedimentos.
 
-**Deploy na nuvem:** automático quando o código **chega** ao remoto em `develop` (staging) ou `master` (produção), desde que cada serviço Railway tenha *Production Branch* alinhada a essa branch. Não há “ambiente de destino” separado no Git: a branch **é** o ambiente. Detalhe na secção *Branch canónica → ambiente* em [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md).
+**Deploy:** push em `develop` ou `master` publica imagens no GHCR; o servidor de cada ambiente atualiza a partir delas (`docker-compose.prod.yml`).
 
 **Seu usuário funciona em todos os ambientes.** O seed cria utilizadores demo cujas senhas são configuráveis via variáveis de ambiente (ver `.env.example` de cada repo). Em produção, criar utilizador real com senha forte.
 
@@ -60,27 +60,19 @@ Ou projeto por projeto (ver `spring-saas-core/docs/SUBIR-E-TESTAR-TODOS-PROJETOS
 
 ---
 
-## 2. Staging — Railway (develop)
+## 2. Staging (develop)
 
 ### O que é
-Ambiente na nuvem para testar antes de produção. Deploy automático quando há push em `develop`.
+Ambiente para testar antes de produção, com as imagens `:develop`.
 
 ### Como configurar
-1. Projeto Railway "Fluxe B2B Suite - Staging"
-2. Para cada serviço: **Settings** → **Source** → **Production Branch** = `develop`
-3. Variáveis de ambiente (ver `railway.prod.env.example` em cada repo)
-4. **SPRING_PROFILES_ACTIVE=staging** no spring-saas-core (usa `application-staging.yml` com seed)
-5. Após clonar template, recriar serviços ou alterar Postgres/Redis, seguir a secção **Manutenção contínua** em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) (dois projetos, alinhamento de credenciais, worker vs API, migrações e smoke pós-deploy).
+1. Servidor com `docker-compose.prod.yml` e as imagens `:develop`
+2. Variáveis de ambiente (ver `prod.env.example` em cada repo)
+3. **SPRING_PROFILES_ACTIVE=staging** no spring-saas-core (usa `application-staging.yml` com seed)
 
 ### Alimentar Staging com dados (após primeiro deploy)
 
-Do repositório **fluxe-b2b-suite**, com Railway CLI logado e cada backend (node-b2b-orders, py-payments-ledger) linkado ao **projeto Railway Staging**:
-
-```bash
-./scripts/staging-seed.sh railway
-```
-
-O script roda em sequência: migrations + seed do node-b2b-orders e do py-payments-ledger. O **spring-saas-core** já aplica seed no deploy quando `SPRING_PROFILES_ACTIVE=staging` (Liquibase contexts: staging,seed).
+Rode migrations e seed do node-b2b-orders e do py-payments-ledger apontando para o banco de staging ([config/env/README.md](../config/env/README.md)). O **spring-saas-core** já aplica seed no deploy quando `SPRING_PROFILES_ACTIVE=staging` (Liquibase contexts: staging,seed).
 
 Para dados extras (pedidos, payment intents, inventário via API), use `./scripts/demo-seed.sh` apontando para as URLs de staging (variáveis `CORE`, `ORDERS`, `PAYMENTS` ou editar o script).
 
@@ -94,27 +86,26 @@ Para dados extras (pedidos, payment intents, inventário via API), use `./script
 
 ---
 
-## 3. Produção — Railway (master)
+## 3. Produção (master)
 
 ### O que é
 Ambiente real. "O bicho pega" aqui.
 
 ### Como configurar
-1. Projeto Railway "Fluxe B2B Suite - Production"
-2. Para cada serviço: **Production Branch** = `master`
-3. Variáveis de produção (JWT em segredo, CORS restrito, OIDC se usar, etc.)
-4. **SPRING_PROFILES_ACTIVE=prod** no spring-saas-core
+1. Servidor com `docker-compose.prod.yml` e as imagens `:master`
+2. Variáveis de produção (JWT em segredo, CORS restrito, OIDC se usar, etc.)
+3. **SPRING_PROFILES_ACTIVE=prod** no spring-saas-core
 
 ### Migrations (sem seed completo)
 ```bash
 # spring-saas-core: Liquibase no startup (contexts: prod) → só 008 (essencial)
 
 # node-b2b-orders
-railway run npx prisma migrate deploy
+npx prisma migrate deploy
 # NÃO rodar: npx prisma db seed
 
 # py-payments-ledger
-railway run alembic upgrade head
+alembic upgrade head
 # NÃO rodar seed completo
 ```
 
@@ -157,7 +148,7 @@ Produção:   migration + 008 (essencial) + schema dos outros; sem seed de demo
 
 - **[config/env/README.md](../config/env/README.md)** — tabela única de portas/hosts (local vs Docker), como evitar troca de config
 - [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) — branches, CI/CD, protocolos
-- [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) — passo a passo Railway e **manutenção contínua** (evitar deriva entre ambientes após clones e novos serviços)
+- [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) — passo a passo de implantação
 - [GUIA-OPERACIONAL.md](GUIA-OPERACIONAL.md) — subir local, smoke tests
 - [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md) — lista completa de variáveis por serviço
 - `spring-saas-core/docs/SUBIR-E-TESTAR-TODOS-PROJETOS.md` — guia por projeto

@@ -13,11 +13,13 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CartService, CartItem } from '@union.solutions/shop/data';
 import { OrdersFacade, Order } from '@saas-suite/data-access/orders';
-import { PaymentsFacade, CreatePaymentIntentRequest } from '@saas-suite/data-access/payments';
 import { TenantContextService } from '@saas-suite/shared/http';
 import { AuthStore } from '@saas-suite/shared/auth';
 import { RuntimeConfigService } from '@saas-suite/shared/config';
 import { I18nService } from '@saas-suite/shared/i18n';
+
+const PAYMENT_POLL_ATTEMPTS = 5;
+const PAYMENT_POLL_INTERVAL_MS = 1000;
 
 @Component({
   selector: 'app-checkout',
@@ -754,7 +756,6 @@ export class CheckoutComponent {
   protected readonly cart = inject(CartService);
   protected readonly i18n = inject(I18nService);
   private readonly ordersFacade = inject(OrdersFacade);
-  private readonly paymentsFacade = inject(PaymentsFacade);
   private readonly tenantCtx = inject(TenantContextService);
   private readonly authStore = inject(AuthStore);
   private readonly configService = inject(RuntimeConfigService);
@@ -800,6 +801,16 @@ export class CheckoutComponent {
     this.cart.updateQuantity(item.product.id, item.quantity - 1);
   }
 
+  /** A liquidação é assíncrona: mostra PAID se chegar a tempo; senão, o último status conhecido. */
+  private async waitForPayment(orderId: string): Promise<Order | null> {
+    for (let attempt = 0; attempt < PAYMENT_POLL_ATTEMPTS; attempt += 1) {
+      await this.delay(PAYMENT_POLL_INTERVAL_MS);
+      await this.ordersFacade.loadOrder(orderId);
+      if (this.ordersFacade.selectedOrder()?.status === 'PAID') break;
+    }
+    return this.ordersFacade.selectedOrder();
+  }
+
   private delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -827,27 +838,7 @@ export class CheckoutComponent {
         return;
       }
 
-      await this.ordersFacade.loadOrder(order.id);
-      const fullOrder = this.ordersFacade.selectedOrder();
-
-      const paymentReq: CreatePaymentIntentRequest = {
-        amount: fullOrder?.totalAmount ?? order.totalAmount,
-        currency: fullOrder?.currency || order.currency || 'BRL',
-        customer_ref: this.customerId,
-      };
-      const payment = await this.paymentsFacade.createPayment(paymentReq);
-
-      if (!payment) {
-        this.checkoutError.set(msgs.failedCreatePayment);
-        return;
-      }
-
-      const confirmedPayment = await this.paymentsFacade.confirmPayment(payment.id);
-      if (!confirmedPayment) {
-        this.checkoutError.set(msgs.failedConfirmPayment);
-        return;
-      }
-
+      // O pagamento nasce no backend ao confirmar o pedido, uma vez por pedido; a loja não cria outro.
       let confirmedOrd = await this.ordersFacade.confirmOrder(order.id);
       if (!confirmedOrd) {
         await this.delay(1500);
@@ -858,8 +849,7 @@ export class CheckoutComponent {
         return;
       }
 
-      await this.ordersFacade.loadOrder(order.id);
-      const finalOrder = this.ordersFacade.selectedOrder();
+      const finalOrder = await this.waitForPayment(order.id);
 
       this.confirmedOrder.set(finalOrder ?? confirmedOrd);
       this.cart.clear();

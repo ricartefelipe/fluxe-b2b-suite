@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.4] - 2026-11-02
+
+### Fixed
+- Loja: uma compra gera um único pagamento. A loja não cria mais pagamento próprio: ele nasce no backend ao confirmar o pedido.
+- Telas de pagamento: a política deixa de exigir `region-a` ou `region-b`, igual à do serviço de pagamentos, que não restringe região.
+
+### Changed
+- Novo pedido no portal de operação: o preço vem do catálogo, sem campo de preço unitário.
+
 ## [1.5.3] - 2026-11-02
 
 ### Removed

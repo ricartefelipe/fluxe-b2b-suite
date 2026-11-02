@@ -21,7 +21,8 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # O Playwright travado no lockfile não instala navegador no Ubuntu 26.04, a imagem atual de ubuntu-latest.
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: saas-suite-ui

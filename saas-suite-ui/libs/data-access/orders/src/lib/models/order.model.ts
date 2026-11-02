@@ -22,9 +22,16 @@ export interface Order {
   updatedAt: string;
 }
 
+/** O preço do pedido vem do catálogo; `price`, se enviado, é o que o cliente viu e a API recusa divergência. */
+export interface CreateOrderItem {
+  sku: string;
+  qty: number;
+  price?: number;
+}
+
 export interface CreateOrderRequest {
   customerId: string;
-  items: OrderItem[];
+  items: CreateOrderItem[];
 }
 
 export interface OrderListParams {

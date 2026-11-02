@@ -68,7 +68,7 @@ ORDER_JSON=$(http_expect_2xx --max-time 30 -X POST "$BASE_URL/v1/orders" \
   -H "X-Tenant-Id: $TENANT" \
   -H "Idempotency-Key: $IDEM" \
   -H "Content-Type: application/json" \
-  -d '{"customerId":"STAGING-CHECK","items":[{"sku":"SKU-1","qty":1,"price":10}]}')
+  -d '{"customerId":"STAGING-CHECK","items":[{"sku":"ELET-001","qty":1}]}')
 ORDER_ID=$(json_get "$ORDER_JSON" "id")
 STATUS=$(json_get "$ORDER_JSON" "status")
 if [[ "$STATUS" != "CREATED" ]]; then

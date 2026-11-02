@@ -121,23 +121,23 @@ create_order() {
 }
 
 ORDER1=$(create_order "customer-acme-corp" \
-  '[{"sku":"ELET-001","qty":2,"price":4899.90},{"sku":"ELET-003","qty":5,"price":489.90}]' \
+  '[{"sku":"ELET-001","qty":2},{"sku":"ELET-003","qty":5}]' \
   "Pedido ACME Corp (notebooks + teclados)")
 
 ORDER2=$(create_order "customer-globex-ltda" \
-  '[{"sku":"ESCR-001","qty":3,"price":2199.00},{"sku":"ESCR-002","qty":1,"price":3499.00}]' \
+  '[{"sku":"ESCR-001","qty":3},{"sku":"ESCR-002","qty":1}]' \
   "Pedido Globex Ltda (cadeiras + mesa)")
 
 ORDER3=$(create_order "customer-initech-sa" \
-  '[{"sku":"SEG-001","qty":10,"price":599.90},{"sku":"SEG-005","qty":2,"price":2199.00}]' \
+  '[{"sku":"SEG-001","qty":10},{"sku":"SEG-005","qty":2}]' \
   "Pedido Initech SA (câmeras + alarme)")
 
 ORDER4=$(create_order "customer-umbrella-ind" \
-  '[{"sku":"IND-003","qty":1,"price":4599.00},{"sku":"IND-004","qty":5,"price":689.90}]' \
+  '[{"sku":"IND-003","qty":1},{"sku":"IND-004","qty":5}]' \
   "Pedido Umbrella Ind (empilhadeira + estantes)")
 
 ORDER5=$(create_order "customer-wayne-ent" \
-  '[{"sku":"LIMP-001","qty":2,"price":3299.00},{"sku":"LIMP-002","qty":1,"price":2499.00}]' \
+  '[{"sku":"LIMP-001","qty":2},{"sku":"LIMP-002","qty":1}]' \
   "Pedido Wayne Enterprises (limpeza)")
 
 echo ""

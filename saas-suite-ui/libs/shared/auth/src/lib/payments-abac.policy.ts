@@ -5,6 +5,7 @@ const PLATFORM_TENANT_ID = '00000000-0000-0000-0000-000000000001';
 /**
  * Espelha as políticas ABAC default do py-payments-ledger (`seed._upsert_policies`).
  * Se alterares políticas no serviço de pagamentos, atualiza este mapa ou extrai contrato partilhado.
+ * `allowedRegions` vazio no seed = sem restrição de região no serviço.
  */
 const PLAN_TIER: Record<string, number> = {
   free: 0,
@@ -26,27 +27,27 @@ type AbacRule = { allowedPlans: string[]; allowedRegions: string[] };
 const RULES: Record<PaymentsAbacPermissionKey, AbacRule> = {
   'payments:read': {
     allowedPlans: ['free', 'pro', 'enterprise'],
-    allowedRegions: ['region-a', 'region-b'],
+    allowedRegions: [],
   },
   'payments:write': {
     allowedPlans: ['pro', 'enterprise'],
-    allowedRegions: ['region-a', 'region-b'],
+    allowedRegions: [],
   },
   'ledger:read': {
     allowedPlans: ['pro', 'enterprise'],
-    allowedRegions: ['region-a', 'region-b'],
+    allowedRegions: [],
   },
   'admin:write': {
     allowedPlans: ['enterprise'],
-    allowedRegions: ['region-a', 'region-b'],
+    allowedRegions: [],
   },
   'profile:read': {
     allowedPlans: ['free', 'pro', 'enterprise'],
-    allowedRegions: ['region-a', 'region-b'],
+    allowedRegions: [],
   },
   'analytics:read': {
     allowedPlans: ['pro', 'enterprise'],
-    allowedRegions: ['region-a', 'region-b'],
+    allowedRegions: [],
   },
 };
 
@@ -74,7 +75,7 @@ function planAllowed(planNorm: string, allowed: string[]): boolean {
 }
 
 function regionAllowed(regionNorm: string, allowed: string[]): boolean {
-  return allowed.includes(regionNorm);
+  return allowed.length === 0 || allowed.includes(regionNorm);
 }
 
 function isPaymentsAbacBypassSession(session: AuthSession | null): boolean {

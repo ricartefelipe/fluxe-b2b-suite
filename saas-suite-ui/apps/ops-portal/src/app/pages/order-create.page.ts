@@ -64,26 +64,12 @@ import { OrdersFacade } from '@saas-suite/data-access/orders';
                   <mat-error>{{ i18n.messages().orders.quantityMin }}</mat-error>
                 }
               </mat-form-field>
-              <mat-form-field appearance="outline" style="width: 120px">
-                <mat-label>{{ i18n.messages().orders.unitPrice }}</mat-label>
-                <input matInput type="number" formControlName="unitPrice">
-                @if (item.get('unitPrice')!.hasError('min')) {
-                  <mat-error>{{ i18n.messages().orders.priceMin }}</mat-error>
-                }
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>{{ i18n.messages().common.description }}</mat-label>
-                <input matInput formControlName="description">
-              </mat-form-field>
               <button mat-icon-button color="warn" type="button" (click)="removeItem($index)"><mat-icon>delete</mat-icon></button>
             </div>
           }
           </div>
           <button mat-stroked-button type="button" (click)="addItem()"><mat-icon>add</mat-icon> {{ i18n.messages().orders.addItem }}</button>
 
-          <div class="total">
-            <strong>{{ i18n.messages().common.total }}: {{ orderForm.get('currency')?.value }} {{ calcTotal() | number:'1.2-2' }}</strong>
-          </div>
 
           <button mat-raised-button color="primary" type="button" (click)="submit()" [disabled]="orderForm.invalid || submitting()" class="submit-btn">
             {{ i18n.messages().orders.createOrder }}
@@ -124,21 +110,12 @@ export class OrderCreatePage {
     return this.fb.group({
       sku: ['', Validators.required],
       quantity: [1, [Validators.required, Validators.min(1)]],
-      unitPrice: [0, [Validators.required, Validators.min(0)]],
-      description: [''],
     });
   }
 
   addItem(): void { this.items.push(this.createItemGroup()); }
   removeItem(i: number): void { this.items.removeAt(i); }
 
-  calcTotal(): number {
-    return this.items.controls.reduce((sum, ctrl) => {
-      const qty = ctrl.get('quantity')?.value ?? 0;
-      const price = ctrl.get('unitPrice')?.value ?? 0;
-      return sum + qty * price;
-    }, 0);
-  }
 
   async submit(): Promise<void> {
     if (this.orderForm.invalid) {
@@ -154,8 +131,6 @@ export class OrderCreatePage {
       items: val.items.map(i => ({
         sku: i.sku ?? '',
         qty: i.quantity ?? 0,
-        price: i.unitPrice ?? 0,
-        description: i.description ?? undefined,
       })),
     });
     this.submitting.set(false);

@@ -12,7 +12,7 @@ O **CI** (`deploy.yml`) corre em push/PR para `develop`/`master` quando mudam `s
 | **Deploy Frontend** | `deploy-frontend.yml` | Push apenas em **`master`** (paths `saas-suite-ui/**` ou este workflow) ou **Run workflow** | Build produção + injeção de `config.json` + **Cloudflare Pages** (produção). **Não** corre em `develop`. |
 | **Deploy Production** | `deploy-prod.yml` | Push em `master` com alterações em `deploy/**`, `docker-compose.prod.yml`, `scripts/**`, ou **Run workflow** | `rsync` para o VPS, `./scripts/deploy.sh`, smoke tests |
 
-**Staging (fronts em `develop`):** não passa por este repositório no Cloudflare; os URLs de staging estão no Railway — ver [URLS-STAGING.md](URLS-STAGING.md) e [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) (ramo `develop` nos projetos Railway).
+**Staging (fronts em `develop`):** não passa por este repositório no Cloudflare.
 
 **Importante:** um merge em `master` que mexe só em `saas-suite-ui/**` dispara **CI** + **Deploy Frontend** (Cloudflare). Para atualizar o **VPS** (imagens Docker), só **Deploy Production** quando mudam `deploy/**`, `docker-compose.prod.yml` ou `scripts/**`, ou corre **Actions → Deploy Production → Run workflow** manualmente.
 

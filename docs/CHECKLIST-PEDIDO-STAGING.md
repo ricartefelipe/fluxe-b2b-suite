@@ -4,23 +4,13 @@ Objetivo: **repetir em staging** o fluxo **token → criar pedido → RESERVED �
 
 ## Prerequisitos
 
-1. **Migracoes Prisma aplicadas** na base PostgreSQL de staging (`npx prisma migrate deploy` via CI, startup ou `railway run` no servico orders). Se faltar tabela (ex.: `OutboxEvent`), o `POST /v1/orders` devolve 500 com detalhe no corpo — ver [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md).
-2. API **node-b2b-orders** deployada em staging (ex.: Railway) com **mesmo** `JWT_SECRET` / issuer alinhado ao seed, ou auth local da propria API (`POST /v1/auth/token`).
-3. Base URL publica (sem barra final). Consulte o Railway Dashboard → Settings → Networking para obter o host real do seu serviço.
+1. **Migracoes Prisma aplicadas** na base PostgreSQL de staging (`npx prisma migrate deploy` via CI, startup ou dentro do container do servico orders). Se faltar tabela (ex.: `OutboxEvent`), o `POST /v1/orders` devolve 500 com detalhe no corpo — ver [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md).
+2. API **node-b2b-orders** deployada em staging com **mesmo** `JWT_SECRET` / issuer alinhado ao seed, ou auth local da propria API (`POST /v1/auth/token`).
+3. Base URL publica (sem barra final). Use o host real do seu serviço.
 4. Utilizador e tenant **existentes na base de staging** (apos `seed` ou migracao). Os defaults do script assumem o seed de desenvolvimento:
    - Utilizador e senha definidos no seed (ver variáveis `SEED_EMAIL` / `SEED_PASSWORD` em `.env.example`)  
    Se o teu staging usar outros dados, define `OPS_EMAIL`, `OPS_PASSWORD`, `OPS_TENANT`.
 5. **Worker** e **RabbitMQ** ativos — sem worker o pedido pode ficar em `CREATED` e nunca chegar a `RESERVED`.
-
-## GitHub Actions (manual, opcional)
-
-No repositório **fluxe-b2b-suite**: **Actions** → **Smoke pedido staging (manual)** → **Run workflow**.
-
-- **Modo `confirmed`:** até CONFIRMED — exige secret `ORDERS_SMOKE_URL`.
-- **Modo `paid`:** até PAID com publicação manual de `payment.settled` — exige `ORDERS_SMOKE_URL` e `SMOKE_RABBITMQ_URL` (mesmo broker que a API/worker). O workflow clona **node-b2b-orders** e executa `npm ci` para o script `publish-payment-settled.js`. Repositório privado: configurar `CROSS_REPO_READ_TOKEN` (PAT com `repo`).
-- **Modo `saga`:** poll até PAID (ledger + workers) — exige `ORDERS_SMOKE_URL`; `SMOKE_RABBITMQ_URL` e `PAYMENTS_SMOKE_URL` são opcionais (health do ledger). **Não** bloqueia PRs; use após validar variáveis em staging.
-
-Segredos opcionais: `SMOKE_OPS_EMAIL`, `SMOKE_OPS_PASSWORD`, `SMOKE_OPS_TENANT` (senão o script usa os defaults do seed).
 
 ## Execucao automatica (recomendado)
 
@@ -40,8 +30,8 @@ Ou: `bash scripts/smoke-order-staging.sh`
 Requer **mesmo RabbitMQ** que a API e o worker (`RABBITMQ_URL`), **worker ativo**, e repo **node-b2b-orders** clonado ao lado de **fluxe-b2b-suite** (o script usa `node-b2b-orders/scripts/publish-payment-settled.js`).
 
 ```bash
-export ORDERS_SMOKE_URL="https://SEU-ORDERS-STAGING.up.railway.app"
-export RABBITMQ_URL="amqps://..."   # mesma URL configurada na API/worker no Railway
+export ORDERS_SMOKE_URL="https://orders-staging.seu-dominio.com"
+export RABBITMQ_URL="amqps://..."   # mesma URL configurada na API/worker
 pnpm smoke:order-staging:paid
 # ou: SMOKE_PAYMENT_PAID=1 bash scripts/smoke-order-staging.sh
 ```
@@ -53,7 +43,7 @@ Publica `payment.settled` (como o **py-payments-ledger** faria) e verifica `GET 
 Requer **py-payments-ledger** e **node-b2b-orders** com workers ativos, **mesmo** `RABBITMQ_URL`, integração orders↔Rabbit (`ORDERS_INTEGRATION_ENABLED=true` ou equivalente) e gateway de pagamento que autorize o charge em staging.
 
 ```bash
-export ORDERS_SMOKE_URL="https://SEU-ORDERS-STAGING.up.railway.app"
+export ORDERS_SMOKE_URL="https://orders-staging.seu-dominio.com"
 export RABBITMQ_URL="amqps://..."   # mesma URL na API/worker/ledger
 # opcional: health do ledger — PAYMENTS_SMOKE_URL ou SMOKE_PAYMENTS_BASE
 pnpm smoke:order-staging:saga

@@ -1,6 +1,6 @@
 # O que falta para o produto estar 100% vendável
 
-Checklist objetivo do que ainda falta implementar ou validar para considerar o produto **pronto para venda** (go-to-market). Complementa [VISTORIA-COMPLETA.md](VISTORIA-COMPLETA.md) e [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md).
+Checklist objetivo do que ainda falta implementar ou validar para considerar o produto **pronto para venda** (go-to-market). Complementa [VISTORIA-COMPLETA.md](VISTORIA-COMPLETA.md) e [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md).
 
 ---
 
@@ -8,10 +8,10 @@ Checklist objetivo do que ainda falta implementar ou validar para considerar o p
 
 | Item | Status | Notas |
 |------|--------|--------|
-| **Config dos frontends em staging/produção** | ✅ Documentado | **ops-portal** e **admin-console**: variáveis com **URLs absolutas**; secção 5 e checklist em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md). |
+| **Config dos frontends em staging/produção** | ✅ Documentado | **ops-portal** e **admin-console**: variáveis com **URLs absolutas**; secção 5 e checklist em [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md). |
 | **Tenant context quando Core falha** | ✅ Corrigido | Se a lista de tenants não carregar (Core inacessível), o Ops/Admin agora usam o `tenantId` da sessão para enviar `X-Tenant-Id` nas requisições, evitando dashboard vazio. |
-| **Checklist pós-deploy** | ✅ Documentado | Health checks, login, Shop, Dashboard Ops, Admin tenants, JWT único, CORS — em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md#checklist-pós-deploy). |
-| **Seed de staging** | ✅ Existe | `scripts/staging-seed.sh`; ver [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md). |
+| **Checklist pós-deploy** | ✅ Documentado | Health checks, login, Shop, Dashboard Ops, Admin tenants, JWT único, CORS — em [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md). |
+| **Seed de staging** | ✅ Existe | migrations e seed dos backends; ver [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md). |
 
 ---
 
@@ -61,7 +61,7 @@ Checklist objetivo do que ainda falta implementar ou validar para considerar o p
 | Item | Status | Notas |
 |------|--------|--------|
 | **Mensagem de erro no dashboard** | ✅ Implementado | Quando `loadAll` falha no painel Ops, exibe card com mensagem clara e botão "Tentar novamente" (“Não foi possível carregar os dados. Verifique as URLs das APIs no ambiente.”). |
-| **CORS em produção** | ✅ Documentado | Tabela em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md#51-cors-nos-backends): variável por backend (`CORS_ALLOWED_ORIGINS` / `CORS_ORIGINS`) e exemplo; checklist pós-deploy inclui CORS. |
+| **CORS em produção** | ✅ Documentado | Tabela em [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md): variável por backend (`CORS_ALLOWED_ORIGINS` / `CORS_ORIGINS`) e exemplo; checklist pós-deploy inclui CORS. |
 | **Sentry (erros servidor)** | ✅ Implementado | Com `SENTRY_DSN` preenchido: **spring-saas-core** (`sentry-spring-boot-starter-jakarta`), **node-b2b-orders** (`@sentry/node` + captura 5xx no `ProblemDetailsFilter`; worker importa o mesmo instrumento), **py-payments-ledger** (`sentry-sdk` + handler global + worker). Variáveis: `SENTRY_ENVIRONMENT`, `SENTRY_TRACES_SAMPLE_RATE`. |
 
 ---
@@ -71,7 +71,7 @@ Checklist objetivo do que ainda falta implementar ou validar para considerar o p
 
 Todos os itens acima estão implementados ou documentados. O produto está **100% vendável** do ponto de vista operacional, legal, billing e suporte.
 
-- **Config e CORS:** DEPLOY-RAILWAY (URLs absolutas para ops/admin; tabela CORS nos backends).
+- **Config e CORS:** GUIA-DEPLOY-PASSO-A-PASSO (URLs absolutas para ops/admin; tabela CORS nos backends).
 - **Legal e suporte:** Termos, Privacidade, Fale conosco, banner de cookies, link Ajuda configurável (SUPPORT_DOCS_URL).
 - **E-mail de suporte:** Configurável via SUPPORT_EMAIL no Shop ou via i18n.
 

@@ -13,13 +13,12 @@ Checklist para colocar o Fluxe B2B Suite em produção e **pronto para venda**. 
 
 ---
 
-## 2. Railway — Produção (master)
+## 2. Servidor de produção (master)
 
-- [ ] Projeto Railway **Production** criado (ou ambiente production no mesmo projeto)
-- [ ] Para **cada** serviço: **Settings** → **Source** → **Production Branch** = `master`
-- [ ] PostgreSQL e Redis (plugins ou externos) configurados para o ambiente production
+- [ ] Servidor com `docker-compose.prod.yml` e imagens `:master`
+- [ ] PostgreSQL e Redis configurados para produção
 - [ ] RabbitMQ (CloudAMQP ou outro) com URL de produção
-- [ ] Variáveis de ambiente de produção preenchidas a partir dos `railway.prod.env.example` de cada repo (ver seção 4)
+- [ ] Variáveis de ambiente de produção preenchidas a partir dos `prod.env.example` de cada repo (ver seção 4)
 
 ---
 
@@ -66,10 +65,10 @@ Checklist para colocar o Fluxe B2B Suite em produção e **pronto para venda**. 
 ## 4. Migrations em produção (sem seed de demo)
 
 - [ ] **spring-saas-core:** Liquibase roda no startup com `SPRING_PROFILES_ACTIVE=prod` (changesets essenciais do perfil prod — **sem** contextos `staging`/`seed`). Confirmar que não há seed Liquibase activo em prod.
-- [ ] **node-b2b-orders:** na raiz desse repositório (ou via Railway CLI ligado ao serviço):
+- [ ] **node-b2b-orders:** na raiz desse repositório:
 
 ```bash
-railway run npx prisma migrate deploy
+npx prisma migrate deploy
 ```
 
 — **não** executar `prisma db seed` em produção.
@@ -77,7 +76,7 @@ railway run npx prisma migrate deploy
 - [ ] **py-payments-ledger:**
 
 ```bash
-railway run alembic upgrade head
+alembic upgrade head
 ```
 
 — **não** rodar scripts de seed de demo em produção.
@@ -92,12 +91,11 @@ Referência única de placeholders alinhados ao `docker-compose.prod.yml`: [.env
 
 ## 5. Domínio e SSL
 
-- [ ] Domínio customizado (ex.: `app.fluxe.com.br`, `admin.fluxe.com.br`) configurado no Railway: **Settings** → **Domains** → **Custom Domain**
-- [ ] CNAME (ou A) apontando para o serviço Railway; SSL automático via Let's Encrypt
+- [ ] Domínio customizado (ex.: `app.fluxe.com.br`, `admin.fluxe.com.br`) apontado para o servidor
+- [ ] CNAME (ou A) apontando para o servidor; TLS com Let's Encrypt no proxy
 - [ ] `CORS_ORIGINS` / `CORS_ALLOWED_ORIGINS` atualizados com os domínios reais
 - [ ] Frontends com variáveis de ambiente apontando para as URLs de produção (incluindo domínio customizado se aplicável)
 
-Ver detalhes em [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md)#domínio-customizado.
 
 ---
 
@@ -147,7 +145,7 @@ Ver referência em [docs/TERMOS-PRIVACIDADE.md](TERMOS-PRIVACIDADE.md).
 | Documento | Conteúdo |
 |-----------|----------|
 | [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md) | Local, staging, produção — dados e variáveis |
-| [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) | Passo a passo Railway, checklist, domínio customizado |
+| [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) | Passo a passo de implantação |
 | [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Git Flow, release e tags, CI/CD |
 | [REFERENCIA-CONFIGURACAO.md](REFERENCIA-CONFIGURACAO.md) | Todas as variáveis por serviço |
 | [GUIA-DO-SISTEMA.md](GUIA-DO-SISTEMA.md) | Visão geral do sistema e operação |
@@ -160,11 +158,10 @@ Ver referência em [docs/TERMOS-PRIVACIDADE.md](TERMOS-PRIVACIDADE.md).
 
 ## 10. Backups (PostgreSQL e dados)
 
-- [ ] **Railway:** no plugin PostgreSQL do projeto Production, confirmar política de backup (snapshot automático conforme plano). Documentação operacional da Railway sobre backups do Postgres.
 - [ ] **Export manual:** agendar `pg_dump` encriptado para armazenamento externo (S3 compatível, bucket privado) pelo menos mensalmente para clientes enterprise.
 - [ ] **Teste de restore:** pelo menos uma vez por trimestre, restaurar backup para um ambiente isolado e validar integridade (schema + amostra de dados).
 
-Secrets (`JWT_SECRET`, `STRIPE_*`, `RESEND_*`, `ENCRYPTION_KEY`) devem estar apenas em gestão de secrets (Railway / Vault); **não** incluir em dumps públicos nem em repositório.
+Secrets (`JWT_SECRET`, `STRIPE_*`, `RESEND_*`, `ENCRYPTION_KEY`) devem estar apenas em gestão de secrets (`.env` restrito ou Vault); **não** incluir em dumps públicos nem em repositório.
 
 ---
 
@@ -173,7 +170,7 @@ Secrets (`JWT_SECRET`, `STRIPE_*`, `RESEND_*`, `ENCRYPTION_KEY`) devem estar ape
 - [ ] **Sentry (recomendado):** os três backends já incluem o SDK (Core Spring, Orders Nest, Payments FastAPI/worker). Em cada serviço definir `SENTRY_DSN` (no compose: `SENTRY_DSN_CORE` / `SENTRY_DSN_ORDERS` / `SENTRY_DSN_PAYMENTS` → ver [.env.example](../.env.example)); opcional `SENTRY_ENVIRONMENT`, `SENTRY_TRACES_SAMPLE_RATE`.
 - [ ] **Métricas:** spring-saas-core expõe métricas Micrometer/Prometheus conforme perfil — não expor `/actuator/prometheus` à Internet sem autenticação ou rede privada.
 - [ ] **Alertas:** thresholds iniciais em [MONITORING-THRESHOLDS.md](MONITORING-THRESHOLDS.md); configurar pelo menos alerta de disponibilidade (health falhou) e um alerta de erros ou latência por serviço.
-- [ ] **OpenTelemetry:** no compose de referência os serviços apontam OTLP para Jaeger local; em Railway pode usar exporter OTLP para o provedor gerido (Datadog, Grafana Cloud, etc.) se aplicável.
+- [ ] **OpenTelemetry:** no compose de referência os serviços apontam OTLP para Jaeger local; em produção pode usar exporter OTLP para o provedor gerido (Datadog, Grafana Cloud, etc.) se aplicável.
 
 ---
 
@@ -210,7 +207,7 @@ O script chama os endpoints de health documentados na secção 7 e falha com có
 1. Validar staging (develop) e CI verde.
 2. Abrir PR `develop` → `master`; revisar e fazer merge (--no-ff).
 3. Criar tag de release (ex.: `v1.5.0`) se adotado o processo de tags.
-4. Railway faz deploy automático da branch `master`.
+4. Atualizar o servidor de produção com as imagens de `master`.
 5. Configurar variáveis de produção (JWT, Stripe, Resend, CORS, OIDC).
 6. Rodar migrations (sem seed) se necessário.
 7. Configurar domínio customizado e SSL.

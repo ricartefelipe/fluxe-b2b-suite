@@ -10,7 +10,7 @@ Não substitui a verificação do separador **Actions** no GitHub (estado de cad
 | Ramo | Uso |
 |------|-----|
 | `feature/*` | Desenvolvimento; integração via PR para `develop`. |
-| `develop` | Integração: **CI** do monorepo; **staging** dos fronts via **Railway** (não Cloudflare deste workflow). Backends: imagens GHCR em push. |
+| `develop` | Integração: **CI** do monorepo; sem deploy de fronts (Cloudflare só em `master`). Backends: imagens GHCR em push. |
 | `master` | **Produção**: **Deploy Frontend** (Cloudflare Pages) quando mudam `saas-suite-ui/**`; VPS só com paths em `deploy-prod.yml`; `latest` em GHCR no ramo predefinido. |
 
 ---
@@ -38,7 +38,7 @@ Não substitui a verificação do separador **Actions** no GitHub (estado de cad
 
 **Efeito:** um único job em matrix (shop, ops-portal, admin-console): `pnpm install` → build produção → injeção de `config.json` / `config.keycloak.json` → `wrangler pages deploy` para **Cloudflare Pages** (produção). Não duplica lint/test/E2E (isso fica no workflow **CI**).
 
-**Staging:** não é este ficheiro. Fronts em ambiente de integração: **Railway** com ramo `develop`, ver [URLS-STAGING.md](URLS-STAGING.md).
+**Staging:** não é este ficheiro.
 
 ---
 
@@ -96,7 +96,7 @@ Requer `SONAR_TOKEN` (e projeto no SonarCloud) para análise completa.
 
 **Efeito:** build e push para **GHCR** (`ghcr.io/<owner>/node-b2b-orders`), com tags por SHA, nome do ramo e `latest` se o ramo for o predefinido do repositório.
 
-**Conclusão factual:** push em `develop` ou `master` gera imagens; **não** define, por si só, qual servidor as puxa — isso depende de `docker-compose`, Railway, VPS, etc., fora deste ficheiro.
+**Conclusão factual:** push em `develop` ou `master` gera imagens; **não** define, por si só, qual servidor as puxa — isso depende de `docker-compose`, VPS, etc., fora deste ficheiro.
 
 ---
 
@@ -120,7 +120,6 @@ Mesmo padrão que `node-b2b-orders`:
 
 1. GitHub → repositório → **Actions** → escolher o workflow → última execução no ramo desejado.
 2. Cloudflare Dashboard → **Workers & Pages** → projeto (`fluxe-shop`, etc.) → **Deployments** (após push em `master` que dispare **Deploy Frontend** com sucesso).
-3. **Railway** (staging): painel do projeto com **branch** `develop` — ver [URLS-STAGING.md](URLS-STAGING.md).
 4. VPS: conforme [DEPLOY-GITHUB.md](DEPLOY-GITHUB.md).
 
 ---

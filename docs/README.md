@@ -9,11 +9,10 @@
 | Documento | Descrição |
 |-----------|-----------|
 | [README.md](README.md) | Este índice |
-| [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md) | **Local, staging e produção:** `develop` → staging (teste); `master` → produção (uso real); dados e deploy Railway |
+| [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md) | **Local, staging e produção:** `develop` → staging (teste); `master` → produção (uso real); dados e deploy |
 | [GO-LIVE-VENDA.md](GO-LIVE-VENDA.md) | Checklist completo go-live para venda (produção, Stripe, Resend, domínio, OIDC, migrations, termos) |
 | [PRODUCAO-OPERACAO.md](PRODUCAO-OPERACAO.md) | Go-live **operacional:** domínio/SSL, preflight de secrets, migrations sem seed, backups, incidentes |
 | [EXECUCAO-VENDA-MONITORIZACAO.md](EXECUCAO-VENDA-MONITORIZACAO.md) | Playbook único: staging, smoke pedido/PAID, monitorização, promoção e produção |
-| [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md) | Deploy no Railway: serviços, variáveis, migrations, seed (staging vs produção), domínio customizado e SSL |
 | [URLS-AMBIENTES.md](URLS-AMBIENTES.md) | URLs de staging e production (fronts e APIs) e usuário inicial nos 3 fronts |
 | [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md) | Pipeline, esteiras develop/master, release e tags, protocolos (Git Flow, qualidade, testes, CI/CD, docs) |
 | [CHECKLIST-PROMOCAO-DEVELOP-MASTER.md](CHECKLIST-PROMOCAO-DEVELOP-MASTER.md) | Checklist único antes de promover `develop` → `master` |
@@ -62,7 +61,6 @@
 
 | Script | Descrição |
 |--------|-----------|
-| [scripts/staging-seed.sh](../scripts/staging-seed.sh) | Alimenta **staging** com dados (migrations + seeds) via Railway CLI; ver [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md) |
 | [scripts/demo-seed.sh](../scripts/demo-seed.sh) | Popula dados demo via API (local ou staging); requer backends no ar |
 
 ---
@@ -73,12 +71,12 @@ Alguns itens originalmente planejados já estão cobertos por documentos existen
 
 | Tópico | Coberto por |
 |--------|-------------|
-| Ordem de deploy, variáveis, health checks, rollback | [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md), [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md), [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md) |
+| Ordem de deploy, variáveis, health checks, rollback | [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md), [RUNBOOK-ROLLBACK.md](RUNBOOK-ROLLBACK.md) |
 | CI/CD por repo | [PIPELINE-ESTEIRAS.md](PIPELINE-ESTEIRAS.md), [DEPLOY-GITHUB.md](DEPLOY-GITHUB.md), [BRANCHES-E-WORKFLOWS.md](BRANCHES-E-WORKFLOWS.md) |
 | Subir os 4 repos integrados | [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md), scripts `up-local.sh` / `e2e-integrated.sh` |
 | Regras de negócio | [REGRAS-NEGOCIO.md](REGRAS-NEGOCIO.md), [HISTORIAS-USUARIO.md](HISTORIAS-USUARIO.md) |
 | Estado da entrega | [O-QUE-FALTA-100-VENDAVEL.md](O-QUE-FALTA-100-VENDAVEL.md), [ESTADO-ENTREGAS.md](ESTADO-ENTREGAS.md) |
-| Publicar frontend/Railway | [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md), [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) |
+| Publicar frontend | [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md) |
 
 Documentos ainda por criar:
 

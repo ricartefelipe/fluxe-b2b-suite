@@ -6,7 +6,7 @@ Preencher este documento em cada janela de release/go-live.
 
 Referencias:
 - [AMBIENTES-CONFIGURACAO.md](AMBIENTES-CONFIGURACAO.md)
-- [DEPLOY-RAILWAY.md](DEPLOY-RAILWAY.md)
+- [GUIA-DEPLOY-PASSO-A-PASSO.md](GUIA-DEPLOY-PASSO-A-PASSO.md)
 - [URLS-STAGING.md](URLS-STAGING.md)
 
 ---

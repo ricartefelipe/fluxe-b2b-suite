@@ -40,8 +40,8 @@ describe('paymentsAbacAllows ledger:read', () => {
     expect(paymentsAbacAllows('ledger:read', 'free', 'region-a')).toBe(false);
   });
 
-  it('denies wrong region', () => {
-    expect(paymentsAbacAllows('ledger:read', 'pro', 'global')).toBe(false);
+  it('does not restrict region, like the payments service', () => {
+    expect(paymentsAbacAllows('ledger:read', 'pro', 'sa-east-1')).toBe(true);
   });
 
   it('treats empty plan as free', () => {
@@ -58,8 +58,8 @@ describe('paymentsAbacAllows payments:read', () => {
     expect(paymentsAbacAllows('payments:read', 'free', 'region-a')).toBe(true);
   });
 
-  it('denies free in wrong region', () => {
-    expect(paymentsAbacAllows('payments:read', 'free', 'eu-west-1')).toBe(false);
+  it('allows free in any region', () => {
+    expect(paymentsAbacAllows('payments:read', 'free', 'eu-west-1')).toBe(true);
   });
 });
 
@@ -93,8 +93,8 @@ describe('sessionPaymentsAbacAllows', () => {
     expect(sessionPaymentsAbacAllows(s, 'ledger:read')).toBe(true);
   });
 
-  it('denies global region for normal tenant', () => {
-    const s = baseSession({ plan: 'enterprise', region: 'global' });
+  it('still denies by plan in any region', () => {
+    const s = baseSession({ plan: 'free', region: 'sa-east-1' });
     expect(sessionPaymentsAbacAllows(s, 'ledger:read')).toBe(false);
   });
 });

@@ -55,7 +55,7 @@ import { I18nService } from '@saas-suite/shared/i18n';
             <mat-stepper #stepper linear class="checkout-stepper">
 
               <!-- Step 1: Cart -->
-              <mat-step [completed]="cart.items().length > 0" [label]="i18n.messages().shop.cart">
+              <mat-step [completed]="cart.items().length > 0 || !!confirmedOrder()" [label]="i18n.messages().shop.cart">
                 <div class="step-content">
                   <h2 class="step-title">{{ i18n.messages().shop.reviewYourCart }}</h2>
 
@@ -863,7 +863,8 @@ export class CheckoutComponent {
 
       this.confirmedOrder.set(finalOrder ?? confirmedOrd);
       this.cart.clear();
-      this.stepper()?.next();
+      // Só depois da detecção de mudanças o stepper linear vê as etapas anteriores como concluídas.
+      setTimeout(() => this.stepper()?.next());
     } catch {
       this.checkoutError.set(msgs.unexpectedError);
     } finally {

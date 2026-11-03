@@ -28,6 +28,8 @@ const E2E_TENANT_DEMO = '00000000-0000-0000-0000-000000000002';
 const E2E_TENANT_PLATFORM = '00000000-0000-0000-0000-000000000001';
 
 const E2E_ADMIN_JWT_PERMS: string[] = [
+  // A plataforma é quem altera políticas; o token real do Core traz esta permissão.
+  'policies:write',
   'tenants:read',
   'tenants:write',
   'policies:read',

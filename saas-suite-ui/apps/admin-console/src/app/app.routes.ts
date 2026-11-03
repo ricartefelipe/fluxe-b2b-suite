@@ -1,5 +1,5 @@
 import { Route } from '@angular/router';
-import { authGuard, permissionGuard } from '@saas-suite/shared/auth';
+import { authGuard, permissionGuard, platformGuard } from '@saas-suite/shared/auth';
 
 export const appRoutes: Route[] = [
   {
@@ -68,7 +68,7 @@ export const appRoutes: Route[] = [
       {
         path: 'ai',
         loadComponent: () => import('./pages/ai.page').then(m => m.AiPage),
-        canActivate: [permissionGuard],
+        canActivate: [platformGuard, permissionGuard],
         data: { permissions: ['analytics:read'] },
       },
       {

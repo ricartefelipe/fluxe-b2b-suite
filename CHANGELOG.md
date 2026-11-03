@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.5] - 2026-11-03
+
+### Security
+- Console: administrador de locatário não vê mais criar, suspender, ativar, salvar ou trocar de locatário, nem criar ou apagar política. Assistente fica só para a plataforma. Acompanha o isolamento do `spring-saas-core`.
+
+### Fixed
+- Portais só abrem depois de escolher o locatário. A plataforma via dados de outro locatário sob o nome do selecionado ao recarregar a página.
+- Portal de operações e console não pedem a lista de locatários sem `tenants:read`, o que mostrava erro ao entrar.
+- `scripts/demo-seed.sh`: o pagamento vem da confirmação do pedido, como numa compra real. Antes criava um pagamento extra por pedido, com valor fixo. Também espera o limite de escritas da API, corrige a confirmação e falha quando a carga fica incompleta.
+
 ## [1.5.4] - 2026-11-02
 
 ### Fixed

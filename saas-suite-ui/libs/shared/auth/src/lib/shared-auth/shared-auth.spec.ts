@@ -207,6 +207,34 @@ describe('AuthStore', () => {
     });
   });
 
+  describe('isPlatformAdmin', () => {
+    const PLATFORM = '00000000-0000-0000-0000-000000000001';
+
+    it('reconhece o token global', () => {
+      store.setSession(validSession({ tenantId: '*', roles: ['ops'] }));
+      expect(store.isPlatformAdmin()).toBe(true);
+    });
+
+    it('reconhece o administrador do locatário de plataforma', () => {
+      store.setSession(validSession({ tenantId: PLATFORM, roles: ['admin'] }));
+      expect(store.isPlatformAdmin()).toBe(true);
+    });
+
+    it('não reconhece outro papel no locatário de plataforma', () => {
+      store.setSession(validSession({ tenantId: PLATFORM, roles: ['ops'] }));
+      expect(store.isPlatformAdmin()).toBe(false);
+    });
+
+    it('não reconhece o administrador de um locatário', () => {
+      store.setSession(validSession({ tenantId: 'tid1', roles: ['admin'] }));
+      expect(store.isPlatformAdmin()).toBe(false);
+    });
+
+    it('é falso sem sessão', () => {
+      expect(store.isPlatformAdmin()).toBe(false);
+    });
+  });
+
   it('permissions() and roles() default to empty arrays when cleared', () => {
     store.clearSession();
     expect(store.permissions()).toEqual([]);
@@ -278,6 +306,28 @@ describe('authGuard', () => {
     );
     expect(result).not.toBe(true);
     expect(result.toString()).toBe('/change-password');
+  });
+});
+
+// ---------- platformGuard ----------
+
+describe('platformGuard', () => {
+  const route = {} as ActivatedRouteSnapshot;
+  const state = {} as RouterStateSnapshot;
+
+  it('deixa a plataforma entrar', async () => {
+    const { platformGuard } = await import('../guards/permission.guard');
+    TestBed.inject(AuthStore).setSession(validSession({ tenantId: '*' }));
+
+    expect(TestBed.runInInjectionContext(() => platformGuard(route, state))).toBe(true);
+  });
+
+  it('manda o administrador de locatário para /403', async () => {
+    const { platformGuard } = await import('../guards/permission.guard');
+    TestBed.inject(AuthStore).setSession(validSession({ tenantId: 'tid1', roles: ['admin'] }));
+
+    const result = TestBed.runInInjectionContext(() => platformGuard(route, state));
+    expect(result.toString()).toBe('/403');
   });
 });
 

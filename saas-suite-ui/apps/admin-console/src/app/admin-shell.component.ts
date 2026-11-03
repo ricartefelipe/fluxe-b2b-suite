@@ -1,4 +1,4 @@
-import { Component, inject, computed, OnInit } from '@angular/core';
+import { Component, inject, computed, OnInit, signal } from '@angular/core';
 import { ShellComponent, NavItem } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
@@ -14,10 +14,12 @@ import { SubscriptionShellBannerComponent } from './subscription-shell-banner.co
   standalone: true,
   imports: [ShellComponent, SubscriptionShellBannerComponent, OnboardingChecklistComponent],
   template: `
-    <saas-shell [navItems]="navItems()" [appTitle]="appTitle()">
-      <app-subscription-shell-banner mainTop />
-      <lib-onboarding-checklist mainTop />
-    </saas-shell>
+    @if (ready()) {
+      <saas-shell [navItems]="navItems()" [appTitle]="appTitle()">
+        <app-subscription-shell-banner mainTop />
+        <lib-onboarding-checklist mainTop />
+      </saas-shell>
+    }
   `,
 })
 export class AdminShellComponent implements OnInit {
@@ -33,6 +35,7 @@ export class AdminShellComponent implements OnInit {
     try {
       const m = this.i18n.messages()?.adminNav;
       if (!m) return [];
+      const platform = this.authStore.isPlatformAdmin();
       return [
       { label: m.home, route: '/home', icon: 'home' },
       { label: m.tenants, route: '/tenants', icon: 'business', permission: 'tenants:read' },
@@ -43,15 +46,26 @@ export class AdminShellComponent implements OnInit {
       { label: m.billing, route: '/billing', icon: 'credit_card', permission: 'tenants:read' },
       { label: m.help, route: '/help', icon: 'help_outline' },
       { label: m.auditLog, route: '/audit', icon: 'history', permission: 'audit:read' },
-      { label: m.aiAssistant, route: '/ai', icon: 'smart_toy', permission: 'analytics:read' },
+      ...(platform ? [{ label: m.aiAssistant, route: '/ai', icon: 'smart_toy', permission: 'analytics:read' }] : []),
     ];
     } catch {
       return [];
     }
   });
 
+  /** A tela só abre com o locatário escolhido: antes, a plataforma via dados de outro sob o nome do selecionado. */
+  readonly ready = signal(false);
+
   async ngOnInit(): Promise<void> {
-    await this.tenantStore.loadTenants();
+    await this.resolveTenant();
+    this.ready.set(true);
+    this.syncOnboardingChecklist();
+  }
+
+  private async resolveTenant(): Promise<void> {
+    if (this.authStore.hasPermission('tenants:read')) {
+      await this.tenantStore.loadTenants();
+    }
     if (!this.tenantStore.activeTenantId()) {
       const tid = this.authStore.session()?.tenantId;
       const tenants = this.tenantStore.tenants();
@@ -65,7 +79,6 @@ export class AdminShellComponent implements OnInit {
         this.tenantStore.selectTenant(fallback);
       }
     }
-    this.syncOnboardingChecklist();
   }
 
   private async syncOnboardingChecklist(): Promise<void> {

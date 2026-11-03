@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.7] - 2026-11-03
+
+### Security
+- stack de produção: RabbitMQ 4.4.0 (a linha 3 não recebe mais correções), Keycloak 26.8.1 fixado por digest (antes 26.0 sem versão fixa, com 102 achados altos e críticos), Postgres sem `gosu`, Redis e Nginx atualizados.
+
+### Changed
+- o guia de operação explica como sair de um volume criado pela 3.13: a 4.4 arranca sobre ele mas perde as mensagens das filas; o caminho seguro passa pela 4.2.9. Também documenta o reinício dos workers depois de recriar o volume, necessário até node-b2b-orders 1.4.6 e py-payments-ledger 2.0.5.
+
 ## [1.5.6] - 2026-11-03
 
 ### Security

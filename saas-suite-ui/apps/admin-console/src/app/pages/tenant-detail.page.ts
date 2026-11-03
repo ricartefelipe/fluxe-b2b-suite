@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
@@ -15,6 +15,7 @@ import { StatusChipComponent, ConfirmDialogComponent } from '@saas-suite/shared/
 import { TenantsFacade, Tenant, TenantPlan } from '@saas-suite/data-access/core';
 import { CoreApiClient } from '@saas-suite/data-access/core';
 import { I18nService } from '@saas-suite/shared/i18n';
+import { AuthStore } from '@saas-suite/shared/auth';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -72,9 +73,9 @@ import { firstValueFrom } from 'rxjs';
         </div>
         <div class="actions">
           <button mat-stroked-button (click)="goBack()"><mat-icon>arrow_back</mat-icon> {{ i18n.messages().common.back }}</button>
-          @if (t.status === 'ACTIVE') {
+          @if (canManage() && t.status === 'ACTIVE') {
             <button mat-raised-button color="warn" (click)="suspend()">{{ i18n.messages().admin.suspend }}</button>
-          } @else if (t.status === 'SUSPENDED') {
+          } @else if (canManage() && t.status === 'SUSPENDED') {
             <button mat-raised-button color="primary" (click)="activate()">{{ i18n.messages().admin.activate }}</button>
           }
         </div>
@@ -106,9 +107,11 @@ import { firstValueFrom } from 'rxjs';
               <input matInput [value]="t.region" disabled>
             </mat-form-field>
           </form>
+          @if (canManage()) {
           <button mat-raised-button color="primary" (click)="save()" [disabled]="editForm.invalid || saving()">
             {{ i18n.messages().admin.saveChanges }}
           </button>
+          }
         </mat-card-content>
       </mat-card>
     }
@@ -130,6 +133,10 @@ export class TenantDetailPage implements OnInit {
   private dialog = inject(MatDialog);
   private fb = inject(FormBuilder);
   protected i18n = inject(I18nService);
+  private auth = inject(AuthStore);
+
+  /** Alterar locatário, inclusive o próprio, é da plataforma: o Core recusa os demais. */
+  protected canManage = computed(() => this.auth.permissions().includes('tenants:write'));
 
   tenant = signal<Tenant | null>(null);
   loading = signal(true);
@@ -154,12 +161,18 @@ export class TenantDetailPage implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (!id || id === 'new') {
       this.loading.set(false);
+      if (id === 'new' && !this.canManage()) {
+        await this.router.navigate(['/403']);
+      }
       return;
     }
     try {
       const t = await firstValueFrom(this.api.getTenant(id));
       this.tenant.set(t);
       this.editForm.patchValue({ name: t.name, plan: t.plan });
+      if (!this.canManage()) {
+        this.editForm.disable();
+      }
     } catch { this.snackBar.open(this.i18n.messages().admin.tenantNotFound, 'OK', { duration: 3000 }); }
     finally { this.loading.set(false); }
   }

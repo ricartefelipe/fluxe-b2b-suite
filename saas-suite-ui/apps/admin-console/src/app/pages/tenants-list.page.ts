@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, AfterViewInit, effect, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, inject, OnInit, ViewChild, AfterViewInit, effect, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
@@ -14,6 +14,7 @@ import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { StatusChipComponent, EmptyStateComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
 import { MatCardModule } from '@angular/material/card';
 import { I18nService } from '@saas-suite/shared/i18n';
+import { AuthStore } from '@saas-suite/shared/auth';
 import { TenantsFacade, Tenant, TenantStatus, TenantPlan } from '@saas-suite/data-access/core';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
 import { formatDateTime } from '@saas-suite/shared/util';
@@ -30,9 +31,11 @@ import { formatDateTime } from '@saas-suite/shared/util';
   template: `
     <div class="page-header">
       <h1>{{ i18n.messages().tenant.listTitle }}</h1>
-      <button mat-raised-button color="primary" (click)="openCreate()">
-        <mat-icon>add</mat-icon> {{ i18n.messages().tenant.newTenant }}
-      </button>
+      @if (canManage()) {
+        <button mat-raised-button color="primary" (click)="openCreate()">
+          <mat-icon>add</mat-icon> {{ i18n.messages().tenant.newTenant }}
+        </button>
+      }
     </div>
 
     <div class="filters">
@@ -73,7 +76,7 @@ import { formatDateTime } from '@saas-suite/shared/util';
       <saas-empty-state
         icon="business"
         [title]="i18n.messages().tenant.noTenantsFound"
-        [actionLabel]="i18n.messages().tenant.newTenant"
+        [actionLabel]="canManage() ? i18n.messages().tenant.newTenant : ''"
         actionIcon="add"
         (action)="openCreate()" />
     } @else {
@@ -98,7 +101,9 @@ import { formatDateTime } from '@saas-suite/shared/util';
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let t">
             <button mat-icon-button (click)="goToDetail(t)"><mat-icon>open_in_new</mat-icon></button>
-            <button mat-icon-button color="primary" (click)="impersonate(t)"><mat-icon>login</mat-icon></button>
+            @if (canManage()) {
+              <button mat-icon-button color="primary" (click)="impersonate(t)"><mat-icon>login</mat-icon></button>
+            }
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
@@ -125,6 +130,10 @@ export class TenantsListPage implements OnInit, AfterViewInit {
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private tenantStore = inject(TenantContextStore);
+  private auth = inject(AuthStore);
+
+  /** Locatário só vê o próprio cadastro: criar e trocar de locatário são da plataforma. */
+  protected canManage = computed(() => this.auth.permissions().includes('tenants:write'));
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;

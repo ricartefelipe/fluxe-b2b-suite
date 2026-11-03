@@ -49,3 +49,9 @@ export const permissionGuard: CanActivateFn = (route: ActivatedRouteSnapshot) =>
   }
   return true;
 };
+
+/** Telas com dados agregados de todos os locatários: o Core responde 403 para os demais. */
+export const platformGuard: CanActivateFn = () => {
+  const store = inject(AuthStore);
+  return store.isPlatformAdmin() ? true : inject(Router).createUrlTree(['/403']);
+};

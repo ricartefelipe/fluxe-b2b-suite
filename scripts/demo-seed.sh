@@ -78,6 +78,24 @@ echo ""
 AUTH="Authorization: Bearer $ORDERS_TOKEN"
 PAY_AUTH="Authorization: Bearer $PAY_TOKEN"
 
+# A API limita as escritas por minuto: a carga espera a janela em vez de perder dados.
+post_orders() {
+  local path="$1" body="$2" out code attempt
+  out=$(mktemp)
+  for attempt in 1 2 3 4 5 6 7 8; do
+    code=$(curl $CURL_OPTS -s -o "$out" -w '%{http_code}' -X POST "$ORDERS$path" \
+      -H "$AUTH" -H "$TENANT" -H "$JSON" -H "Idempotency-Key: $(uuidgen)" -d "$body" || echo 000)
+    [ "$code" = "429" ] || break
+    sleep 10
+  done
+  cat "$out"
+  rm -f "$out"
+  case "$code" in
+    2*) return 0 ;;
+    *) echo "HTTP $code em $path" >&2; return 1 ;;
+  esac
+}
+
 # ── Ajustar inventário dos produtos do catálogo ──
 echo -e "${BOLD}[2/6] Ajustando inventário do catálogo...${NC}"
 SKUS=("ELET-001:50" "ELET-002:30" "ELET-003:80" "ELET-004:120" "ELET-005:60"
@@ -90,11 +108,11 @@ ADJUSTED=0
 for entry in "${SKUS[@]}"; do
   sku="${entry%%:*}"
   qty="${entry##*:}"
-  idem=$(uuidgen)
-  resp=$(curl $CURL_OPTS -sf -X POST "$ORDERS/v1/inventory/adjustments" \
-    -H "$AUTH" -H "$TENANT" -H "$JSON" \
-    -H "Idempotency-Key: $idem" \
-    -d "{\"sku\":\"$sku\",\"type\":\"IN\",\"qty\":$qty,\"reason\":\"demo-seed initial stock\"}" 2>/dev/null) && ((ADJUSTED++)) || true
+  if post_orders "/v1/inventory/adjustments" "{\"sku\":\"$sku\",\"type\":\"IN\",\"qty\":$qty,\"reason\":\"demo-seed initial stock\"}" >/dev/null; then
+    ADJUSTED=$((ADJUSTED + 1))
+  else
+    fail "Ajuste de inventário recusado: $sku"
+  fi
 done
 ok "Inventário ajustado para $ADJUSTED SKUs"
 echo ""
@@ -104,13 +122,8 @@ echo -e "${BOLD}[3/6] Criando pedidos de demonstração...${NC}"
 
 create_order() {
   local customer="$1" items="$2" desc="$3"
-  local idem
-  idem=$(uuidgen)
   local resp
-  resp=$(curl $CURL_OPTS -sf -X POST "$ORDERS/v1/orders" \
-    -H "$AUTH" -H "$TENANT" -H "$JSON" \
-    -H "Idempotency-Key: $idem" \
-    -d "{\"customerId\":\"$customer\",\"items\":$items}" 2>/dev/null)
+  resp=$(post_orders "/v1/orders" "{\"customerId\":\"$customer\",\"items\":$items}") || resp=""
   if [ -n "$resp" ]; then
     local oid status
     oid=$(echo "$resp" | jq -r '.id')
@@ -142,72 +155,65 @@ ORDER5=$(create_order "customer-wayne-ent" \
 
 echo ""
 
-# ── Aguardar worker reservar (CREATED → RESERVED) ──
-echo -e "${BOLD}[4/6] Aguardando worker reservar inventário...${NC}"
-sleep 8
+# ── Aguardar worker reservar e confirmar (CREATED → RESERVED → CONFIRMED) ──
+echo -e "${BOLD}[4/6] Aguardando reserva e confirmando pedidos...${NC}"
 
-CONFIRMED=0
+order_status() {
+  curl $CURL_OPTS -sf "$ORDERS/v1/orders/$1" -H "$AUTH" -H "$TENANT" | jq -r '.status' 2>/dev/null || echo "?"
+}
+
+wait_status() {
+  local oid="$1" expected="$2" attempts="$3" i
+  for ((i = 0; i < attempts; i++)); do
+    [ "$(order_status "$oid")" = "$expected" ] && return 0
+    sleep 1
+  done
+  return 1
+}
+
+CONFIRMED=()
 for oid in $ORDER1 $ORDER2 $ORDER3; do
-  [ -z "$oid" ] && continue
-  status=$(curl $CURL_OPTS -sf "$ORDERS/v1/orders/$oid" -H "$AUTH" -H "$TENANT" | jq -r '.status' 2>/dev/null || echo "?")
-  if [ "$status" = "RESERVED" ]; then
-    curl $CURL_OPTS -sf -X PATCH "$ORDERS/v1/orders/$oid/confirm" \
-      -H "$AUTH" -H "$TENANT" >/dev/null 2>&1 && ((CONFIRMED++)) || true
+  if ! wait_status "$oid" "RESERVED" 30; then
+    fail "Pedido $oid não foi reservado: $(order_status "$oid")"
+    continue
+  fi
+  if post_orders "/v1/orders/$oid/confirm" '{}' >/dev/null; then
+    CONFIRMED+=("$oid")
+  else
+    fail "Confirmação recusada: $oid"
   fi
 done
-ok "$CONFIRMED pedidos confirmados (restantes ficam RESERVED/CREATED para demonstração)"
+ok "${#CONFIRMED[@]} pedidos confirmados (os demais ficam em reserva para demonstração)"
 echo ""
 
-# ── Criar payment intents ──
-echo -e "${BOLD}[5/6] Criando payment intents...${NC}"
-{
-  create_payment() {
-    local amount="$1" desc="$2" ref="$3"
-    local idem
-    idem=$(uuidgen)
-    local resp
-    resp=$(curl $CURL_OPTS -sf -X POST "$PAYMENTS/v1/payment-intents" \
-      -H "$PAY_AUTH" -H "$TENANT" -H "$JSON" \
-      -H "Idempotency-Key: $idem" \
-      -d "{\"amount\":$amount,\"currency\":\"BRL\",\"description\":\"$desc\",\"customer_ref\":\"order:$ref\"}" 2>/dev/null)
-    if [ -n "$resp" ]; then
-      local pid status
-      pid=$(echo "$resp" | jq -r '.id')
-      status=$(echo "$resp" | jq -r '.status')
-      info "$desc → R\$ $amount ($status)" >&2
-      echo "$pid"
-    fi
-  }
-
-  PI1=$(create_payment "12249.30" "Pedido ACME Corp" "${ORDER1:-demo-order-1}")
-  PI2=$(create_payment "10096.00" "Pedido Globex Ltda" "${ORDER2:-demo-order-2}")
-  PI3=$(create_payment "10397.00" "Pedido Initech SA" "${ORDER3:-demo-order-3}")
-
-  SETTLED=0
-  for pid in $PI1 $PI2; do
-    [ -z "$pid" ] && continue
-    curl $CURL_OPTS -sf -X POST "$PAYMENTS/v1/payment-intents/$pid/confirm" \
-      -H "$PAY_AUTH" -H "$TENANT" \
-      -H "Idempotency-Key: $(uuidgen)" >/dev/null 2>&1 && ((SETTLED++)) || true
-  done
-  ok "$SETTLED pagamentos confirmados (worker fará settle automático)"
-}
+# ── Aguardar o pagamento: a confirmação gera a cobrança, como numa compra real ──
+echo -e "${BOLD}[5/6] Aguardando pagamento dos pedidos confirmados...${NC}"
+PAID=0
+for oid in "${CONFIRMED[@]}"; do
+  if wait_status "$oid" "PAID" 90; then
+    PAID=$((PAID + 1))
+    info "Pedido $oid pago"
+  else
+    fail "Pedido $oid não foi pago: $(order_status "$oid")"
+  fi
+done
+ok "$PAID pedidos pagos"
 echo ""
 
-# ── Aguardar settlement ──
-echo -e "${BOLD}[6/6] Aguardando worker liquidar pagamentos...${NC}"
-sleep 8
+# ── Conferir pagamentos e ledger ──
+echo -e "${BOLD}[6/6] Conferindo pagamentos e ledger...${NC}"
+PAYMENTS_TOTAL=$(curl $CURL_OPTS -sf "$PAYMENTS/v1/payment-intents" -H "$PAY_AUTH" -H "$TENANT" | jq 'if type == "array" then length else (.total // (.items | length)) end' 2>/dev/null || echo "?")
+ok "$PAYMENTS_TOTAL pagamentos no locatário"
+ENTRIES=$(curl $CURL_OPTS -sf "$PAYMENTS/v1/ledger/entries" -H "$PAY_AUTH" -H "$TENANT" | jq 'if type == "array" then length else (.total // (.items | length)) end' 2>/dev/null || echo "?")
+ok "$ENTRIES entradas no ledger"
+BALANCES=$(curl $CURL_OPTS -sf "$PAYMENTS/v1/ledger/balances" -H "$PAY_AUTH" -H "$TENANT" | jq 'if type == "array" then length else (.total // (.items | length)) end' 2>/dev/null || echo "?")
+ok "$BALANCES contas no balanço"
+echo ""
 
-if [ -n "${PAY_TOKEN:-}" ]; then
-  ENTRIES=$(curl $CURL_OPTS -sf "$PAYMENTS/v1/ledger/entries" \
-    -H "$PAY_AUTH" -H "$TENANT" 2>/dev/null | jq 'length' 2>/dev/null || echo "0")
-  ok "$ENTRIES entradas no ledger"
-
-  BALANCES=$(curl $CURL_OPTS -sf "$PAYMENTS/v1/ledger/balances" \
-    -H "$PAY_AUTH" -H "$TENANT" 2>/dev/null | jq 'length' 2>/dev/null || echo "0")
-  ok "$BALANCES contas no balanço"
+if [ "$ADJUSTED" -ne "${#SKUS[@]}" ] || [ "${#CONFIRMED[@]}" -ne 3 ] || [ "$PAID" -ne 3 ]; then
+  fail "Carga incompleta: $ADJUSTED/${#SKUS[@]} ajustes, ${#CONFIRMED[@]}/3 confirmados, $PAID/3 pagos."
+  exit 1
 fi
-echo ""
 
 # ── Resumo ──
 echo -e "${BOLD}══════════════════════════════════════════════${NC}"
@@ -215,8 +221,8 @@ ok "Demo seed concluído!"
 echo ""
 echo "  Dados criados:"
 echo "    • Inventário ajustado para 25 produtos"
-echo "    • 5 pedidos (3 confirmados, 2 em reserva)"
-echo "    • 3 payment intents (2 confirmados → settled)"
+echo "    • 5 pedidos (3 pagos, 2 em reserva)"
+echo "    • 1 pagamento por pedido pago, gerado pela confirmação"
 echo "    • Entradas no ledger contábil"
 echo ""
 echo "  Explore a API:"

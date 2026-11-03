@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ViewChild, AfterViewInit, effect, ChangeDetectionStrategy } from '@angular/core';
+import { Component, computed, inject, OnInit, ViewChild, AfterViewInit, effect, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +15,7 @@ import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
 import { EmptyStateComponent, ConfirmDialogComponent, TableSkeletonComponent } from '@saas-suite/shared/ui';
 import { PoliciesFacade, Policy, CreatePolicyRequest } from '@saas-suite/data-access/core';
 import { I18nService } from '@saas-suite/shared/i18n';
+import { AuthStore } from '@saas-suite/shared/auth';
 import { firstValueFrom } from 'rxjs';
 
 @Component({
@@ -29,12 +30,14 @@ import { firstValueFrom } from 'rxjs';
   template: `
     <div class="page-header">
       <h1>{{ i18n.messages().admin.policiesTitle }}</h1>
+      @if (canManage()) {
       <button mat-raised-button color="primary" (click)="showForm = !showForm">
         <mat-icon>{{ showForm ? 'close' : 'add' }}</mat-icon> {{ showForm ? i18n.messages().common.cancel : i18n.messages().admin.newPolicy }}
       </button>
+      }
     </div>
 
-    @if (showForm) {
+    @if (showForm && canManage()) {
       <form [formGroup]="policyForm" class="create-form" (ngSubmit)="create()">
         <mat-form-field appearance="outline">
           <mat-label>{{ i18n.messages().admin.permissionCode }}</mat-label>
@@ -76,7 +79,7 @@ import { firstValueFrom } from 'rxjs';
       <saas-empty-state
         icon="policy"
         [title]="i18n.messages().admin.noPoliciesFound"
-        [actionLabel]="i18n.messages().admin.createPolicy"
+        [actionLabel]="canManage() ? i18n.messages().admin.createPolicy : ''"
         actionIcon="add"
         (action)="showForm = true" />
     } @else {
@@ -102,7 +105,9 @@ import { firstValueFrom } from 'rxjs';
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef></th>
           <td mat-cell *matCellDef="let p">
-            <button mat-icon-button color="warn" (click)="remove(p)"><mat-icon>delete</mat-icon></button>
+            @if (canManage()) {
+              <button mat-icon-button color="warn" (click)="remove(p)"><mat-icon>delete</mat-icon></button>
+            }
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="columns"></tr>
@@ -132,6 +137,10 @@ export class PoliciesListPage implements OnInit, AfterViewInit {
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private auth = inject(AuthStore);
+
+  /** As políticas são globais: locatário consulta, só a plataforma altera. */
+  protected canManage = computed(() => this.auth.permissions().includes('policies:write'));
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;

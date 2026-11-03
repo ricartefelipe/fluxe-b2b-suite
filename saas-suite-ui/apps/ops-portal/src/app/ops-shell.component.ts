@@ -1,4 +1,4 @@
-import { Component, inject, computed, OnInit } from '@angular/core';
+import { Component, inject, computed, OnInit, signal } from '@angular/core';
 import { ShellComponent, NavItem } from '@saas-suite/shared/ui';
 import { I18nService } from '@saas-suite/shared/i18n';
 import { TenantContextStore } from '@saas-suite/domains/tenancy';
@@ -14,7 +14,7 @@ const PLATFORM_TENANT_ID = '00000000-0000-0000-0000-000000000001';
   selector: 'app-ops-shell',
   standalone: true,
   imports: [ShellComponent],
-  template: `<saas-shell [navItems]="navItems()" [appTitle]="appTitle()" />`,
+  template: `@if (ready()) { <saas-shell [navItems]="navItems()" [appTitle]="appTitle()" /> }`,
 })
 export class OpsShellComponent implements OnInit {
   private i18n = inject(I18nService);
@@ -74,8 +74,19 @@ export class OpsShellComponent implements OnInit {
     ];
   });
 
+  /** A tela só abre com o locatário escolhido: antes, a plataforma via dados de outro sob o nome do selecionado. */
+  readonly ready = signal(false);
+
   async ngOnInit(): Promise<void> {
-    await this.tenantStore.loadTenants();
+    await this.resolveTenant();
+    this.ready.set(true);
+  }
+
+  private async resolveTenant(): Promise<void> {
+    // Sem a permissão, o Core recusa com 403 e o usuário veria um erro ao entrar: o locatário vem da sessão.
+    if (this.authStore.hasPermission('tenants:read')) {
+      await this.tenantStore.loadTenants();
+    }
     if (!this.tenantStore.activeTenantId()) {
       const tid = this.authStore.session()?.tenantId;
       const tenants = this.tenantStore.tenants();

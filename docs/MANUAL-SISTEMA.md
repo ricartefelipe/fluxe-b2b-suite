@@ -105,7 +105,7 @@ A **Fluxe B2B Suite** é uma plataforma multi-tenant completa para operações B
 | Frontend | Angular 21, Nx 22.5, Angular Material, pnpm |
 | Banco de dados | PostgreSQL 16 (um por serviço) |
 | Cache / Rate limit | Redis 7 |
-| Mensageria | RabbitMQ 3 (topic exchanges) |
+| Mensageria | RabbitMQ 4 (topic exchanges) |
 | Observabilidade | Prometheus + Grafana |
 | Containers | Docker + Docker Compose |
 

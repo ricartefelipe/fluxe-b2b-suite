@@ -124,7 +124,7 @@ C4Container
         ContainerDb(redis_orders, "Redis Orders", "Redis 7", "Cache, rate limiting, deduplicação")
         ContainerDb(redis_payments, "Redis Payments", "Redis 7", "Rate limiting, idempotência")
 
-        Container(rabbit, "RabbitMQ", "RabbitMQ 3", "Broker de mensagens: saas.events, orders.x, payments.x")
+        Container(rabbit, "RabbitMQ", "RabbitMQ 4", "Broker de mensagens: saas.events, orders.x, payments.x")
     }
 
     System_Ext(oidc, "Keycloak OIDC")

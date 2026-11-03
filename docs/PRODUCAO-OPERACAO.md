@@ -98,7 +98,23 @@ Guarde o `.dump` fora do repositório, em armazenamento privado e encriptado. **
 
 ---
 
-## 8. Referências
+## 8. Atualização do RabbitMQ 3 para 4
+
+O `docker-compose.prod.yml` usa o RabbitMQ 4.4. A partir da 4.3, o RabbitMQ só suporta atualizar dados gravados pela 4.2. Sobre um volume `rabbitmq_data` criado pelo RabbitMQ 3.13, a 4.4 arranca e mantém as filas, mas **perde as mensagens em silêncio**: num teste com 3 mensagens persistentes e paragem normal, a fila voltou com 0, sem erro no log. Numa instalação que já corre a versão 3, escolha um dos caminhos antes de subir a nova versão.
+
+**Esvaziar as filas e recriar o volume (recomendado).** Os serviços declaram exchanges e filas ao arrancar, e o utilizador vem de `RABBITMQ_USER` e `RABBITMQ_PASSWORD`, então nada se perde se as filas estiverem vazias.
+
+1. Pare o tráfego de entrada (frontends e APIs) e deixe os workers consumirem o que falta.
+2. Confirme que todas as filas estão em zero: `docker compose -f docker-compose.prod.yml exec rabbitmq rabbitmqctl list_queues name messages`.
+3. Pare o RabbitMQ e remova só o volume dele: `docker compose -f docker-compose.prod.yml rm -sf rabbitmq` e depois `docker volume rm <projeto>_rabbitmq_data`.
+4. Suba o RabbitMQ com a nova versão e **reinicie os serviços** (`docker compose -f docker-compose.prod.yml up -d --force-recreate`), para que cada um declare as suas filas. Até node-b2b-orders 1.4.6 e py-payments-ledger 2.0.5, os workers reconectam a um broker sem filas mas não voltam a funcionar: o despachante do outbox do orders fica preso ao canal antigo e a fila `payments.orders.events` não é declarada de novo.
+5. Confira `rabbitmqctl list_queues name consumers`: cada fila de trabalho precisa ter pelo menos um consumidor.
+
+**Atualizar no lugar, mantendo as mensagens.** Ative todas as feature flags na 3.13 (`rabbitmqctl enable_feature_flag all`), troque a imagem para a última 4.2.x (por exemplo `rabbitmq:4.2.9-management-alpine`), ative de novo todas as feature flags e só então suba para a 4.4. Pare o RabbitMQ com `docker compose stop` (paragem normal) entre as versões. No mesmo teste, as 3 mensagens chegaram à 4.4. Ver o [guia de atualização do RabbitMQ](https://www.rabbitmq.com/docs/upgrade).
+
+---
+
+## 9. Referências
 
 | Documento | Uso |
 |-----------|-----|

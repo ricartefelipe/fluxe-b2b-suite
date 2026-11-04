@@ -11,14 +11,17 @@ on:
   workflow_dispatch:
     inputs:
       saas_core_tag:
-        description: "spring-saas-core image tag"
-        default: "latest"
+        description: "spring-saas-core image tag (vazio usa o .env da VPS; nunca latest)"
+        required: false
+        default: ""
       orders_tag:
-        description: "node-b2b-orders image tag"
-        default: "latest"
+        description: "node-b2b-orders image tag (vazio usa o .env da VPS; nunca latest)"
+        required: false
+        default: ""
       payments_tag:
-        description: "py-payments-ledger image tag"
-        default: "latest"
+        description: "py-payments-ledger image tag (vazio usa o .env da VPS; nunca latest)"
+        required: false
+        default: ""
 
 concurrency:
   group: deploy-prod

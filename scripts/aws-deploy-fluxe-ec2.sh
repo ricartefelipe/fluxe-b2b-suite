@@ -5,6 +5,9 @@
 #   FLUXE_HOST=1.2.3.4 FLUXE_KEY=~/.ssh/fluxe-b2b-deploy.pem ./scripts/aws-deploy-fluxe-ec2.sh
 #   # ou após provision:
 #   source .aws-deploy/last-ec2.env && ./scripts/aws-deploy-fluxe-ec2.sh
+#
+# Ao gerar o .env piloto, as versões das imagens são obrigatórias (as mesmas variáveis de .env.example):
+#   SAAS_CORE_TAG=... ORDERS_TAG=... PAYMENTS_TAG=... SHOP_TAG=... OPS_TAG=... ADMIN_TAG=... ./scripts/aws-deploy-fluxe-ec2.sh
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -44,6 +47,12 @@ COMPOSE_CMD="$("${SSH[@]}" "command -v docker-compose >/dev/null 2>&1 && echo do
 # Gerar .env piloto se não existir localmente
 ENV_FILE="${ENV_FILE:-$SUITE_ROOT/.env.aws-pilot}"
 if [[ ! -f "$ENV_FILE" ]]; then
+  for var in SAAS_CORE_TAG ORDERS_TAG PAYMENTS_TAG SHOP_TAG OPS_TAG ADMIN_TAG; do
+    if [[ -z "${!var:-}" || "${!var}" == "latest" ]]; then
+      echo "Defina $var com a versão publicada da release (veja .env.example); latest não é aceito." >&2
+      exit 1
+    fi
+  done
   echo "▸ Gerando $ENV_FILE (piloto — revisar antes de vender)"
   JWT_SECRET="$(openssl rand -hex 32)"
   DB_PASSWORD="$(openssl rand -hex 16)"
@@ -57,9 +66,12 @@ if [[ ! -f "$ENV_FILE" ]]; then
 DOMAIN=${FLUXE_HOST}
 DOCKER_PLATFORM=linux/amd64
 GHCR_ORG=ricartefelipe
-SAAS_CORE_TAG=latest
-ORDERS_TAG=latest
-PAYMENTS_TAG=latest
+SAAS_CORE_TAG=${SAAS_CORE_TAG}
+ORDERS_TAG=${ORDERS_TAG}
+PAYMENTS_TAG=${PAYMENTS_TAG}
+SHOP_TAG=${SHOP_TAG}
+OPS_TAG=${OPS_TAG}
+ADMIN_TAG=${ADMIN_TAG}
 
 DB_USER=fluxe
 DB_PASSWORD=${DB_PASSWORD}

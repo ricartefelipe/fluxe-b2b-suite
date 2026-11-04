@@ -40,6 +40,12 @@ REQUIRED_VARS=(
   CORS_ALLOWED_ORIGINS
   GRAFANA_PASSWORD
   GHCR_ORG
+  SAAS_CORE_TAG
+  ORDERS_TAG
+  PAYMENTS_TAG
+  SHOP_TAG
+  OPS_TAG
+  ADMIN_TAG
   DOMAIN
 )
 
@@ -60,13 +66,22 @@ fi
 
 log "Environment OK."
 
-# ---------- 2. Pull latest images ----------
-log "Pulling latest images from GHCR..."
+for var in SAAS_CORE_TAG ORDERS_TAG PAYMENTS_TAG SHOP_TAG OPS_TAG ADMIN_TAG; do
+  if [[ "${!var}" == "latest" ]]; then
+    error "$var=latest: use a versão publicada da release (veja .env.example). latest muda a cada push na master."
+    exit 1
+  fi
+done
+
+# ---------- 2. Pull release images ----------
+log "Pulling release images from GHCR..."
 
 IMAGES=(
-  "ghcr.io/${GHCR_ORG}/spring-saas-core:${SAAS_CORE_TAG:-latest}"
-  "ghcr.io/${GHCR_ORG}/node-b2b-orders:${ORDERS_TAG:-latest}"
-  "ghcr.io/${GHCR_ORG}/py-payments-ledger:${PAYMENTS_TAG:-latest}"
+  "ghcr.io/${GHCR_ORG}/spring-saas-core:${SAAS_CORE_TAG}"
+  "ghcr.io/${GHCR_ORG}/node-b2b-orders:${ORDERS_TAG}"
+  "ghcr.io/${GHCR_ORG}/node-b2b-orders-worker:${ORDERS_TAG}"
+  "ghcr.io/${GHCR_ORG}/py-payments-ledger:${PAYMENTS_TAG}"
+  "ghcr.io/${GHCR_ORG}/py-payments-ledger-worker:${PAYMENTS_TAG}"
 )
 
 for img in "${IMAGES[@]}"; do

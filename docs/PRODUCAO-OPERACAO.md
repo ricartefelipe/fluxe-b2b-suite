@@ -114,7 +114,15 @@ O `docker-compose.prod.yml` usa o RabbitMQ 4.4. A partir da 4.3, o RabbitMQ só 
 
 ---
 
-## 9. Referências
+## 9. Versões das imagens
+
+O `docker-compose.prod.yml` e o `scripts/deploy.sh` exigem `SAAS_CORE_TAG`, `ORDERS_TAG`, `PAYMENTS_TAG`, `SHOP_TAG`, `OPS_TAG` e `ADMIN_TAG` no `.env` e recusam `latest`: com ele, cada `docker compose pull` podia trazer o último push da master de um serviço, sem ter sido testado com os outros. Os serviços publicam a imagem com o SHA do commit; use o commit da tag da release (`git rev-parse <tag>^{commit}`), com 7 caracteres no saas-core e no payments e o SHA completo no orders. O [.env.example](../.env.example) traz os valores da release atual.
+
+**Numa stack que já corre com `latest`:** copie as seis variáveis `*_TAG` do `.env.example` para o `.env` antes do próximo deploy. Sem elas, o `docker compose` para com `required variable SAAS_CORE_TAG is missing a value`, sem mexer nos containers que estão de pé. Para atualizar um serviço, troque só a variável dele e rode `./scripts/deploy.sh`.
+
+---
+
+## 10. Referências
 
 | Documento | Uso |
 |-----------|-----|

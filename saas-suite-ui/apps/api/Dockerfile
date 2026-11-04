@@ -4,7 +4,8 @@
 #
 # Run the container with `nx docker:run api -p 3000:3000`.
 #
-FROM docker.io/node:lts-alpine
+# node:24-alpine
+FROM node@sha256:8a32c8cf649a49915a66e81e7a609223c708d0adabf288ee3f4077d765542f85
 
 ENV HOST=0.0.0.0
 ENV PORT=3333

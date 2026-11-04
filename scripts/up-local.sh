@@ -448,7 +448,7 @@ start_prometheus() {
     -p "$port:9090" \
     -v "$config:/etc/prometheus/prometheus.yml:ro" \
     --restart unless-stopped \
-    prom/prometheus:latest \
+    prom/prometheus:v3.15.1@sha256:fa3302279710be2f21a8301ec17a8b4f2301fd829bd113839b3b6b02b6f191a2 \
     --config.file=/etc/prometheus/prometheus.yml >/dev/null 2>&1
   ok "Prometheus $name → localhost:$port"
 }
@@ -466,7 +466,7 @@ start_grafana() {
     -e GF_SECURITY_ADMIN_PASSWORD=admin \
     "${vol_args[@]}" \
     --restart unless-stopped \
-    grafana/grafana:10.4.2 >/dev/null 2>&1
+    grafana/grafana:12.4.14@sha256:ae509d9ae8c1021ca32ec370a9ca975d40165eda9fccd1e1102d317ff8787cd7 >/dev/null 2>&1
   ok "Grafana $name → localhost:$port (admin/admin)"
 }
 

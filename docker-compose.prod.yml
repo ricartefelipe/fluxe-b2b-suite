@@ -360,10 +360,9 @@ services:
 
   # === OBSERVABILITY ===
   jaeger:
-    image: jaegertracing/all-in-one:latest
+    # Jaeger v2 (a linha 1 chegou ao fim): recebe OTLP em 4317 e 4318 e serve a interface em 16686, com armazenamento em memória.
+    image: jaegertracing/jaeger:2.22.0@sha256:836b967b5abcf1f7758066aa6b348619267a2f1459f72d472840570f9bd88a17
     restart: unless-stopped
-    environment:
-      COLLECTOR_OTLP_ENABLED: "true"
     ports:
       - "127.0.0.1:16686:16686"
       - "127.0.0.1:4317:4317"
@@ -374,7 +373,7 @@ services:
           memory: 512M
 
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.15.1@sha256:fa3302279710be2f21a8301ec17a8b4f2301fd829bd113839b3b6b02b6f191a2
     restart: unless-stopped
     volumes:
       - ./deploy/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
@@ -390,7 +389,7 @@ services:
           memory: 512M
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:12.4.14@sha256:ae509d9ae8c1021ca32ec370a9ca975d40165eda9fccd1e1102d317ff8787cd7
     restart: unless-stopped
     environment:
       GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}

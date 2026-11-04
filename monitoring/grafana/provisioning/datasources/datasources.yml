@@ -1,0 +1,13 @@
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+    jsonData:
+      timeInterval: '15s'
+
+# Traços: interface do Jaeger em http://127.0.0.1:16686. Desde a 2.21, o Jaeger só serve a API v3, que a fonte de dados
+# Jaeger do Grafana (12.4 e 13.3) ainda não lê; o painel "Tracing" usa as métricas de spans do Prometheus.

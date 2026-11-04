@@ -47,7 +47,7 @@ bash scripts/bootstrap-venv.sh
 ### Pré-requisitos
 
 1. **Docker Desktop** ou Docker Engine **a correr** (`docker ps` sem erro).
-2. Java 21, Maven, Node 20+, pnpm, Python 3.12+.
+2. Java 21, Maven, Node 22+, pnpm, Python 3.12+.
 3. Opcional: `sudo apt install python3.12-venv` (evita fallback get-pip).
 
 ### Subir tudo

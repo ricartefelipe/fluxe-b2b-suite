@@ -61,7 +61,7 @@ Configurar em **Settings → Environment Variables** de cada projeto:
 
 | Variável | Descrição | Exemplo |
 |---|---|---|
-| `NODE_VERSION` | Versão do Node.js | `20` |
+| `NODE_VERSION` | Versão do Node.js | `22` |
 | `PNPM_VERSION` | Versão do pnpm | `9` |
 
 > As variáveis de runtime da aplicação (API URLs, Keycloak) são injetadas via `config.json`

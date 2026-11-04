@@ -120,9 +120,11 @@ jobs:
       - name: Sync deployment files to VPS
         if: steps.vps.outputs.configured == 'true'
         run: |
+          # Sem barra no fim: cada pasta chega como pasta (deploy/, monitoring/, scripts/), que é onde o compose e o
+          # passo seguinte as procuram. Com a barra, o rsync copiava só o conteúdo para a raiz.
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key" \
-            docker-compose.prod.yml deploy/ scripts/ \
+            docker-compose.prod.yml deploy monitoring scripts \
             ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:~/fluxe-b2b-suite/
 
       - name: Deploy on VPS

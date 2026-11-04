@@ -1,0 +1,85 @@
+# Jaeger v2 da stack de produção: recebe os traços por OTLP, guarda em memória e, pelo conector span_metrics, gera as
+# métricas de chamadas, erros e latência por serviço que o Prometheus coleta em jaeger:8889. São essas métricas que
+# alimentam o painel "Tracing" do Grafana e a aba Monitor da interface do Jaeger.
+service:
+  extensions: [jaeger_storage, jaeger_query, healthcheckv2]
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [filter/ruido, batch]
+      exporters: [jaeger_storage_exporter, span_metrics]
+    metrics/spanmetrics:
+      receivers: [span_metrics]
+      exporters: [prometheus]
+  telemetry:
+    resource:
+      service.name: jaeger
+    metrics:
+      level: basic
+      readers:
+        - pull:
+            exporter:
+              prometheus:
+                host: 0.0.0.0
+                port: 8888
+    logs:
+      level: info
+
+extensions:
+  healthcheckv2:
+    use_v2: true
+    http:
+      endpoint: 0.0.0.0:13133
+  jaeger_query:
+    storage:
+      traces: memoria
+      metrics: prometheus
+  jaeger_storage:
+    backends:
+      memoria:
+        memory:
+          max_traces: 100000
+    metric_backends:
+      prometheus:
+        prometheus:
+          endpoint: http://prometheus:9090
+          normalize_calls: true
+          normalize_duration: true
+
+connectors:
+  span_metrics:
+    # Uma série por serviço, operação, tipo de span e situação, mais o código HTTP da resposta: http.response.status_code
+    # nos serviços Node e Python, status no saas-core (Micrometer).
+    dimensions:
+      - name: http.response.status_code
+      - name: status
+    histogram:
+      explicit:
+        buckets: [5ms, 10ms, 25ms, 50ms, 100ms, 250ms, 500ms, 1s, 2500ms, 5s, 10s]
+    metrics_flush_interval: 15s
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  # Verificações de saúde, coletas do Prometheus e os próprios traços do Jaeger não entram: a cada 10 a 15 s, eles
+  # encheriam a busca de traços e as métricas com chamadas que não são de usuário.
+  filter/ruido:
+    error_mode: ignore
+    traces:
+      span:
+        - 'resource.attributes["service.name"] == "jaeger"'
+        - 'IsMatch(attributes["http.route"], "^/(v1/)?(healthz|readyz|metrics)$")'
+        - 'IsMatch(attributes["uri"], "^/actuator/")'
+  batch:
+
+exporters:
+  jaeger_storage_exporter:
+    trace_storage: memoria
+  prometheus:
+    endpoint: 0.0.0.0:8889

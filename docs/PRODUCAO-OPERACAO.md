@@ -120,9 +120,13 @@ O `docker-compose.prod.yml` e o `scripts/deploy.sh` exigem `SAAS_CORE_TAG`, `ORD
 
 **Numa stack que já corre com `latest`:** copie as seis variáveis `*_TAG` do `.env.example` para o `.env` antes do próximo deploy. Sem elas, o `docker compose` para com `required variable SAAS_CORE_TAG is missing a value`, sem mexer nos containers que estão de pé. Para atualizar um serviço, troque só a variável dele e rode `./scripts/deploy.sh`.
 
+## 10. Traços e painel "Tracing"
+
+O Jaeger (`deploy/jaeger/config.yaml`) guarda os traços em memória e, pelo conector `span_metrics`, gera métricas de chamadas, erros e latência por serviço e operação, expostas em `jaeger:8889` e coletadas pelo Prometheus (job `jaeger-spanmetrics`). O painel "Tracing" do Grafana e a aba **Monitor** da interface do Jaeger (`http://127.0.0.1:16686`) leem essas métricas. As métricas aparecem cerca de 15 s depois do primeiro tráfego; sem tráfego, o painel fica vazio. A fonte de dados e os painéis vêm de `monitoring/grafana`, montada no Grafana na partida.
+
 ---
 
-## 10. Referências
+## 11. Referências
 
 | Documento | Uso |
 |-----------|-----|

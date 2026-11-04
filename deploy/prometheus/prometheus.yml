@@ -24,6 +24,11 @@ scrape_configs:
         labels:
           service: "payments-api"
 
+  # Métricas de spans geradas pelo Jaeger (conector span_metrics): chamadas, erros e latência por serviço.
+  - job_name: "jaeger-spanmetrics"
+    static_configs:
+      - targets: ["jaeger:8889"]
+
   - job_name: "prometheus"
     static_configs:
       - targets: ["localhost:9090"]

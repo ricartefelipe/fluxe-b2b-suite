@@ -85,7 +85,7 @@ services:
 
   # === BACKENDS ===
   saas-core:
-    image: ghcr.io/${GHCR_ORG}/spring-saas-core:${SAAS_CORE_TAG:-latest}
+    image: ghcr.io/${GHCR_ORG}/spring-saas-core:${SAAS_CORE_TAG:?defina SAAS_CORE_TAG no .env com a versao publicada; veja .env.example}
     platform: ${DOCKER_PLATFORM:-linux/amd64}
     restart: unless-stopped
     environment:
@@ -141,7 +141,7 @@ services:
           memory: 2G
 
   orders-api:
-    image: ghcr.io/${GHCR_ORG}/node-b2b-orders:${ORDERS_TAG:-latest}
+    image: ghcr.io/${GHCR_ORG}/node-b2b-orders:${ORDERS_TAG:?defina ORDERS_TAG no .env com a versao publicada; veja .env.example}
     platform: ${DOCKER_PLATFORM:-linux/amd64}
     restart: unless-stopped
     environment:
@@ -176,7 +176,7 @@ services:
           memory: 512M
 
   orders-worker:
-    image: ghcr.io/${GHCR_ORG}/node-b2b-orders-worker:${ORDERS_TAG:-latest}
+    image: ghcr.io/${GHCR_ORG}/node-b2b-orders-worker:${ORDERS_TAG:?defina ORDERS_TAG no .env com a versao publicada; veja .env.example}
     platform: ${DOCKER_PLATFORM:-linux/amd64}
     restart: unless-stopped
     environment:
@@ -195,7 +195,7 @@ services:
           memory: 256M
 
   payments-api:
-    image: ghcr.io/${GHCR_ORG}/py-payments-ledger:${PAYMENTS_TAG:-latest}
+    image: ghcr.io/${GHCR_ORG}/py-payments-ledger:${PAYMENTS_TAG:?defina PAYMENTS_TAG no .env com a versao publicada; veja .env.example}
     platform: ${DOCKER_PLATFORM:-linux/amd64}
     restart: unless-stopped
     environment:
@@ -234,7 +234,7 @@ services:
           memory: 512M
 
   payments-worker:
-    image: ghcr.io/${GHCR_ORG}/py-payments-ledger-worker:${PAYMENTS_TAG:-latest}
+    image: ghcr.io/${GHCR_ORG}/py-payments-ledger-worker:${PAYMENTS_TAG:?defina PAYMENTS_TAG no .env com a versao publicada; veja .env.example}
     platform: ${DOCKER_PLATFORM:-linux/amd64}
     restart: unless-stopped
     environment:
@@ -258,7 +258,7 @@ services:
 
   # === FRONTENDS ===
   shop-frontend:
-    image: ghcr.io/${GHCR_ORG}/shop-frontend:${SHOP_TAG:-latest}
+    image: ghcr.io/${GHCR_ORG}/shop-frontend:${SHOP_TAG:?defina SHOP_TAG no .env com a versao publicada; veja .env.example}
     restart: unless-stopped
     environment:
       CORE_API_BASE_URL: /api/core
@@ -286,7 +286,7 @@ services:
           memory: 384M
 
   ops-portal:
-    image: ghcr.io/${GHCR_ORG}/ops-portal:${OPS_TAG:-latest}
+    image: ghcr.io/${GHCR_ORG}/ops-portal:${OPS_TAG:?defina OPS_TAG no .env com a versao publicada; veja .env.example}
     restart: unless-stopped
     environment:
       CORE_API_BASE_URL: /api/core
@@ -312,7 +312,7 @@ services:
           memory: 128M
 
   admin-console:
-    image: ghcr.io/${GHCR_ORG}/admin-console:${ADMIN_TAG:-latest}
+    image: ghcr.io/${GHCR_ORG}/admin-console:${ADMIN_TAG:?defina ADMIN_TAG no .env com a versao publicada; veja .env.example}
     restart: unless-stopped
     environment:
       CORE_API_BASE_URL: /api/core
@@ -363,6 +363,10 @@ services:
     # Jaeger v2 (a linha 1 chegou ao fim): recebe OTLP em 4317 e 4318 e serve a interface em 16686, com armazenamento em memória.
     image: jaegertracing/jaeger:2.22.0@sha256:836b967b5abcf1f7758066aa6b348619267a2f1459f72d472840570f9bd88a17
     restart: unless-stopped
+    # Configuração própria: além de guardar os traços, gera as métricas de spans que o Prometheus coleta em jaeger:8889.
+    command: ["--config", "/etc/jaeger/config.yaml"]
+    volumes:
+      - ./deploy/jaeger/config.yaml:/etc/jaeger/config.yaml:ro
     ports:
       - "127.0.0.1:16686:16686"
       - "127.0.0.1:4317:4317"
@@ -398,6 +402,9 @@ services:
       GF_SERVER_SERVE_FROM_SUB_PATH: "true"
     volumes:
       - grafana_data:/var/lib/grafana
+      # Fonte de dados e painéis versionados em monitoring/grafana, carregados na partida.
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
     ports:
       - "127.0.0.1:3030:3000"
     deploy:

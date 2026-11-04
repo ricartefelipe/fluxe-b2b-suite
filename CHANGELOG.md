@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.8] - 2026-11-04
+
+### Security
+- monitoração fixada por digest: Jaeger 2.22.0 (antes `all-in-one:latest`, com 75 achados altos e críticos), Prometheus 3.15.1 e Grafana 12.4.14.
+- o deploy de produção exige a versão de cada imagem dos serviços e recusa `latest`.
+
+### Fixed
+- o painel Tracing mostra taxa, erros e latência a partir das métricas de spans do Jaeger; o Grafana de produção volta a carregar os painéis e o rsync do workflow de produção copia as pastas para o lugar certo.
+
 ## [1.5.7] - 2026-11-03
 
 ### Security

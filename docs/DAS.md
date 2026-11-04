@@ -1003,8 +1003,9 @@ Todos os eventos seguem um envelope padronizado:
 | Nx | nx | latest |
 | PostgreSQL | postgres | 16 |
 | Redis | redis | 7 |
-| RabbitMQ | rabbitmq | 3 (management) |
+| RabbitMQ | rabbitmq | 4.4 |
 | Keycloak | keycloak | 26 |
-| Prometheus | prom/prometheus | latest |
-| Grafana | grafana/grafana | 10.4+ |
+| Prometheus | prom/prometheus | 3.15 |
+| Grafana | grafana/grafana | 12.4 |
+| Jaeger | jaegertracing/jaeger | 2.22 |
 | Nginx | nginx | latest |

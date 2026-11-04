@@ -14,6 +14,17 @@
   "templating": {
     "list": [
       {
+        "name": "DS_PROMETHEUS",
+        "label": "Fonte de dados",
+        "type": "datasource",
+        "query": "prometheus",
+        "current": {},
+        "hide": 0,
+        "refresh": 1,
+        "regex": "",
+        "options": []
+      },
+      {
         "name": "tenant_id",
         "type": "query",
         "datasource": { "type": "prometheus", "uid": "${DS_PROMETHEUS}" },

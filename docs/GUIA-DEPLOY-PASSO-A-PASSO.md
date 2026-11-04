@@ -1119,7 +1119,7 @@ Vamos configurar **3 projetos** — um para cada frontend: Shop, Ops Portal e Ad
      saas-suite-ui/dist/apps/shop/browser
      ```
 9. Clique em **"Environment variables (advanced)"** e adicione:
-   - **Variable name:** `NODE_VERSION` → **Value:** `20`
+   - **Variable name:** `NODE_VERSION` → **Value:** `22`
 10. Clique **"Save and Deploy"**
 11. Aguarde o build (3-5 minutos). Quando terminar, você verá a URL: `https://fluxe-shop.pages.dev`
 

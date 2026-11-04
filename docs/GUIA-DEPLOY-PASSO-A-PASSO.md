@@ -661,10 +661,18 @@ DOMAIN=fluxe.seudominio.com.br
 GHCR_ORG=ricartefelipe
 
 # --- Versões das Imagens ---
-# "latest" = sempre pega a mais recente. Pode trocar por uma tag específica.
-SAAS_CORE_TAG=latest
-ORDERS_TAG=latest
-PAYMENTS_TAG=latest
+# Obrigatórias. O deploy recusa "latest", que muda a cada push na master e pode trazer
+# uma versão que ninguém testou junto. Use o commit da tag da release de cada serviço
+# (git rev-parse <tag>^{commit}): 7 caracteres no saas-core e no payments, SHA completo
+# no orders. Valores da release 1.5.7 (saas-core v1.4.1, orders v1.4.7, payments v2.0.6):
+SAAS_CORE_TAG=ced2559
+ORDERS_TAG=e95f3bac9e17550a0c3997f6f399868b2e154742
+PAYMENTS_TAG=2d11bac
+# As interfaces não são publicadas no GHCR (vão para o Cloudflare Pages); a variável
+# só identifica a versão quando você as constrói com docker-compose.prod.build.yml.
+SHOP_TAG=v1.5.7
+OPS_TAG=v1.5.7
+ADMIN_TAG=v1.5.7
 
 # --- PostgreSQL (banco de dados) ---
 # O usuário principal do banco
@@ -783,7 +791,7 @@ O script vai mostrar o progresso:
 ```
 [deploy] Validating environment...
 [deploy] Environment OK.
-[deploy] Pulling latest images from GHCR...
+[deploy] Pulling release images from GHCR...
 [deploy] Starting infrastructure services...
 [deploy] Waiting for infrastructure health checks...
 [deploy] Infrastructure ready.
@@ -1681,10 +1689,13 @@ docker login ghcr.io
 
 # Verificar o nome correto da imagem
 source /opt/fluxe/.env
-echo "ghcr.io/${GHCR_ORG}/spring-saas-core:${SAAS_CORE_TAG:-latest}"
+echo "ghcr.io/${GHCR_ORG}/spring-saas-core:${SAAS_CORE_TAG}"
 
 # Tentar baixar manualmente
-docker pull ghcr.io/${GHCR_ORG}/spring-saas-core:${SAAS_CORE_TAG:-latest}
+docker pull ghcr.io/${GHCR_ORG}/spring-saas-core:${SAAS_CORE_TAG}
+
+# "required variable SAAS_CORE_TAG is missing a value": o .env não define a versão.
+# Copie as variáveis *_TAG de .env.example (ou use o commit da tag da release).
 ```
 
 ### Problema: "Keycloak não inicia"
